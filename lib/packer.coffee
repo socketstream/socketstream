@@ -110,13 +110,13 @@ class exports.Packer
           final_output = output.join("\n")
           final_output = self._minifyJS(final_output)
 
-          self._deleteFilesInPublicDir(/^app/)
+          self._deleteFilesInPublicDir(/^app.\.js/)
           self.files.js.app = "app_#{Date.now()}.js"
           fs.writeFileSync("#{self.public_path}/#{self.files.js.app}", final_output)
           emitter.emit('regenerate_html')
         
       lib: ->
-        self._deleteFilesInPublicDir(/^lib/)
+        self._deleteFilesInPublicDir(/^lib.\.js/)
         self.files.js.lib = "lib_#{Date.now()}.js"
         output = self._concatFiles('./lib/client')
         sys.log("  Appending SocketStream client files...")
@@ -127,15 +127,15 @@ class exports.Packer
     css:
       
       app: ->
-        self._deleteFilesInPublicDir(/^css/)
+        self._deleteFilesInPublicDir(/^app.\.css/)
         self.files.css.app = "app_#{Date.now()}.css"
         require('child_process').exec("sass --update app/sass/app.sass:#{self.public_path}/#{self.files.css.app} --style compressed")
         sys.log('SASS compliled into CSS')
         emitter.emit('regenerate_html')
         
       lib: ->
-        output = self._concatFiles("./lib/css")
         self._deleteFilesInPublicDir(/^lib.\.css/)
+        output = self._concatFiles("./lib/css")
         self.files.css.lib = "lib_#{Date.now()}.css"
         fs.writeFile("#{self.public_path}/#{self.files.css.lib}", output)
         sys.log('CSS libs concatinated')
