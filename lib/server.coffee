@@ -43,7 +43,9 @@ class exports.Server
         client.remote('setSession', session.id, {system: true})
         log.createNewSession(session) if log
       client.remote('ready', {}, {system: true})
-  
+
+      global.sesh = client.session.attributes # Paul added this
+      
   _processIncomingCall: (data, client) ->
     return null unless client.session.data # drop all calls unless session is loaded
     msg = JSON.parse(data)
@@ -61,9 +63,7 @@ class exports.Server
           obj = new klass
           obj.session = client.session
           obj.user = client.session.user
-          
-          global.sesh = client.session.attributes # Paul added this
-        
+                  
           args = []
           args.push(msg.params) if msg.params
           args.push((params, options) -> client.remote(msg, params, options))
