@@ -61,6 +61,8 @@ class exports.Server
           obj = new klass
           obj.session = client.session
           obj.user = client.session.user
+          
+          global.sesh = client.session.attributes # Paul added this
         
           args = []
           args.push(msg.params) if msg.params
