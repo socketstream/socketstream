@@ -5,9 +5,9 @@
   "homepage":     "http://www.socketstream.org",
   "author":       "Owen Barnes <owen@socketstream.org>",
   "dependencies": {
-    "coffee-script":  ">= 0.9.6",
-    "socket.io":      ">= 0.6.1",
-    "redis":          ">= 0.3.9",
+    "coffee-script":  "= 1.0.0",
+    "socket.io":      "= 0.6.1",
+    "redis":          "= 0.5.2",
   },
   "directories":  { "lib": "./lib" },
   "main":         "./lib/socket_stream.js",
