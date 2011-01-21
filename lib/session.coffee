@@ -9,7 +9,8 @@ class exports.Session
   
   id_length: 32
   user: null
-
+  attributes: {} # Added by Paul
+  
   constructor: (@client) ->
     @cookies = try
       utils.parseCookie(@client.request.headers.cookie)
@@ -39,17 +40,21 @@ class exports.Session
       @newly_created = true
       cb(err, @)
 
+  # AUTH - rip out
   assignUser: (user_id) ->
     return null unless user_id
     @user = new UserSession(user_id)
     @
 
+  # AUTH - rip out
   save: ->
     R.hset @key(), 'user_id', @user.id if @user
 
+  # AUTH - rip out
   loggedIn: ->
     @user?
 
+  # AUTH - rip out
   logout: (cb) ->
     @user = null
     @create (err, new_session) -> cb(null, new_session)
