@@ -1,5 +1,5 @@
 http    = require 'http'
-io      = require 'socket.io@0.6.1'
+io      = require 'socket.io@0.6.8'
 static  = require 'node-static@0.5.3'
 
 log = null
