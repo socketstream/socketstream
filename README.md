@@ -22,7 +22,7 @@ More coming soon at [www.socketstream.org](http://www.socketstream.org).
 
 SocketStream is a radically different type of web framework. Instead of having multiple 'pages', each rendered by separate HTTP calls, SocketStream only has one 'page' of static HTML which is compressed and then sent the first time the client visits the site. At the same time all the CSS and client-side code your application will ever need is packaged, minified and sent to the client in the most optimal (CDN-friendly) way.
 
-The magic happens curiosity of a websocket or 'flash socket' tunnel which is instantly created between the client and the Node.js server.
+The magic happens curtousy of a websocket or 'flash socket' tunnel which is instantly created between the client and the Node.js server.
 From this point onwards all the data your application needs is sent over the tunnel asynchronously as serialized JSON objects. This means no HTTP connection latency and true bi-directional 'streaming' communication between client and server.
 
 

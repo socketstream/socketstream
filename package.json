@@ -8,6 +8,7 @@
     "coffee-script":  "= 1.0.0",
     "socket.io":      "= 0.6.8",
     "redis":          "= 0.5.2",
+    "hiredis":        "= 0.1.6",
     "node-static":    "= 0.5.3",
     "jade":           "= 0.6.0",
   },
