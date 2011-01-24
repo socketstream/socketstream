@@ -16,6 +16,7 @@ class exports.Packer
     ['./app/views', 'html', 'index', -> self.watch()],
     ['./lib/client', 'js', 'lib'],
     ['./lib/css', 'css', 'lib'],
+    ["#{__dirname}/client/js", 'js', 'system'],
   ]
 
   constructor: (@options = {}) ->
@@ -43,35 +44,8 @@ class exports.Packer
     @output.css.lib()
     @output.css.app()
     @output.html.index()
-    
-  _findAssets: ->
-    @_fileList self.public_path, null, (files) =>
-      files.filter((file) -> file.match(/(css|js)$/)).map (file) ->
-        file_arr = file.split('.')
-        ext = file_arr[file_arr.length - 1]
-        type = file_arr[0].substring(0,3)
-        f = self.files[ext]
-        f[type] = file
-  
-  _watchForChangesInDir: (dir, cb) ->
-    fs.readdirSync(dir).map (file) ->
-      path = "#{dir}/#{file}"
-      fs.unwatchFile(path)
-      fs.watchFile path, (curr, prev) ->
-        if !curr or (Number(curr.mtime) > Number(prev.mtime))
-          sys.log("Change detected in #{path}. Recompiling client files...")
-          cb()
-  
-  _deleteFilesInPublicDir: (rexexp) ->
-    fs.readdirSync(self.public_path).map (file) -> fs.unlink("#{self.public_path}/#{file}") if file.match(rexexp)
 
-  _outputSystemLibs: ->
-    output = self._concatFiles("#{self.system_path}/js")
-    fs.writeFileSync("#{self.system_path}/cached/lib.min.js", output)
-    sys.log("SocketStream client files updated")
-    self._outputJavascriptLibs()
 
-    
   output:
     
     html:
@@ -124,6 +98,12 @@ class exports.Packer
         fs.writeFile("#{self.public_path}/#{self.files.js.lib}", output)
         emitter.emit('regenerate_html')
       
+      system: ->
+        output = self._concatFiles("#{self.system_path}/js")
+        fs.writeFileSync("#{self.system_path}/cached/lib.min.js", output)
+        sys.log("SocketStream client files updated")
+        self.output.js.lib()
+      
     css:
       
       app: ->
@@ -146,6 +126,27 @@ class exports.Packer
     
   _jsTag: (path, name) ->
     '<script src="/' + path + '/' + name + '" type="text/javascript"></script>'
+    
+  _findAssets: ->
+    @_fileList self.public_path, null, (files) =>
+      files.filter((file) -> file.match(/(css|js)$/)).map (file) ->
+        file_arr = file.split('.')
+        ext = file_arr[file_arr.length - 1]
+        type = file_arr[0].substring(0,3)
+        f = self.files[ext]
+        f[type] = file
+  
+  _watchForChangesInDir: (dir, cb) ->
+    fs.readdirSync(dir).map (file) ->
+      path = "#{dir}/#{file}"
+      fs.unwatchFile(path)
+      fs.watchFile path, (curr, prev) ->
+        if !curr or (Number(curr.mtime) > Number(prev.mtime))
+          sys.log("Change detected in #{path}. Recompiling client files...")
+          cb()
+  
+  _deleteFilesInPublicDir: (rexexp) ->
+    fs.readdirSync(self.public_path).map (file) -> fs.unlink("#{self.public_path}/#{file}") if file.match(rexexp)
   
   _fileList: (path, first_file, cb) ->
     files = fs.readdirSync(path).filter((file) -> !file.match(/(^_|^\.)/))
@@ -156,7 +157,7 @@ class exports.Packer
 
   _concatFiles: (path) ->
     self._fileList path, null, (files) ->
-      files.map (file) ->
+      files.sort().map (file) ->
         sys.log "  Concatinating file #{file}"
         output = fs.readFileSync("#{path}/#{file}", 'utf8')
         output = self._minifyJS(output) if file.match(/\.(coffee|js)/) and !file.match(/\.min/)

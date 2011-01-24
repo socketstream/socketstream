@@ -3,13 +3,13 @@
 
 utils = require('./utils')
 
-UserSession = require('user_session').UserSession
+UserSession = require('./user_session').UserSession
 
 class exports.Session
   
   id_length: 32
-  user: null
-  attributes: {} # Added by Paul
+  user: null     # Takes a UserSession
+  attributes: {} # To be stored in the redis session
   
   constructor: (@client) ->
     @cookies = try
@@ -19,7 +19,7 @@ class exports.Session
   
   key: ->
     "session:#{@id}"
-  
+
   process: (cb) ->
     if @cookies && @cookies.session_id && @cookies.session_id.length == @id_length
       R.hgetall 'session:' + @cookies.session_id, (err, @data) =>
@@ -39,11 +39,11 @@ class exports.Session
     R.hset @key(), 'created_at', @data.created_at, (err, response) =>
       @newly_created = true
       cb(err, @)
-
-  # AUTH - rip out
+      
   assignUser: (user_id) ->
     return null unless user_id
-    @user = new UserSession(user_id)
+    @user = new UserSession(user_id, @)
+    SocketStream.connected_users[user_id] = @client
     @
 
   # AUTH - rip out
