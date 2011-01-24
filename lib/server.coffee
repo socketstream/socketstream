@@ -5,6 +5,8 @@ static  = require 'node-static@0.5.3'
 log = null
 self = {}
 
+global.connected_users = {}
+
 Session = require('./session').Session
 
 class exports.Server
@@ -22,8 +24,9 @@ class exports.Server
     @socket.on('connection', @_processNewConnection)
     @socket.on('clientMessage', @_processIncomingCall)
     @server.listen(SocketStream.config.port)
+    @_listenForPubSubEvents()
     @_showWelcomeMessage()
-  
+    
   _processHttpRequest: (request, response) ->
     return self._compileCoffeeScript(request, response) if NODE_ENV == 'development' and request.url.match(/\.coffee$/) 
     file = new(static.Server)('./public')
@@ -32,8 +35,8 @@ class exports.Server
     
   _processNewConnection: (client) ->
     client.remote = (method, params, options = {}) ->
-      message = {method: method, params: params, cb_id: method.cb_id, callee: method.callee}
-      message.system = true if options.system
+      message = {method: method, params: params, cb_id: method.cb_id, callee: method.callee, type: 'callback'}
+      message.type = 'system' if options.system
       client.send(JSON.stringify(message))
       log.outgoingCall(client, method) if log and (options and !options.system and !options.silent)
   
@@ -69,7 +72,7 @@ class exports.Server
           try
             obj[method].apply(obj, args)
           catch e
-            sys.log 'Error: Unable apply method to class ' + method
+            sys.log 'Error: Unable apply method ' + method
             console.error(e)
         
         catch e
@@ -79,6 +82,16 @@ class exports.Server
         log.incomingCall(msg, client) if log and !(msg.options && msg.options.silent)
     else
       sys.log "Invalid message: #{data}"
+
+  _listenForPubSubEvents: ->
+    # WIP
+    RPS.on 'message', (channel, message) ->
+      channel = channel.split(':')
+      if channel && channel[0] == 'user'
+        client = SocketStream.connected_users[channel[1]]
+        client.remote('campaigns.list', {}, {}) if client
+      else
+        console.error ['Unknown pub/sub message received from Redis', channel, message]     
   
   _compileCoffeeScript: (request, response) ->
     request.addListener 'end', =>
