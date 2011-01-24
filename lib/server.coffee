@@ -43,8 +43,6 @@ class exports.Server
         client.remote('setSession', session.id, {system: true})
         log.createNewSession(session) if log
       client.remote('ready', {}, {system: true})
-
-      global.sesh = client.session.attributes # Paul added this
       
   _processIncomingCall: (data, client) ->
     return null unless client.session.data # drop all calls unless session is loaded
