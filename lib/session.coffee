@@ -9,7 +9,6 @@ class exports.Session
   
   id_length: 32
   user: null
-  attributes: {} # Added by Paul
   
   constructor: (@client) ->
     @cookies = try
