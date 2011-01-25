@@ -3,7 +3,7 @@
 
 utils = require('./utils')
 
-UserSession = require('./user_session').UserSession
+UserSession = require('user_session').UserSession
 
 class exports.Session
   
@@ -43,7 +43,6 @@ class exports.Session
   assignUser: (user_id) ->
     return null unless user_id
     @user = new UserSession(user_id, @)
-    SocketStream.connected_users[user_id] = @client
     @
 
   # AUTH - rip out
