@@ -1,5 +1,4 @@
 # TODO: Greatly improve to support arbitrary storage of session variables within Redis (using hashes)
-# TODO: Work out how Session will interact with UserSession and Authentication
 
 utils = require('./utils')
 
@@ -8,7 +7,7 @@ UserSession = require('user_session').UserSession
 class exports.Session
   
   id_length: 32
-  user: null     # Takes a UserSession
+  user: null     # Takes a UserSession instance when user is logged in
   attributes: {} # To be stored in the redis session
   
   constructor: (@client) ->
@@ -40,20 +39,31 @@ class exports.Session
       @newly_created = true
       cb(err, @)
       
+
+  # Users
+
+  loggedIn: ->
+    @user?
+      
   assignUser: (user_id) ->
     return null unless user_id
     @user = new UserSession(user_id, @)
     @
 
+  authenticate: (module_name, params, cb) ->
+    klass = require(module_name).Authentication
+    auth = new klass
+    auth.authenticate params, cb
+
+  logout: (cb) ->
+    @user.destroy()
+    @user = null
+    @create (err, new_session) -> cb(null, new_session)    
+
+
   # AUTH - rip out
   save: ->
     R.hset @key(), 'user_id', @user.id if @user
 
-  # AUTH - rip out
-  loggedIn: ->
-    @user?
 
-  # AUTH - rip out
-  logout: (cb) ->
-    @user = null
-    @create (err, new_session) -> cb(null, new_session)
+

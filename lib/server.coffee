@@ -1,7 +1,6 @@
 http    = require 'http'
 io      = require 'socket.io@0.6.8'
 static  = require 'node-static@0.5.3'
-authLib = require('socketstream-auth')
 
 log = null
 self = {}
@@ -18,7 +17,6 @@ class exports.Server
     if SocketStream.config.log_level and SocketStream.config.log_level > 0
       Logger = require('./logger.coffee').Logger
       log = new Logger(SocketStream.config.log_level)
-    @_setAuthenticationStrategy()
     
   start: ->
     @server = http.createServer(@_processHttpRequest)
@@ -117,9 +115,3 @@ class exports.Server
     sys.puts "----------------------------------------------------------------"
     sys.puts "\n"
 
-  _setAuthenticationStrategy: ->
-    authStrategies = {sso: authLib.SSO, crap: authLib.HttpBasic}
-    SocketStream.Authentication = if SocketStream.config.authenticationType? 
-      authStrategies[SocketStream.config.authenticationType] 
-    else
-      authLib.SSO
