@@ -5,7 +5,7 @@ class exports.UserSession
     @_subscribe()
     @
   
-  logout: (cb) ->
+  destroy: (cb) ->
     @_unsubscribe()
 
   _subscribe: (cb) ->
@@ -13,5 +13,5 @@ class exports.UserSession
     SocketStream.connected_users[@id] = @session.client
     
   _unsubscribe: ->
-    RPS.unsubscribe @key, (err, res) =>
-      delete SocketStream.connected_users[@id]
+    RPS.unsubscribe @key
+    delete SocketStream.connected_users[@id]
