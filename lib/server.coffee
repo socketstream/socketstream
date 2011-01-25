@@ -34,18 +34,22 @@ class exports.Server
     log.staticFile(request) if log
     
   _processNewConnection: (client) ->
-    client.remote = (method, params, options = {}) ->
-      message = {method: method, params: params, cb_id: method.cb_id, callee: method.callee, type: 'callback'}
-      message.type = 'system' if options.system
+
+    client.remote = (method, params, type, options = {}) ->
+      message = {method: method, params: params, cb_id: method.cb_id, callee: method.callee, type: type}
       client.send(JSON.stringify(message))
-      log.outgoingCall(client, method) if log and (options and !options.system and !options.silent)
+      log.outgoingCall(client, method) if log and (type != 'system' and options and !options.silent)
+      
+    client.invoke = (user_id, listener, params) ->
+      message = JSON.stringify({listener: listener, params: params})
+      R.publish "user:#{user_id}", message
   
     client.session = new Session(client)
     client.session.process (err, session) ->
       if session.newly_created
-        client.remote('setSession', session.id, {system: true})
+        client.remote('setSession', session.id, 'system')
         log.createNewSession(session) if log
-      client.remote('ready', {}, {system: true})
+      client.remote('ready', {}, 'system')
       
   _processIncomingCall: (data, client) ->
     return null unless client.session.data # drop all calls unless session is loaded
@@ -67,7 +71,7 @@ class exports.Server
                   
           args = []
           args.push(msg.params) if msg.params
-          args.push((params, options) -> client.remote(msg, params, options))
+          args.push((params, options) -> client.remote(msg, params, 'callback', options))
           
           try
             obj[method].apply(obj, args)
@@ -84,12 +88,14 @@ class exports.Server
       sys.log "Invalid message: #{data}"
 
   _listenForPubSubEvents: ->
-    # WIP
     RPS.on 'message', (channel, message) ->
       channel = channel.split(':')
       if channel && channel[0] == 'user'
         client = SocketStream.connected_users[channel[1]]
-        client.remote('campaigns.list', {}, {}) if client
+        if client and client.connected
+          message = JSON.parse(message)
+          message.type = 'event'
+          client.send(JSON.stringify(message))
       else
         console.error ['Unknown pub/sub message received from Redis', channel, message]     
   
