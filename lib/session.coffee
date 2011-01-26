@@ -4,11 +4,10 @@ utils = require('./utils')
 
 UserSession = require('./user_session').UserSession
 
-class exports.Session
+class Session
   
   id_length: 32
   user: null     # Takes a UserSession instance when user is logged in
-  attributes: {} # To be stored in the redis session
   
   constructor: (@client) ->
     @cookies = try
@@ -37,8 +36,7 @@ class exports.Session
     @data.created_at = Number(new Date())
     R.hset @key(), 'created_at', @data.created_at, (err, response) =>
       @newly_created = true
-      cb(err, @)
-      
+      cb(err, @)      
 
   # Users
 
@@ -60,10 +58,18 @@ class exports.Session
     @user = null
     @create (err, new_session) -> cb(null, new_session)    
 
-
   # AUTH - rip out
   save: ->
     R.hset @key(), 'user_id', @user.id if @user
 
-
-
+class exports.RedisSession extends Session  
+  
+  getAttributes: ->
+    attr = R.hget @key(), 'attributes'
+    JSON.parse if attr is undefined then '{}'
+    
+  setAttributes: (new_attributes) ->
+    R.hset @key(), 'attributes', JSON.stringify @_mergeAttributes @getAttributes(), new_attributes
+                    
+  _mergeAttributes: (old_attributes, new_attributes) ->
+    Object.extend old_attributes, new_attributes
