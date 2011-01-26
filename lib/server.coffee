@@ -5,25 +5,25 @@ static  = require 'node-static@0.5.3'
 log = null
 self = {}
 
-global.connected_users = {}
-
 Session = require('./session').RedisSession
+Publish = require('./publish').Publish
+$SS.publish = new Publish
 
 class exports.Server
   
   constructor: () ->
     self = @
     @controllers = {}
-    if SocketStream.config.log_level and SocketStream.config.log_level > 0
+    if $SS.config.log_level and $SS.config.log_level > 0
       Logger = require('./logger.coffee').Logger
-      log = new Logger(SocketStream.config.log_level)
+      log = new Logger($SS.config.log_level)
     
   start: ->
     @server = http.createServer(@_processHttpRequest)
     @socket = io.listen(@server, {transports: ['websocket', 'flashsocket']})
     @socket.on('connection', @_processNewConnection)
     @socket.on('clientMessage', @_processIncomingCall)
-    @server.listen(SocketStream.config.port)
+    @server.listen($SS.config.port)
     @_listenForPubSubEvents()
     @_showWelcomeMessage()
     
@@ -34,15 +34,10 @@ class exports.Server
     log.staticFile(request) if log
     
   _processNewConnection: (client) ->
-
     client.remote = (method, params, type, options = {}) ->
       message = {method: method, params: params, cb_id: method.cb_id, callee: method.callee, type: type}
       client.send(JSON.stringify(message))
       log.outgoingCall(client, method) if log and (type != 'system' and options and !options.silent)
-      
-    client.invoke = (user_id, listener, params) ->
-      message = JSON.stringify({listener: listener, params: params})
-      R.publish "user:#{user_id}", message
   
     client.session = new Session(client)
     client.session.process (err, session) ->
@@ -61,7 +56,7 @@ class exports.Server
       if method.charAt(0) == '_'
         sys.log "Error: Unable to access private method #{method}"
       else
-        path = "#{SocketStream.root}/app/server/#{action.join('/')}"
+        path = "#{$SS.root}/app/server/#{action.join('/')}"
         klass_name = action.pop().capitalized()
         try
           klass = require(path)[klass_name]
@@ -92,21 +87,20 @@ class exports.Server
       sys.log "Invalid message: #{data}"
 
   _listenForPubSubEvents: ->
-    RPS.on 'message', (channel, message) ->
+    RPS.on 'message', (channel, message) =>
       channel = channel.split(':')
-      if channel && channel[0] == 'user'
-        client = SocketStream.connected_users[channel[1]]
-        if client and client.connected
-          message = JSON.parse(message)
-          message.type = 'event'
-          client.send(JSON.stringify(message))
-      else
-        console.error ['Unknown pub/sub message received from Redis', channel, message]     
+      if channel && channel[0] == 'socketstream'
+        switch channel[1]
+          when 'user'
+            client = $SS.connected_users[channel[2]]
+            client.send(message) if client and client.connected
+          when 'broadcast'
+            @socket.broadcast(message)
   
   _compileCoffeeScript: (request, response) ->
     request.addListener 'end', =>
       file = request.url.split('/')[2].split('.')[0]
-      fs.readFile "#{SocketStream.root}/app/client/#{file}.coffee", 'utf8', (err, coffeescript) ->
+      fs.readFile "#{$SS.root}/app/client/#{file}.coffee", 'utf8', (err, coffeescript) ->
         js = coffee.compile(coffeescript)
         response.writeHead(200, {'Content-type': 'text/javascript', 'Content-Length': js.length})
         response.end(js)
@@ -114,8 +108,8 @@ class exports.Server
   _showWelcomeMessage: ->
     sys.puts "\n"
     sys.puts "------------------------- SocketStream -------------------------"
-    sys.puts "  Version #{SocketStream.version.join('.')} running in #{NODE_ENV}"
-    sys.puts "  Running on Port #{SocketStream.config.port}, PID #{process.pid}"
+    sys.puts "  Version #{$SS.version.join('.')} running in #{NODE_ENV}"
+    sys.puts "  Running on Port #{$SS.config.port}, PID #{process.pid}"
     sys.puts "----------------------------------------------------------------"
     sys.puts "\n"
 
