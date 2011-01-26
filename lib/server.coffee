@@ -7,7 +7,7 @@ self = {}
 
 global.connected_users = {}
 
-Session = require('./session').Session
+Session = require('./session').RedisSession
 
 class exports.Server
   
