@@ -65,23 +65,27 @@ class exports.Server
         klass_name = action.pop().capitalized()
         try
           klass = require(path)[klass_name]
-          obj = new klass
-          obj.session = client.session
-          obj.user = client.session.user
-                  
-          args = []
-          args.push(msg.params) if msg.params
-          args.push((params, options) -> client.remote(msg, params, 'callback', options))
-          
-          try
-            obj[method].apply(obj, args)
-          catch e
-            sys.log 'Error: Unable apply method ' + method
-            console.error(e)
-        
         catch e
           sys.log 'Error: Unable to find class ' + klass_name
           console.error(e)
+          
+        # Inject 'helper functions'
+        obj = new klass
+        obj.session = client.session
+        obj.user = client.session.user
+
+        args = []
+        args.push(msg.params) if msg.params
+        args.push((params, options) -> client.remote(msg, params, 'callback', options))
+        
+        if NODE_ENV == 'development'
+          obj[method].apply(obj, args) # We need to see full stack trace on screen
+        else
+          try
+            obj[method].apply(obj, args)
+          catch e
+            # TODO: Catch and handle exceptions nicely without crashing server
+            console.error(e)
         
         log.incomingCall(msg, client) if log and !(msg.options && msg.options.silent)
     else
