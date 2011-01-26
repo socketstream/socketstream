@@ -2,7 +2,7 @@
 
 utils = require('./utils')
 
-UserSession = require('user_session').UserSession
+UserSession = require('./user_session').UserSession
 
 class exports.Session
   
