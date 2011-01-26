@@ -1,7 +1,7 @@
 class exports.UserSession
 
   constructor: (@id, @session) ->
-    @key = "user:#{@id}"
+    @pubsub_key = "socketstream:user:#{@id}"
     @_subscribe()
     @
   
@@ -9,9 +9,9 @@ class exports.UserSession
     @_unsubscribe()
 
   _subscribe: (cb) ->
-    RPS.subscribe @key
+    RPS.subscribe @pubsub_key
     SocketStream.connected_users[@id] = @session.client
     
   _unsubscribe: ->
-    RPS.unsubscribe @key
+    RPS.unsubscribe @pubsub_key
     delete SocketStream.connected_users[@id]
