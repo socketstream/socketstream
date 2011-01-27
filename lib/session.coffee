@@ -24,9 +24,15 @@ class Session
         if err or @data == null
           @create(cb)
         else
+          #TODO - clean this bit up as a result of not having to sanitize hashes in JSON 
+          parsedAttributes = JSON.parse @data.attributes if @data.attributes?
+          @data.user_id = parsedAttributes._id if parsedAttributes? and parsedAttributes._id? #HACK
           @id = @cookies.session_id
-          @assignUser(@data.user_id.toString()) if @data.user_id
-          cb(null, @)
+          if @data.user_id
+            @assignUser @data 
+            cb(null, @)
+          else
+            cb(null, @)
     else
       @create(cb)
 
@@ -53,9 +59,9 @@ class Session
     auth = new klass
     auth.authenticate params, cb
 
-
   # Users
 
+  #NOTE - may become deprecated
   assignUser: (user_id) ->
     return null unless user_id
     @user = new UserSession(user_id, @)
@@ -69,18 +75,27 @@ class Session
     @user = null
     @create (err, new_session) -> cb(null, new_session)    
 
-  # AUTH - rip out
+  # NOTE - do we still use this?
   save: ->
     R.hset @key(), 'user_id', @user.id if @user
-
+    
 class exports.RedisSession extends Session  
   
   getAttributes: ->
     attr = R.hget @key(), 'attributes'
     JSON.parse if attr is undefined then '{}'
     
+  #TODO - minimize the santization of hashes via JSON parse and stringify.
   setAttributes: (new_attributes) ->
     R.hset @key(), 'attributes', JSON.stringify @_mergeAttributes @getAttributes(), new_attributes
                     
   _mergeAttributes: (old_attributes, new_attributes) ->
     Object.extend old_attributes, new_attributes
+
+  # We've had to customise the assignUser function as it was breaking
+  # in the app due to a circular reference to the session object. 
+  assignUser: (data) ->
+    super
+    return null unless data.user_id
+    @user = JSON.parse data.attributes  
+  
