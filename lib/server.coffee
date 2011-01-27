@@ -5,7 +5,7 @@ static  = require 'node-static@0.5.3'
 log = null
 self = {}
 
-Session = require('./session').RedisSession
+Session = require('./session').Session
 Publish = require('./publish').Publish
 $SS.publish = new Publish
 

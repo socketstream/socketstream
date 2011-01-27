@@ -1,13 +1,9 @@
-# TODO: Greatly improve to support arbitrary storage of session variables within Redis (using hashes)
-
 utils = require('./utils')
 
-UserSession = require('./user_session').UserSession
-
-class Session
+class exports.Session
   
   id_length: 32
-  user: null     # Takes a UserSession instance when user is logged in
+  user: null
   
   constructor: (@client) ->
     @cookies = try
@@ -24,15 +20,9 @@ class Session
         if err or @data == null
           @create(cb)
         else
-          #TODO - clean this bit up as a result of not having to sanitize hashes in JSON 
-          parsedAttributes = JSON.parse @data.attributes if @data.attributes?
-          @data.user_id = parsedAttributes._id if parsedAttributes? and parsedAttributes._id? #HACK
           @id = @cookies.session_id
-          if @data.user_id
-            @assignUser @data 
-            cb(null, @)
-          else
-            cb(null, @)
+          @assignUser @data
+          cb(null, @)
     else
       @create(cb)
 
@@ -60,42 +50,31 @@ class Session
     auth.authenticate params, cb
 
   # Users
-
-  #NOTE - may become deprecated
-  assignUser: (user_id) ->
-    return null unless user_id
-    @user = new UserSession(user_id, @)
-    @
+  assignUser: (data) ->
+    return null unless data.user_id
+    @user = @_encodeAttributes data.attributes  
 
   loggedIn: ->
     @user?
-      
+  
   logout: (cb) ->
-    @user.destroy()
     @user = null
     @create (err, new_session) -> cb(null, new_session)    
-
-  # NOTE - do we still use this?
-  save: ->
-    R.hset @key(), 'user_id', @user.id if @user
-    
-class exports.RedisSession extends Session  
   
+  setUserAndAttributes: (id, user_data) ->
+    return null if id is undefined or user_data is undefined
+    R.hset @key(), 'user_id', id
+    @assignUser(user_data)    
+    R.hset @key(), 'attributes', @_decodeAttributes Object.extend @getAttributes(), user_data # Set attributes    
+    
   getAttributes: ->
     attr = R.hget @key(), 'attributes'
-    JSON.parse if attr is undefined then '{}'
+    @_encodeAttributes if attr is undefined then '{}' else attr
     
-  #TODO - minimize the santization of hashes via JSON parse and stringify.
-  setAttributes: (new_attributes) ->
-    R.hset @key(), 'attributes', JSON.stringify @_mergeAttributes @getAttributes(), new_attributes
-                    
-  _mergeAttributes: (old_attributes, new_attributes) ->
-    Object.extend old_attributes, new_attributes
+  # Encode a hash to a string for storing in Redis. This should be deprecated once Redis 2.2 is in use.  
+  _encodeAttributes: (attr) ->
+    JSON.parse attr
 
-  # We've had to customise the assignUser function as it was breaking
-  # in the app due to a circular reference to the session object. 
-  assignUser: (data) ->
-    super
-    return null unless data.user_id
-    @user = JSON.parse data.attributes  
-  
+  # Decode a string from Redis into a hash. This should be deprecated once Redis 2.2 is in use.    
+  _decodeAttributes: (attr) ->
+    JSON.stringify attr
