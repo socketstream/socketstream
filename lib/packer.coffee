@@ -19,7 +19,6 @@ class exports.Packer
   ]
 
   constructor: (@options = {}) ->
-    console.log uglifyjs
     self = @
     @files = {js: {}, css: {}}
     @_findAssets()
