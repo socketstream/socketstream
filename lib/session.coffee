@@ -37,11 +37,11 @@ class exports.Session
   # Authentication is provided by passing the name of a module which Node must be able to load, either from /lib/server, /vendor/module/lib, or from npm.
   # The module must implement an 'authenticate' function which expects a params object normally in the form of username and password, but could also be biometric or iPhone device id, SSO token, etc.
   #
-  # The callback must be an object with a 'status' attribute (boolean) and an 'id' attribute (number or string) if successful.
+  # The callback must be an object with a 'status' attribute (boolean) and a 'user_id' attribute (number or string) if successful.
   #
   # Additional info, such as number of tries remaining etc, can be passed back within the object and pushed upstream to the client. E.g:
   #
-  # {success: true, id: 21323, info: {username: 'joebloggs'}}
+  # {success: true, user_id: 21323, info: {username: 'joebloggs'}}
   # {success: false, info: {num_retries: 2}}
   # {success: false, info: {num_retries: 0, lockout_duration_mins: 30}}
   authenticate: (module_name, params, cb) ->
@@ -52,7 +52,7 @@ class exports.Session
   # Users
   assignUser: (data) ->
     return null unless data.user_id
-    @user = @_encodeAttributes data.attributes  
+    @user = JSON.parse data.attributes  
 
   loggedIn: ->
     @user?
@@ -65,16 +65,8 @@ class exports.Session
     return null if id is undefined or user_data is undefined
     R.hset @key(), 'user_id', id
     @assignUser(user_data)    
-    R.hset @key(), 'attributes', @_decodeAttributes Object.extend @getAttributes(), user_data # Set attributes    
+    R.hset @key(), 'attributes', JSON.stringify Object.extend @getAttributes(), user_data # Set attributes    
     
   getAttributes: ->
     attr = R.hget @key(), 'attributes'
-    @_encodeAttributes if attr is undefined then '{}' else attr
-    
-  # Encode a hash to a string for storing in Redis. This should be deprecated once Redis 2.2 is in use.  
-  _encodeAttributes: (attr) ->
-    JSON.parse attr
-
-  # Decode a string from Redis into a hash. This should be deprecated once Redis 2.2 is in use.    
-  _decodeAttributes: (attr) ->
-    JSON.stringify attr
+    JSON.parse if attr is undefined then '{}' else attr
