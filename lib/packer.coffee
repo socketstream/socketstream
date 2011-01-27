@@ -1,9 +1,8 @@
 EventEmitter = require('events').EventEmitter
 emitter = new EventEmitter
 
-require.paths.unshift('./vendor/UglifyJS/lib')
-
 jade = require 'jade'
+uglifyjs = require("uglify-js@0.0.3")
 self = {}
 
 class exports.Packer
@@ -20,6 +19,7 @@ class exports.Packer
   ]
 
   constructor: (@options = {}) ->
+    console.log uglifyjs
     self = @
     @files = {js: {}, css: {}}
     @_findAssets()
@@ -166,8 +166,8 @@ class exports.Packer
 
   _minifyJS: (orig_code) ->
     orig_size = (orig_code.length / 1024)
-    jsp = require("parse-js")
-    pro = require("process")
+    jsp = uglifyjs.parser
+    pro = uglifyjs.uglify
     ast = jsp.parse(orig_code)
     ast = pro.ast_mangle(ast)
     ast = pro.ast_squeeze(ast)
