@@ -5,7 +5,7 @@ SocketStream makes it a breeze to build phenomenally fast, highly-scalable real-
 More coming soon at [www.socketstream.org](http://www.socketstream.org).
 
 
-#### Features
+### Features
 
 * No-latency bi-directional communication between client and server using websockets (or flash sockets)
 * Write client and server code in Coffeescript or Javascript - your choice
@@ -21,7 +21,7 @@ More coming soon at [www.socketstream.org](http://www.socketstream.org).
 * Uses Ruby SASS for CSS (other options coming soon)
 
 
-#### Philosophy
+### Philosophy
 
 SocketStream is a radically different type of web framework. Instead of having multiple 'pages', each rendered by separate HTTP calls, SocketStream only has one 'page' of static HTML which is compressed and then sent the first time the client visits the site. At the same time all the CSS and client-side code your application will ever need is packaged, minified and sent to the client in the most optimal (CDN-friendly) way.
 
@@ -29,7 +29,7 @@ The magic happens courtesy of a websocket or 'flash socket' tunnel which is inst
 From this point onwards all the data your application needs is sent over the tunnel asynchronously as serialized JSON objects. This means no HTTP connection latency and true bi-directional 'streaming' communication between client and server.
 
 
-#### Installing
+### Installing
 
 For now clone this project to a directory and link it as a local npm package with:
 
@@ -38,7 +38,7 @@ For now clone this project to a directory and link it as a local npm package wit
 There is no rails-like project generator yet, so you'll need to checkout the example_site project too (available shortly!).
 
 
-#### Quick Example
+### Quick Example
 
 The key to using socket stream is the `remote` method which is available anywhere within the client app.
 
@@ -64,7 +64,7 @@ And on the server, add this to /app/server/app.coffee
 That's it! Want to see something a bit more advanced? How about reverse geocoding using HTML5 geolocation?
 
 
-#### Reverse Geocoding Example
+### Reverse Geocoding Example
 
 For the server code, create the file /app/server/geocode.coffee and paste in the following code:
 
@@ -125,10 +125,10 @@ Then, purely to demonstrate a nice way to do client-side namespacing, let's crea
 Run this code and you should see your current location pop up (pretty accurate if you're on WiFi).
 Of course, you'll need to handle the many and various errors that could go wrong during this process with a callback to the client.
 
-Bonus tip: Want to show your location again? Just type 'app.geocode.determineLocation()' from the browser console. All client-side functions can be called this way.
+**Bonus tip:** Want to run this again? Just type 'app.geocode.determineLocation()' from the browser console. All client-side functions can be called this way.
 
 
-#### Pub/Sub Example
+### Pub/Sub Example
 
 Want to build a chat app or push an notification to a particular user?
     
@@ -150,12 +150,12 @@ Pretty cool eh? But it gets better. We don't have to worry which server the user
 
 What happens if we want to notify every user when data has changed, or let everyone know the system is going down for maintenance? Simple, just use the broadcast method:
 
-    $SS.publish.broadcast('flash', {type: 'notification', message: 'Notice: This service will be temporarily unavailable in 10 minutes'})
+    $SS.publish.broadcast('flash', {type: 'notification', message: 'Notice: This service is going down in 10 minutes'})
     
-Ah, but you have thousands of users across hundreds of servers you say? No problem. The workload is distributed to every connected Node.js instance by design. I'm sure you can see where this is going... ;-)
+Ah, but you have thousands of users across hundreds of servers you say? No problem. The workload is distributed across every connected Node.js instance by design. I'm sure you can see where this is going... ;-)
 
 
-#### Coming Soon
+### Coming Soon
 
 So so much... including:
 
