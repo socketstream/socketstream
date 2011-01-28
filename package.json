@@ -18,5 +18,5 @@
   },
   "directories":  { "lib": "./lib" },
   "main":         "./lib/socket_stream.js",
-  "engines":      { "node": ">= 3.0.0" }
+  "engines":      { "node": ">= 0.3.0" }
 }
