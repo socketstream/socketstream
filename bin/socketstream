@@ -5,4 +5,4 @@ var path = require('path');
 var fs   = require('fs');
 var lib  = path.join(path.dirname(fs.realpathSync(__filename)), '../lib');
 
-require lib + '/cli/cli.coffee';
+require(lib + '/cli/cli.coffee');

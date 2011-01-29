@@ -25,17 +25,23 @@ More coming soon at [www.socketstream.org](http://www.socketstream.org).
 
 SocketStream is a radically different type of web framework. Instead of having multiple 'pages', each rendered by separate HTTP calls, SocketStream only has one 'page' of static HTML which is compressed and then sent the first time the client visits the site. At the same time all the CSS and client-side code your application will ever need is packaged, minified and sent to the client in the most optimal (CDN-friendly) way.
 
-The magic happens courtesy of a websocket or 'flash socket' tunnel which is instantly created between the client and the Node.js server. This connection will be automatically restored should the connection fail.
+The magic happens courtesy of a websocket or 'flash socket' tunnel which is instantly created between the client and the Node.js server. This tunnel will be automatically restored by the client should the connection fail.
 From this point onwards all the data your application needs is sent over the tunnel asynchronously as serialized JSON objects. This means no HTTP connection latency and true bi-directional 'streaming' communication between client and server.
+
+Note: While SocketStream is a perfect fit for all manner of true web apps which require real-time data (chat, stock trading, location monitoring, analytics, etc), it would make a poor choice for a blog or other content-rich site which requires unique URLs for search engine optimization.
 
 
 ### Installing
 
 For now clone this project to a directory and link it as a local npm package with:
 
-`npm link`
+    npm link
 
-There is no rails-like project generator yet, so you'll need to checkout the example_site project too (available shortly!).
+To generate a new empty SocketStream project, simply type:
+
+    socketstream <name of your project>
+
+Full tutorial and many examples coming soon.
 
 
 ### Quick Example
@@ -162,3 +168,5 @@ So so much... including:
 * Build rate-limiting into SocketStream to block clients attempting to DDOS the connection
 * Horizontal scaling by downloading a list of active servers and automatically trying new servers should one fail over, no load balancers required!
 * Beautiful super-fast browser-based testing
+
+
