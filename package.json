@@ -15,8 +15,12 @@
     "node-static":    "= 0.5.3",
     "jade":           "= 0.6.0",
     "uglify-js":      "= 0.0.3",
+    "argsparser":     "= 0.0.3",
   },
   "directories":  { "lib": "./lib" },
   "main":         "./lib/socket_stream.js",
-  "engines":      { "node": ">= 0.3.0" }
+  "engines":      { "node": ">= 0.3.0" },
+  "bin":          {
+    "socketstream":   "./bin/socketstream"
+  }
 }
