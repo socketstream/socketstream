@@ -23,12 +23,12 @@ class exports.Session
   process: (cb) ->
     if @cookies && @cookies.session_id && @cookies.session_id.length == @id_length
       R.hgetall "socketstream:session:#{@cookies.session_id}", (err, data) =>
-        if err or data == null
+        if err or data == null or data == undefined
           @create(cb)
         else
           @id = @cookies.session_id
           @attributes = JSON.parse(data.attributes || '{}')
-          @setUser(data.user_id)
+          @setUserId(data.user_id)
           cb(@)
     else
       @create(cb)
@@ -56,8 +56,8 @@ class exports.Session
     auth.authenticate params, cb
 
   # Users
-  setUser: (user_id) ->
-    return null if user_id
+  setUserId: (user_id) ->
+    return null unless user_id
     @user_id = user_id
     R.hset @key(), 'user_id', @user_id
     RPS.subscribe @pubsub_key()
