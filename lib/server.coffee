@@ -40,14 +40,14 @@ class exports.Server
       log.outgoingCall(client, method) if log and (type != 'system' and options and !options.silent)
   
     client.session = new Session(client)
-    client.session.process (err, session) ->
+    client.session.process (session) ->
       if session.newly_created
         client.remote('setSession', session.id, 'system')
         log.createNewSession(session) if log
       client.remote('ready', {}, 'system')
       
   _processIncomingCall: (data, client) ->
-    return null unless client.session.data # drop all calls unless session is loaded
+    return null unless client.session.id # drop all calls unless session is loaded
     msg = JSON.parse(data)
     
     if msg && msg.method
