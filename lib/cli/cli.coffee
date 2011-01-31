@@ -23,10 +23,9 @@ class AppGenerator
       {fileName: '/app/client/app.coffee', data: 'window.debug_level = 2\n\nclass window.App\n\n\tversion: [0,0,1]\n\n\tconstructor: ->'}
       {fileName: '/app/sass/app.sass',     data: ''}
       {fileName: '/app/server/app.coffee', data: 'class exports.App\n\n\tinit: (cb) ->\n\t\tcb true'}
-      {fileName: '/app/views/index.jade',  data: 'html\n\thead\n\thead\n\t\ttitle '+@name+'\n\tbody'}
+      {fileName: '/app/views/index.jade',  data: 'html\n\thead\n\thead\n\t\ttitle '+@name+'\n\tbody\n\t\th3 Welcome to your new SocketStream project!'}
       {fileName: '/app.coffee',            data: "app = require('socketstream').init(__dirname)\napp.start()"}      
       {fileName: '/lib/css/reset.css',     data: ''}
-      {fileName: '/lib/nodemon-ignore',    data: ''}
     ]
     fs.writeFileSync @name + file.fileName, file.data for file in files
     

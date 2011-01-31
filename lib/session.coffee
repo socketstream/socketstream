@@ -1,4 +1,5 @@
 utils = require('./utils')
+UserSession = require('./user_session').UserSession
 
 class exports.Session
   
@@ -52,7 +53,8 @@ class exports.Session
   # Users
   assignUser: (data) ->
     return null unless data.user_id
-    @user = JSON.parse data.attributes  
+    @user = new UserSession(data.user_id, @)
+    @user.attributes = JSON.parse(data.attributes) if data.attributes
 
   loggedIn: ->
     @user?
@@ -61,12 +63,12 @@ class exports.Session
     @user = null
     @create (err, new_session) -> cb(null, new_session)    
   
-  setUserAndAttributes: (id, user_data) ->
-    return null if id is undefined or user_data is undefined
-    R.hset @key(), 'user_id', id
+  setUserAndAttributes: (user_id, user_data) ->
+    return null if user_id is undefined or user_data is undefined
+    R.hset @key(), 'user_id', user_id
     @assignUser(user_data)    
-    R.hset @key(), 'attributes', JSON.stringify Object.extend @getAttributes(), user_data # Set attributes    
+    R.hset @key(), 'attributes', JSON.stringify(Object.extend(@getAttributes(), user_data)) # Set attributes    
     
   getAttributes: ->
     attr = R.hget @key(), 'attributes'
-    JSON.parse if attr is undefined then '{}' else attr
+    JSON.parse(attr || '{}')
