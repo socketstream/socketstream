@@ -169,30 +169,36 @@ To generate a new empty SocketStream project, simply type:
 The directories generated will be very familiar to Rails users. Here's a brief overview:
 
 #### /app/client
-* The /app/client/app.coffee file must exist and contain an 'init' method, called once the connection is established
-* All files within /app/client will be sent to the client. Nesting client files within folders is not supported yet
-* Changing any file within /app/client will not require a restart in development mode (NODE_ENV=development), just hit refresh on the browser
+* All files within /app/client will be converted to Javascript and sent to the client
+* The app.init() function will be automatically called once the websocket connection is established
+* Changing any client will not require a restart in development mode (NODE_ENV=development), just hit refresh on the browser
 * Client code is automatically concatenated and minified in staging and production (NODE_ENV=staging)
+* Nesting client files within folders is not supported yet
 * If you have a Javascript library you wish to use (e.g. jQuery), put this in /lib/client instead
+* jQuery is required for now, though we will remove this dependency in the future
+* All client code can be called from the console using the 'app' variable (app is an instance of window.App)
+* The /app/client/app.coffee file must always be present
 
 #### /app/server
-* The /app/server/app.coffee file must exist
+* All files in this directory behave similar to Controllers in traditional MVC frameworks
+* For example, to call app.init from the client and pass 25 as params, type remote('app.init',25,function(){ alert(this); })
+* The last argument must always be the callback (cb). If app.init were to call cb('hello it works') we would see this message popup
 * All methods are automatically accessible via the client unless they begin with an underscore - so be careful!
-* If the method takes incoming params, these must be declared as the first argument
-* The last argument must always be the callback. All methods must take a callback argument, even if this simply returns null
+* If the method takes incoming params, these will be pushed into the first argument. The second must always be the callback.
 * Each file must begin 'class exports.' followed by the capitalized name of the file (e.g. 'class exports.User')
 * Server files can be nested. E.g. remote('users.online.yesterday') would reference the 'yesterday' method in /app/server/users/online.coffee
 * @session gives you direct access to the User's session
 * @user gives you direct access to your custom User code. More on this coming soon
+* The /app/server/app.coffee file must always be present
 
 #### /app/css
-* /app/css/app.stly must exist. This is designed to contain your stylesheet code in [Stylus](http://learnboost.github.com/stylus/) format
+* /app/css/app.stly must exist. This should contain your stylesheet code in [Stylus](http://learnboost.github.com/stylus/) format (similar to SASS)
 * Additional Stylus files can be imported into app.stly using @import 'name_of_file'
 * Changing any file within /app/css will automatically trigger Stylus re-compilation
 * If you wish to use CSS libraries within your project (e.g. reset.css or jQuery UI) put these in /lib/css instead
 
 #### /app/views
-* /app/views/app.jade must exist. This is designed to contain all the static HTML your app needs in [Jade](http://jade-lang.com/) format
+* /app/views/app.jade must exist. This should contain all the static HTML your app needs in [Jade](http://jade-lang.com/) format (similar to HAML)
 * The HTML HEAD tag must contain '!= SocketStream'. This helper ensures all the correct libraries are loaded depending upon the environment (declared by NODE_ENV)
 * Only one view file is supported at the moment. We may implement 'partials' in the future.
 * Changing the /app/views/app.jade file, or any other client asset file, will automatically trigger Jade re-compilation when in development mode
@@ -201,9 +207,11 @@ The directories generated will be very familiar to Rails users. Here's a brief o
 * Changes to files within /lib/client or /lib/css automatically triggers re-compilation of client assets in development mode
 * Easily control the order your client libraries are loaded by prefixing them with a number (e.g. 1.jquery.js, 2.jquery-ui.js)
 * Client JS files are automatically minified unless the filename contains '.min'
+* Any files within /lib/server can be required automatically by Node. Ideal for custom authentication modules
 
 #### /public
-* Store your static files here (e.g. /public/images) but leave the /public/assets folder alone as this is managed by SocketStream
+* Store your static files here (e.g. /public/images, robots.txt, etc)
+* The /public/assets folder is managed by SocketStream and should not be touched
 
 #### /vendor
 * Put any vendored libraries in here using the format /vendor/mycode/lib/mycode.js
