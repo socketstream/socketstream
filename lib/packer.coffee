@@ -13,7 +13,7 @@ class exports.Packer
   system_path: __dirname + '/client'
 
   watch_dirs: [
-    ['./app/views', 'html', 'index', -> self.watch()],
+    ['./app/views', 'html', 'app', -> self.watch()],
     ['./app/css', 'css', 'app'],
     ['./lib/client', 'js', 'lib'],
     ['./lib/css', 'css', 'lib'],
@@ -26,10 +26,10 @@ class exports.Packer
     @_findAssets()
   
   developerMode: ->
-    self.output.html.index ->
+    self.output.html.app ->
       self.watch()
       emitter.on 'regenerate_html', ->
-        self.output.html.index ->
+        self.output.html.app ->
           self.watch()
   
   watch: ->
@@ -43,14 +43,14 @@ class exports.Packer
     @output.js.app()
     @output.css.lib()
     @output.css.app()
-    @output.html.index()
+    @output.html.app()
 
 
   output:
     
     html:
       
-      index: (cb = ->) ->
+      app: (cb = ->) ->
         self.assets = []
         self.assets.push(self.tag.js('assets', self.files.js.lib))
         self.assets.push(self.tag.css('assets', self.files.css.lib))
@@ -62,9 +62,9 @@ class exports.Packer
           self.assets.push(self.tag.js('assets', self.files.js.app))
         
         self.assets.push('<script type="text/javascript">$(document).ready(function() { app = new App(); app.init(); });</script>')
-        jade.renderFile './app/views/index.jade', {locals: {SocketStream: self.assets.join('')}}, (err, html) ->
+        jade.renderFile './app/views/app.jade', {locals: {SocketStream: self.assets.join('')}}, (err, html) ->
           fs.writeFileSync './public/index.html', html
-          sys.log('Compiled index.jade to index.html')
+          sys.log('Compiled app.jade to index.html')
           cb()
     
     js:

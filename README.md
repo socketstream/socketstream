@@ -23,25 +23,18 @@ More coming soon at [www.socketstream.org](http://www.socketstream.org).
 
 ### Philosophy
 
-SocketStream is a radically different type of web framework. Instead of having multiple 'pages', each rendered by separate HTTP calls, SocketStream only has one 'page' of static HTML which is compressed and then sent the first time the client visits the site. At the same time all the CSS and client-side code your application will ever need is packaged, minified and sent to the client in the most optimal (CDN-friendly) way.
-
-The magic happens courtesy of a websocket or 'flash socket' tunnel which is instantly created between the client and the Node.js server. This tunnel will be automatically restored by the client should the connection fail.
-From this point onwards all the data your application needs is sent over the tunnel asynchronously as serialized JSON objects. This means no HTTP connection latency and true bi-directional 'streaming' communication between client and server.
-
-Note: While SocketStream is a perfect fit for all manner of true web apps which require real-time data (chat, stock trading, location monitoring, analytics, etc), it would make a poor choice for a blog or other content-rich site which requires unique URLs for search engine optimization.
+SocketStream is a new web framework built around the [Single-page Application](http://en.wikipedia.org/wiki/Single-page_application) paradigm. It embraces websockets, in-memory datastores (Redis), and client-side rendering to provide an ultra-responsive experience that will amaze your users.
 
 
-### Installing
+### How does it work?
 
-For now clone this project to a directory and link it as a local npm package with:
+SocketStream automatically compresses and minifies all the static HTML, CSS and client-side code your app will ever need and sends this through the first time a user visits your site.
 
-    npm link
+From then on all application data is sent and received as serialized JSON objects over a websocket (or 'flash socket') tunnel, instantly established when the client connects and automatically re-established if broken.
 
-To generate a new empty SocketStream project, simply type:
+All this means no more connection latency, HTTP header overhead, or slow AJAX calls. Just true bi-directional, asynchronous, 'streaming' communication between client and server.
 
-    socketstream <name of your project>
-
-Full tutorial and many examples coming soon.
+Note: While SocketStream is a perfect fit for all manner of modern applications which require real-time data (chat, stock trading, location monitoring, analytics, etc), it would make a poor choice for a blog or other content-rich site which requires unique URLs for search engine optimization.
 
 
 ### Quick Example
@@ -161,12 +154,73 @@ What happens if we want to notify every user when data has changed, or let every
 Ah, but you have thousands of users across hundreds of servers you say? No problem. The workload is distributed across every connected Node.js instance by design. I'm sure you can see where this is going... ;-)
 
 
+### Getting Started
+
+Ready to give it a whirl? SocketStream is highly experimental at the moment, but we're using it in new projects and improving it every day.
+
+For now clone this project to a directory and link it as a local npm package with:
+
+    npm link
+
+To generate a new empty SocketStream project, simply type:
+
+    socketstream <name of your project>
+
+The directories generated will be very familiar to Rails users. Here's a brief overview:
+
+#### /app/client
+* The /app/client/app.coffee file must exist and contain an 'init' method, called once the connection is established
+* All files within /app/client will be sent to the client. Nesting client files within folders is not supported yet
+* Changing any file within /app/client will not require a restart in development mode (NODE_ENV=development), just hit refresh on the browser
+* Client code is automatically concatenated and minified in staging and production (NODE_ENV=staging)
+* If you have a Javascript library you wish to use (e.g. jQuery), put this in /lib/client instead
+
+#### /app/server
+* The /app/server/app.coffee file must exist
+* All methods are automatically accessible via the client unless they begin with an underscore - so be careful!
+* If the method takes incoming params, these must be declared as the first argument
+* The last argument must always be the callback. All methods must take a callback argument, even if this simply returns null
+* Each file must begin 'class exports.' followed by the capitalized name of the file (e.g. 'class exports.User')
+* Server files can be nested. E.g. remote('users.online.yesterday') would reference the 'yesterday' method in /app/server/users/online.coffee
+* @session gives you direct access to the User's session
+* @user gives you direct access to your custom User code. More on this coming soon
+
+#### /app/css
+* /app/css/app.stly must exist. This is designed to contain your stylesheet code in [Stylus](http://learnboost.github.com/stylus/) format
+* Additional Stylus files can be imported into app.stly using @import 'name_of_file'
+* Changing any file within /app/css will automatically trigger Stylus re-compilation
+* If you wish to use CSS libraries within your project (e.g. reset.css or jQuery UI) put these in /lib/css instead
+
+#### /app/views
+* /app/views/app.jade must exist. This is designed to contain all the static HTML your app needs in [Jade](http://jade-lang.com/) format
+* The HTML HEAD tag must contain '!= SocketStream'. This helper ensures all the correct libraries are loaded depending upon the environment (declared by NODE_ENV)
+* Only one view file is supported at the moment. We may implement 'partials' in the future.
+* Changing the /app/views/app.jade file, or any other client asset file, will automatically trigger Jade re-compilation when in development mode
+
+#### /lib
+* Changes to files within /lib/client or /lib/css automatically triggers re-compilation of client assets in development mode
+* Easily control the order your client libraries are loaded by prefixing them with a number (e.g. 1.jquery.js, 2.jquery-ui.js)
+* Client JS files are automatically minified unless the filename contains '.min'
+
+#### /public
+* Store your static files here (e.g. /public/images) but leave the /public/assets folder alone as this is managed by SocketStream
+
+#### /vendor
+* Put any vendored libraries in here using the format /vendor/mycode/lib/mycode.js
+
+
+Before starting up your new app, make sure you have Redis 2.2+ running on your localhost, then type:
+
+    node app.coffee
+    
+If all goes well you'll see the SocketStream banner coming up, then you're ready to start coding!
+
+
 ### Coming Soon
 
 So so much... including:
 
+* Lots more documentation, a tutorial and many more examples
 * Build rate-limiting into SocketStream to block clients attempting to DDOS the connection
 * Horizontal scaling by downloading a list of active servers and automatically trying new servers should one fail over, no load balancers required!
 * Beautiful super-fast browser-based testing
-
-
