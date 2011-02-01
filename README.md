@@ -17,8 +17,8 @@ More coming soon at [www.socketstream.org](http://www.socketstream.org).
 * Makes it easy to debug client code in development while automatically packing and minifying client code in staging/production
 * Nested namespaces allow building of large 'enterprise' apps (only without the slowness!)
 * Did we mention fast? SocketStream starts up instantly, ready to accept thousands of incoming connections
-* Uses [http://jade-lang.com/](Jade) to render static HTML
-* Uses [http://learnboost.github.com/stylus/](Stylus) for CSS
+* Uses [Jade](http://jade-lang.com/) to render static HTML
+* Uses [Stylus](http://learnboost.github.com/stylus/) for CSS
 
 
 ### Philosophy
