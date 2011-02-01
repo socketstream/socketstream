@@ -16,6 +16,7 @@
     "jade":           "= 0.6.0",
     "uglify-js":      "= 0.0.3",
     "argsparser":     "= 0.0.3",
+    "stylus":         "= 0.0.2"
   },
   "directories":  { "lib": "./lib" },
   "main":         "./lib/socket_stream.js",
