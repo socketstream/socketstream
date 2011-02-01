@@ -13,7 +13,7 @@ class AppGenerator
   
   makeDirectories: (@name) ->
     mode = 0755
-    directories = ['/app', '/app/client', '/app/sass', '/app/server', '/app/views', '/lib', '/lib/client', '/lib/css', '/lib/server', '/public', '/public/assets', '/public/dev', '/vendor']
+    directories = ['/app', '/app/client', '/app/css', '/app/server', '/app/views', '/lib', '/lib/client', '/lib/css', '/lib/server', '/public', '/public/assets', '/vendor']
     console.log "Creating a new SocketStream app called " + @name
     fs.mkdirSync @name, mode # Create the root directory
     fs.mkdirSync @name + directory, mode for directory in directories
@@ -23,7 +23,7 @@ class AppGenerator
       {fileName: '/app/client/app.coffee', data: 'window.debug_level = 2\n\nclass window.App\n\n\tversion: [0,0,1]\n\n\tconstructor: ->'}
       {fileName: '/app/css/app.styl',      data: ''}
       {fileName: '/app/server/app.coffee', data: 'class exports.App\n\n\tinit: (cb) ->\n\t\tcb true'}
-      {fileName: '/app/views/index.jade',  data: 'html\n\thead\n\thead\n\t\ttitle '+@name+'\n\tbody\n\t\th3 Welcome to your new SocketStream project!'}
+      {fileName: '/app/views/app.jade',    data: 'html\n\thead\n\thead\n\t\t!= SocketStream\n\t\ttitle '+@name+'\n\tbody\n\t\th3 Welcome to your new SocketStream project!'}
       {fileName: '/app.coffee',            data: "app = require('socketstream').init(__dirname)\napp.start()"}      
       {fileName: '/lib/css/reset.css',     data: ''}
     ]
