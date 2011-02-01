@@ -21,7 +21,7 @@ class AppGenerator
   makeFiles: (@name) ->
     files = [
       {fileName: '/app/client/app.coffee', data: 'window.debug_level = 2\n\nclass window.App\n\n\tversion: [0,0,1]\n\n\tconstructor: ->'}
-      {fileName: '/app/sass/app.sass',     data: ''}
+      {fileName: '/app/css/app.styl',      data: ''}
       {fileName: '/app/server/app.coffee', data: 'class exports.App\n\n\tinit: (cb) ->\n\t\tcb true'}
       {fileName: '/app/views/index.jade',  data: 'html\n\thead\n\thead\n\t\ttitle '+@name+'\n\tbody\n\t\th3 Welcome to your new SocketStream project!'}
       {fileName: '/app.coffee',            data: "app = require('socketstream').init(__dirname)\napp.start()"}      
@@ -36,4 +36,4 @@ new AppGenerator args.node[1]
 #TODO have socketstream list all of the commands in nice fashion.
 #TODO replace reset.css with something like meyer's css reset
 #TODO replace index.jade with cool socketstream index page
-#TODO replace app.sass with stylesheet for socketstream index page
+#TODO replace app.styl with stylesheet for socketstream index page

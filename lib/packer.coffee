@@ -1,7 +1,8 @@
 EventEmitter = require('events').EventEmitter
 emitter = new EventEmitter
 
-jade = require 'jade'
+jade = require('jade@0.6.0')
+stylus = require('stylus@0.0.2')
 uglifyjs = require("uglify-js@0.0.3")
 self = {}
 
@@ -13,6 +14,7 @@ class exports.Packer
 
   watch_dirs: [
     ['./app/views', 'html', 'index', -> self.watch()],
+    ['./app/css', 'css', 'app'],
     ['./lib/client', 'js', 'lib'],
     ['./lib/css', 'css', 'lib'],
     ["#{__dirname}/client/js", 'js', 'system'],
@@ -29,7 +31,6 @@ class exports.Packer
       emitter.on 'regenerate_html', ->
         self.output.html.index ->
           self.watch()
-    self._monitorSassFiles()
   
   watch: ->
     self.timestamp = Date.now()
@@ -51,16 +52,15 @@ class exports.Packer
       
       index: (cb = ->) ->
         self.assets = []
-        self.assets.push(self._jsTag('assets', self.files.js.lib))
-        self.assets.push(self._cssTag('assets', self.files.css.lib))
+        self.assets.push(self.tag.js('assets', self.files.js.lib))
+        self.assets.push(self.tag.css('assets', self.files.css.lib))
+        self.assets.push(self.tag.css('assets', self.files.css.app))
 
         if NODE_ENV == 'development'
-          self._fileList './app/client', 'app.coffee', (files) => files.map (file) => self.assets.push(self._jsTag('dev', file))
-          self._fileList './app/sass', 'app.sass', (files) =>     files.map (file) => self.assets.push(self._cssTag('dev', file.replace(/sass/,'css')))
+          self._fileList './app/client', 'app.coffee', (files) => files.map (file) => self.assets.push(self.tag.js('dev', file))
         else
-          self.assets.push(self._cssTag('assets', self.files.css.app))
-          self.assets.push(self._jsTag('assets', self.files.js.app))
-
+          self.assets.push(self.tag.js('assets', self.files.js.app))
+        
         self.assets.push('<script type="text/javascript">$(document).ready(function() { app = new App(); app.init(); });</script>')
         jade.renderFile './app/views/index.jade', {locals: {SocketStream: self.assets.join('')}}, (err, html) ->
           fs.writeFileSync './public/index.html', html
@@ -106,11 +106,17 @@ class exports.Packer
     css:
       
       app: ->
+        source_path = './app/css'
+        source_file = 'app.styl' # @import all additional files from this one
         self._deleteFilesInPublicDir(/^app.*css$/)
         self.files.css.app = "app_#{Date.now()}.css"
-        require('child_process').exec("sass --update app/sass/app.sass:#{self.public_path}/#{self.files.css.app} --style compressed")
-        sys.log('SASS compliled into CSS')
-        emitter.emit('regenerate_html')
+        input = fs.readFileSync("#{source_path}/#{source_file}", 'utf8')
+        compress = if NODE_ENV == 'development' then false else true
+        stylus.render input, { filename: source_file, paths: [source_path], compress: compress}, (err, output) ->
+          throw err if (err)
+          fs.writeFile("#{self.public_path}/#{self.files.css.app}", output)
+          sys.log('Stylus files compliled into CSS')
+          emitter.emit('regenerate_html')
         
       lib: ->
         self._deleteFilesInPublicDir(/^lib.*css$/)
@@ -119,13 +125,17 @@ class exports.Packer
         fs.writeFile("#{self.public_path}/#{self.files.css.lib}", output)
         sys.log('CSS libs concatinated')
         emitter.emit('regenerate_html')
-  
-  _cssTag: (path, name) ->
-    '<link href="/' + path + '/' + name + '" media="screen" rel="stylesheet" type="text/css">'
-    
-  _jsTag: (path, name) ->
-    '<script src="/' + path + '/' + name + '" type="text/javascript"></script>'
-    
+
+
+  tag:
+
+    css: (path, name) ->
+      '<link href="/' + path + '/' + name + '" media="screen" rel="stylesheet" type="text/css">'
+      
+    js: (path, name) ->
+      '<script src="/' + path + '/' + name + '" type="text/javascript"></script>'
+
+
   _findAssets: ->
     @_fileList self.public_path, null, (files) =>
       files.filter((file) -> file.match(/(css|js)$/)).map (file) ->
@@ -175,8 +185,4 @@ class exports.Packer
     sys.log("  Minified from #{orig_size} KB to #{min_size} KB")
     minified + ';' # Ensures all scripts are correctly terminated
     
-  _monitorSassFiles: ->
-    require('child_process').exec("sass --watch app/sass:public/dev --style compressed")
-
-
   
