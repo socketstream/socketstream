@@ -2,7 +2,7 @@ EventEmitter = require('events').EventEmitter
 emitter = new EventEmitter
 
 jade = require('jade@0.6.0')
-stylus = require('stylus@0.0.2')
+stylus = require('stylus@0.2.0')
 uglifyjs = require("uglify-js@0.0.3")
 self = {}
 
