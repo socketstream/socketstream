@@ -1,2 +1,31 @@
+// Example Stylus file. All changes are detected and automatically compiled into CSS
+
+// Helper methods
+
+vertical-gradient(from, to)
+  background-color to
+  background-image -webkit-gradient(linear, left top, left bottom, from(from), to(to))
+  background-image -moz-linear-gradient(top, from, to)
+
+
+// Main
+
+body, html
+  height 100%
+
 body
-  font normal 1.1em sans-serif
+  font normal 1em sans-serif
+  vertical-gradient #eee, #fff
+
+p
+  margin-bottom 1em
+
+h1
+  font-size 1.5em
+  margin-bottom 1.3em
+  color #0057c5
+  text-shadow 1px 1px 2px white
+
+#content
+  padding 50px
+
