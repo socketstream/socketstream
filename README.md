@@ -17,7 +17,7 @@ More coming soon at [www.socketstream.org](http://www.socketstream.org).
 * Makes it easy to debug client code in development while automatically packing and minifying client code in staging/production
 * Nested namespaces allow building of large 'enterprise' apps (only without the slowness!)
 * Did we mention fast? SocketStream starts up instantly, ready to accept thousands of incoming connections
-* Works great with jQuery, underscore.js and any other client-side libraries
+* Bundled with, but not dependent on, jQuery 1.5
 * Uses [Jade](http://jade-lang.com/) to render static HTML
 * Uses [Stylus](http://learnboost.github.com/stylus/) for CSS
 
@@ -192,7 +192,7 @@ The directories generated will be very familiar to Rails users. Here's a brief o
 * Changing any client will not require a restart in development mode (NODE_ENV=development), just hit refresh on the browser
 * Client code is automatically concatenated and minified in staging and production (NODE_ENV=staging)
 * Nesting client files within folders is not supported yet
-* If you have a Javascript library you wish to use (e.g. jQuery), put this in /lib/client instead
+* If you have a Javascript library you wish to use (e.g. jQuery UI), put this in /lib/client instead
 * All client code can be called from the console using the 'app' variable (app is an instance of window.App)
 * The /app/client/app.coffee file must always be present
 
