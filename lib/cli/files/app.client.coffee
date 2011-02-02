@@ -2,10 +2,9 @@ window.debug_level = 2
 
 class window.App
   
-  version: [0,0,1]
-  
   constructor: ->
-    
+  
+  # This method is called automatically when the websocket connection is established. Do not rename/delete
   init: ->
     remote 'app.init', navigator.userAgent, (response) ->
-      alert(response)
+      $('#message-from-server').text(response)
