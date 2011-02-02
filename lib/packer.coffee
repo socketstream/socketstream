@@ -23,7 +23,7 @@ class exports.Packer
   constructor: (@options = {}) ->
     self = @
     @files = {js: {}, css: {}}
-    @_findAssets()
+    @_findAssets => @_ensureAssetsExist()
   
   developerMode: ->
     self.output.html.app ->
@@ -61,7 +61,7 @@ class exports.Packer
         else
           self.assets.push(self.tag.js('assets', self.files.js.app))
         
-        self.assets.push('<script type="text/javascript">$(document).ready(function() { app = new App(); app.init(); });</script>')
+        self.assets.push('<script type="text/javascript">window.app = new App(); app.init();</script>')
         jade.renderFile './app/views/app.jade', {locals: {SocketStream: self.assets.join('')}}, (err, html) ->
           fs.writeFileSync './public/index.html', html
           sys.log('Compiled app.jade to index.html')
@@ -136,7 +136,7 @@ class exports.Packer
       '<script src="/' + path + '/' + name + '" type="text/javascript"></script>'
 
 
-  _findAssets: ->
+  _findAssets: (cb) ->
     @_fileList self.public_path, null, (files) =>
       files.filter((file) -> file.match(/(css|js)$/)).map (file) ->
         file_arr = file.split('.')
@@ -144,6 +144,12 @@ class exports.Packer
         type = file_arr[0].substring(0,3)
         f = self.files[ext]
         f[type] = file
+      cb()
+ 
+  _ensureAssetsExist: ->
+    unless self.files.js.lib? and self.files.css.lib? and self.files.css.app?
+      sys.log "It looks like this is the first time you're running SocketStream. Generating asset files..."
+      @pack()
   
   _watchForChangesInDir: (dir, cb) ->
     fs.readdirSync(dir).map (file) ->
