@@ -19,21 +19,21 @@ class AppGenerator
     fs.mkdirSync @name + directory, mode for directory in directories
     
   makeFiles: (@name) ->
+    filesDir = fs.realpathSync(__filename).replace('/cli.coffee','') + '/files' # TODO - find a less brittle way
     files = [
-      {fileName: '/app/client/app.coffee', data: 'window.debug_level = 2\n\nclass window.App\n\n\tversion: [0,0,1]\n\n\tconstructor: ->\n\n\tinit: ->\n\t\tremote \'app.init\', navigator.userAgent, (response) ->\n\t\t\talert(response)'}
-      {fileName: '/app/css/app.styl',      data: 'body\n\tfont normal 1.1em sans-serif'}
-      {fileName: '/app/server/app.coffee', data: 'class exports.App\n\n\tinit: (userAgent, cb) ->\n\t\tconsole.log "Welcome user of: #{userAgent}"\n\t\tcb \'Welcome. This message is sent from the server, so everything is working OK\''}
-      {fileName: '/app/views/app.jade',    data: 'html\n\thead\n\thead\n\t\t!= SocketStream\n\t\ttitle '+@name+'\n\tbody\n\t\th3 Welcome to your new SocketStream project!'}
-      {fileName: '/app.coffee',            data: "app = require('socketstream').init(__dirname)\napp.start()"}      
-      {fileName: '/lib/css/reset.css',     data: ''}
+      {fileName: '/app/client/app.coffee', dataFile: '/app.client.coffee'}
+      {fileName: '/app/css/app.styl',      dataFile: '/app.styl'}
+      {fileName: '/app/server/app.coffee', dataFile: '/app.server.coffee'}
+      {fileName: '/app/views/app.jade',    dataFile: '/app.jade'}
+      {fileName: '/app.coffee',            dataFile: '/app.coffee'}      
+      {fileName: '/lib/css/reset.css',     dataFile: '/reset.css'}
     ]
-    fs.writeFileSync @name + file.fileName, file.data for file in files
+    fs.writeFileSync @name + file.fileName, fs.readFileSync(filesDir+file.dataFile, 'utf-8') for file in files
     
 args = argParser.parse()
 new AppGenerator args.node[1]
 
 #TODO replace 'socketstream <APPNAME>' with 'socketstream new <APPNAME>'
 #TODO have socketstream list all of the commands in nice fashion.
-#TODO replace reset.css with something like meyer's css reset
 #TODO replace index.jade with cool socketstream index page
 #TODO replace app.styl with stylesheet for socketstream index page
