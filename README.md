@@ -48,7 +48,7 @@ On the client side, add this to the /app/client/app.coffee file:
 
     class window.App
 
-      init: (number) ->
+      square: (number) ->
         remote 'app.square', number, (response) ->
           console.log "#{number} squared is #{response}"
 
@@ -60,8 +60,16 @@ And on the server, add this to /app/server/app.coffee
       square: (number, cb) ->
         cb(number * number)
 
+Refresh your page then type this into the browser console:
 
-That's it! Want to see something a bit more advanced? How about reverse geocoding using HTML5 geolocation?
+    app.square(25)
+
+And you will see the following output:
+
+    25 squared is 625
+
+
+Ready for something a bit more advanced? Let's take a look at reverse geocoding using HTML5 geolocation...
 
 
 ### Reverse Geocoding Example
