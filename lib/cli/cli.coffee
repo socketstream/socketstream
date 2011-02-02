@@ -20,9 +20,9 @@ class AppGenerator
     
   makeFiles: (@name) ->
     files = [
-      {fileName: '/app/client/app.coffee', data: 'window.debug_level = 2\n\nclass window.App\n\n\tversion: [0,0,1]\n\n\tconstructor: ->'}
-      {fileName: '/app/css/app.styl',      data: ''}
-      {fileName: '/app/server/app.coffee', data: 'class exports.App\n\n\tinit: (cb) ->\n\t\tcb true'}
+      {fileName: '/app/client/app.coffee', data: 'window.debug_level = 2\n\nclass window.App\n\n\tversion: [0,0,1]\n\n\tconstructor: ->\n\n\tinit: ->\n\t\tremote \'app.init\', navigator.userAgent, (response) ->\n\t\t\talert(response)'}
+      {fileName: '/app/css/app.styl',      data: 'body\n\tfont normal 1.1em sans-serif'}
+      {fileName: '/app/server/app.coffee', data: 'class exports.App\n\n\tinit: (userAgent, cb) ->\n\t\tconsole.log "Welcome user of: #{userAgent}"\n\t\tcb \'Welcome. This message is sent from the server, so everything is working OK\''}
       {fileName: '/app/views/app.jade',    data: 'html\n\thead\n\thead\n\t\t!= SocketStream\n\t\ttitle '+@name+'\n\tbody\n\t\th3 Welcome to your new SocketStream project!'}
       {fileName: '/app.coffee',            data: "app = require('socketstream').init(__dirname)\napp.start()"}      
       {fileName: '/lib/css/reset.css',     data: ''}

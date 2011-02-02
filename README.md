@@ -195,6 +195,7 @@ The directories generated will be very familiar to Rails users. Here's a brief o
 * /app/css/app.stly must exist. This should contain your stylesheet code in [Stylus](http://learnboost.github.com/stylus/) format (similar to SASS)
 * Additional Stylus files can be imported into app.stly using @import 'name_of_file'
 * Changing any file within /app/css will automatically trigger Stylus re-compilation
+* CSS files will be compressed in staging or production mode
 * If you wish to use CSS libraries within your project (e.g. reset.css or jQuery UI) put these in /lib/css instead
 
 #### /app/views
