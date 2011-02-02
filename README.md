@@ -158,7 +158,9 @@ Ah, but you have thousands of users across hundreds of servers you say? No probl
 ### Requirements
 
 [Node 0.3.7](http://nodejs.org/#download)
+
 [NPM](http://npmjs.org/)
+
 [Redis 2.2](http://redis.io/)
 
 
