@@ -2,7 +2,7 @@ EventEmitter = require('events').EventEmitter
 emitter = new EventEmitter
 
 jade = require('jade@0.6.0')
-stylus = require('stylus@0.2.0')
+stylus = require('stylus@0.2.1')
 uglifyjs = require("uglify-js@0.0.3")
 self = {}
 
@@ -61,7 +61,7 @@ class exports.Packer
         else
           self.assets.push(self.tag.js('assets', self.files.js.app))
         
-        self.assets.push('<script type="text/javascript">window.app = new App(); app.init();</script>')
+        self.assets.push('<script type="text/javascript">$(document).ready(function() { app = new App(); app.init(); });</script>')
         jade.renderFile './app/views/app.jade', {locals: {SocketStream: self.assets.join('')}}, (err, html) ->
           fs.writeFileSync './public/index.html', html
           sys.log('Compiled app.jade to index.html')
@@ -113,7 +113,7 @@ class exports.Packer
         input = fs.readFileSync("#{source_path}/#{source_file}", 'utf8')
         compress = if NODE_ENV == 'development' then false else true
         stylus.render input, { filename: source_file, paths: [source_path], compress: compress}, (err, output) ->
-          throw err if (err)
+          throw(err) if err
           fs.writeFile("#{self.public_path}/#{self.files.css.app}", output)
           sys.log('Stylus files compliled into CSS')
           emitter.emit('regenerate_html')
