@@ -8,7 +8,7 @@ More coming soon at [www.socketstream.org](http://www.socketstream.org).
 ### Features
 
 * No-latency bi-directional communication between client and server using websockets (or flash sockets)
-* Write client and server code in Coffeescript or Javascript - your choice
+* Write client and server code in [Coffeescript](http://jashkenas.github.com/coffee-script/) or Javascript - your choice
 * Effortless scalable pub/sub baked right in. Not just for chat apps and stock tickers anymore! See examples below.
 * In-built User model via @session.user with modular authentication
 * Uses Redis for fast session retrieval, pub/sub, list of users online, and any other data your app needs instantly
@@ -153,6 +153,13 @@ What happens if we want to notify every user when data has changed, or let every
     $SS.publish.broadcast('flash', {type: 'notification', message: 'Notice: This service is going down in 10 minutes'})
     
 Ah, but you have thousands of users across hundreds of servers you say? No problem. The workload is distributed across every connected Node.js instance by design. I'm sure you can see where this is going... ;-)
+
+
+### Requirements
+
+[Node 0.3.7](http://nodejs.org/#download)
+[NPM](http://npmjs.org/)
+[Redis 2.2](http://redis.io/)
 
 
 ### Getting Started
