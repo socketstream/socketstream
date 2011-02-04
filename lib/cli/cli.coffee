@@ -20,12 +20,13 @@ class exports.AppGenerator
   makeFiles: (@name) ->
     filesDir = fs.realpathSync(__filename).replace('/cli.coffee','') + '/files' # TODO - find a less brittle way
     files = [
-      {fileName: '/app/client/app.coffee', dataFile: '/app.client.coffee'}
-      {fileName: '/app/css/app.styl',      dataFile: '/app.styl'}
-      {fileName: '/app/server/app.coffee', dataFile: '/app.server.coffee'}
-      {fileName: '/app/views/app.jade',    dataFile: '/app.jade'}
-      {fileName: '/app.coffee',            dataFile: '/app.coffee'}      
-      {fileName: '/lib/css/reset.css',     dataFile: '/reset.css'}
+      {fileName: '/app/client/app.coffee',        dataFile: '/app.client.coffee'}
+      {fileName: '/app/server/app.coffee',        dataFile: '/app.server.coffee'}
+      {fileName: '/app/views/app.jade',           dataFile: '/app.jade'}
+      {fileName: '/app/css/app.styl',             dataFile: '/app.styl'}
+      {fileName: '/app.coffee',                   dataFile: '/app.coffee'}      
+      {fileName: '/lib/css/reset.css',            dataFile: '/reset.css'}
+      {fileName: '/lib/client/jquery-1.5.min.js', dataFile: '/lib.client.jquery-1.5.min.js'}
     ]
     fs.writeFileSync @name + file.fileName, fs.readFileSync(filesDir+file.dataFile, 'utf-8') for file in files
     

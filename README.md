@@ -8,16 +8,15 @@ More coming soon at [www.socketstream.org](http://www.socketstream.org).
 ### Features
 
 * No-latency bi-directional communication between client and server using websockets (or flash sockets)
-* Write client and server code in [Coffeescript](http://jashkenas.github.com/coffee-script/) or Javascript - your choice
+* Write client AND server code in [Coffeescript](http://jashkenas.github.com/coffee-script/) or Javascript - your choice
 * Effortless scalable pub/sub baked right in. Not just for chat apps and stock tickers anymore! See examples below.
 * In-built User model via @session.user with modular authentication
-* Uses Redis for fast session retrieval, pub/sub, list of users online, and any other data your app needs instantly
-* Works on all major browsers thanks to the excellent Socket.IO
-* Automatically packages and minifies your client CSS and JS files (e.g. jQuery, Underscore.js, reset.css)
-* Makes it easy to debug client code in development while automatically packing and minifying client code in staging/production
+* Uses [Redis](http://www.redis.io/) for fast session retrieval, pub/sub, list of users online, and any other data your app needs instantly
+* Works on all major browsers thanks to the excellent [Socket.IO](http://socket.io/)
+* Automatically packages and minifies your client CSS and JS files in staging/production
 * Nested namespaces allow building of large 'enterprise' apps (only without the slowness!)
 * Did we mention fast? SocketStream starts up instantly, ready to accept thousands of incoming connections
-* Works great with jQuery, underscore.js and any other client-side libraries
+* Bundled with jQuery 1.5. Easily add additional client libraries such as [underscore.js](http://documentcloud.github.com/underscore/)
 * Uses [Jade](http://jade-lang.com/) to render static HTML
 * Uses [Stylus](http://learnboost.github.com/stylus/) for CSS
 
@@ -165,11 +164,11 @@ Ah, but you have thousands of users across hundreds of servers you say? No probl
 
 ### Requirements
 
-[Node 0.3.7](http://nodejs.org/#download)
+[Node 0.3.5](http://nodejs.org/#download) or above
 
-[NPM](http://npmjs.org/)
+[NPM](http://npmjs.org/) (Node Package Manager)
 
-[Redis 2.2](http://redis.io/)
+[Redis 2.2](http://redis.io/) or above
 
 
 ### Getting Started
@@ -192,7 +191,7 @@ The directories generated will be very familiar to Rails users. Here's a brief o
 * Changing any client will not require a restart in development mode (NODE_ENV=development), just hit refresh on the browser
 * Client code is automatically concatenated and minified in staging and production (NODE_ENV=staging)
 * Nesting client files within folders is not supported yet
-* If you have a Javascript library you wish to use (e.g. jQuery), put this in /lib/client instead
+* If you have a Javascript library you wish to use (e.g. jQuery UI), put this in /lib/client instead
 * All client code can be called from the console using the 'app' variable (app is an instance of window.App)
 * The /app/client/app.coffee file must always be present
 
