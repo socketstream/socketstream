@@ -28,10 +28,15 @@ class exports.Server
     @_showWelcomeMessage()
     
   _processHttpRequest: (request, response) ->
-    return self._compileCoffeeScript(request, response) if NODE_ENV == 'development' and request.url.match(/\.coffee$/) 
+    # If we are in developer mode
+    if !$SS.config.pack_assets 
+      if request.url.match(/\.coffee$/) 
+        return self._compileCoffeeScript(request, response)
+    # Else serve static assets
     file = new(static.Server)('./public')
     request.addListener('end', -> file.serve(request, response))
     log.staticFile(request) if log
+      
     
   _processNewConnection: (client) ->
     client.remote = (method, params, type, options = {}) ->

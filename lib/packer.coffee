@@ -56,10 +56,11 @@ class exports.Packer
         self.assets.push(self.tag.css('assets', self.files.css.lib))
         self.assets.push(self.tag.css('assets', self.files.css.app))
 
-        if NODE_ENV == 'development'
-          self._fileList './app/client', 'app.coffee', (files) => files.map (file) => self.assets.push(self.tag.js('dev', file))
-        else
+        if $SS.config.pack_assets
           self.assets.push(self.tag.js('assets', self.files.js.app))
+        else
+          self._fileList './app/client', 'app.coffee', (files) => files.map (file) => self.assets.push(self.tag.js('dev', file))
+          
         
         self.assets.push('<script type="text/javascript">$(document).ready(function() { app = new App(); app.init(); });</script>')
         jade.renderFile './app/views/app.jade', {locals: {SocketStream: self.assets.join('')}}, (err, html) ->
@@ -111,11 +112,10 @@ class exports.Packer
         self._deleteFilesInPublicDir(/^app.*css$/)
         self.files.css.app = "app_#{Date.now()}.css"
         input = fs.readFileSync("#{source_path}/#{source_file}", 'utf8')
-        compress = if NODE_ENV == 'development' then false else true
-        stylus.render input, { filename: source_file, paths: [source_path], compress: compress}, (err, output) ->
+        stylus.render input, { filename: source_file, paths: [source_path], compress: $SS.config.pack_assets}, (err, output) ->
           throw(err) if err
           fs.writeFile("#{self.public_path}/#{self.files.css.app}", output)
-          sys.log('Stylus files compliled into CSS')
+          sys.log('Stylus files compiled into CSS')
           emitter.emit('regenerate_html')
         
       lib: ->
@@ -123,7 +123,7 @@ class exports.Packer
         output = self._concatFiles("./lib/css")
         self.files.css.lib = "lib_#{Date.now()}.css"
         fs.writeFile("#{self.public_path}/#{self.files.css.lib}", output)
-        sys.log('CSS libs concatinated')
+        sys.log('CSS libs concatenated')
         emitter.emit('regenerate_html')
 
 
@@ -173,7 +173,7 @@ class exports.Packer
   _concatFiles: (path) ->
     self._fileList path, null, (files) ->
       files.sort().map (file) ->
-        sys.log "  Concatinating file #{file}"
+        sys.log "  Concatenating file #{file}"
         output = fs.readFileSync("#{path}/#{file}", 'utf8')
         output = self._minifyJS(output) if file.match(/\.(coffee|js)/) and !file.match(/\.min/)
         output
