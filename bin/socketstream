@@ -1,8 +1,11 @@
 #!/usr/bin/env node
-var coffee = require('coffee-script');
+var coffee    = require('coffee-script');
 
-var path = require('path');
-var fs   = require('fs');
-var lib  = path.join(path.dirname(fs.realpathSync(__filename)), '../lib');
+var path      = require('path');
+var fs        = require('fs');
+var argParser = require('argsparser');
+var lib       = path.join(path.dirname(fs.realpathSync(__filename)), '../lib');
+var cli       = require(lib + '/cli/cli.coffee');
 
-require(lib + '/cli/cli.coffee');
+var args      = argParser.parse();
+new cli.AppGenerator(args.node[1]);
