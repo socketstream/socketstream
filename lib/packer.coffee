@@ -59,7 +59,7 @@ class exports.Packer
         if $SS.config.pack_assets
           self.inclusions.push(self.tag.js('assets', self.files.js.app))
         else
-          self._fileList './app/client', 'app.coffee', (files) => files.map (file) => self.assets.push(self.tag.js('dev', file))
+          self._fileList './app/client', 'app.coffee', (files) => files.map (file) => self.inclusions.push(self.tag.js('dev', file))
         
         self.inclusions.push('<script type="text/javascript">$(document).ready(function() { app = new App(); app.init(); });</script>')
         
