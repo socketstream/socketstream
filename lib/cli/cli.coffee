@@ -1,7 +1,6 @@
-argParser = require 'argsparser'
 fs        = require 'fs'
 
-class AppGenerator
+class exports.AppGenerator
   
   constructor: (@name) ->
     return console.log "Please provide a name for your application: $> socketstream <MyAppName>" if @name is undefined
@@ -30,9 +29,6 @@ class AppGenerator
     ]
     fs.writeFileSync @name + file.fileName, fs.readFileSync(filesDir+file.dataFile, 'utf-8') for file in files
     
-args = argParser.parse()
-new AppGenerator args.node[1]
-
 #TODO replace 'socketstream <APPNAME>' with 'socketstream new <APPNAME>'
 #TODO have socketstream list all of the commands in nice fashion.
 #TODO replace index.jade with cool socketstream index page
