@@ -8,7 +8,6 @@ self = {}
 
 class exports.Packer
 
-  assets:      []
   public_path: './public/assets'
   system_path: __dirname + '/client'
 
@@ -51,19 +50,21 @@ class exports.Packer
     html:
       
       app: (cb = ->) ->
-        self.assets = []
-        self.assets.push(self.tag.js('assets', self.files.js.lib))
-        self.assets.push(self.tag.css('assets', self.files.css.lib))
-        self.assets.push(self.tag.css('assets', self.files.css.app))
+        self.ouput = []
+        self.inclusions = []
+        self.inclusions.push(self.tag.js('assets', self.files.js.lib))
+        self.inclusions.push(self.tag.css('assets', self.files.css.lib))
+        self.inclusions.push(self.tag.css('assets', self.files.css.app))
 
         if $SS.config.pack_assets
-          self.assets.push(self.tag.js('assets', self.files.js.app))
+          self.inclusions.push(self.tag.js('assets', self.files.js.app))
         else
           self._fileList './app/client', 'app.coffee', (files) => files.map (file) => self.assets.push(self.tag.js('dev', file))
-          
         
-        self.assets.push('<script type="text/javascript">$(document).ready(function() { app = new App(); app.init(); });</script>')
-        jade.renderFile './app/views/app.jade', {locals: {SocketStream: self.assets.join('')}}, (err, html) ->
+        self.inclusions.push('<script type="text/javascript">$(document).ready(function() { app = new App(); app.init(); });</script>')
+        
+        self._buildTemplates()
+        jade.renderFile './app/views/app.jade', {locals: {SocketStream: self.inclusions.join('')}}, (err, html) ->
           fs.writeFileSync './public/index.html', html
           sys.log('Compiled app.jade to index.html')
           cb()
@@ -134,6 +135,9 @@ class exports.Packer
       
     js: (path, name) ->
       '<script src="/' + path + '/' + name + '" type="text/javascript"></script>'
+    
+    template: (id, contents) ->
+      '<script id="' + id + '" type="text/html">' + contents + '</script>'
 
 
   _findAssets: (cb) ->
@@ -164,7 +168,7 @@ class exports.Packer
     fs.readdirSync(self.public_path).map (file) -> fs.unlink("#{self.public_path}/#{file}") if file.match(rexexp)
   
   _fileList: (path, first_file, cb) ->
-    files = fs.readdirSync(path).filter((file) -> !file.match(/(^_|^\.)/))
+    files = fs.readdirSync(path).sort().filter((file) -> !file.match(/(^_|^\.)/))
     if first_file
       files = files.delete(first_file)
       files.unshift(first_file) 
@@ -190,5 +194,23 @@ class exports.Packer
     min_size = (minified.length / 1024)
     sys.log("  Minified from #{orig_size} KB to #{min_size} KB")
     minified + ';' # Ensures all scripts are correctly terminated
+
+  _buildTemplates: ->
+    self._fileList './app/views', null, (files) ->
+      files.filter((file) -> !file.match(/\.jade$/)).map (dir) ->
+        self._fileList "./app/views/#{dir}", null, (templates) ->
+          self.inclusions.push(self._buildTemplate(dir + '/' + template_name)) for template_name in templates
     
-  
+  _buildTemplate: (template_path) ->
+    path = template_path.split('/').join('-')
+    ext = path.split('.').reverse()[0]
+    id = path.replace('.' + ext, '')
+    file = fs.readFileSync('./app/views/' + template_path, 'utf8')
+    try
+      html = jade.render(file);
+    catch e
+      console.error 'Unable to render jade template: ' + template_path
+      throw e
+    self.tag.template(id, html)
+    
+    
