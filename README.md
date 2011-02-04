@@ -240,6 +240,18 @@ Before starting up your new app, make sure you have Redis 2.2+ running on your l
     
 If all goes well you'll see the SocketStream banner coming up, then you're ready to start coding!
 
+### Tests
+
+There are a handful of tests at the moment, but there will be more once the internal API becomes stable.
+
+If you wish to run the test suite, install jasbin:
+
+    npm install jasbin
+
+Then run jasbin in the SocketStream directory:
+  
+    cd socketstream/
+    jasbin
 
 ### Coming Soon
 
