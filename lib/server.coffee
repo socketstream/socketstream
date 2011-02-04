@@ -47,38 +47,44 @@ class exports.Server
       client.remote('ready', {}, 'system')
       
   _processIncomingCall: (data, client) ->
-    return null if @_validateIncomingCallData(JSON.parse(data), client) is null 
-    methodClass     = validation[0] 
-    methodFunction  = validation[1]
-    msg             = validation[2]
-
-    path = "#{$SS.root}/app/server/#{methodClass.join('/')}"
-    klass_name = methodFunction.capitalized()
-    try
-      klass = require(path)[klass_name]
-    catch e
-      sys.log 'Error: Unable to find class ' + klass_name
-      console.error(e)
-      
-    # Inject 'helper functions'
-    obj = new klass
-    obj.session = client.session
-    obj.user = client.session.user
-
-    args = []
-    args.push(msg.params) if msg.params
-    args.push((params, options) -> client.remote(msg, params, 'callback', options))
+    return null unless client.session.id # drop all calls unless session is loaded
+    msg = JSON.parse(data)
     
-    if NODE_ENV == 'development'
-      obj[method].apply(obj, args) # We need to see full stack trace on screen
+    if msg && msg.method
+      action = msg.method.split('.')
+      method = action.pop()
+      if method.charAt(0) == '_'
+        sys.log "Error: Unable to access private method #{method}"
+      else
+        path = "#{$SS.root}/app/server/#{action.join('/')}"
+        klass_name = action.pop().capitalized()
+        try
+          klass = require(path)[klass_name]
+        catch e
+          sys.log 'Error: Unable to find class ' + klass_name
+          console.error(e)
+          
+        # Inject 'helper functions'
+        obj = new klass
+        obj.session = client.session
+        obj.user = client.session.user
+
+        args = []
+        args.push(msg.params) if msg.params
+        args.push((params, options) -> client.remote(msg, params, 'callback', options))
+        
+        if NODE_ENV == 'development'
+          obj[method].apply(obj, args) # We need to see full stack trace on screen
+        else
+          try
+            obj[method].apply(obj, args)
+          catch e
+            # TODO: Catch and handle exceptions nicely without crashing server
+            console.error(e)
+        
+        log.incomingCall(msg, client) if log and !(msg.options && msg.options.silent)
     else
-      try
-        obj[method].apply(obj, args)
-      catch e
-        # TODO: Catch and handle exceptions nicely without crashing server
-        console.error(e)
-    
-    log.incomingCall(msg, client) if log and !(msg.options && msg.options.silent)
+      sys.log "Invalid message: #{data}"
 
   _listenForPubSubEvents: ->
     RPS.on 'message', (channel, message) =>
@@ -107,22 +113,3 @@ class exports.Server
     sys.puts "----------------------------------------------------------------"
     sys.puts "\n"
 
-  # This handles all the validations required. If all is fine, it returns an array of objects, otherwise it returns null. Still ugly
-  _validateIncomingCallData: (msg, client) ->
-    
-    return null unless client.session.id # drop all calls unless session is loaded
-    if msg and msg.method
-      if msg.method.match(/\w+\.\w+/) is null # Make sure that the message method looks like 'class.function'
-        console.error "Invalid argument called on remote: #{msg.method}. Please call like this: class.function"
-        return null
-      else 
-        methodClass    = msg.method.split('.')[0]
-        methodFunction = msg.method.split('.')[1]
-        if methodFunction.charAt(0) == '_' # Someone is trying to call a private method, err!
-          sys.log "Error: Unable to access private method #{methodFunction}. You can make the method public by removing the _"
-          return null
-        else
-          return [methodClass, methodFunction, msg]
-    else
-      sys.log "Invalid message: #{data}"
-    
