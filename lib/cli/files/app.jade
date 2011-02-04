@@ -1,6 +1,12 @@
-html
+!!! 5
+html(lang: "en")
   head
     != SocketStream
-    title SocketStream
+    title Welcome to SocketStream
   body
-    h3 Welcome to your new SocketStream project!
+    #content
+      h1 Welcome to your new SocketStream project!
+      p#message-from-server
+      |Until we make this the beautiful, helpful starter page it should be, please check out the docs on
+      a(href='https://github.com/socketstream/socketstream') Github
+
