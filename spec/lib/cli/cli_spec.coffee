@@ -13,7 +13,7 @@ describe 'cli.coffee', ->
   
   afterEach ->
     # remove files
-    files = ['/app/client/app.coffee', '/app/css/app.styl', '/app/server/app.coffee', '/app/views/app.jade', '/app.coffee', '/lib/css/reset.css']
+    files = ['/app/client/app.coffee', '/app/css/app.styl', '/app/server/app.coffee', '/app/views/app.jade', '/app.coffee', '/lib/css/reset.css', '/lib/client/jquery-1.5.min.js']
     fs.unlinkSync appName + file, mode for file in files
     # then remove directories, in order of most nested
     directories = ['/app/client', '/app/css', '/app/server', '/app/views', '/app', '/lib/client', '/lib/css', '/lib/server', '/lib', '/public/assets', '/public', '/vendor']
