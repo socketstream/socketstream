@@ -6,6 +6,9 @@ fs      = require 'fs'
 appName = 'tasty'
 mode    = 0755
 
+listFiles = (dir) ->
+  fs.readdirSync(dir).sort()
+
 describe 'cli.coffee', ->
   
   beforeEach ->
@@ -21,10 +24,10 @@ describe 'cli.coffee', ->
     fs.rmdirSync appName, mode
     
   it 'should generate a new application in the given directory', ->
-    expect(fs.readdirSync appName).toEqual ['app','app.coffee','lib','public','vendor']
-    expect(fs.readdirSync appName + '/app').toEqual ['client', 'css', 'server', 'views']
-    expect(fs.readdirSync appName + '/lib').toEqual ['client', 'css', 'server']
-    expect(fs.readdirSync appName + '/public').toEqual ['assets']
+    expect(listFiles appName).toEqual ['app','app.coffee','lib','public','vendor']
+    expect(listFiles appName + '/app').toEqual ['client', 'css', 'server', 'views']
+    expect(listFiles appName + '/lib').toEqual ['client', 'css', 'server']
+    expect(listFiles appName + '/public').toEqual ['assets']
     # TODO check that other relevant files exist
 
   # getHomepage = (cb) ->

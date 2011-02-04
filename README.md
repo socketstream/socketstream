@@ -17,6 +17,7 @@ More coming soon at [www.socketstream.org](http://www.socketstream.org).
 * Nested namespaces allow building of large 'enterprise' apps (only without the slowness!)
 * Did we mention fast? SocketStream starts up instantly, ready to accept thousands of incoming connections
 * Bundled with jQuery 1.5. Easily add additional client libraries such as [underscore.js](http://documentcloud.github.com/underscore/)
+* Easily create jQuery templates using the [official plugin](http://api.jquery.com/category/plugins/templates/). Works like partials in Rails.
 * Uses [Jade](http://jade-lang.com/) to render static HTML
 * Uses [Stylus](http://learnboost.github.com/stylus/) for CSS
 
@@ -217,7 +218,7 @@ The directories generated will be very familiar to Rails users. Here's a brief o
 #### /app/views
 * /app/views/app.jade must exist. This should contain all the static HTML your app needs in [Jade](http://jade-lang.com/) format (similar to HAML)
 * The HTML HEAD tag must contain '!= SocketStream'. This helper ensures all the correct libraries are loaded depending upon the environment (declared by NODE_ENV)
-* Only one view file is supported at the moment. We may implement 'partials' in the future.
+* Nest additional html as jQuery templates (similar to Rails partials). E.g /app/views/people/info.jade is accessible as $("#people-info").tmpl(myData)
 * Changing the /app/views/app.jade file, or any other client asset file, will automatically trigger Jade re-compilation when in development mode
 
 #### /lib
