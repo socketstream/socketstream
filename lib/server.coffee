@@ -9,6 +9,9 @@ Session = require('./session').Session
 Publish = require('./publish').Publish
 $SS.publish = new Publish
 
+Compiler = require('./compiler').Compiler
+compiler = new Compiler
+
 class exports.Server
   
   constructor: () ->
@@ -28,16 +31,17 @@ class exports.Server
     @_showWelcomeMessage()
     
   _processHttpRequest: (request, response) ->
-    # If we are in developer mode
-    if !$SS.config.pack_assets 
-      if request.url.match(/\.coffee$/) 
-        return self._compileCoffeeScript(request, response)
-    # Else serve static assets
-    file = new(static.Server)('./public')
-    request.addListener('end', -> file.serve(request, response))
-    log.staticFile(request) if log
+    respond_to = ['coffee', 'styl']
+    file_extension = request.url.split('.').reverse()[0]
+    if !$SS.config.pack_assets and respond_to.include(file_extension)
+      compiler.fromURL request.url, (result) ->
+        response.writeHead(200, {'Content-type': result.content_type, 'Content-Length': result.output.length})
+        response.end(result.output)
+    else
+      file = new(static.Server)('./public')
+      request.addListener('end', -> file.serve(request, response))
+      log.staticFile(request) if log
       
-    
   _processNewConnection: (client) ->
     client.remote = (method, params, type, options = {}) ->
       message = {method: method, params: params, cb_id: method.cb_id, callee: method.callee, type: type}
@@ -66,7 +70,8 @@ class exports.Server
         try
           klass = require(path)[klass_name]
         catch e
-          sys.log 'Error: Unable to find class ' + klass_name
+          sys.log 'Error: Unable to find class ' + klass_name + ' or error in file'
+          throw e if NODE_ENV == 'development'
           console.error(e)
           
         # Inject 'helper functions'
@@ -78,14 +83,11 @@ class exports.Server
         args.push(msg.params) if msg.params
         args.push((params, options) -> client.remote(msg, params, 'callback', options))
         
-        if NODE_ENV == 'development'
-          obj[method].apply(obj, args) # We need to see full stack trace on screen
-        else
-          try
-            obj[method].apply(obj, args)
-          catch e
-            # TODO: Catch and handle exceptions nicely without crashing server
-            console.error(e)
+        try
+          obj[method].apply(obj, args)
+        catch e
+          throw e if NODE_ENV == 'development'
+          console.error(e)
         
         log.incomingCall(msg, client) if log and !(msg.options && msg.options.silent)
     else
@@ -101,14 +103,6 @@ class exports.Server
             client.send(message) if client and client.connected
           when 'broadcast'
             @socket.broadcast(message)
-  
-  _compileCoffeeScript: (request, response) ->
-    request.addListener 'end', =>
-      file = request.url.split('/')[2].split('.')[0]
-      fs.readFile "#{$SS.root}/app/client/#{file}.coffee", 'utf8', (err, coffeescript) ->
-        js = coffee.compile(coffeescript)
-        response.writeHead(200, {'Content-type': 'text/javascript', 'Content-Length': js.length})
-        response.end(js)
 
   _showWelcomeMessage: ->
     sys.puts "\n"

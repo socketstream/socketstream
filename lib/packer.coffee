@@ -1,9 +1,6 @@
 EventEmitter = require('events').EventEmitter
 emitter = new EventEmitter
 
-jade = require('jade@0.6.0')
-stylus = require('stylus@0.2.1')
-uglifyjs = require("uglify-js@0.0.3")
 self = {}
 
 class exports.Packer
@@ -38,6 +35,7 @@ class exports.Packer
       self._watchForChangesInDir(asset[0], -> self.output[asset[1]][asset[2]]())
     
   pack: ->
+    sys.log "Pre-packing all client assets..."
     @output.js.lib()
     @output.js.app()
     @output.css.lib()
@@ -54,17 +52,18 @@ class exports.Packer
         self.inclusions = []
         self.inclusions.push(self.tag.js('assets', self.files.js.lib))
         self.inclusions.push(self.tag.css('assets', self.files.css.lib))
-        self.inclusions.push(self.tag.css('assets', self.files.css.app))
-
+        
         if $SS.config.pack_assets
           self.inclusions.push(self.tag.js('assets', self.files.js.app))
+          self.inclusions.push(self.tag.css('assets', self.files.css.app))
         else
           self._fileList './app/client', 'app.coffee', (files) => files.map (file) => self.inclusions.push(self.tag.js('dev', file))
+          self.inclusions.push(self.tag.css('dev', 'app.styl'))
         
         self.inclusions.push('<script type="text/javascript">$(document).ready(function() { app = new App(); app.init(); });</script>')
         
         self._buildTemplates()
-        jade.renderFile './app/views/app.jade', {locals: {SocketStream: self.inclusions.join('')}}, (err, html) ->
+        $SS.libs.jade.renderFile './app/views/app.jade', {locals: {SocketStream: self.inclusions.join('')}}, (err, html) ->
           fs.writeFileSync './public/index.html', html
           sys.log('Compiled app.jade to index.html')
           cb()
@@ -79,7 +78,7 @@ class exports.Packer
             sys.log('  Compiling and adding ' + file)
             coffeescript = fs.readFileSync("#{source_path}/#{file}", 'utf8')
             try
-              output.push(coffee.compile(coffeescript))
+              output.push($SS.libs.coffee.compile(coffeescript))
             catch e
               sys.log("\x1B[1;31mUnable to compile coffeescript #{file} to JS: #{e.message}\x1b[0m")
           final_output = output.join("\n")
@@ -112,9 +111,14 @@ class exports.Packer
         source_file = 'app.styl' # @import all additional files from this one
         self._deleteFilesInPublicDir(/^app.*css$/)
         self.files.css.app = "app_#{Date.now()}.css"
+        
+        
+        
         input = fs.readFileSync("#{source_path}/#{source_file}", 'utf8')
-        stylus.render input, { filename: source_file, paths: [source_path], compress: $SS.config.pack_assets}, (err, output) ->
+        $SS.libs.stylus.render input, { filename: source_file, paths: [source_path], compress: $SS.config.pack_assets}, (err, output) ->
           throw(err) if err
+        
+        
           fs.writeFile("#{self.public_path}/#{self.files.css.app}", output)
           sys.log('Stylus files compiled into CSS')
           emitter.emit('regenerate_html')
@@ -185,8 +189,8 @@ class exports.Packer
 
   _minifyJS: (orig_code) ->
     orig_size = (orig_code.length / 1024)
-    jsp = uglifyjs.parser
-    pro = uglifyjs.uglify
+    jsp = $SS.libs.uglifyjs.parser
+    pro = $SS.libs.uglifyjs.uglify
     ast = jsp.parse(orig_code)
     ast = pro.ast_mangle(ast)
     ast = pro.ast_squeeze(ast)
@@ -207,7 +211,7 @@ class exports.Packer
     id = path.replace('.' + ext, '')
     file = fs.readFileSync('./app/views/' + template_path, 'utf8')
     try
-      html = jade.render(file);
+      html = $SS.libs.jade.render(file);
     catch e
       console.error 'Unable to render jade template: ' + template_path
       throw e
