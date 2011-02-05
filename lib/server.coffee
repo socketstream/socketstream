@@ -71,7 +71,7 @@ class exports.Server
           klass = require(path)[klass_name]
         catch e
           sys.log 'Error: Unable to find class ' + klass_name + ' or error in file'
-          throw e if NODE_ENV == 'development'
+          throw e if $SS.config.throw_errors
           console.error(e)
           
         # Inject 'helper functions'
@@ -86,7 +86,7 @@ class exports.Server
         try
           obj[method].apply(obj, args)
         catch e
-          throw e if NODE_ENV == 'development'
+          throw e if $SS.config.throw_errors
           console.error(e)
         
         log.incomingCall(msg, client) if log and !(msg.options && msg.options.silent)
@@ -107,7 +107,7 @@ class exports.Server
   _showWelcomeMessage: ->
     sys.puts "\n"
     sys.puts "------------------------- SocketStream -------------------------"
-    sys.puts "  Version #{$SS.version.join('.')} running in #{NODE_ENV}"
+    sys.puts "  Version #{$SS.version.join('.')} running in #{$SS.env}"
     sys.puts "  Running on Port #{$SS.config.port}, PID #{process.pid}"
     sys.puts "----------------------------------------------------------------"
     sys.puts "\n"

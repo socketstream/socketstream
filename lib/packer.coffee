@@ -10,7 +10,6 @@ class exports.Packer
 
   watch_dirs: [
     ['./app/views', 'html', 'app', -> self.watch()],
-    ['./app/css', 'css', 'app'],
     ['./lib/client', 'js', 'lib'],
     ['./lib/css', 'css', 'lib'],
     ["#{__dirname}/client/js", 'js', 'system'],
