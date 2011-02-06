@@ -1,6 +1,4 @@
 http    = require 'http'
-io      = require 'socket.io@0.6.8'
-static  = require 'node-static@0.5.3'
 
 self = {}
 Session = require('./session').Session
@@ -9,10 +7,11 @@ class exports.Server
   
   constructor: () ->
     self = @
+    @static_server = new($SS.libs.static.Server)('./public')
     
   start: ->    
     @server = http.createServer(@_processHttpRequest)
-    @socket = io.listen(@server, {transports: ['websocket', 'flashsocket']})
+    @socket = $SS.libs.io.listen(@server, {transports: ['websocket', 'flashsocket']})
     @socket.on('connection', @_processNewConnection)
     @socket.on('clientMessage', @_processIncomingCall)
     @server.listen($SS.config.port)
@@ -23,9 +22,9 @@ class exports.Server
     if !$SS.config.pack_assets and $SS.sys.asset.request.valid(request.url)
       $SS.sys.asset.request.serve(request, response)
     else
-      file = new(static.Server)('./public')
-      request.addListener('end', -> file.serve(request, response))
-      $SS.sys.log.staticFile(request)
+      request.addListener 'end', ->
+        self.static_server.serve(request, response)
+        $SS.sys.log.staticFile(request)
     
   _processNewConnection: (client) ->
     client.remote = (method, params, type, options = {}) ->
