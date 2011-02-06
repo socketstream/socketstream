@@ -189,12 +189,11 @@ The directories generated will be very familiar to Rails users. Here's a brief o
 #### /app/client
 * All files within /app/client will be converted to Javascript and sent to the client
 * The app.init() function will be automatically called once the websocket connection is established
-* Coffeescript files are compiled on-the-fly in development mode (NODE_ENV=development), so no need to restart the server
-* Client code is automatically concatenated and minified in staging and production (NODE_ENV=staging)
 * All client code can be called from the console using the 'app' variable (app is an instance of window.App)
 * If you have a Javascript library you wish to use (e.g. jQuery UI), put this in /lib/client instead
 * Nesting client files within folders is not supported yet. We will implement this once we settle on the best design
 * The /app/client/app.coffee file must always be present
+* Coffeescript client files are automatically compiled and served on-the-fly in development mode and pre-compiled/minified/cached in staging and production
 
 #### /app/server
 * All files in this directory behave similar to Controllers in traditional MVC frameworks
@@ -211,14 +210,14 @@ The directories generated will be very familiar to Rails users. Here's a brief o
 #### /app/css
 * /app/css/app.stly must exist. This should contain your stylesheet code in [Stylus](http://learnboost.github.com/stylus/) format (similar to SASS)
 * Additional Stylus files can be imported into app.stly using @import 'name_of_file'. Feel free to nest files if you wish.
-* Stylus files are compiled into CSS in real-time when in development mode but pre-compressed and cached as static files in staging and production
 * If you wish to use CSS libraries within your project (e.g. reset.css or jQuery UI) put these in /lib/css instead
+* Stylus files are automatically compiled and served on-the-fly in development mode and pre-compiled/compressed/cached in staging and production
 
 #### /app/views
 * /app/views/app.jade must exist. This should contain all the static HTML your app needs in [Jade](http://jade-lang.com/) format (similar to HAML)
 * The HTML HEAD tag must contain '!= SocketStream'. This helper ensures all the correct libraries are loaded depending upon the environment (declared by NODE_ENV)
 * Easily nest additional html as jQuery templates (similar to Rails partials). E.g /app/views/people/info.jade is accessible as $("#people-info").tmpl(myData)
-* Changing the /app/views/app.jade file, or any other client asset file, will automatically trigger Jade re-compilation when in development mode
+* Jade views and templates are automatically compiled and served on-the-fly in development and pre-compiled/compressed/cached in staging and production
 
 #### /lib
 * Changes to files within /lib/client or /lib/css automatically triggers re-compilation/packing/minification of client assets

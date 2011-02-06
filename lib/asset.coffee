@@ -8,7 +8,6 @@ class exports.Asset
   system_path: __dirname + '/client'
 
   watch_dirs: [
-    ['./app/views', 'html', 'app', -> self.watch()],
     ['./lib/client', 'js', 'lib'],
     ['./lib/css', 'css', 'lib'],
     ["#{__dirname}/client/js", 'js', 'system'],
@@ -21,44 +20,67 @@ class exports.Asset
   init: ->
     @_findAssets => @_ensureAssetsExist()
   
-  developerMode: ->
-    self.pack.html.app ->
-      self.watch()
-      emitter.on 'regenerate_html', ->
-        self.pack.html.app ->
-          self.watch()
+  monitor: ->
+    emitter.on 'regenerate_html', ->
+      self.pack.html.app -> self.watch()
+    self.watch()
   
   watch: ->
     self.timestamp = Date.now()
-    sys.log 'Watching client files for changes...'
     @watch_dirs.map (asset) ->
-      self._watchForChangesInDir(asset[0], -> self.output[asset[1]][asset[2]]())
+      self._watchForChangesInDir(asset[0], -> self.pack[asset[1]][asset[2]]())
 
 
   # Live Request Server - Compiles and serves assets live in development mode (or whenever $SS.config.pack_assets != true)
   request:
 
     valid: (url) ->
-      #return true if url == '/'
+      return true if url == '/'
       responds_to = ['coffee', 'styl']
       file_extension = url.split('.').reverse()[0]
       responds_to.include(file_extension)
     
     serve: (request, response) ->
-      #return @jade('app.jade',cb) if url == '/'
-      file_name = request.url.split('/')[2]
-      file_extension = request.url.split('.').reverse()[0]
-      self.compile[file_extension] file_name, (result) ->
+      file = @_parseURL(request.url)
+      request.ss_benchmark_start = new Date
+      self.compile[file.extension] file.name, (result) ->
         response.writeHead(200, {'Content-type': result.content_type, 'Content-Length': result.output.length})
         response.end(result.output)
+        benchmark_result = (new Date) - request.ss_benchmark_start
+        sys.log("DEV INFO: Compiled and served #{file.name} in #{benchmark_result}ms")
+    
+    _parseURL: (url) ->
+      if url == '/'
+        {name: 'app.jade', extension: 'jade'}
+      else
+        {name: url.split('/')[2], extension: url.split('.').reverse()[0]}
 
 
   # Asset Compiler - Transforms lovely languages into ancient text
   compile:
 
-    jade: (input_file_name, locals, cb) ->
+    jade: (input_file_name, cb) ->
       file = "#{$SS.root}/app/views/#{input_file_name}"
-      $SS.libs.jade.renderFile file, {locals: {SocketStream: locals}}, (err, html) ->
+      
+      inclusions = []
+      inclusions.push(self.tag.js('assets', self.files.js.lib))
+      inclusions.push(self.tag.css('assets', self.files.css.lib))
+      
+      if $SS.config.pack_assets
+        inclusions.push(self.tag.js('assets', self.files.js.app))
+        inclusions.push(self.tag.css('assets', self.files.css.app))
+      else
+        files = self._fileList './app/client', 'app.coffee'
+        files.map (file) => inclusions.push(self.tag.js('dev', file))
+        inclusions.push(self.tag.css('dev', 'app.styl'))
+      
+      # Include any jQuery templates
+      inclusions = inclusions.concat(self._buildTemplates())
+      
+      # Add code to call app.init() in client (this will be called as soon as SocketStream is ready)
+      inclusions.push('<script type="text/javascript">$(document).ready(function() { app = new App(); app.init(); });</script>')
+      
+      $SS.libs.jade.renderFile file, {locals: {SocketStream: inclusions.join('')}}, (err, html) ->
         cb {output: html, content_type: 'text/html'}
 
     coffee: (input_file_name, cb) ->
@@ -93,23 +115,8 @@ class exports.Asset
     
     html:
       
-      app: (cb = ->) ->
-        self.inclusions = []
-        self.inclusions.push(self.tag.js('assets', self.files.js.lib))
-        self.inclusions.push(self.tag.css('assets', self.files.css.lib))
-        
-        if $SS.config.pack_assets
-          self.inclusions.push(self.tag.js('assets', self.files.js.app))
-          self.inclusions.push(self.tag.css('assets', self.files.css.app))
-        else
-          self._fileList './app/client', 'app.coffee', (files) => files.map (file) => self.inclusions.push(self.tag.js('dev', file))
-          self.inclusions.push(self.tag.css('dev', 'app.styl'))
-        
-        self.inclusions.push('<script type="text/javascript">$(document).ready(function() { app = new App(); app.init(); });</script>')
-        
-        self._buildTemplates()
-        
-        self.compile.jade 'app.jade', self.inclusions.join(''), (result) ->
+      app: (cb = ->) ->        
+        self.compile.jade 'app.jade', (result) ->
           fs.writeFileSync './public/index.html', result.output
           sys.log('Compiled app.jade to index.html')
           cb()
@@ -119,19 +126,19 @@ class exports.Asset
       app: ->
         source_path = './app/client'
         source_file_name = 'app.coffee'
-        self._fileList source_path, source_file_name, (files) =>
-          output = []
-          files.map (file_name) ->
-            sys.log('  Compiling and adding ' + file_name)
-            self.compile.coffee file_name, (result) ->
-              output.push(result.output)
-          final_output = output.join("\n")
-          final_output = self._minifyJS(source_file_name, final_output)
+        output = []
+        files = self._fileList source_path, source_file_name
+        files.map (file_name) ->
+          sys.log('  Compiling and adding ' + file_name)
+          self.compile.coffee file_name, (result) ->
+            output.push(result.output)
+        final_output = output.join("\n")
+        final_output = self._minifyJS(source_file_name, final_output)
 
-          self._deleteFilesInPublicDir(/^app.*js$/)
-          self.files.js.app = "app_#{Date.now()}.js"
-          fs.writeFileSync("#{self.public_path}/#{self.files.js.app}", final_output)
-          emitter.emit('regenerate_html')
+        self._deleteFilesInPublicDir(/^app.*js$/)
+        self.files.js.app = "app_#{Date.now()}.js"
+        fs.writeFileSync("#{self.public_path}/#{self.files.js.app}", final_output)
+        emitter.emit('regenerate_html')
         
       lib: ->
         self._deleteFilesInPublicDir(/^lib.*js$/)
@@ -145,8 +152,8 @@ class exports.Asset
       system: ->
         output = self._concatFiles("#{self.system_path}/js")
         fs.writeFileSync("#{self.system_path}/cached/lib.min.js", output)
-        sys.log("SocketStream client files updated")
-        self.output.js.lib()
+        sys.log("SocketStream system client files updated. Recompiling application lib file to include new code...")
+        self.pack.js.lib()
       
     css:
       
@@ -182,14 +189,14 @@ class exports.Asset
   # Private helper methods
 
   _findAssets: (cb) ->
-    @_fileList self.public_path, null, (files) =>
-      files.filter((file) -> file.match(/(css|js)$/)).map (file) ->
-        file_arr = file.split('.')
-        ext = file_arr[file_arr.length - 1]
-        type = file_arr[0].substring(0,3)
-        f = self.files[ext]
-        f[type] = file
-      cb()
+    files = self._fileList self.public_path
+    files.filter((file) -> file.match(/(css|js)$/)).map (file) ->
+      file_arr = file.split('.')
+      ext = file_arr[file_arr.length - 1]
+      type = file_arr[0].substring(0,3)
+      f = self.files[ext]
+      f[type] = file
+    cb()
  
   _ensureAssetsExist: ->
     unless self.files.js.lib? and self.files.css.lib? and self.files.css.app?
@@ -208,21 +215,21 @@ class exports.Asset
   _deleteFilesInPublicDir: (rexexp) ->
     fs.readdirSync(self.public_path).map (file) -> fs.unlink("#{self.public_path}/#{file}") if file.match(rexexp)
   
-  _fileList: (path, first_file, cb) ->
-    files = fs.readdirSync(path).sort().filter((file) -> !file.match(/(^_|^\.)/))
+  _fileList: (path, first_file = null) ->
+    files = fs.readdirSync(path).filter((file) -> !file.match(/(^_|^\.)/))
     if first_file
       files = files.delete(first_file)
       files.unshift(first_file) 
-    cb(files)
+    files.sort()
 
   _concatFiles: (path) ->
-    self._fileList path, null, (files) ->
-      files.sort().map (file_name) ->
-        sys.log "  Concatenating file #{file_name}"
-        output = fs.readFileSync("#{path}/#{file_name}", 'utf8')
-        output = self._minifyJS(file_name, output) if file_name.match(/\.(coffee|js)/) and !file_name.match(/\.min/)
-        output
-      .join("\n")
+    files = self._fileList path
+    files.map (file_name) ->
+      sys.log "  Concatenating file #{file_name}"
+      output = fs.readFileSync("#{path}/#{file_name}", 'utf8')
+      output = self._minifyJS(file_name, output) if file_name.match(/\.(coffee|js)/) and !file_name.match(/\.min/)
+      output
+    .join("\n")
 
   _minifyJS: (file_name, orig_code) ->
     formatKb = (size) -> "#{Math.round(size * 1000) / 1000} KB"
@@ -238,10 +245,13 @@ class exports.Asset
     minified + ';' # Ensures all scripts are correctly terminated
 
   _buildTemplates: ->
-    self._fileList './app/views', null, (files) ->
-      files.filter((file) -> !file.match(/\.jade$/)).map (dir) ->
-        self._fileList "./app/views/#{dir}", null, (templates) ->
-          self.inclusions.push(self._buildTemplate(dir + '/' + template_name)) for template_name in templates
+    output = []
+    files = self._fileList './app/views'
+    files.filter((file) -> !file.match(/\.jade$/)).map (dir) ->
+      templates = self._fileList "./app/views/#{dir}"
+      templates.map (template_name) ->
+        output.push(self._buildTemplate(dir + '/' + template_name))
+    output
     
   _buildTemplate: (template_path) ->
     path = template_path.split('/').join('-')
