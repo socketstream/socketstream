@@ -3,11 +3,23 @@
 
 class exports.Compiler
   
+  respondsToUrl: (url) ->
+    #return true if url == '/'
+    responds_to = ['coffee', 'styl']
+    file_extension = url.split('.').reverse()[0]
+    responds_to.include(file_extension)
+  
   fromURL: (url, cb) ->
+    return @jade('app.jade',cb) if url == '/'
     file_name = url.split('/')[2]
     file_extension = url.split('.').reverse()[0]
     @[file_extension](file_name, cb)
 
+
+  jade: (input_file_name, locals, cb) ->
+    file = "#{$SS.root}/app/views/#{input_file_name}"
+    $SS.libs.jade.renderFile file, {locals: {SocketStream: locals}}, (err, html) ->
+      cb {output: html, content_type: 'text/html'}
 
   coffee: (input_file_name, cb) ->
     input = fs.readFileSync "#{$SS.root}/app/client/#{input_file_name}", 'utf8'

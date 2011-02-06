@@ -64,8 +64,8 @@ class exports.Packer
         
         self._buildTemplates()
         
-        $SS.libs.jade.renderFile './app/views/app.jade', {locals: {SocketStream: self.inclusions.join('')}}, (err, html) ->
-          fs.writeFileSync './public/index.html', html
+        $SS.sys.asset.compiler.jade 'app.jade', self.inclusions.join(''), (result) ->
+          fs.writeFileSync './public/index.html', result.output
           sys.log('Compiled app.jade to index.html')
           cb()
     
@@ -205,5 +205,4 @@ class exports.Packer
       console.error 'Unable to render jade template: ' + template_path
       throw e
     self.tag.template(id, html)
-    
     
