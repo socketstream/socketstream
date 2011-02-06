@@ -20,10 +20,8 @@ class exports.Server
     @_showWelcomeMessage()
     
   _processHttpRequest: (request, response) ->
-    if !$SS.config.pack_assets and $SS.sys.asset.compiler.respondsToUrl(request.url)
-      $SS.sys.asset.compiler.fromURL request.url, (result) ->
-        response.writeHead(200, {'Content-type': result.content_type, 'Content-Length': result.output.length})
-        response.end(result.output)
+    if !$SS.config.pack_assets and $SS.sys.asset.request.valid(request.url)
+      $SS.sys.asset.request.serve(request, response)
     else
       file = new(static.Server)('./public')
       request.addListener('end', -> file.serve(request, response))

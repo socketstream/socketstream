@@ -2,8 +2,7 @@ EventEmitter = require('events').EventEmitter
 emitter = new EventEmitter
 
 self = {}
-
-class exports.Packer
+class exports.Asset
 
   public_path: './public/assets'
   system_path: __dirname + '/client'
@@ -23,10 +22,10 @@ class exports.Packer
     @_findAssets => @_ensureAssetsExist()
   
   developerMode: ->
-    self.output.html.app ->
+    self.pack.html.app ->
       self.watch()
       emitter.on 'regenerate_html', ->
-        self.output.html.app ->
+        self.pack.html.app ->
           self.watch()
   
   watch: ->
@@ -34,17 +33,63 @@ class exports.Packer
     sys.log 'Watching client files for changes...'
     @watch_dirs.map (asset) ->
       self._watchForChangesInDir(asset[0], -> self.output[asset[1]][asset[2]]())
+
+
+  # Live Request Server - Compiles and serves assets live in development mode (or whenever $SS.config.pack_assets != true)
+  request:
+
+    valid: (url) ->
+      #return true if url == '/'
+      responds_to = ['coffee', 'styl']
+      file_extension = url.split('.').reverse()[0]
+      responds_to.include(file_extension)
     
-  pack: ->
-    sys.log "Pre-packing all client assets..."
-    @output.js.lib()
-    @output.js.app()
-    @output.css.lib()
-    @output.css.app()
-    @output.html.app()
+    serve: (request, response) ->
+      #return @jade('app.jade',cb) if url == '/'
+      file_name = request.url.split('/')[2]
+      file_extension = request.url.split('.').reverse()[0]
+      self.compile[file_extension] file_name, (result) ->
+        response.writeHead(200, {'Content-type': result.content_type, 'Content-Length': result.output.length})
+        response.end(result.output)
 
 
-  output:
+  # Asset Compiler - Transforms lovely languages into ancient text
+  compile:
+
+    jade: (input_file_name, locals, cb) ->
+      file = "#{$SS.root}/app/views/#{input_file_name}"
+      $SS.libs.jade.renderFile file, {locals: {SocketStream: locals}}, (err, html) ->
+        cb {output: html, content_type: 'text/html'}
+
+    coffee: (input_file_name, cb) ->
+      input = fs.readFileSync "#{$SS.root}/app/client/#{input_file_name}", 'utf8'
+      try
+        js = $SS.libs.coffee.compile(input)
+        cb {output: js, content_type: 'text/javascript'}
+      catch e
+        sys.log("\x1B[1;31mError: Unable to compile Coffeescript file #{input_file_name} to JS\x1B[0m")
+        throw(e) if $SS.config.throw_errors
+
+    styl: (input_file_name, cb)  ->
+      source_path = "#{$SS.root}/app/css"
+      input = fs.readFileSync "#{source_path}/#{input_file_name}", 'utf8'
+      $SS.libs.stylus.render input, { filename: input_file_name, paths: [source_path], compress: $SS.config.pack_assets}, (err, css) ->
+        if err
+          sys.log("\x1B[1;31mError: Unable to compile Stylus file #{input_file_name} to CSS\x1B[0m")
+          throw(err)
+        cb {output: css, content_type: 'text/css'}
+
+
+  # Asset Packer - Pre-concatenates/compiles/minifies files in advance to be served by the node static server
+  pack:
+    
+    all: ->
+      sys.log "Pre-packing all client assets..."
+      @js.lib()
+      @js.app()
+      @css.lib()
+      @css.app()
+      @html.app()
     
     html:
       
@@ -64,7 +109,7 @@ class exports.Packer
         
         self._buildTemplates()
         
-        $SS.sys.asset.compiler.jade 'app.jade', self.inclusions.join(''), (result) ->
+        self.compile.jade 'app.jade', self.inclusions.join(''), (result) ->
           fs.writeFileSync './public/index.html', result.output
           sys.log('Compiled app.jade to index.html')
           cb()
@@ -73,14 +118,15 @@ class exports.Packer
       
       app: ->
         source_path = './app/client'
-        self._fileList source_path, 'app.coffee', (files) =>
+        source_file_name = 'app.coffee'
+        self._fileList source_path, source_file_name, (files) =>
           output = []
           files.map (file_name) ->
             sys.log('  Compiling and adding ' + file_name)
-            $SS.sys.asset.compiler.coffee file_name, (result) ->
+            self.compile.coffee file_name, (result) ->
               output.push(result.output)
           final_output = output.join("\n")
-          final_output = self._minifyJS(final_output)
+          final_output = self._minifyJS(source_file_name, final_output)
 
           self._deleteFilesInPublicDir(/^app.*js$/)
           self.files.js.app = "app_#{Date.now()}.js"
@@ -107,7 +153,7 @@ class exports.Packer
       app: ->
         self._deleteFilesInPublicDir(/^app.*css$/)
         self.files.css.app = "app_#{Date.now()}.css"
-        $SS.sys.asset.compiler.styl 'app.styl', (result) ->
+        self.compile.styl 'app.styl', (result) ->
           fs.writeFile("#{self.public_path}/#{self.files.css.app}", result.output)
           sys.log('Stylus files compiled into CSS')
           emitter.emit('regenerate_html')
@@ -120,7 +166,7 @@ class exports.Packer
         sys.log('CSS libs concatenated')
         emitter.emit('regenerate_html')
 
-
+  # Helpers to generate HTML tags
   tag:
 
     css: (path, name) ->
@@ -132,6 +178,8 @@ class exports.Packer
     template: (id, contents) ->
       '<script id="' + id + '" type="text/html">' + contents + '</script>'
 
+  
+  # Private helper methods
 
   _findAssets: (cb) ->
     @_fileList self.public_path, null, (files) =>
@@ -146,7 +194,7 @@ class exports.Packer
   _ensureAssetsExist: ->
     unless self.files.js.lib? and self.files.css.lib? and self.files.css.app?
       sys.log "It looks like this is the first time you're running SocketStream. Generating asset files..."
-      @pack()
+      self.pack.all()
   
   _watchForChangesInDir: (dir, cb) ->
     fs.readdirSync(dir).map (file) ->
@@ -169,14 +217,15 @@ class exports.Packer
 
   _concatFiles: (path) ->
     self._fileList path, null, (files) ->
-      files.sort().map (file) ->
-        sys.log "  Concatenating file #{file}"
-        output = fs.readFileSync("#{path}/#{file}", 'utf8')
-        output = self._minifyJS(output) if file.match(/\.(coffee|js)/) and !file.match(/\.min/)
+      files.sort().map (file_name) ->
+        sys.log "  Concatenating file #{file_name}"
+        output = fs.readFileSync("#{path}/#{file_name}", 'utf8')
+        output = self._minifyJS(file_name, output) if file_name.match(/\.(coffee|js)/) and !file_name.match(/\.min/)
         output
       .join("\n")
 
-  _minifyJS: (orig_code) ->
+  _minifyJS: (file_name, orig_code) ->
+    formatKb = (size) -> "#{Math.round(size * 1000) / 1000} KB"
     orig_size = (orig_code.length / 1024)
     jsp = $SS.libs.uglifyjs.parser
     pro = $SS.libs.uglifyjs.uglify
@@ -185,7 +234,7 @@ class exports.Packer
     ast = pro.ast_squeeze(ast)
     minified = pro.gen_code(ast)
     min_size = (minified.length / 1024)
-    sys.log("  Minified from #{orig_size} KB to #{min_size} KB")
+    sys.log("  Minified #{file_name} from #{formatKb(orig_size)} to #{formatKb(min_size)}")
     minified + ';' # Ensures all scripts are correctly terminated
 
   _buildTemplates: ->
