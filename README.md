@@ -1,8 +1,8 @@
 ## SocketStream
 
-SocketStream makes it a breeze to build phenomenally fast, highly-scalable real-time apps on Node.js.
+SocketStream makes it a breeze to build phenomenally fast, highly-scalable real-time web applications on Node.js.
 
-More coming soon at [www.socketstream.org](http://www.socketstream.org).
+
 
 
 ### Features
@@ -25,6 +25,8 @@ More coming soon at [www.socketstream.org](http://www.socketstream.org).
 ### Philosophy
 
 SocketStream is a new web framework built around the [Single-page Application](http://en.wikipedia.org/wiki/Single-page_application) paradigm. It embraces websockets, in-memory datastores (Redis), and client-side rendering to provide an ultra-responsive experience that will amaze your users.
+
+Our goal is to ensure the core SocketStream project always remains lean, robust, and **breathtakingly fast**. At the same time we will make it easy to extend functionality using npm modules.
 
 
 ### How does it work?
@@ -189,47 +191,46 @@ The directories generated will be very familiar to Rails users. Here's a brief o
 #### /app/client
 * All files within /app/client will be converted to Javascript and sent to the client
 * The app.init() function will be automatically called once the websocket connection is established
-* Changing any client will not require a restart in development mode (NODE_ENV=development), just hit refresh on the browser
+* Coffeescript files are compiled on-the-fly in development mode (NODE_ENV=development), so no need to restart the server
 * Client code is automatically concatenated and minified in staging and production (NODE_ENV=staging)
-* Nesting client files within folders is not supported yet
-* If you have a Javascript library you wish to use (e.g. jQuery UI), put this in /lib/client instead
 * All client code can be called from the console using the 'app' variable (app is an instance of window.App)
+* If you have a Javascript library you wish to use (e.g. jQuery UI), put this in /lib/client instead
+* Nesting client files within folders is not supported yet. We will implement this once we settle on the best design
 * The /app/client/app.coffee file must always be present
 
 #### /app/server
 * All files in this directory behave similar to Controllers in traditional MVC frameworks
-* For example, to call app.init from the client and pass 25 as params, type remote('app.init',25,function(){ alert(this); })
+* For example, to call app.init from the client and pass 25 as params, call remote('app.init',25,function(){ alert(this); }) in the client
 * The last argument must always be the callback (cb). If app.init were to call cb('hello it works') we would see this message popup
 * All methods are automatically accessible via the client unless they begin with an underscore - so be careful!
 * If the method takes incoming params, these will be pushed into the first argument. The second must always be the callback.
 * Each file must begin 'class exports.' followed by the capitalized name of the file (e.g. 'class exports.User')
 * Server files can be nested. E.g. remote('users.online.yesterday') would reference the 'yesterday' method in /app/server/users/online.coffee
 * @session gives you direct access to the User's session
-* @user gives you direct access to your custom User code. More on this coming soon
+* @user gives you direct access to your custom User instance. More on this coming soon
 * The /app/server/app.coffee file must always be present
 
 #### /app/css
 * /app/css/app.stly must exist. This should contain your stylesheet code in [Stylus](http://learnboost.github.com/stylus/) format (similar to SASS)
-* Additional Stylus files can be imported into app.stly using @import 'name_of_file'
-* Changing any file within /app/css will automatically trigger Stylus re-compilation
-* CSS files will be compressed in staging or production mode
+* Additional Stylus files can be imported into app.stly using @import 'name_of_file'. Feel free to nest files if you wish.
+* Stylus files are compiled into CSS in real-time when in development mode but pre-compressed and cached as static files in staging and production
 * If you wish to use CSS libraries within your project (e.g. reset.css or jQuery UI) put these in /lib/css instead
 
 #### /app/views
 * /app/views/app.jade must exist. This should contain all the static HTML your app needs in [Jade](http://jade-lang.com/) format (similar to HAML)
 * The HTML HEAD tag must contain '!= SocketStream'. This helper ensures all the correct libraries are loaded depending upon the environment (declared by NODE_ENV)
-* Nest additional html as jQuery templates (similar to Rails partials). E.g /app/views/people/info.jade is accessible as $("#people-info").tmpl(myData)
+* Easily nest additional html as jQuery templates (similar to Rails partials). E.g /app/views/people/info.jade is accessible as $("#people-info").tmpl(myData)
 * Changing the /app/views/app.jade file, or any other client asset file, will automatically trigger Jade re-compilation when in development mode
 
 #### /lib
-* Changes to files within /lib/client or /lib/css automatically triggers re-compilation of client assets in development mode
+* Changes to files within /lib/client or /lib/css automatically triggers re-compilation/packing/minification of client assets
 * Easily control the order your client libraries are loaded by prefixing them with a number (e.g. 1.jquery.js, 2.jquery-ui.js)
-* Client JS files are automatically minified unless the filename contains '.min'
+* Client JS files are automatically minified by Uglify JS unless the filename contains '.min'
 * Any files within /lib/server can be required automatically by Node. Ideal for custom authentication modules
 
 #### /public
 * Store your static files here (e.g. /public/images, robots.txt, etc)
-* The /public/assets folder is managed by SocketStream and should not be touched
+* The /index.html file and /public/assets folder are managed by SocketStream and should not be touched
 
 #### /vendor
 * Put any vendored libraries in here using the format /vendor/mycode/lib/mycode.js
@@ -239,7 +240,8 @@ Before starting up your new app, make sure you have Redis 2.2+ running on your l
 
     node app.coffee
     
-If all goes well you'll see the SocketStream banner coming up, then you're ready to start coding!
+If all goes well you'll see the SocketStream banner coming up, then you're ready to start!
+
 
 ### Tests
 
@@ -253,6 +255,7 @@ Then run jasbin in the SocketStream directory:
   
     cd socketstream/
     jasbin
+
 
 ### Coming Soon
 
