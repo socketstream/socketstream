@@ -18,6 +18,8 @@ class exports.Packer
   constructor: (@options = {}) ->
     self = @
     @files = {js: {}, css: {}}
+    
+  init: ->
     @_findAssets => @_ensureAssetsExist()
   
   developerMode: ->
@@ -47,7 +49,6 @@ class exports.Packer
     html:
       
       app: (cb = ->) ->
-        self.ouput = []
         self.inclusions = []
         self.inclusions.push(self.tag.js('assets', self.files.js.lib))
         self.inclusions.push(self.tag.css('assets', self.files.css.lib))
@@ -62,6 +63,7 @@ class exports.Packer
         self.inclusions.push('<script type="text/javascript">$(document).ready(function() { app = new App(); app.init(); });</script>')
         
         self._buildTemplates()
+        
         $SS.libs.jade.renderFile './app/views/app.jade', {locals: {SocketStream: self.inclusions.join('')}}, (err, html) ->
           fs.writeFileSync './public/index.html', html
           sys.log('Compiled app.jade to index.html')
@@ -73,13 +75,10 @@ class exports.Packer
         source_path = './app/client'
         self._fileList source_path, 'app.coffee', (files) =>
           output = []
-          files.map (file) ->
-            sys.log('  Compiling and adding ' + file)
-            coffeescript = fs.readFileSync("#{source_path}/#{file}", 'utf8')
-            try
-              output.push($SS.libs.coffee.compile(coffeescript))
-            catch e
-              sys.log("\x1B[1;31mUnable to compile coffeescript #{file} to JS: #{e.message}\x1b[0m")
+          files.map (file_name) ->
+            sys.log('  Compiling and adding ' + file_name)
+            $SS.sys.asset.compiler.coffee file_name, (result) ->
+              output.push(result.output)
           final_output = output.join("\n")
           final_output = self._minifyJS(final_output)
 
@@ -106,19 +105,10 @@ class exports.Packer
     css:
       
       app: ->
-        source_path = './app/css'
-        source_file = 'app.styl' # @import all additional files from this one
         self._deleteFilesInPublicDir(/^app.*css$/)
         self.files.css.app = "app_#{Date.now()}.css"
-        
-        
-        
-        input = fs.readFileSync("#{source_path}/#{source_file}", 'utf8')
-        $SS.libs.stylus.render input, { filename: source_file, paths: [source_path], compress: $SS.config.pack_assets}, (err, output) ->
-          throw(err) if err
-        
-        
-          fs.writeFile("#{self.public_path}/#{self.files.css.app}", output)
+        $SS.sys.asset.compiler.styl 'app.styl', (result) ->
+          fs.writeFile("#{self.public_path}/#{self.files.css.app}", result.output)
           sys.log('Stylus files compiled into CSS')
           emitter.emit('regenerate_html')
         
