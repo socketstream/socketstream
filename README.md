@@ -3,8 +3,6 @@
 SocketStream makes it a breeze to build phenomenally fast, highly-scalable real-time web applications on Node.js.
 
 
-
-
 ### Features
 
 * No-latency bi-directional communication between client and server using websockets (or flash sockets)
@@ -13,10 +11,10 @@ SocketStream makes it a breeze to build phenomenally fast, highly-scalable real-
 * In-built User model via @session.user with modular authentication
 * Uses [Redis](http://www.redis.io/) for fast session retrieval, pub/sub, list of users online, and any other data your app needs instantly
 * Works on all major browsers thanks to the excellent [Socket.IO](http://socket.io/)
-* Automatically packages and minifies your client CSS and JS files in staging/production
+* Automatically packages and [minifies](https://github.com/mishoo/UglifyJS) your client CSS and JS files in staging/production
 * Nested namespaces allow building of large 'enterprise' apps (only without the slowness!)
 * Did we mention fast? SocketStream starts up instantly, ready to accept thousands of incoming connections
-* Bundled with jQuery 1.5. Easily add additional client libraries such as [underscore.js](http://documentcloud.github.com/underscore/)
+* Bundled with jQuery 1.5. Easily add additional client libraries such as [Underscore.js](http://documentcloud.github.com/underscore/)
 * Easily create jQuery templates using the [official plugin](http://api.jquery.com/category/plugins/templates/). Works like partials in Rails.
 * Uses [Jade](http://jade-lang.com/) to render static HTML
 * Uses [Stylus](http://learnboost.github.com/stylus/) for CSS
@@ -225,7 +223,7 @@ The directories generated will be very familiar to Rails users. Here's a brief o
 #### /lib
 * Changes to files within /lib/client or /lib/css automatically triggers re-compilation/packing/minification of client assets
 * Easily control the order your client libraries are loaded by prefixing them with a number (e.g. 1.jquery.js, 2.jquery-ui.js)
-* Client JS files are automatically minified by Uglify JS unless the filename contains '.min'
+* Client JS files are automatically minified by [UglifyJS](https://github.com/mishoo/UglifyJS) unless the filename contains '.min'
 * Any files within /lib/server can be required automatically by Node. Ideal for custom authentication modules
 
 #### /public
