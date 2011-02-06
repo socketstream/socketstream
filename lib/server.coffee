@@ -20,10 +20,10 @@ class exports.Server
     @_showWelcomeMessage()
     
   _processHttpRequest: (request, response) ->
-    respond_to = ['coffee', 'styl']
-    file_extension = request.url.split('.').reverse()[0]
-    if !$SS.config.pack_assets and respond_to.include(file_extension)
-      self._compileAsset(request, response)
+    if !$SS.config.pack_assets and $SS.sys.asset.compiler.respondsToUrl(request.url)
+      $SS.sys.asset.compiler.fromURL request.url, (result) ->
+        response.writeHead(200, {'Content-type': result.content_type, 'Content-Length': result.output.length})
+        response.end(result.output)
     else
       file = new(static.Server)('./public')
       request.addListener('end', -> file.serve(request, response))
@@ -91,11 +91,6 @@ class exports.Server
           when 'broadcast'
             @socket.broadcast(message)
             
-  _compileAsset: (request, response) ->
-    $SS.sys.asset.compiler.fromURL request.url, (result) ->
-      response.writeHead(200, {'Content-type': result.content_type, 'Content-Length': result.output.length})
-      response.end(result.output)
-
   _showWelcomeMessage: ->
     sys.puts "\n"
     sys.puts "------------------------- SocketStream -------------------------"
