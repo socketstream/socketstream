@@ -2,26 +2,15 @@ http    = require 'http'
 io      = require 'socket.io@0.6.8'
 static  = require 'node-static@0.5.3'
 
-log = null
 self = {}
-
 Session = require('./session').Session
-Publish = require('./publish').Publish
-$SS.publish = new Publish
-
-Compiler = require('./compiler').Compiler
-compiler = new Compiler
 
 class exports.Server
   
   constructor: () ->
     self = @
-    @controllers = {}
-    if $SS.config.log_level and $SS.config.log_level > 0
-      Logger = require('./logger.coffee').Logger
-      log = new Logger($SS.config.log_level)
     
-  start: ->
+  start: ->    
     @server = http.createServer(@_processHttpRequest)
     @socket = io.listen(@server, {transports: ['websocket', 'flashsocket']})
     @socket.on('connection', @_processNewConnection)
@@ -34,25 +23,23 @@ class exports.Server
     respond_to = ['coffee', 'styl']
     file_extension = request.url.split('.').reverse()[0]
     if !$SS.config.pack_assets and respond_to.include(file_extension)
-      compiler.fromURL request.url, (result) ->
-        response.writeHead(200, {'Content-type': result.content_type, 'Content-Length': result.output.length})
-        response.end(result.output)
+      self._compileAsset(request, response)
     else
       file = new(static.Server)('./public')
       request.addListener('end', -> file.serve(request, response))
-      log.staticFile(request) if log
-      
+      $SS.sys.log.staticFile(request)
+    
   _processNewConnection: (client) ->
     client.remote = (method, params, type, options = {}) ->
       message = {method: method, params: params, cb_id: method.cb_id, callee: method.callee, type: type}
       client.send(JSON.stringify(message))
-      log.outgoingCall(client, method) if log and (type != 'system' and options and !options.silent)
+      $SS.sys.log.outgoingCall(client, method) if (type != 'system' and options and !options.silent)
   
     client.session = new Session(client)
     client.session.process (session) ->
       if session.newly_created
         client.remote('setSession', session.id, 'system')
-        log.createNewSession(session) if log
+        $SS.sys.log.createNewSession(session)
       client.remote('ready', {}, 'system')
       
   _processIncomingCall: (data, client) ->
@@ -89,7 +76,7 @@ class exports.Server
           throw e if $SS.config.throw_errors
           console.error(e)
         
-        log.incomingCall(msg, client) if log and !(msg.options && msg.options.silent)
+        $SS.sys.log.incomingCall(msg, client) if !(msg.options && msg.options.silent)
     else
       sys.log "Invalid message: #{data}"
 
@@ -103,6 +90,11 @@ class exports.Server
             client.send(message) if client and client.connected
           when 'broadcast'
             @socket.broadcast(message)
+            
+  _compileAsset: (request, response) ->
+    $SS.sys.asset.compiler.fromURL request.url, (result) ->
+      response.writeHead(200, {'Content-type': result.content_type, 'Content-Length': result.output.length})
+      response.end(result.output)
 
   _showWelcomeMessage: ->
     sys.puts "\n"
