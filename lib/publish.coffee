@@ -4,7 +4,8 @@ class exports.Publish
     RPS.subscribe 'socketstream:broadcast'
   
   # Publish event to a user regardless of which server they are connected to
-  user: (user_id, event, params) -> 
+  user: (user_id, event, params) ->
+    $SS.sys.log.publish.user(user_id, event, params)
     message = JSON.stringify({event: event, params: params})
     R.publish "socketstream:user:#{user_id}", message
 
@@ -14,6 +15,7 @@ class exports.Publish
  
   # Publish event to every client connected to every server
   broadcast: (event, params) -> 
+    $SS.sys.log.publish.broadcast(event, params)
     message = JSON.stringify({event: event, params: params})
     R.publish "socketstream:broadcast", message
   

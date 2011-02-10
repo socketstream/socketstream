@@ -84,7 +84,10 @@ class exports.Server
         switch channel[1]
           when 'user'
             client = $SS.connected_users[channel[2]]
-            client.send(message) if client and client.connected
+            return if client and client.connected
+              client.send(message)
+            else
+              null
           when 'broadcast'
             @socket.broadcast(message)
             

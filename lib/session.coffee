@@ -18,7 +18,7 @@ class exports.Session
     "socketstream:session:#{@id}"
     
   pubsub_key: ->
-    "socketstream:user:#{@id}"
+    "socketstream:user:#{@user_id}"
 
   process: (cb) ->
     if @cookies && @cookies.session_id && @cookies.session_id.length == @id_length
@@ -61,7 +61,7 @@ class exports.Session
     @user_id = user_id
     R.hset @key(), 'user_id', @user_id
     RPS.subscribe @pubsub_key()
-    $SS.connected_users[@id] = @client
+    $SS.connected_users[@user_id] = @client
     
   logout: (cb) ->
     @user_id = null  # clear user_id. note we are not erasing this in redis as it can be advantagous to keep this for retrospective analytics
