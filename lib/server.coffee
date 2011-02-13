@@ -1,4 +1,5 @@
 http    = require 'http'
+#https   = require 'https'
 
 self = {}
 Session = require('./session').Session
@@ -9,7 +10,7 @@ class exports.Server
     self = @
     @static_server = new($SS.libs.static.Server)('./public')
     
-  start: ->    
+  start: ->
     @server = http.createServer(@_processHttpRequest)
     @socket = $SS.libs.io.listen(@server, {transports: ['websocket', 'flashsocket']})
     @socket.on('connection', @_processNewConnection)
@@ -17,6 +18,12 @@ class exports.Server
     @server.listen($SS.config.port)
     @_listenForPubSubEvents()
     @_showWelcomeMessage()
+  
+  _options: -> # for forthcoming HTTPS
+    {
+      key:  fs.readFileSync("#{$SS.root}/config/ssl/key.pem"),
+      cert: fs.readFileSync("#{$SS.root}/config/ssl/cert.pem")      
+    }
     
   _processHttpRequest: (request, response) ->
     if !$SS.config.pack_assets and $SS.sys.asset.request.valid(request.url)
