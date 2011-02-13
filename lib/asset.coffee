@@ -252,11 +252,16 @@ class exports.Asset
     fs.readdirSync(self.public_path).map (file) -> fs.unlink("#{self.public_path}/#{file}") if file.match(rexexp)
   
   _fileList: (path, first_file = null) ->
-    files = fs.readdirSync(path).filter((file) -> !file.match(/(^_|^\.)/))
-    if first_file and files.include(first_file)
-      files = files.delete(first_file)
-      files.unshift(first_file) 
-    files.sort()
+    try
+      files = fs.readdirSync(path).filter((file) -> !file.match(/(^_|^\.)/))
+      if first_file and files.include(first_file)
+        files = files.delete(first_file)
+        files.unshift(first_file) 
+      files.sort()
+    catch e
+      throw e unless e.code == 'ENOENT' # dir missing
+      []
+
 
   _concatFiles: (path) ->
     files = self._fileList path

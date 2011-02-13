@@ -1,2 +1,2 @@
-app = require('socketstream').init(__dirname)
+app = require('socketstream').init()
 app.start()

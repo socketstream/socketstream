@@ -12,7 +12,7 @@ class exports.AppGenerator
   
   makeDirectories: (@name) ->
     mode = 0755
-    directories = ['/app', '/app/client', '/app/css', '/app/server', '/app/views', '/lib', '/lib/client', '/lib/css', '/lib/server', '/public', '/public/assets', '/vendor']
+    directories = ['/app', '/app/client', '/app/css', '/app/server', '/app/shared', '/app/views', '/lib', '/lib/client', '/lib/css', '/lib/server', '/public', '/public/assets', '/vendor']
     console.log "Creating a new SocketStream app called " + @name
     fs.mkdirSync @name, mode # Create the root directory
     fs.mkdirSync @name + directory, mode for directory in directories
