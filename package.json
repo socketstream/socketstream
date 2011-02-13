@@ -9,14 +9,14 @@
   ],
   "dependencies": {
     "coffee-script":  "= 1.0.0",
-    "socket.io":      "= 0.6.9",
+    "socket.io":      "= 0.6.10",
     "redis":          "= 0.5.2",
     "hiredis":        "= 0.1.6",
     "node-static":    "= 0.5.3",
     "jade":           "= 0.6.0",
     "uglify-js":      "= 0.0.3",
     "argsparser":     "= 0.0.3",
-    "stylus":         "= 0.2.1"
+    "stylus":         "= 0.5.1"
   },
   "directories":  { "lib": "./lib" },
   "main":         "./lib/socket_stream.js",

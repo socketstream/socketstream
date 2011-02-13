@@ -8,7 +8,7 @@ SocketStream makes it a breeze to build phenomenally fast, highly-scalable real-
 * No-latency bi-directional communication between client and server using websockets (or flash sockets)
 * Write client AND server code in [Coffeescript](http://jashkenas.github.com/coffee-script/) or Javascript - your choice
 * Effortless scalable pub/sub baked right in. Not just for chat apps and stock tickers anymore! See examples below.
-* In-built User model via @session.user with modular authentication
+* In-built User model with modular authentication
 * Uses [Redis](http://www.redis.io/) for fast session retrieval, pub/sub, list of users online, and any other data your app needs instantly
 * Works on all major browsers thanks to the excellent [Socket.IO](http://socket.io/)
 * Automatically packages and [minifies](https://github.com/mishoo/UglifyJS) your client CSS and JS files in staging/production
@@ -165,7 +165,7 @@ Ah, but you have thousands of users across hundreds of servers you say? No probl
 
 ### Requirements
 
-[Node 0.3.5](http://nodejs.org/#download) or above
+[Node 0.4](http://nodejs.org/#download) or above
 
 [NPM](http://npmjs.org/) (Node Package Manager)
 
@@ -261,4 +261,4 @@ So so much... including:
 * Lots more documentation, a tutorial and many more examples
 * Build rate-limiting into SocketStream to block clients attempting to DDOS the connection
 * Horizontal scaling by downloading a list of active servers and automatically trying new servers should one fail over, no load balancers required!
-* Beautiful super-fast browser-based testing
+* Beautiful super-fast browser-based testing and diagnostics

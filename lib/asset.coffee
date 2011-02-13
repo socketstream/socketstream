@@ -6,6 +6,7 @@ class exports.Asset
 
   public_path: './public/assets'
   system_path: __dirname + '/client'
+  client_dirs: ['client', 'shared']
 
   watch_dirs: [
     ['./lib/client', 'js', 'lib'],
@@ -33,12 +34,13 @@ class exports.Asset
 
   # Live Request Server - Compiles and serves assets live in development mode (or whenever $SS.config.pack_assets != true)
   request:
+    
+    responds_to:  ['coffee', 'styl']
 
     valid: (url) ->
-      return true if url == '/'
-      responds_to = ['coffee', 'styl']
+      return true if url == '/'      
       file_extension = url.split('.').reverse()[0]
-      responds_to.include(file_extension)
+      @responds_to.include(file_extension)
     
     serve: (request, response) ->
       file = @_parseURL(request.url)
@@ -50,10 +52,15 @@ class exports.Asset
         sys.log("DEV INFO: Compiled and served #{file.name} in #{benchmark_result}ms")
     
     _parseURL: (url) ->
+      extension = url.split('.').reverse()[0]
+      path = url.split('/')
+      dir = path[1]; file = path[2]
       if url == '/'
         {name: 'app.jade', extension: 'jade'}
+      else if extension == 'coffee' and self.client_dirs.include(dir)
+        {name: "#{dir}/#{file}", extension: extension}
       else
-        {name: url.split('/')[2], extension: url.split('.').reverse()[0]}
+        {name: file, extension: extension}
 
 
   # Asset Compiler - Transforms lovely languages into ancient text
@@ -62,20 +69,26 @@ class exports.Asset
     jade: (input_file_name, cb) ->
       file = "#{$SS.root}/app/views/#{input_file_name}"
       
+      # Always include links to JS and CSS client-side pre-packed libraries
       inclusions = []
       inclusions.push(self.tag.js('assets', self.files.js.lib))
       inclusions.push(self.tag.css('assets', self.files.css.lib))
       
+      # Typically when in Staging or Production assets are pre-packed, so we include links to them here
       if $SS.config.pack_assets
         inclusions.push(self.tag.js('assets', self.files.js.app))
         inclusions.push(self.tag.css('assets', self.files.css.app))
+      # However, when in Development, we need to iterate through all dirs and include separate links to load each file
       else
-        files = self._fileList './app/client', 'app.coffee'
-        files.map (file) => inclusions.push(self.tag.js('dev', file))
-        inclusions.push(self.tag.css('dev', 'app.styl'))
+        # Include client-side and shared CoffeeScript
+        self.client_dirs.map (dir) ->
+          files = self._fileList "./app/#{dir}", 'app.coffee'
+          files.map (file) -> inclusions.push(self.tag.js(dir, file))
+        # Include Stylus files (additional files should be linked from app.styl)
+        inclusions.push(self.tag.css('css', 'app.styl'))
       
-      # Include any jQuery templates
-      inclusions = inclusions.concat(self._buildTemplates())
+      # Include all jQuery templates, if present
+      inclusions = inclusions.concat(@_buildTemplates())
       
       # Add code to call app.init() in client (this will be called as soon as SocketStream is ready)
       inclusions.push('<script type="text/javascript">$(document).ready(function() { app = new App(); app.init(); });</script>')
@@ -84,7 +97,7 @@ class exports.Asset
         cb {output: html, content_type: 'text/html'}
 
     coffee: (input_file_name, cb) ->
-      path = "app/client/#{input_file_name}"
+      path = "app/#{input_file_name}"
       input = fs.readFileSync "#{$SS.root}/#{path}", 'utf8'
       try
         js = $SS.libs.coffee.compile(input)
@@ -102,6 +115,27 @@ class exports.Asset
           sys.log("\x1B[1;31mError: Unable to compile Stylus file #{path} to CSS\x1B[0m")
           throw(err) if $SS.config.throw_errors
         cb {output: css, content_type: 'text/css'}
+
+    _buildTemplates: ->
+      output = []
+      files = self._fileList './app/views'
+      files.filter((file) -> !file.match(/\.jade$/)).map (dir) =>
+        templates = self._fileList "./app/views/#{dir}"
+        templates.map (template_name) =>
+          output.push(@_buildTemplate(dir + '/' + template_name))
+      output
+
+    _buildTemplate: (template_path) ->
+      path = template_path.split('/').join('-')
+      ext = path.split('.').reverse()[0]
+      id = path.replace('.' + ext, '')
+      file = fs.readFileSync('./app/views/' + template_path, 'utf8')
+      try
+        html = $SS.libs.jade.render(file);
+      catch e
+        console.error 'Unable to render jade template: ' + template_path
+        throw e
+      self.tag.template(id, html)
 
 
   # Asset Packer - Pre-concatenates/compiles/minifies files in advance to be served by the node static server
@@ -126,21 +160,22 @@ class exports.Asset
     js:
       
       app: ->
-        source_path = './app/client'
         source_file_name = 'app.coffee'
         output = []
-        files = self._fileList source_path, source_file_name
-        files.map (file_name) ->
-          sys.log('  Compiling and adding ' + file_name)
-          self.compile.coffee file_name, (result) ->
-            output.push(result.output)
+
+        self.client_dirs.map (dir) ->
+          source_path = "./app/#{dir}"
+          files = self._fileList source_path, source_file_name
+          files.map (file_name) ->
+            full_file_name = dir + '/' + file_name
+            sys.log('  Compiling and adding ' + full_file_name)
+            self.compile.coffee full_file_name, (result) -> output.push(result.output)
         final_output = output.join("\n")
         final_output = self._minifyJS(source_file_name, final_output)
 
         self._deleteFilesInPublicDir(/^app.*js$/)
         self.files.js.app = "app_#{Date.now()}.js"
         fs.writeFileSync("#{self.public_path}/#{self.files.js.app}", final_output)
-        emitter.emit('regenerate_html')
         
       lib: ->
         self._deleteFilesInPublicDir(/^lib.*js$/)
@@ -165,7 +200,6 @@ class exports.Asset
         self.compile.styl 'app.styl', (result) ->
           fs.writeFile("#{self.public_path}/#{self.files.css.app}", result.output)
           sys.log('Stylus files compiled into CSS')
-          emitter.emit('regenerate_html')
         
       lib: ->
         self._deleteFilesInPublicDir(/^lib.*css$/)
@@ -219,7 +253,7 @@ class exports.Asset
   
   _fileList: (path, first_file = null) ->
     files = fs.readdirSync(path).filter((file) -> !file.match(/(^_|^\.)/))
-    if first_file
+    if first_file and files.include(first_file)
       files = files.delete(first_file)
       files.unshift(first_file) 
     files.sort()
@@ -230,6 +264,7 @@ class exports.Asset
       sys.log "  Concatenating file #{file_name}"
       output = fs.readFileSync("#{path}/#{file_name}", 'utf8')
       output = self._minifyJS(file_name, output) if file_name.match(/\.(coffee|js)/) and !file_name.match(/\.min/)
+      output += ';' if file_name.match(/\.(js)/) # Ensures the file ends with a semicolon. Many libs don't and would otherwise break when concatenated
       output
     .join("\n")
 
@@ -244,26 +279,4 @@ class exports.Asset
     minified = pro.gen_code(ast)
     min_size = (minified.length / 1024)
     sys.log("  Minified #{file_name} from #{formatKb(orig_size)} to #{formatKb(min_size)}")
-    minified + ';' # Ensures all scripts are correctly terminated
-
-  _buildTemplates: ->
-    output = []
-    files = self._fileList './app/views'
-    files.filter((file) -> !file.match(/\.jade$/)).map (dir) ->
-      templates = self._fileList "./app/views/#{dir}"
-      templates.map (template_name) ->
-        output.push(self._buildTemplate(dir + '/' + template_name))
-    output
-    
-  _buildTemplate: (template_path) ->
-    path = template_path.split('/').join('-')
-    ext = path.split('.').reverse()[0]
-    id = path.replace('.' + ext, '')
-    file = fs.readFileSync('./app/views/' + template_path, 'utf8')
-    try
-      html = $SS.libs.jade.render(file);
-    catch e
-      console.error 'Unable to render jade template: ' + template_path
-      throw e
-    self.tag.template(id, html)
-    
+    minified
