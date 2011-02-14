@@ -41,7 +41,7 @@ class exports.Asset
     responds_to:  ['coffee', 'styl']
 
     valid: (url) ->
-      return true if url == '/'      
+      return true if @_root(url)
       file_extension = url.split('.').reverse()[0]
       @responds_to.include(file_extension)
     
@@ -58,12 +58,16 @@ class exports.Asset
       extension = url.split('.').reverse()[0]
       path = url.split('/')
       dir = path[1]; file = path[2]
-      if url == '/'
+      if @_root(url)
         {name: 'app.jade', extension: 'jade'}
       else if extension == 'coffee' and self.client_dirs.include(dir)
         {name: "#{dir}/#{file}", extension: extension}
       else
         {name: file, extension: extension}
+
+    # Determins if we're looking for the root of the site, ignoring any hashes or anything in the query string
+    _root: (url) ->
+       url.split('?')[0].split('/').length == 2
 
 
   # Asset Compiler - Transforms lovely languages into ancient text
