@@ -1,5 +1,7 @@
-http    = require 'http'
-#https   = require 'https'
+fs = require('fs')
+util = require('util')
+http = require('http')
+#https = require('https')
 
 self = {}
 Session = require('./session').Session
@@ -54,14 +56,14 @@ class exports.Server
       action = msg.method.split('.')
       method = action.pop()
       if method.charAt(0) == '_'
-        sys.log "Error: Unable to access private method #{method}"
+        util.log "Error: Unable to access private method #{method}"
       else
         path = "#{$SS.root}/app/server/#{action.join('/')}"
         klass_name = action.pop().capitalized()
         try
           klass = require(path)[klass_name]
         catch e
-          sys.log 'Error: Unable to find class ' + klass_name + ' or error in file'
+          util.log 'Error: Unable to find class ' + klass_name + ' or error in file'
           throw e if $SS.config.throw_errors
           console.error(e)
           
@@ -82,7 +84,7 @@ class exports.Server
         
         $SS.sys.log.incomingCall(msg, client) if !(msg.options && msg.options.silent)
     else
-      sys.log "Invalid message: #{data}"
+      util.log "Invalid message: #{data}"
 
   _listenForPubSubEvents: ->
     RPS.on 'message', (channel, message) =>
@@ -99,10 +101,10 @@ class exports.Server
             @socket.broadcast(message)
             
   _showWelcomeMessage: ->
-    sys.puts "\n"
-    sys.puts "------------------------- SocketStream -------------------------"
-    sys.puts "  Version #{$SS.version.join('.')} running in #{$SS.env}"
-    sys.puts "  Running on Port #{$SS.config.port}, PID #{process.pid}"
-    sys.puts "----------------------------------------------------------------"
-    sys.puts "\n"
+    util.puts "\n"
+    util.puts "------------------------- SocketStream -------------------------"
+    util.puts "  Version #{$SS.version.join('.')} running in #{$SS.env}"
+    util.puts "  Running on Port #{$SS.config.port}, PID #{process.pid}"
+    util.puts "----------------------------------------------------------------"
+    util.puts "\n"
 

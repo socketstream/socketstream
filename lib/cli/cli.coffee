@@ -1,23 +1,32 @@
-fs        = require 'fs'
+fs = require 'fs'
 
 class exports.AppGenerator
   
   constructor: (@name) ->
     return console.log "Please provide a name for your application: $> socketstream <MyAppName>" if @name is undefined
-    @makeDirectories @name
-    @makeFiles @name
-    console.log "Created app " + @name + ". You can now run the app:"
-    console.log "\t\t cd " + @name
-    console.log "\t\t node app.coffee"
+    @dir_mode = 0755
+    if @makeRootDirectory()
+      @makeDirectories()
+      @makeFiles()
+      @showFinishText()
   
-  makeDirectories: (@name) ->
-    mode = 0755
+  makeRootDirectory: ->
+    console.log "Creating a new SocketStream app called #{@name}"
+    try
+      fs.mkdirSync @name, @dir_mode # Create the root directory
+      return true
+    catch e
+      if e.code == 'EEXIST'
+        console.log "Sorry the '#{@name}' directory already exists. Please choose another name for your app."
+        return false
+      else
+        throw e
+  
+  makeDirectories: ->
     directories = ['/app', '/app/client', '/app/css', '/app/server', '/app/shared', '/app/views', '/lib', '/lib/client', '/lib/css', '/lib/server', '/public', '/public/assets', '/vendor']
-    console.log "Creating a new SocketStream app called " + @name
-    fs.mkdirSync @name, mode # Create the root directory
-    fs.mkdirSync @name + directory, mode for directory in directories
+    fs.mkdirSync @name + directory, @dir_mode for directory in directories
     
-  makeFiles: (@name) ->
+  makeFiles: ->
     filesDir = fs.realpathSync(__filename).replace('/cli.coffee','') + '/files' # TODO - find a less brittle way
     files = [
       {fileName: '/app/client/app.coffee',        dataFile: '/app.client.coffee'}
@@ -29,6 +38,11 @@ class exports.AppGenerator
       {fileName: '/lib/client/jquery-1.5.min.js', dataFile: '/lib.client.jquery-1.5.min.js'}
     ]
     fs.writeFileSync @name + file.fileName, fs.readFileSync(filesDir+file.dataFile, 'utf-8') for file in files
+  
+  showFinishText: ->
+    console.log "Success! Created app " + @name + ". You can now run the app:"
+    console.log "\t\t cd " + @name
+    console.log "\t\t node app.coffee"
     
 #TODO replace 'socketstream <APPNAME>' with 'socketstream new <APPNAME>'
 #TODO have socketstream list all of the commands in nice fashion.
