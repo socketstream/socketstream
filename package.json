@@ -1,7 +1,7 @@
 {
   "name":         "socketstream",
   "description":  "Build phenomenally fast real-time apps on Node.js",
-  "version":      "0.0.1",
+  "version":      "0.0.2",
   "homepage":     "http://www.socketstream.org",
   "author":       "Owen Barnes <owen@socketstream.org>",
   "contributors": [
@@ -19,7 +19,7 @@
     "stylus":         "= 0.5.1"
   },
   "directories":  { "lib": "./lib" },
-  "main":         "./lib/socket_stream.js",
+  "main":         "./lib/socketstream.js",
   "engines":      { "node": ">= 0.3.0" },
   "bin":          {
     "socketstream":   "./bin/socketstream"

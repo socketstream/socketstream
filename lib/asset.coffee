@@ -1,3 +1,6 @@
+fs = require("fs")
+util = require("util")
+
 EventEmitter = require('events').EventEmitter
 emitter = new EventEmitter
 
@@ -49,7 +52,7 @@ class exports.Asset
         response.writeHead(200, {'Content-type': result.content_type, 'Content-Length': result.output.length})
         response.end(result.output)
         benchmark_result = (new Date) - request.ss_benchmark_start
-        sys.log("DEV INFO: Compiled and served #{file.name} in #{benchmark_result}ms")
+        util.log("DEV INFO: Compiled and served #{file.name} in #{benchmark_result}ms")
     
     _parseURL: (url) ->
       extension = url.split('.').reverse()[0]
@@ -103,7 +106,7 @@ class exports.Asset
         js = $SS.libs.coffee.compile(input)
         cb {output: js, content_type: 'text/javascript'}
       catch e
-        sys.log("\x1B[1;31mError: Unable to compile Coffeescript file #{path} to JS\x1B[0m")
+        util.log("\x1B[1;31mError: Unable to compile Coffeescript file #{path} to JS\x1B[0m")
         throw(e) if $SS.config.throw_errors
 
     styl: (input_file_name, cb) ->
@@ -112,7 +115,7 @@ class exports.Asset
       input = fs.readFileSync "#{$SS.root}/#{path}", 'utf8'
       $SS.libs.stylus.render input, { filename: input_file_name, paths: [dir], compress: $SS.config.pack_assets}, (err, css) ->
         if err
-          sys.log("\x1B[1;31mError: Unable to compile Stylus file #{path} to CSS\x1B[0m")
+          util.log("\x1B[1;31mError: Unable to compile Stylus file #{path} to CSS\x1B[0m")
           throw(err) if $SS.config.throw_errors
         cb {output: css, content_type: 'text/css'}
 
@@ -142,7 +145,7 @@ class exports.Asset
   pack:
     
     all: ->
-      sys.log "Pre-packing all client assets..."
+      util.log "Pre-packing all client assets..."
       @js.lib()
       @js.app()
       @css.lib()
@@ -154,7 +157,7 @@ class exports.Asset
       app: (cb = ->) ->        
         self.compile.jade 'app.jade', (result) ->
           fs.writeFileSync './public/index.html', result.output
-          sys.log('Compiled app.jade to index.html')
+          util.log('Compiled app.jade to index.html')
           cb()
     
     js:
@@ -168,7 +171,7 @@ class exports.Asset
           files = self._fileList source_path, source_file_name
           files.map (file_name) ->
             full_file_name = dir + '/' + file_name
-            sys.log('  Compiling and adding ' + full_file_name)
+            util.log('  Compiling and adding ' + full_file_name)
             self.compile.coffee full_file_name, (result) -> output.push(result.output)
         final_output = output.join("\n")
         final_output = self._minifyJS(source_file_name, final_output)
@@ -181,7 +184,7 @@ class exports.Asset
         self._deleteFilesInPublicDir(/^lib.*js$/)
         self.files.js.lib = "lib_#{Date.now()}.js"
         output = self._concatFiles('./lib/client')
-        sys.log("  Appending SocketStream client files...")
+        util.log("  Appending SocketStream client files...")
         output += fs.readFileSync("#{self.system_path}/cached/lib.min.js", 'utf8')
         fs.writeFile("#{self.public_path}/#{self.files.js.lib}", output)
         emitter.emit('regenerate_html')
@@ -189,7 +192,7 @@ class exports.Asset
       system: ->
         output = self._concatFiles("#{self.system_path}/js")
         fs.writeFileSync("#{self.system_path}/cached/lib.min.js", output)
-        sys.log("SocketStream system client files updated. Recompiling application lib file to include new code...")
+        util.log("SocketStream system client files updated. Recompiling application lib file to include new code...")
         self.pack.js.lib()
       
     css:
@@ -199,14 +202,14 @@ class exports.Asset
         self.files.css.app = "app_#{Date.now()}.css"
         self.compile.styl 'app.styl', (result) ->
           fs.writeFile("#{self.public_path}/#{self.files.css.app}", result.output)
-          sys.log('Stylus files compiled into CSS')
+          util.log('Stylus files compiled into CSS')
         
       lib: ->
         self._deleteFilesInPublicDir(/^lib.*css$/)
         output = self._concatFiles("./lib/css")
         self.files.css.lib = "lib_#{Date.now()}.css"
         fs.writeFile("#{self.public_path}/#{self.files.css.lib}", output)
-        sys.log('CSS libs concatenated')
+        util.log('CSS libs concatenated')
         emitter.emit('regenerate_html')
 
   # Helpers to generate HTML tags
@@ -236,7 +239,7 @@ class exports.Asset
  
   _ensureAssetsExist: ->
     unless self.files.js.lib? and self.files.css.lib? and self.files.css.app?
-      sys.log "It looks like this is the first time you're running SocketStream. Generating asset files..."
+      util.log "It looks like this is the first time you're running SocketStream. Generating asset files..."
       self.pack.all()
   
   _watchForChangesInDir: (dir, cb) ->
@@ -245,7 +248,7 @@ class exports.Asset
       fs.unwatchFile(path)
       fs.watchFile path, (curr, prev) ->
         if !curr or (Number(curr.mtime) > Number(prev.mtime))
-          sys.log("Change detected in #{path}. Recompiling client files...")
+          util.log("Change detected in #{path}. Recompiling client files...")
           cb()
   
   _deleteFilesInPublicDir: (rexexp) ->
@@ -266,7 +269,7 @@ class exports.Asset
   _concatFiles: (path) ->
     files = self._fileList path
     files.map (file_name) ->
-      sys.log "  Concatenating file #{file_name}"
+      util.log "  Concatenating file #{file_name}"
       output = fs.readFileSync("#{path}/#{file_name}", 'utf8')
       output = self._minifyJS(file_name, output) if file_name.match(/\.(coffee|js)/) and !file_name.match(/\.min/)
       output += ';' if file_name.match(/\.(js)/) # Ensures the file ends with a semicolon. Many libs don't and would otherwise break when concatenated
@@ -283,5 +286,5 @@ class exports.Asset
     ast = pro.ast_squeeze(ast)
     minified = pro.gen_code(ast)
     min_size = (minified.length / 1024)
-    sys.log("  Minified #{file_name} from #{formatKb(orig_size)} to #{formatKb(min_size)}")
+    util.log("  Minified #{file_name} from #{formatKb(orig_size)} to #{formatKb(min_size)}")
     minified

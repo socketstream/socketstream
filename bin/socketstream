@@ -1,10 +1,10 @@
 #!/usr/bin/env node
-var coffee    = require('coffee-script');
-
 var path      = require('path');
 var fs        = require('fs');
 var argParser = require('argsparser');
 var lib       = path.join(path.dirname(fs.realpathSync(__filename)), '../lib');
+
+require(lib + '/socketstream');
 var cli       = require(lib + '/cli/cli.coffee');
 
 var args      = argParser.parse();

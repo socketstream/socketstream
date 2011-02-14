@@ -2,12 +2,15 @@
 
 SocketStream makes it a breeze to build phenomenally fast, highly-scalable real-time web applications on Node.js.
 
+Latest release: 0.0.2
+
 
 ### Features
 
 * No-latency bi-directional communication between client and server using websockets (or flash sockets)
 * Write client AND server code in [Coffeescript](http://jashkenas.github.com/coffee-script/) or Javascript - your choice
 * Effortless scalable pub/sub baked right in. Not just for chat apps and stock tickers anymore! See examples below.
+* Finally: Write code once and use it on the client AND server! Ideal for business logic and model validation.
 * In-built User model with modular authentication
 * Uses [Redis](http://www.redis.io/) for fast session retrieval, pub/sub, list of users online, and any other data your app needs instantly
 * Works on all major browsers thanks to the excellent [Socket.IO](http://socket.io/)
@@ -193,6 +196,7 @@ The directories generated will be very familiar to Rails users. Here's a brief o
 * If you have a Javascript library you wish to use (e.g. jQuery UI), put this in /lib/client instead
 * Nesting client files within folders is not supported yet. We will implement this once we settle on the best design
 * The /app/client/app.coffee file must always be present
+* View incoming/outgoing calls by setting $SS.config.log_level = 2 in your /app/client/app.coffee file
 * Coffeescript client files are automatically compiled and served on-the-fly in development mode and pre-compiled/minified/cached in staging and production
 
 #### /app/server
@@ -206,6 +210,14 @@ The directories generated will be very familiar to Rails users. Here's a brief o
 * @session gives you direct access to the User's session
 * @user gives you direct access to your custom User instance. More on this coming soon
 * The /app/server/app.coffee file must always be present
+
+#### /app/shared
+* All files within /app/shared will be converted to Javascript and sent to the client. In addition they can also be used server-side
+* Ideal for business logic and models that need to validate on the client (for speed) yet ensure integrity before saving to the DB
+* Start your file with the same header you would for a server file. E.g. class exports.Filter
+* Use it client-side by instantiating the class: filter = new exports.Filter
+* Use it server-side by first requiring the file, then instantiating the class: Filter = require('filter').Filter; filter = new Filter;
+* WARNING: All code within this folder will be sent to the client. Do not include any proprietary secret sauce or use database/filesystem calls
 
 #### /app/css
 * /app/css/app.stly must exist. This should contain your stylesheet code in [Stylus](http://learnboost.github.com/stylus/) format (similar to SASS)
@@ -231,6 +243,7 @@ The directories generated will be very familiar to Rails users. Here's a brief o
 
 #### /vendor
 * Put any vendored libraries in here using the format /vendor/mycode/lib/mycode.js
+* This directory is optional
 
 
 Before starting up your new app, make sure you have Redis 2.2+ running on your localhost, then type:
