@@ -12,11 +12,18 @@ class exports.Logger
   createNewSession: (session) -> 
     util.log "\x1B[1;35mCreating new session: #{session.id}\x1B[0m"
 
-  incomingCall: (data, client) ->
-    util.log "#{client.sessionId} \x1B[1;36m->\x1b[0m #{data.method}#{self._params(data.params)}" if $SS.config.log_level >= 2
+  incoming:
+    
+    socketio: (data, client) ->
+      util.log "#{client.sessionId} \x1B[1;36m->\x1b[0m #{data.method}#{self._params(data.params)}" if $SS.config.log_level >= 2
+      
+    http: (actions, params, format) ->
+      util.log "API (#{format}) \x1B[1;36m->\x1b[0m #{actions.join('.')} #{self._params(params)}" if $SS.config.log_level >= 2
 
-  outgoingCall: (client, method) ->
-    util.log "#{client.sessionId} \x1B[1;32m<-\x1b[0m #{method.callee}" if $SS.config.log_level >= 2
+  outgoing:
+    
+    socketio: (client, method) ->
+      util.log "#{client.sessionId} \x1B[1;32m<-\x1b[0m #{method.callee}" if $SS.config.log_level >= 2
   
   publish:
     

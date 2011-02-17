@@ -1,6 +1,3 @@
-# Uncomment this line to enable debugging in the browser console
-# $SS.config.log_level = 2 
-
 class window.App
   
   constructor: ->
