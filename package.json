@@ -20,7 +20,7 @@
   },
   "directories":  { "lib": "./lib" },
   "main":         "./lib/socketstream.js",
-  "engines":      { "node": ">= 0.3.0" },
+  "engines":      { "node": ">= 0.4.0" },
   "bin":          {
     "socketstream":   "./bin/socketstream"
   }
