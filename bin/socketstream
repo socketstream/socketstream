@@ -12,14 +12,17 @@ var SS            = require(lib + '/socketstream');
 
 switch(command) {
   case 'start':
+  case 's':
     util.log('Starting SocketStream...');
     SS.init().start();
     break;
   case 'new':
+  case 'n':
     var gen = require(lib + '/cli/app_generator.coffee');
     new gen.AppGenerator(params[0]);
     break;
   case 'console':
+  case 'c':
     SS.init();
     var repl = require('repl');
     repl.start('SocketStream > ');
