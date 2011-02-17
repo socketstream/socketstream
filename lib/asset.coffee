@@ -67,7 +67,8 @@ class exports.Asset
 
     # Determins if we're looking for the root of the site, ignoring any hashes or anything in the query string
     _root: (url) ->
-       url.split('?')[0].split('/').length == 2
+       u = url.split('?')[0].split('/')
+       u.length == 2 and !u[1].match(/\./)
 
 
   # Asset Compiler - Transforms lovely languages into ancient text

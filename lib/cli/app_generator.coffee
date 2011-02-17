@@ -27,7 +27,7 @@ class exports.AppGenerator
     fs.mkdirSync @name + directory, @dir_mode for directory in directories
     
   makeFiles: ->
-    filesDir = fs.realpathSync(__filename).replace('/cli.coffee','') + '/files' # TODO - find a less brittle way
+    filesDir = "#{__dirname}/files"
     files = [
       {fileName: '/app/client/app.coffee',        dataFile: '/app.client.coffee'}
       {fileName: '/app/server/app.coffee',        dataFile: '/app.server.coffee'}
@@ -42,7 +42,7 @@ class exports.AppGenerator
   showFinishText: ->
     console.log "Success! Created app " + @name + ". You can now run the app:"
     console.log "\t\t cd " + @name
-    console.log "\t\t node app.coffee"
+    console.log "\t\t socketstream start"
     
 #TODO replace 'socketstream <APPNAME>' with 'socketstream new <APPNAME>'
 #TODO have socketstream list all of the commands in nice fashion.
