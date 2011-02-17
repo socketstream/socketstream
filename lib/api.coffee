@@ -1,43 +1,70 @@
-# API
+# SocketStream HTTP API
+# ---------------------
+# The API automatically makes all public methods within /app/server accesible over HTTP
+
+# EXAMPLES:
+# /api/app/square.json?5 is the same as calling remote('app.square',5,cb) from the browser
+# To see the output on screen type type .html instead of .json
+# Pass objects in the query string: E.g. /api/user/add.json?name=Tom&age=21 is the same as remote('user.add',{name: 'Tom', age: 21},cb)
+# Note: Make sure you cast strings into the type of value you're expecting when using the HTTP API
 
 url_lib = require('url')
 Request = require('./request')
 
 exports.call = (request, response) ->
   url = url_lib.parse(request.url, true)
-  params = parseParams(url)
-  path = url.pathname.split('.')
-  action = path[0]
-  output_format = path[1]
-  action_array = action.split('/').slice(2)
+  new ApiRequest(url, response).process()
 
-  Request.process action_array, params, null, null, (data, options) ->
-    out = output_filter[output_format](data)
-    response.writeHead(200, {'Content-type': out.content_type, 'Content-Length': out.output.length})
-    response.end(out.output)
+class ApiRequest
   
-  $SS.sys.log.incoming.http(action_array, params, output_format)
-
-
-parseParams = (url) ->
-  if url.search
-    # Test to see if we're passing an object
-    if url.search.match('=')
-      url.query
-    # Or just a string/number
+  constructor: (@url, @response) ->
+    @errors = []
+    @params = @_parseParams()
+    path = @url.pathname.split('.')
+    action = path[0]
+    @format = path[1].toString().toLowerCase()
+    @actions = action.split('/').slice(2)
+    
+  process: ->
+    @_verify()
+    if @errors.any()
+      @_showErrors()
     else
-      url.search.split('?')[1]
-  else
-    undefined
+      Request.process @actions, @params, null, null, (data, options) =>
+        out = @formats[@format](data)
+        @_deliver(200, out.content_type, out.output)
+      $SS.sys.log.incoming.http(@actions, @params, @format)
+  
+  _verify: ->
+    unless @formats.keys().include(@format)
+      @errors.push('Invalid output format. Supported formats: ' + @formats.keys().join(', ')) 
 
+  _deliver: (code, type, body) ->
+    @response.writeHead(code, {'Content-type': type, 'Content-Length': body.length})
+    @response.end(body)
+  
+  _showErrors: (message) ->
+    output = '<h3>SocketStream API Error</h3>'
+    output += @errors.join('<br/>')
+    @_deliver(400, 'text/html', output)
 
-output_filter =
+  _parseParams: ->
+    if @url.search
+      # Test to see if we're passing an object
+      if @url.search.match('=')
+        @url.query
+      # Or just a string/number
+      else
+        @url.search.split('?')[1]
 
-  json: (obj) ->
-    output = JSON.stringify(obj)
-    {output: output, content_type: 'text/json'}
+  # Output Formats
+  formats:
 
-  # TODO: improve with syntax highlighting
-  html: (obj) ->
-    output = JSON.stringify(obj)
-    {output: output, content_type: 'text/html'}
+    json: (obj) ->
+      output = JSON.stringify(obj)
+      {output: output, content_type: 'text/json'}
+
+    # TODO: improve with syntax highlighting
+    html: (obj) ->
+      output = JSON.stringify(obj)
+      {output: output, content_type: 'text/html'}

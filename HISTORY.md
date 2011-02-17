@@ -1,3 +1,13 @@
+0.0.4 / 2011-02-17
+==================
+
+  * New feature: Start your apps with 'socketstream start'
+  * New feature: 'socketstream console'. Try typing $SS.publish.broadcast('my_channel','my message')  Much more to come here!
+  * Improvement: Improved error checking within API. WIP
+  * Improvement: Recognition of a root URL
+  * Change: Create new apps is now 'socketstream new <PROJECTNAME>'
+
+
 0.0.3 / 2011-02-17
 ==================
 

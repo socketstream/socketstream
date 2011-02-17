@@ -16,6 +16,7 @@ setDefaults = ->
     log_level:          3         # 0 = none, 1 = calls only, 2 = calls + params, 3 = full
     pack_assets:        true      # set this to false when developing
     throw_errors:       true      # this needs to be false in production or the server will quit on any error
+    api_prefix:         'api'     # defines the HTTP API namespace
     
     # Set Params which will be passed to the client when they connect
     client:

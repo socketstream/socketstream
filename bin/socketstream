@@ -1,11 +1,29 @@
 #!/usr/bin/env node
-var path      = require('path');
-var fs        = require('fs');
-var argParser = require('argsparser');
-var lib       = path.join(path.dirname(fs.realpathSync(__filename)), '../lib');
+var util          = require('util');
+var fs            = require('fs');
+var argParser     = require('argsparser');
+var lib           = __dirname + '/../lib';
 
-require(lib + '/socketstream');
-var cli       = require(lib + '/cli/cli.coffee');
+var args          = argParser.parse().node;
+var command       = args[1];
+var params        = args.slice(2);
 
-var args      = argParser.parse();
-new cli.AppGenerator(args.node[1]);
+var SS            = require(lib + '/socketstream');
+
+switch(command) {
+  case 'start':
+    util.log('Starting SocketStream...');
+    SS.init().start();
+    break;
+  case 'new':
+    var gen = require(lib + '/cli/app_generator.coffee');
+    new gen.AppGenerator(params[0]);
+    break;
+  case 'console':
+    SS.init();
+    var repl = require('repl');
+    repl.start('SocketStream > ');
+    break;
+  default:
+    console.log('Sorry, I do not know how to ' + command);
+};

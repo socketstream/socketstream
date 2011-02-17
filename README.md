@@ -2,25 +2,28 @@
 
 SocketStream makes it a breeze to build phenomenally fast, highly-scalable real-time web applications on Node.js.
 
-Latest release: 0.0.3
+Latest release: 0.0.4
 
 
 ### Features
 
-* No-latency bi-directional communication between client and server using websockets (or flash sockets)
-* Write client AND server code in [Coffeescript](http://jashkenas.github.com/coffee-script/) or Javascript - your choice
-* Effortless scalable pub/sub baked right in. Not just for chat apps and stock tickers anymore! See examples below.
-* Finally: Write code once and use it on the client AND server! Ideal for business logic and model validation.
+* True bi-directional communication using websockets (or flash sockets)
+* Crazy fast! Starts up instantly. No HTTP handshaking/headers/routing to slow you down
+* Works on all major browsers thanks to the excellent [Socket.IO](http://socket.io/)
+* Write client and server code in [Coffeescript](http://jashkenas.github.com/coffee-script/) or Javascript - your choice
+* Easily share code between the client and server. Ideal for business logic and model validation
+* Free HTTP API! All server-side code can also be accessed over a high-speed request-based API
+* Effortless, scalable, pub/sub baked right in. See examples below
+* Awesome asset packer! Automatically packages and [minifies](https://github.com/mishoo/UglifyJS) your client-side code
 * In-built User model with modular authentication
 * Uses [Redis](http://www.redis.io/) for fast session retrieval, pub/sub, list of users online, and any other data your app needs instantly
-* Works on all major browsers thanks to the excellent [Socket.IO](http://socket.io/)
-* Automatically packages and [minifies](https://github.com/mishoo/UglifyJS) your client CSS and JS files in staging/production
 * Nested namespaces allow building of large 'enterprise' apps (only without the slowness!)
-* Did we mention fast? SocketStream starts up instantly, ready to accept thousands of incoming connections
+* Interactive console - just type 'socketstream console'
 * Bundled with jQuery 1.5. Easily add additional client libraries such as [Underscore.js](http://documentcloud.github.com/underscore/)
 * Easily create jQuery templates using the [official plugin](http://api.jquery.com/category/plugins/templates/). Works like partials in Rails.
 * Uses [Jade](http://jade-lang.com/) to render static HTML
 * Uses [Stylus](http://learnboost.github.com/stylus/) for CSS
+* MIT Licence
 
 
 ### Philosophy
@@ -71,6 +74,9 @@ And you will see the following output:
 
     25 squared is 625
 
+You can also call this method over HTTP with the following URL:
+
+    /api/app/square.json?5           (Hint: use .html to output on screen)
 
 Ready for something a bit more advanced? Let's take a look at reverse geocoding using HTML5 geolocation...
 
@@ -185,7 +191,7 @@ For now clone this project to a directory and link it as a local npm package wit
 
 To generate a new empty SocketStream project, simply type:
 
-    socketstream <name of your project>
+    socketstream new <name of your project>
 
 The directories generated will be very familiar to Rails users. Here's a brief overview:
 
@@ -202,11 +208,12 @@ The directories generated will be very familiar to Rails users. Here's a brief o
 #### /app/server
 * All files in this directory behave similar to Controllers in traditional MVC frameworks
 * For example, to call app.init from the client and pass 25 as params, call remote('app.init',25,function(){ alert(this); }) in the client
+* All methods can be automatically accessed via the in-built HTTP API (e.g. /api/app/square.json?5)
 * The last argument must always be the callback (cb). If app.init were to call cb('hello it works') we would see this message popup
-* All methods are automatically accessible via the client unless they begin with an underscore - so be careful!
 * If the method takes incoming params, these will be pushed into the first argument. The second must always be the callback.
 * Each file must begin 'class exports.' followed by the capitalized name of the file (e.g. 'class exports.User')
 * Server files can be nested. E.g. remote('users.online.yesterday') would reference the 'yesterday' method in /app/server/users/online.coffee
+* All methods are publicly accessible unless they begin with an underscore - so be careful!
 * @session gives you direct access to the User's session
 * @user gives you direct access to your custom User instance. More on this coming soon
 * The /app/server/app.coffee file must always be present
@@ -248,7 +255,7 @@ The directories generated will be very familiar to Rails users. Here's a brief o
 
 Before starting up your new app, make sure you have Redis 2.2+ running on your localhost, then type:
 
-    node app.coffee
+   socketstream start
     
 If all goes well you'll see the SocketStream banner coming up, then you're ready to start!
 
@@ -267,11 +274,6 @@ Then run jasbin in the SocketStream directory:
     jasbin
 
 
-### Coming Soon
+### License
 
-So so much... including:
-
-* Lots more documentation, a tutorial and many more examples
-* Build rate-limiting into SocketStream to block clients attempting to DDOS the connection
-* Horizontal scaling by downloading a list of active servers and automatically trying new servers should one fail over, no load balancers required!
-* Beautiful super-fast browser-based testing and diagnostics
+SocketStream is released under the MIT license.
