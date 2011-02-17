@@ -14,18 +14,25 @@ setDefaults = ->
   $SS.config =
     port:               3000
     log_level:          3         # 0 = none, 1 = calls only, 2 = calls + params, 3 = full
-    pack_assets:        false     # set this to true on staging and production
+    pack_assets:        true      # set this to false when developing
     throw_errors:       true      # this needs to be false in production or the server will quit on any error
+    
+    # Set Params which will be passed to the client when they connect
+    client:
+      log_level:        2         # 0 = none, 1 = calls only, 2 = calls + params, 3 = full
 
 # For now we override default config depending upon environment. This will still be overridden by any app config file in
 # /config/environments/NODE_ENV.js . We may want to remove this in the future and insist upon seperate app config files, ala Rails
 setEnvironmentDefaults = ->
-  if $SS.env != 'development'
-    $SS.config.pack_assets = true
-
-  if $SS.env == 'production'
-    $SS.config.log_level = 0
-    $SS.config.throw_errors = false
+  override = switch $SS.env
+    when 'development'
+      pack_assets: false
+    when 'production'
+      throw_errors: false
+      log_level: 0
+      client:
+        log_level: 0
+  merge(override)
 
 # Merges custom app config specificed in /config/environments/NODE_ENV.js with SocketStream defaults if the file exists
 mergeAppConfigFile = ->
@@ -35,10 +42,12 @@ mergeAppConfigFile = ->
     try
       app_config = JSON.parse(config_file_body)
       try
-        $SS.config = Object.extend($SS.config, app_config)
+        merge(app_config)
       catch e
         console.error('App config file loaded and parsed as JSON but unable to merge. Check syntax carefully.')
     catch e
       console.error('Loaded, but unable to parse app config file ' + config_file_name + '. Ensure it is in valid JSON format with quotes around all strings.')
   catch e
-    
+
+merge = (new_config) ->
+  $SS.config = Object.extend($SS.config, new_config)

@@ -2,7 +2,7 @@
 
 SocketStream makes it a breeze to build phenomenally fast, highly-scalable real-time web applications on Node.js.
 
-Latest release: 0.0.2
+Latest release: 0.0.3
 
 
 ### Features
@@ -196,7 +196,7 @@ The directories generated will be very familiar to Rails users. Here's a brief o
 * If you have a Javascript library you wish to use (e.g. jQuery UI), put this in /lib/client instead
 * Nesting client files within folders is not supported yet. We will implement this once we settle on the best design
 * The /app/client/app.coffee file must always be present
-* View incoming/outgoing calls by setting $SS.config.log_level = 2 in your /app/client/app.coffee file
+* View incoming/outgoing calls in the browser console in development (controlled with $SS.config.client.log_level)
 * Coffeescript client files are automatically compiled and served on-the-fly in development mode and pre-compiled/minified/cached in staging and production
 
 #### /app/server
