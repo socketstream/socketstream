@@ -3,17 +3,14 @@ util = require('util')
 http = require('http')
 #https = require('https')
 
-self = {}
 Session = require('./session').Session
 Request = require('./request')
+
 api = require('./api')
+static = new($SS.libs.static.Server)('./public')
 
 class exports.Server
-  
-  constructor: () ->
-    self = @
-    @static_server = new($SS.libs.static.Server)('./public')
-    
+
   start: ->
     @server = http.createServer(@_processHttpRequest)
     @socket = $SS.libs.io.listen(@server, {transports: ['websocket', 'flashsocket']})
@@ -28,7 +25,8 @@ class exports.Server
       key:  fs.readFileSync("#{$SS.root}/config/ssl/key.pem"),
       cert: fs.readFileSync("#{$SS.root}/config/ssl/cert.pem")      
     }
-  
+
+
   # HTTP
   
   _processHttpRequest: (request, response) ->
@@ -38,7 +36,7 @@ class exports.Server
       $SS.sys.asset.request.serve(request, response)
     else
       request.addListener 'end', ->
-        self.static_server.serve(request, response)
+        static.serve(request, response)
         $SS.sys.log.staticFile(request)
 
 
