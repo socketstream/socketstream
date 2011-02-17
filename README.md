@@ -12,7 +12,7 @@ Latest release: 0.0.4
 * Works on all major browsers thanks to the excellent [Socket.IO](http://socket.io/)
 * Write client and server code in [Coffeescript](http://jashkenas.github.com/coffee-script/) or Javascript - your choice
 * Easily share code between the client and server. Ideal for business logic and model validation
-* Free HTTP API! All server-side code can also be accessed over a high-speed request-based API
+* Free HTTP API! All server-side code is also accessible over a high-speed request-based API
 * Effortless, scalable, pub/sub baked right in. See examples below
 * Awesome asset packer! Automatically packages and [minifies](https://github.com/mishoo/UglifyJS) your client-side code
 * In-built User model with modular authentication

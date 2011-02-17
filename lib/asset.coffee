@@ -90,7 +90,7 @@ class exports.Asset
       else
         # Include client-side and shared CoffeeScript
         self.client_dirs.map (dir) ->
-          files = self._fileList "./app/#{dir}", 'app.coffee'
+          files = fileList "./app/#{dir}", 'app.coffee'
           files.map (file) -> inclusions.push(self.tag.js(dir, file))
         # Include Stylus files (additional files should be linked from app.styl)
         inclusions.push(self.tag.css('css', 'app.styl'))
@@ -126,9 +126,9 @@ class exports.Asset
 
     _buildTemplates: ->
       output = []
-      files = self._fileList './app/views'
+      files = fileList './app/views'
       files.filter((file) -> !file.match(/\.jade$/)).map (dir) =>
-        templates = self._fileList "./app/views/#{dir}"
+        templates = fileList "./app/views/#{dir}"
         templates.map (template_name) =>
           output.push(@_buildTemplate(dir + '/' + template_name))
       output
@@ -173,13 +173,13 @@ class exports.Asset
 
         self.client_dirs.map (dir) ->
           source_path = "./app/#{dir}"
-          files = self._fileList source_path, source_file_name
+          files = fileList source_path, source_file_name
           files.map (file_name) ->
             full_file_name = dir + '/' + file_name
             util.log('  Compiling and adding ' + full_file_name)
             self.compile.coffee full_file_name, (result) -> output.push(result.output)
         final_output = output.join("\n")
-        final_output = self._minifyJS(source_file_name, final_output)
+        final_output = minifyJS(source_file_name, final_output)
 
         self._deleteFilesInPublicDir(/^app.*js$/)
         self.files.js.app = "app_#{Date.now()}.js"
@@ -188,14 +188,14 @@ class exports.Asset
       lib: ->
         self._deleteFilesInPublicDir(/^lib.*js$/)
         self.files.js.lib = "lib_#{Date.now()}.js"
-        output = self._concatFiles('./lib/client')
+        output = concatFiles('./lib/client')
         util.log("  Appending SocketStream client files...")
         output += fs.readFileSync("#{self.system_path}/cached/lib.min.js", 'utf8')
         fs.writeFile("#{self.public_path}/#{self.files.js.lib}", output)
         emitter.emit('regenerate_html')
       
       system: ->
-        output = self._concatFiles("#{self.system_path}/js")
+        output = concatFiles("#{self.system_path}/js")
         fs.writeFileSync("#{self.system_path}/cached/lib.min.js", output)
         util.log("SocketStream system client files updated. Recompiling application lib file to include new code...")
         self.pack.js.lib()
@@ -211,7 +211,7 @@ class exports.Asset
         
       lib: ->
         self._deleteFilesInPublicDir(/^lib.*css$/)
-        output = self._concatFiles("./lib/css")
+        output = concatFiles("./lib/css")
         self.files.css.lib = "lib_#{Date.now()}.css"
         fs.writeFile("#{self.public_path}/#{self.files.css.lib}", output)
         util.log('CSS libs concatenated')
@@ -233,7 +233,7 @@ class exports.Asset
   # Private helper methods
 
   _findAssets: (cb) ->
-    files = self._fileList self.public_path
+    files = fileList self.public_path
     files.filter((file) -> file.match(/(css|js)$/)).map (file) ->
       file_arr = file.split('.')
       ext = file_arr[file_arr.length - 1]
@@ -258,38 +258,40 @@ class exports.Asset
   
   _deleteFilesInPublicDir: (rexexp) ->
     fs.readdirSync(self.public_path).map (file) -> fs.unlink("#{self.public_path}/#{file}") if file.match(rexexp)
-  
-  _fileList: (path, first_file = null) ->
-    try
-      files = fs.readdirSync(path).filter((file) -> !file.match(/(^_|^\.)/))
-      if first_file and files.include(first_file)
-        files = files.delete(first_file)
-        files.unshift(first_file) 
-      files.sort()
-    catch e
-      throw e unless e.code == 'ENOENT' # dir missing
-      []
 
 
-  _concatFiles: (path) ->
-    files = self._fileList path
-    files.map (file_name) ->
-      util.log "  Concatenating file #{file_name}"
-      output = fs.readFileSync("#{path}/#{file_name}", 'utf8')
-      output = self._minifyJS(file_name, output) if file_name.match(/\.(coffee|js)/) and !file_name.match(/\.min/)
-      output += ';' if file_name.match(/\.(js)/) # Ensures the file ends with a semicolon. Many libs don't and would otherwise break when concatenated
-      output
-    .join("\n")
+# Util Helpers
 
-  _minifyJS: (file_name, orig_code) ->
-    formatKb = (size) -> "#{Math.round(size * 1000) / 1000} KB"
-    orig_size = (orig_code.length / 1024)
-    jsp = $SS.libs.uglifyjs.parser
-    pro = $SS.libs.uglifyjs.uglify
-    ast = jsp.parse(orig_code)
-    ast = pro.ast_mangle(ast)
-    ast = pro.ast_squeeze(ast)
-    minified = pro.gen_code(ast)
-    min_size = (minified.length / 1024)
-    util.log("  Minified #{file_name} from #{formatKb(orig_size)} to #{formatKb(min_size)}")
-    minified
+fileList = (path, first_file = null) ->
+  try
+    files = fs.readdirSync(path).filter((file) -> !file.match(/(^_|^\.)/))
+    if first_file and files.include(first_file)
+      files = files.delete(first_file)
+      files.unshift(first_file) 
+    files.sort()
+  catch e
+    throw e unless e.code == 'ENOENT' # dir missing
+    []
+
+concatFiles = (path) ->
+  files = fileList path
+  files.map (file_name) ->
+    util.log "  Concatenating file #{file_name}"
+    output = fs.readFileSync("#{path}/#{file_name}", 'utf8')
+    output = minifyJS(file_name, output) if file_name.match(/\.(coffee|js)/) and !file_name.match(/\.min/)
+    output += ';' if file_name.match(/\.(js)/) # Ensures the file ends with a semicolon. Many libs don't and would otherwise break when concatenated
+    output
+  .join("\n")
+
+minifyJS = (file_name, orig_code) ->
+  formatKb = (size) -> "#{Math.round(size * 1000) / 1000} KB"
+  orig_size = (orig_code.length / 1024)
+  jsp = $SS.libs.uglifyjs.parser
+  pro = $SS.libs.uglifyjs.uglify
+  ast = jsp.parse(orig_code)
+  ast = pro.ast_mangle(ast)
+  ast = pro.ast_squeeze(ast)
+  minified = pro.gen_code(ast)
+  min_size = (minified.length / 1024)
+  util.log("  Minified #{file_name} from #{formatKb(orig_size)} to #{formatKb(min_size)}")
+  minified
