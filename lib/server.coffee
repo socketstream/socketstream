@@ -71,7 +71,7 @@ class exports.Server
   # Redis Pub/Sub
 
   _listenForPubSubEvents: ->
-    RPS.on 'message', (channel, message) =>
+    $SS.redis.pubsub.on 'message', (channel, message) =>
       channel = channel.split(':')
       if channel && channel[0] == 'socketstream'
         switch channel[1]
