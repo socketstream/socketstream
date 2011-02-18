@@ -6,10 +6,13 @@ util = require('util')
 url_lib = require('url')
 
 exports.process = (action_array, params, session, user, cb) ->
+  throw ['invalid_action', "Invalid action format"] unless typeof(action_array) == 'object'
+
   actions = action_array.slice(0)  # Create a copy before we mangle it
   method = actions.pop()
 
   if method.charAt(0) == '_'
+    throw ['private', "Error: Unable to access private method #{method}"]
     util.log "Error: Unable to access private method #{method}"
   else      
     obj = loadKlass(actions)

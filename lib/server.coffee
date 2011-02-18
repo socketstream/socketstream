@@ -30,7 +30,7 @@ class exports.Server
   # HTTP
   
   _processHttpRequest: (request, response) ->
-    if request.url.split('/')[1].toLowerCase() == $SS.config.api_prefix
+    if $SS.config.api.enabled and api.isValidRequest(request)
       api.call(request, response)
     else if !$SS.config.pack_assets and $SS.sys.asset.request.valid(request.url)
       $SS.sys.asset.request.serve(request, response)
