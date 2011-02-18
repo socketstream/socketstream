@@ -1,7 +1,7 @@
 class exports.Publish
 
   constructor: ->
-    RPS.subscribe 'socketstream:broadcast'
+    $SS.redis.pubsub.subscribe 'socketstream:broadcast'
   
   # Publish event to a user regardless of which server they are connected to
   user: (user_id, event, params) ->

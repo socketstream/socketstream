@@ -22,7 +22,7 @@ class exports.Session
 
   process: (cb) ->
     if @cookies && @cookies.session_id && @cookies.session_id.length == @id_length
-      R.hgetall "socketstream:session:#{@cookies.session_id}", (err, data) =>
+      $SS.redis.main.hgetall "socketstream:session:#{@cookies.session_id}", (err, data) =>
         if err or data == null or data == undefined
           @create(cb)
         else
@@ -36,7 +36,7 @@ class exports.Session
   create: (cb) ->
     @id = utils.randomString(@id_length)
     @created_at = Number(new Date())
-    R.hset @key(), 'created_at', @created_at, (err, response) =>
+    $SS.redis.main.hset @key(), 'created_at', @created_at, (err, response) =>
       @newly_created = true
       cb(@)      
 
@@ -59,14 +59,14 @@ class exports.Session
   setUserId: (user_id) ->
     return null unless user_id
     @user_id = user_id
-    R.hset @key(), 'user_id', @user_id
-    RPS.subscribe @pubsub_key()
+    $SS.redis.main.hset @key(), 'user_id', @user_id
+    $SS.redis.pubsub.subscribe @pubsub_key()
     $SS.connected_users[@user_id] = @client
     
   logout: (cb) ->
     @user_id = null  # clear user_id. note we are not erasing this in redis as it can be advantagous to keep this for retrospective analytics
     @user = null     # clear any attached custom User instance
-    RPS.unsubscribe @pubsub_key()
+    $SS.redis.pubsub.unsubscribe @pubsub_key()
     delete $SS.connected_users[@id]
     @create (err, new_session) -> cb(new_session)
 
@@ -74,6 +74,5 @@ class exports.Session
     @user_id?
 
   save: ->
-    R.hset @key(), 'attributes', JSON.stringify(@attributes)
+    $SS.redis.main.hset @key(), 'attributes', JSON.stringify(@attributes)
     
-
