@@ -260,6 +260,50 @@ Before starting up your new app, make sure you have Redis 2.2+ running on your l
 If all goes well you'll see the SocketStream banner coming up, then you're ready to start!
 
 
+### Connecting to Redis
+
+Redis is automatically accesssible anywhere within your server-side code using the R global variable. E.g.
+
+    R.set("string key", "string val")
+
+    R.get("string key", (err, data) -> console.log(data))    # prints 'string val'
+
+All internal SocketStream keys and channels are prefixed with 'socketstream:', so feel free to use anything else.
+
+[View full list of commands](http://redis.io/commands)
+
+
+### Connecting to Databases
+
+Building a great DB connection framework is very much a focus for a future releases, but this is how we're connecting to mongoDB today.
+
+The /config/db.coffee (or .js) file is loaded automatically at startup, if present. So you can do something like this:
+
+    mongodb = require('mongodb')   # installed by npm
+    Db = mongodb.Db
+    Connection = mongodb.Connection
+    Server = mongodb.Server
+    global.M = new Db('my_database_name', new Server('localhost', 27017))
+    M.open (err, client) -> console.error(err) if err?
+
+This would allow you to access mongoDB from the M global variable.
+
+As this file is loaded after the environment config is processed, you can put your db connection params in /config/environments/development.json
+
+    {
+      "db": {
+        "mongo": {"database": "my_database_name", "host": "localhost", "port": 27017},
+      }
+    }
+
+Then access them inside /config/db.coffee as so:
+
+    config = $SS.config.db.mongo
+    global.M = new Db(config.database, new Server(config.host, config.port))
+
+We've not tested SocketStream with CouchDB, MySQL, or any other DB, but the principals should be the same.
+
+
 ### Tests
 
 There are a handful of tests at the moment, but there will be more once the internal API becomes stable.
