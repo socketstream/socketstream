@@ -16,15 +16,19 @@ setDefaults = ->
     log_level:          3         	# 0 = none, 1 = calls only, 2 = calls + params, 3 = full
     pack_assets:        true      	# set this to false when developing
     throw_errors:       true      	# this needs to be false in production or the server will quit on any error
-    api_prefix:         'api'     	# defines the HTTP API namespace
 
     # Redis
     redis:
       host: 		'127.0.0.1'
       port: 		6379
       options:		{}
-
-    # Set Params which will be passed to the client when they connect
+    
+    # Configures the HTTP request-based API
+    api:
+      enabled:          true
+      prefix:           'api'     # defines the URL namespace
+    
+    # Set Params which will be passed directly to the client when they connect
     client:
       log_level:        2         	# 0 = none, 1 = calls only, 2 = calls + params, 3 = full
 
