@@ -5,10 +5,18 @@ var argParser     = require('argsparser');
 var lib           = __dirname + '/../lib';
 
 var args          = argParser.parse().node;
-var command       = args[1];
-var params        = args.slice(2);
 
-var SS            = require(lib + '/socketstream');
+var SS = require(lib + '/socketstream');
+
+var command, params;
+
+// If no arguments provided
+if (typeof(args) == 'string') {
+  command       = 'help';
+} else {
+  command       = args[1];
+  params        = args.slice(2);
+};
 
 switch(command) {
   case 'start':
@@ -23,10 +31,23 @@ switch(command) {
     break;
   case 'console':
   case 'c':
+    console.log('\nSocketStream Interactive Console. CONTROL+C to quit.\n');
     SS.init();
     var repl = require('repl');
     repl.start('SocketStream > ');
     break;
+  case 'version':
+  case 'v':
+    console.log('SocketStream version ' + $SS.version.join('.'));
+    break;
+  case 'help':
+  case 'h':
+    console.log("SocketStream Help\n\n \
+    start (s)     Start server\n \
+    console (c)   Interactive console\n \
+    version (v)   Print version\n \
+    ");
+    break;
   default:
-    console.log('Sorry, I do not know how to ' + command);
+    console.log('Sorry, I do not know how to ' + command + '. Type "socketstream help" to see a list of commands.');
 };
