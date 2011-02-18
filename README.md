@@ -255,7 +255,7 @@ The directories generated will be very familiar to Rails users. Here's a brief o
 
 Before starting up your new app, make sure you have Redis 2.2+ running on your localhost, then type:
 
-   socketstream start
+    socketstream start
     
 If all goes well you'll see the SocketStream banner coming up, then you're ready to start!
 
