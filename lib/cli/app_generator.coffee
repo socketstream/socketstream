@@ -23,7 +23,7 @@ class exports.AppGenerator
         throw e
   
   makeDirectories: ->
-    directories = ['/app', '/app/client', '/app/css', '/app/server', '/app/shared', '/app/views', '/lib', '/lib/client', '/lib/css', '/lib/server', '/public', '/public/assets', '/vendor']
+    directories = ['/app', '/app/client', '/app/css', '/app/server', '/app/shared', '/app/views', '/lib', '/lib/client', '/lib/css', '/lib/server', '/public', '/config', '/public/assets', '/vendor']
     fs.mkdirSync @name + directory, @dir_mode for directory in directories
     
   makeFiles: ->
@@ -33,7 +33,7 @@ class exports.AppGenerator
       {fileName: '/app/server/app.coffee',        dataFile: '/app.server.coffee'}
       {fileName: '/app/views/app.jade',           dataFile: '/app.jade'}
       {fileName: '/app/css/app.styl',             dataFile: '/app.styl'}
-      {fileName: '/app.coffee',                   dataFile: '/app.coffee'}      
+      {fileName: '/config/db.coffee',             dataFile: '/config.db.coffee'}
       {fileName: '/lib/css/reset.css',            dataFile: '/reset.css'}
       {fileName: '/lib/client/jquery-1.5.min.js', dataFile: '/lib.client.jquery-1.5.min.js'}
     ]
