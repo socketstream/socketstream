@@ -7,7 +7,7 @@ path = require('path')
 
 # Define global $SS variable
 global.$SS =
-  version:          [0,0,5]         # TODO: Read this from package.json
+  version:          [0,0,6]         # TODO: Read this from package.json
   internal:         {}              # Used to store variables used internally
   libs:             {}              # Link all external modules we need throughout SocketStream here
   sys:              {}              # Link all internal SocketStream modules we will always need to have loaded here
@@ -49,6 +49,6 @@ path.exists vendor_dir, (exists) ->
 require('./configurator.coffee').configure()
 
 # Load SocketStream internal system modules we will *always* need to load
-$SS.sys.log =     new (require('./logger.coffee').Logger)
+$SS.sys.log =     require('./logger.coffee')
 $SS.sys.server =  new (require('./server.coffee').Server)
 $SS.sys.asset =   new (require('./asset.coffee').Asset)

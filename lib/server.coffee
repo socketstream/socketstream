@@ -58,14 +58,21 @@ class exports.Server
       
   _processIncomingCall: (data, client) ->
     return null unless client.session.id # drop all calls unless session is loaded
-    msg = JSON.parse(data)
-    if msg && msg.method
-      action_array = msg.method.split('.')
-      Request.process action_array, msg.params, client.session, client.session.user, (params, options) ->
-        client.remote(msg, params, 'callback', options)
-      $SS.sys.log.incoming.socketio(msg, client) if !(msg.options && msg.options.silent)
-    else
-      util.log "Invalid message: #{data}"
+    try
+      try
+        msg = JSON.parse(data)
+      catch e
+        throw ['unable_to_parse_message', 'Unable to parse incoming websocket request']
+      if msg && msg.method
+        action_array = msg.method.split('.')
+        Request.process action_array, msg.params, client.session, client.session.user, (params, options) ->
+          client.remote(msg, params, 'callback', options)
+        $SS.sys.log.incoming.socketio(msg, client) if !(msg.options && msg.options.silent)
+      else
+        throw ['invalid_message', 'Invalid websocket call. No action supplied']
+    catch e
+      client.remote('error', e, 'system')
+      $SS.sys.log.error(e)
       
   
   # Redis Pub/Sub

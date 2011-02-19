@@ -66,7 +66,7 @@ parseParams = (url) ->
   catch e
     throw ['invalid_params', 'Unable to parse params. Check syntax.']
 
-# Attempts to work out the output format requested and ensures it's valid
+# Attempts to work out the output format requested and ensures it's valid. Default to HTML so we can see output on screen
 parseFormat = (path) ->
   return 'html' unless path[1]
   format = path[1].toString().toLowerCase()
