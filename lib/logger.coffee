@@ -1,39 +1,61 @@
+# Logger
+# ------
+# Outputs to the console
+
 util = require("util")
 
-self = {}
-class exports.Logger
-  
-  constructor: ->
-    self = @
-    
-  staticFile: (request) ->
-    util.log "STATIC: #{request.url}" if $SS.config.log_level >= 2
+exports.staticFile = (request) ->
+  output 1, "STATIC: #{request.url}"
 
-  createNewSession: (session) -> 
-    util.log "\x1B[1;35mCreating new session: #{session.id}\x1B[0m"
+exports.createNewSession = (session) ->
+  output 1, color("Creating new session: #{session.id}", 'magenta')
 
-  incoming:
+exports.incoming =
     
-    socketio: (data, client) ->
-      util.log "#{client.sessionId} \x1B[1;36m->\x1b[0m #{data.method}#{self._params(data.params)}" if $SS.config.log_level >= 2
+  socketio: (data, client) ->
+    output 2, "#{client.sessionId} #{color('->', 'cyan')} #{data.method}#{parseParams(data.params)}"
       
-    http: (actions, params, format) ->
-      util.log "API (#{format}) \x1B[1;36m->\x1b[0m #{actions.join('.')} #{self._params(params)}" if $SS.config.log_level >= 2
+  http: (actions, params, format) ->
+    output 2, "API (#{format}) #{color('->', 'cyan')} #{actions.join('.')} #{parseParams(params)}"
 
-  outgoing:
+exports.outgoing =
     
-    socketio: (client, method) ->
-      util.log "#{client.sessionId} \x1B[1;32m<-\x1b[0m #{method.callee}" if $SS.config.log_level >= 2
+  socketio: (client, method) ->
+    output 2, "#{client.sessionId} #{color('<-', 'green')} #{method.callee}"
   
-  publish:
+exports.publish =
     
-    broadcast: (event, params) ->
-      util.log "Broadcast \x1B[1;36m=>\x1b[0m #{event}#{self._params(params)}" if $SS.config.log_level >= 2
+  broadcast: (event, params) ->
+    output 2, "Broadcast #{color('=>', 'cyan')} #{event}#{parseParams(params)}"
 
-    user: (user_id, event, params) ->
-      util.log "User #{user_id} \x1B[1;36m=>\x1b[0m #{event}#{self._params(params)}" if $SS.config.log_level >= 2
-      
+  user: (user_id, event, params) ->
+    output 2, "User #{user_id} #{color('=>', 'cyan')} #{event}#{parseParams(params)}"
   
-  _params: (params) ->
-    params = util.inspect(params) if params and $SS.config.log_level >= 3
-    if params then ': ' + params else ''
+exports.error = (e) ->
+  output 1, color("Error: #{e[1]}", 'red')
+
+
+# Helpers
+
+output = (level, msg) ->
+  util.log(msg) if validLevel(level)
+
+validLevel = (level) ->
+  $SS.config.log_level >= level
+
+parseParams = (params) ->
+  params = util.inspect(params) if params and validLevel(3)
+  if params then ': ' + params else ''
+
+color = (msg, color) ->
+  return msg unless $SS.config.enable_color
+  "\x1B[1;#{color_code[color]}m#{msg}\x1b[0m"
+
+
+# List of UNIX terminal colors
+
+color_code =
+  red:        31
+  magenta:    35
+  cyan:       36
+  green:      32

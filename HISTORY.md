@@ -1,3 +1,11 @@
+0.0.6 / 2011-02-19
+==================
+
+  * New feature: Client-side error reporting when you send incorrect requests
+  * Improvement: Much more API and Websocket request hardening. Server now far more stable against malformed requests
+  * Improvement: Refactored logger
+  
+
 0.0.5 / 2011-02-18
 ==================
 

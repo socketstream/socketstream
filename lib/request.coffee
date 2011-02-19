@@ -1,46 +1,57 @@
 # Incoming Data Request Handler
 # Used to handle Socket.IO and API requests
-# Remember, the process method needs to be written for speed
+# Remember, the process action needs to be written for speed
 
-util = require('util')
 url_lib = require('url')
 
 exports.process = (action_array, params, session, user, cb) ->
-  throw ['invalid_action', "Invalid action format"] unless typeof(action_array) == 'object'
+  throw ['invalid_action_format', "Invalid action format"] unless typeof(action_array) == 'object'
+  throw ['invalid_action_length', "Invalid action length"] unless action_array.length >= 2
 
   actions = action_array.slice(0)  # Create a copy before we mangle it
-  method = actions.pop()
+  action = actions.pop()
 
-  if method.charAt(0) == '_'
-    throw ['private', "Error: Unable to access private method #{method}"]
-    util.log "Error: Unable to access private method #{method}"
+  if action.charAt(0) == '_'
+    throw ['private_action', "Unable to access private action #{action}"]
   else      
     obj = loadKlass(actions)
-
+    
+    # Check to see method exists
+    method = obj[action]
+    throw ['action_missing',"Unable to find the #{action} action. Action names are case sensitive"] unless method 
+    
     # Inject 'helper functions'
     obj.session = session
     obj.user = user
 
-    # Build up args to pass to server method
+    # Build up args to pass to server action
     args = []
     args.push(params) if params
     args.push(cb)
+    
+    # Check we have have the correct number of params
+    throw ['params_missing',      "The #{action} action expects params but none were sent"]       if method.length > args.length
+    throw ['params_not_required', "The #{action} action was sent params but can't receive them"]  if method.length < args.length
 
+    # Attempt the request
     try
-      obj[method].apply(obj, args)
+      method.apply(obj, args)
     catch e
       throw e if $SS.config.throw_errors
       console.error(e)
 
 loadKlass = (actions) ->
-  path = "#{$SS.root}/app/server/#{actions.join('/')}"
-  klass_name = actions.pop().capitalized()
+  mod_path = actions.join('/')
+  file_path = "/app/server/#{mod_path}"
+  mod_name = actions.pop().capitalized()
   try
-    klass = require(path)[klass_name]
+    klass = require("#{$SS.root}/#{file_path}")[mod_name]
+  catch e
+    throw ['unable_to_find_module',"Unable to find module at #{file_path}"]
+  try
     new klass
   catch e
-    util.log 'Error: Unable to find class ' + klass_name + ' or error in file'
     throw e if $SS.config.throw_errors
-    console.error(e)
+    throw ['error_instantiating',"Unable to instantiate #{file_path}"]
 
 
