@@ -22,7 +22,8 @@ exports.process = (args) ->
       gen = require('./cli/app_generator.coffee')
       new gen.AppGenerator(params[0])
     when 'console', 'c'
-      console.log('\nWelcome to the SocketStream Interactive Console. CONTROL+C to quit.\n')
+      console.log('\nSocketStream Version ' + $SS.version.join('.') + ' running in ' + $SS.env)
+      console.log('Press Control+C to quit the console\n')
       SS.init()
       repl = require('repl')
       repl.start('SocketStream > ')

@@ -7,7 +7,6 @@ path = require('path')
 
 # Define global $SS variable
 global.$SS =
-  version:          [0,0,6]         # TODO: Read this from package.json
   internal:         {}              # Used to store variables used internally
   libs:             {}              # Link all external modules we need throughout SocketStream here
   sys:              {}              # Link all internal SocketStream modules we will always need to have loaded here
@@ -15,6 +14,15 @@ global.$SS =
   redis:            {}              # Connect main and pubsub active connections here
   users:
     connected:      {}              # Maintain a list of all connected users for pub/sub
+
+# Parse package.json so we don't have to repeat ourselves
+try
+  $SS.internal.package_json = JSON.parse(fs.readFileSync(__dirname + '/../package.json'))
+catch e
+  throw "Error: Unable to find or parse SocketStream's package.json file"
+
+# Set version from package.json
+$SS.version = $SS.internal.package_json.version.split('.')
 
 # Set root dir
 $SS.root = fs.realpathSync()
