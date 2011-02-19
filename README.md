@@ -2,7 +2,7 @@
 
 SocketStream makes it a breeze to build phenomenally fast, highly-scalable real-time web applications on Node.js.
 
-Latest release: 0.0.6
+Latest release: 0.0.7
 
 
 ### Features
@@ -26,11 +26,9 @@ Latest release: 0.0.6
 * MIT Licence
 
 
-### Philosophy
+### Introduction
 
-SocketStream is a new web framework built around the [Single-page Application](http://en.wikipedia.org/wiki/Single-page_application) paradigm. It embraces websockets, in-memory datastores (Redis), and client-side rendering to provide an ultra-responsive experience that will amaze your users.
-
-Our goal is to ensure the core SocketStream project always remains lean, robust, and **breathtakingly fast**. At the same time we will make it easy to extend functionality using npm modules.
+SocketStream is a new full stack web framework built around the [Single-page Application](http://en.wikipedia.org/wiki/Single-page_application) paradigm. It embraces websockets, in-memory datastores (Redis), and client-side rendering to provide an ultra-responsive experience that will amaze your users.
 
 
 ### How does it work?
@@ -202,7 +200,7 @@ The directories generated will be very familiar to Rails users. Here's a brief o
 * If you have a Javascript library you wish to use (e.g. jQuery UI), put this in /lib/client instead
 * Nesting client files within folders is not supported yet. We will implement this once we settle on the best design
 * The /app/client/app.coffee file must always be present
-* View incoming/outgoing calls in the browser console in development (controlled with $SS.config.client.log_level)
+* View incoming/outgoing calls in the browser console in development (controlled with $SS.config.client.log.level)
 * Coffeescript client files are automatically compiled and served on-the-fly in development mode and pre-compiled/minified/cached in staging and production
 
 #### /app/server
@@ -316,6 +314,25 @@ Then run jasbin in the SocketStream directory:
   
     cd socketstream/
     jasbin
+
+
+### Contributors
+
+* Owen Barnes (socketstream)
+* Paul Jensen (paulbjensen)
+
+We welcome contributions from forward-thinking hackers keen to redefine what's possible on the web. Big, bold ideas, unconstrained by frameworks and concepts from the past, will always be welcome.
+
+The best developers take 10 lines of code and come up with a completely new design that needs 3. If you're one of these rare breed of people we'd love to have you onboard as a potential member of our core team. Test writers and creators of beautiful documentation will receive our maximum appreciation and support as they seek to keep up with a rapidly moving target.
+
+Before you add a major new feature to SocketStream and submit a pull request, bear in mind our goal is to ensure the core stays lean, robust, and breathtakingly fast. Additional non-core functionality should be provided by npm modules. We'll make this possible/easier as time goes on.
+
+If you wish to discuss an idea, or want to chat about anything else, email us at info@socketstream.org
+
+
+### Credits
+
+Thanks to Guillermo Rauch (Socket.IO), TJ Holowaychuk (Stylus, Jade), Jeremy Ashkenas (CoffeeScript), Mihai Bazon (UglifyJS) and Salvatore Sanfilippo (Redis) who's amazing work has made SocketStream possible. 
 
 
 ### License

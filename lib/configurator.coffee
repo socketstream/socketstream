@@ -10,6 +10,7 @@ exports.configure = ->
   mergeAppConfigFile()
 
 
+# PRIVATE HELPERS
 
 setEnvironment = ->
   env = process.env.NODE_ENV || 'development'
@@ -19,10 +20,13 @@ setEnvironment = ->
 setDefaults = ->
   $SS.config =
     port:               3000		    # if you want to run on port 80 or 443 node must be run as root
-    log_level:          3         	# 0 = none, 1 = calls only, 2 = calls + params, 3 = full
-    enable_color:       true        # Use colors when outputting to terminal
-    pack_assets:        true      	# set this to false when developing
+    enable_color:       true        # use colors when outputting to terminal
+    pack_assets:        true      	# set this to false when developing to force the serving of all asset requests live
     throw_errors:       true      	# this needs to be false in production or the server will quit on any error
+
+    # Logger (only to the terminal for now)
+    log:
+      level:            3         	# 0 = none, 1 = calls only, 2 = calls + params, 3 = full
 
     # Redis
     redis:
@@ -35,9 +39,11 @@ setDefaults = ->
       enabled:          true
       prefix:           'api'     # defines the URL namespace
     
-    # Set Params which will be passed directly to the client when they connect
+    # Set params which will be passed directly to the client when they connect
+    # The client config should match the server as closly as possible
     client:
-      log_level:        2         	# 0 = none, 1 = calls only, 2 = calls + params, 3 = full
+      log:
+        level:          2       	# 0 = none, 1 = calls only, 2 = calls + params, 3 = full
 
 # For now we override default config depending upon environment. This will still be overridden by any app config file in
 # /config/environments/NODE_ENV.js . We may want to remove this in the future and insist upon seperate app config files, ala Rails
@@ -47,9 +53,11 @@ setEnvironmentDefaults = ->
       pack_assets: false
     when 'production'
       throw_errors: false
-      log_level: 0
+      log:
+        level: 0
       client:
-        log_level: 0
+        log:
+          level: 0
   merge(override)
 
 # Merges custom app config specificed in /config/environments/NODE_ENV.js with SocketStream defaults if the file exists

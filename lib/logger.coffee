@@ -41,7 +41,7 @@ output = (level, msg) ->
   util.log(msg) if validLevel(level)
 
 validLevel = (level) ->
-  $SS.config.log_level >= level
+  $SS.config.log.level >= level
 
 parseParams = (params) ->
   params = util.inspect(params) if params and validLevel(3)
@@ -49,12 +49,12 @@ parseParams = (params) ->
 
 color = (msg, color) ->
   return msg unless $SS.config.enable_color
-  "\x1B[1;#{color_code[color]}m#{msg}\x1b[0m"
+  "\x1B[1;#{color_codes[color]}m#{msg}\x1b[0m"
 
 
 # List of UNIX terminal colors
 
-color_code =
+color_codes =
   red:        31
   magenta:    35
   cyan:       36

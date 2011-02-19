@@ -1,3 +1,14 @@
+0.0.7 / 2011-02-19
+==================
+
+  * Improvement: Re-written the Client in CoffeeScript. Many improvements and additional error handling and fault tolerance
+  * Improvement: We now get $SS.version from package.json
+  * Improvement: Checks you're in a valid SocketStream project directory before starting up
+  * Improvement: Better console experience
+  * Improvement: Reworked and added new sections to README
+  * Change: $SS.config.log_level is now $SS.config.log.level across server and client
+
+
 0.0.6 / 2011-02-19
 ==================
 

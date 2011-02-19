@@ -15,6 +15,7 @@ class exports.Asset
     ['./lib/client', 'js', 'lib'],
     ['./lib/css', 'css', 'lib'],
     ["#{__dirname}/client/js", 'js', 'system'],
+    ["#{__dirname}/client", 'js', 'system'],
   ]
 
   constructor: (@options = {}) ->
@@ -195,7 +196,16 @@ class exports.Asset
         emitter.emit('regenerate_html')
       
       system: ->
+        client_file_path = "#{self.system_path}/socketstream.coffee"
         output = concatFiles("#{self.system_path}/js")
+        client = fs.readFileSync client_file_path, 'utf8'
+        try
+          js = $SS.libs.coffee.compile(client)
+          util.log("  Compiled SocketStream client into JS")
+          output += minifyJS('client file', js)
+        catch e
+          $SS.sys.log.error(['unable_to_compile_client', "Error: Unable to compile SocketStream client file to JS"])
+          throw(e)
         fs.writeFileSync("#{self.system_path}/cached/lib.min.js", output)
         util.log("SocketStream system client files updated. Recompiling application lib file to include new code...")
         self.pack.js.lib()
