@@ -61,13 +61,13 @@ class exports.Session
     @user_id = user_id
     $SS.redis.main.hset @key(), 'user_id', @user_id
     $SS.redis.pubsub.subscribe @pubsub_key()
-    $SS.connected_users[@user_id] = @client
+    $SS.users.connected[@user_id] = @client
     
   logout: (cb) ->
     @user_id = null  # clear user_id. note we are not erasing this in redis as it can be advantagous to keep this for retrospective analytics
     @user = null     # clear any attached custom User instance
     $SS.redis.pubsub.unsubscribe @pubsub_key()
-    delete $SS.connected_users[@id]
+    delete $SS.users.connected[@id]
     @create (err, new_session) -> cb(new_session)
 
   loggedIn: ->
