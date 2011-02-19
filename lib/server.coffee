@@ -76,7 +76,7 @@ class exports.Server
       if channel && channel[0] == 'socketstream'
         switch channel[1]
           when 'user'
-            client = $SS.connected_users[channel[2]]
+            client = $SS.users.connected[channel[2]]
             return if client and client.connected
               client.send(message)
             else
@@ -89,7 +89,7 @@ showWelcomeMessage = ->
   util.puts "\n"
   util.puts "------------------------- SocketStream -------------------------"
   util.puts "  Version #{$SS.version.join('.')} running in #{$SS.env}"
-  util.puts "  Running on Port #{$SS.config.port}, PID #{process.pid}"
+  util.puts "  Running on Port #{$SS.config.port} | PID #{process.pid} | Startup time #{(new Date) - $SS.internal.up_since}ms"
   util.puts "----------------------------------------------------------------"
   util.puts "\n"
 

@@ -1,3 +1,12 @@
+0.0.5 / 2011-02-18
+==================
+
+  * New feature: Override the default Redis config with $SS.config.redis, and separate pub/sub details if you wish
+  * New feature: Startup time displayed on boot
+  * Improvement: API hardening. Still much more to do here
+  * Improvement: Refactoring of cli, redis, boot up procedure
+
+
 0.0.4 / 2011-02-17
 ==================
 

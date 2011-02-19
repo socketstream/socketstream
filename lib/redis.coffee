@@ -1,20 +1,22 @@
 # Setup Redis main (data) and pub/sub connections
 
-exports.setup = ->
-  openDataConnection()
-  openPubSubConnection()
+exports.connect = ->
+  main:   main()
+  pubsub: pubsub()
 
 # Main data channel. Used for session storage, and available within your app
-openDataConnection = ->
+main = ->
   config = $SS.config.redis
-  global.R = $SS.redis.main = open(config)
+  global.R = open(config)
   R.select(0)
+  R
 
 # Redis requires a seperate connection for PubSub data
-openPubSubConnection = ->
+pubsub = ->
   config = $SS.config.redis_pubsub || $SS.config.redis
-  $SS.redis.pubsub = open(config)
-  $SS.redis.pubsub.select(0)
+  conn = open(config)
+  conn.select(0)
+  conn
 
 # Opens Redis connection if config is valid
 open = (config) ->

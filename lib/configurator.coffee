@@ -4,10 +4,16 @@ fs = require('fs')
 util = require('util')
 
 exports.configure = ->
+  setEnvironment()
   setDefaults()
   setEnvironmentDefaults()
   mergeAppConfigFile()
 
+
+
+setEnvironment = ->
+  env = process.env.NODE_ENV || 'development'
+  $SS.env = env.toString().toLowerCase()
 
 # Set sensible defaults so we can be up and running without an app-specific config file
 setDefaults = ->
