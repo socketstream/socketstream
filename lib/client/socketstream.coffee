@@ -20,10 +20,11 @@ window.$SS =
 window.exports = {}
 
 # Setup the websocket connection
+
 $SS.socket = new io.Socket(document.location.hostname, {
   rememberTransport: false,
   port: document.location.port,
-  secure: false,
+  secure: (document.location.protocol == 'https:'),
   transports: ['websocket', 'flashsocket'],
   tryTransportsOnConnectTimeout: false
 })

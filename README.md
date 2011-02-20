@@ -2,7 +2,7 @@
 
 SocketStream makes it a breeze to build phenomenally fast, highly-scalable real-time web applications on Node.js.
 
-Latest release: 0.0.9   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+Latest release: 0.0.10   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 
 
 ### Features
@@ -15,6 +15,7 @@ Latest release: 0.0.9   ([view changelog](https://github.com/socketstream/socket
 * Free HTTP API! All server-side code is also accessible over a high-speed request-based API
 * Effortless, scalable, pub/sub baked right in. See examples below
 * Awesome asset packer! Automatically packages and [minifies](https://github.com/mishoo/UglifyJS) your client-side code
+* Experimental out-of-the-box HTTPS support. See section below.
 * In-built User model with modular authentication
 * Uses [Redis](http://www.redis.io/) for fast session retrieval, pub/sub, list of users online, and any other data your app needs instantly
 * Nested namespaces allow building of large 'enterprise' apps (only without the slowness!)
@@ -300,6 +301,29 @@ Then access them inside /config/db.coffee as so:
     global.M = new Db(config.database, new Server(config.host, config.port))
 
 We've not tested SocketStream with CouchDB, MySQL, or any other DB, but the principals should be the same.
+
+
+### HTTPS / SSL
+
+HTTPS support is currently highly experimental and hence is switched off by default.
+
+Our eventual goal is to make SocketStream run in HTTPS mode by default, using self-signed certificates (included within SocketStream) if commercial ones are not provided.
+
+To turn on HTTPS make sure you have the openssl library headers on your system before you ./configure the Node source code.
+
+On Ubuntu you can install them like with this command:
+
+    sudo apt-get install libssl-dev openssl
+
+Hint: You may need to install/run pkg-config after doing this.
+
+Once Node has been compiled with TLS/HTTPS support, turn it on by creating a /config/environments/development.json file and putting this inside:
+
+    {
+      "ssl": {"enabled": true}
+    }
+
+We will continue enhancing the HTTPS experience over future releases until it's stable.
 
 
 ### Tests

@@ -5,7 +5,7 @@
 fs = require('fs')
 util = require('util')
 http = require('http')
-#https = require('https')
+https = require('https')
 
 Session = require('./session').Session
 Request = require('./request')
@@ -16,7 +16,7 @@ static = new($SS.libs.static.Server)('./public')
 
 exports.start = ->
   asset.init()
-  server = http.createServer(processHttpRequest)
+  server = mainServer()
   socket = $SS.libs.io.listen(server, {transports: ['websocket', 'flashsocket']})
   socket.on('connection', processNewConnection)
   socket.on('clientMessage', processIncomingCall)
@@ -85,7 +85,16 @@ listenForPubSubEvents = (socket) ->
         when 'broadcast'
           socket.broadcast(message)
 
+mainServer = ->
+  if $SS.config.ssl.enabled
+    https.createServer(ssl.options, processHttpRequest)
+  else
+    http.createServer(processHttpRequest)
 
-options: # for forthcoming HTTPS
-  key:  fs.readFileSync("#{$SS.root}/config/ssl/key.pem"),
-  cert: fs.readFileSync("#{$SS.root}/config/ssl/cert.pem")
+ssl =
+
+  options:
+    key:  fs.readFileSync(__dirname + "/../ssl/key.pem")   # look for "#{$SS.root}/config/ssl/key.pem" in the future
+    cert: fs.readFileSync(__dirname + "/../ssl/cert.pem")
+
+

@@ -21,6 +21,10 @@ setDefaults = ->
     # Logger (only to the terminal for now)
     log:
       level:            3         	# 0 = none, 1 = calls only, 2 = calls + params, 3 = full
+    
+    # SSL (experimental)
+    ssl:
+      enabled:          false       # https support is currently highly experimental. turned off by default
 
     # Redis
     redis:
