@@ -1,3 +1,12 @@
+0.0.8 / 2011-02-20
+==================
+
+  * Improvement: Massively refactored boot up procedure to make sure we never load anything unless we need it
+  * Improvement: The correct (tested) version of every npm module we need is now loaded automatically by parsing package.json
+  * Improvement: SocketStream now will now automatically update your client libs if required when upgrading to a new version
+  * Improvement: Full stack trace now sent to the client (in development mode only) when a server error is encountered
+
+
 0.0.7 / 2011-02-19
 ==================
 

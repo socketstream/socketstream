@@ -1,4 +1,5 @@
 # Incoming Data Request Handler
+# -----------------------------
 # Used to handle Socket.IO and API requests
 # Remember, the process action needs to be written for speed
 
@@ -47,7 +48,10 @@ loadKlass = (actions) ->
   try
     klass = require("#{$SS.root}/#{file_path}")[mod_name]
   catch e
-    throw ['unable_to_find_module',"Unable to find module at #{file_path}"]
+    if $SS.config.throw_errors
+      throw ['application_error', e.stack] 
+    else
+      throw ['unable_to_find_module',"Unable to find or parse module at #{file_path}"]
   try
     new klass
   catch e
