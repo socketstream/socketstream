@@ -123,8 +123,6 @@ loadProject = ->
   $SS.sys.server =  new (require('./server.coffee').Server)
   $SS.sys.asset =   new (require('./asset.coffee').Asset)
   
-  check.clientUpgradeRequired()
-  
   # Load Redis. Note these connections stay open so scripts will cease to terminate on their own once you call this
   $SS.redis = require('./redis.coffee').connect()
   
@@ -143,14 +141,6 @@ check =
     dirs = fs.readdirSync($SS.root)
     if (!dirs.include('app') || !dirs.include('public')) # All other dirs are optional for now
       throw 'Oops! Unable to start SocketStream here. Not a valid project directory'
-
-  # Ensures SocketStream project files are up to date
-  clientUpgradeRequired: ->
-    if $SS.internal.clientVersionChanged()
-      util.log("Thanks for upgrading SocketStream. Regenerating assets to include the latest client code...")
-      $SS.sys.asset.pack.js.lib()
-      $SS.internal.saveState()
-      
 
 load =
 

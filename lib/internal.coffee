@@ -25,6 +25,7 @@ exports.uptime = ->
 # Saves the current state once we've processed changes
 exports.saveState = ->
   fs.writeFileSync(stateFile(), JSON.stringify(@currentState()))
+  @last_known_state = @currentState()
   
 exports.currentState = ->
   version:
@@ -47,7 +48,7 @@ loadState = ->
   try
     JSON.parse(fs.readFileSync(stateFile()))
   catch e
-    {}
+    {} # no big deal if the file get's deleted or mangled, we'll just regenerate it
 
 loadPackageJSON = ->
   try
