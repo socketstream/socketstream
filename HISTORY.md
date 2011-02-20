@@ -1,3 +1,9 @@
+0.0.10 / 2011-02-20
+===================
+
+  * New feature: Experimental HTTPS support. Switched off by default as currently unstable. Updated README with info.
+
+
 0.0.9 / 2011-02-20
 ==================
 
