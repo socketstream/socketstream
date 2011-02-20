@@ -121,7 +121,7 @@ loadProject = ->
   # Load key SocketStream internal system modules we will *always* need to load
   $SS.sys.log =     require('./logger.coffee')
   $SS.sys.server =  new (require('./server.coffee').Server)
-  $SS.sys.asset =   new (require('./asset.coffee').Asset)
+  $SS.sys.asset =   new (require('./asset').Asset)
   
   # Load Redis. Note these connections stay open so scripts will cease to terminate on their own once you call this
   $SS.redis = require('./redis.coffee').connect()
