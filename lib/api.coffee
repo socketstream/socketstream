@@ -52,6 +52,7 @@ showError = (response, error) ->
   output = '<h3>SocketStream API Error</h3>'
   output += error[1]
   deliver(response, 400, 'text/html', output)
+  $SS.sys.log.error(error)
 
 # Attempts to make sense of the params passed in the query string
 parseParams = (url) ->
