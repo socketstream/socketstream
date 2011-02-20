@@ -1,4 +1,4 @@
-cli     = require '../../../lib/cli/cli.coffee'
+cli     = require '../../../lib/cli.coffee'
 fs      = require 'fs'
 #request = require('request')
 #exec    = require('child_process').exec
