@@ -23,6 +23,10 @@ class exports.Asset
     @files = {js: {}, css: {}}
     
   init: ->
+    if $SS.config.pack_assets
+      @pack.all()
+    else
+      @monitor()
     @_findAssets => @_ensureAssetsExist()
   
   monitor: ->

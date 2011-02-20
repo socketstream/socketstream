@@ -97,7 +97,7 @@ System =
   
   # Displays any application errors in the browser's console
   error: (details) ->
-    error('SocketStream Error: ' + details[1])
+    error('SocketStream Application Error: ' + details[1])
 
 
 # Incoming requests are sent to one of the following processors

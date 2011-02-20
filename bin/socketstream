@@ -1,11 +1,10 @@
 #!/usr/bin/env node
-var util          = require('util');
-var fs            = require('fs');
+
+// This is the main entry point into SocketStream
+// The other is socketstream.js which is called when you require('socketstream')
 
 var argParser     = require('argsparser@0.0.3');
-
-var lib           = __dirname + '/../lib';
 var args          = argParser.parse().node;
 
-require('coffee-script@1.0.0');
-require(lib + '/cli.coffee').process(args);
+require('coffee-script@1.0.1');
+require(__dirname + '/../lib/main.coffee').process(args);

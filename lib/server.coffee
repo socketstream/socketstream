@@ -1,3 +1,7 @@
+# Main Web Server
+# ---------------
+# Brokers socket and HTTP connections
+
 fs = require('fs')
 util = require('util')
 http = require('http')
@@ -95,8 +99,8 @@ class exports.Server
 showWelcomeMessage = ->
   util.puts "\n"
   util.puts "------------------------- SocketStream -------------------------"
-  util.puts "  Version #{$SS.version.join('.')} running in #{$SS.env}"
-  util.puts "  Running on Port #{$SS.config.port} | PID #{process.pid} | Startup time #{(new Date) - $SS.internal.up_since}ms"
+  util.puts "  Version #{$SS.version} running in #{$SS.env}"
+  util.puts "  Running on Port #{$SS.config.port} | PID #{process.pid} | Startup time #{$SS.internal.uptime()}ms"
   util.puts "----------------------------------------------------------------"
   util.puts "\n"
 
