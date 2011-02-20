@@ -10,6 +10,9 @@ emitter = new EventEmitter
 
 utils = require('./utils.coffee')
 
+# Define where the SocketStream client files live
+system_path = __dirname + '/../client'
+
 exports.init = (@assets) ->
   @
 
@@ -47,22 +50,22 @@ exports.pack =
       final_output = output.join("\n")
       final_output = utils.minifyJS(source_file_name, final_output)
 
-      exports.assets._deleteFilesInPublicDir(/^app.*js$/)
+      deleteFilesInPublicDir(/^app.*js$/)
       exports.assets.files.js.app = "app_#{Date.now()}.js"
       fs.writeFileSync("#{exports.assets.public_path}/#{exports.assets.files.js.app}", final_output)
       
     lib: ->
-      exports.assets._deleteFilesInPublicDir(/^lib.*js$/)
+      deleteFilesInPublicDir(/^lib.*js$/)
       exports.assets.files.js.lib = "lib_#{Date.now()}.js"
       output = utils.concatFiles('./lib/client')
       util.log("  Appending SocketStream client files...")
-      output += fs.readFileSync("#{exports.assets.system_path}/cached/lib.min.js", 'utf8')
+      output += fs.readFileSync("#{system_path}/cached/lib.min.js", 'utf8')
       fs.writeFile("#{exports.assets.public_path}/#{exports.assets.files.js.lib}", output)
       emitter.emit('regenerate_html')
     
     system: ->
-      client_file_path = "#{exports.assets.system_path}/socketstream.coffee"
-      output = utils.concatFiles("#{exports.assets.system_path}/js")
+      client_file_path = "#{system_path}/socketstream.coffee"
+      output = utils.concatFiles("#{system_path}/js")
       client = fs.readFileSync client_file_path, 'utf8'
       try
         js = $SS.libs.coffee.compile(client)
@@ -71,23 +74,30 @@ exports.pack =
       catch e
         $SS.sys.log.error(['unable_to_compile_client', "Error: Unable to compile SocketStream client file to JS"])
         throw(e)
-      fs.writeFileSync("#{exports.assets.system_path}/cached/lib.min.js", output)
+      fs.writeFileSync("#{system_path}/cached/lib.min.js", output)
       util.log("SocketStream system client files updated. Recompiling application lib file to include new code...")
       exports.assets.pack.js.lib()
     
   css:
     
     app: ->
-      exports.assets._deleteFilesInPublicDir(/^app.*css$/)
+      deleteFilesInPublicDir(/^app.*css$/)
       exports.assets.files.css.app = "app_#{Date.now()}.css"
       exports.assets.compile.styl 'app.styl', (result) ->
         fs.writeFile("#{exports.assets.public_path}/#{exports.assets.files.css.app}", result.output)
         util.log('Stylus files compiled into CSS')
       
     lib: ->
-      exports.assets._deleteFilesInPublicDir(/^lib.*css$/)
+      deleteFilesInPublicDir(/^lib.*css$/)
       output = utils.concatFiles("./lib/css")
       exports.assets.files.css.lib = "lib_#{Date.now()}.css"
       fs.writeFile("#{exports.assets.public_path}/#{exports.assets.files.css.lib}", output)
       util.log('CSS libs concatenated')
       emitter.emit('regenerate_html')
+
+
+# PRIVATE
+
+deleteFilesInPublicDir = (rexexp) ->
+  fs.readdirSync(exports.assets.public_path).map (file) ->
+    fs.unlink("#{exports.assets.public_path}/#{file}") if file.match(rexexp)

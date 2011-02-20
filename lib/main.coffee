@@ -84,14 +84,13 @@ exports.start =
   server: ->
     util.log('Starting SocketStream server...')
     loadProject()
-    $SS.sys.asset.init()
     $SS.sys.server.start()
+    showWelcomeMessage("Running on Port #{$SS.config.port}")
     
   console: ->
     loadProject()
-    console.log('\nSocketStream Version ' + $SS.version + ' running in ' + $SS.env)
-    console.log('Press Control+C to quit the console\n')
     repl = require('repl')
+    showWelcomeMessage('Control+C to quit console')
     repl.start('SocketStream > ')
 
 
@@ -120,8 +119,7 @@ loadProject = ->
 
   # Load key SocketStream internal system modules we will *always* need to load
   $SS.sys.log =     require('./logger.coffee')
-  $SS.sys.server =  new (require('./server.coffee').Server)
-  $SS.sys.asset =   new (require('./asset').Asset)
+  $SS.sys.server =  require('./server.coffee')
   
   # Load Redis. Note these connections stay open so scripts will cease to terminate on their own once you call this
   $SS.redis = require('./redis.coffee').connect()
@@ -182,3 +180,11 @@ load =
       db_config_exists = require.resolve(db_config_file)
     require(db_config_file) if db_config_exists
 
+
+showWelcomeMessage = (additional_text) ->
+  util.puts "\n"
+  util.puts "------------------------- SocketStream -------------------------"
+  util.puts "  Version #{$SS.version} running in #{$SS.env}"
+  util.puts "  #{additional_text} | PID #{process.pid} | Startup time #{$SS.internal.uptime()}ms"
+  util.puts "----------------------------------------------------------------"
+  util.puts "\n"
