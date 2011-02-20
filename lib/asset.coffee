@@ -27,7 +27,9 @@ class exports.Asset
       @pack.all()
     else
       @monitor()
-    @_findAssets => @_ensureAssetsExist()
+    @_findAssets =>
+      @_ensureAssetsExist()
+      @_upgradeAssetsIfRequired()
   
   monitor: ->
     emitter.on 'regenerate_html', ->
@@ -260,6 +262,14 @@ class exports.Asset
     unless self.files.js.lib? and self.files.css.lib? and self.files.css.app?
       util.log "It looks like this is the first time you're running SocketStream. Generating asset files..."
       self.pack.all()
+      $SS.internal.saveState()
+  
+  _upgradeAssetsIfRequired: ->
+    if $SS.internal.clientVersionChanged()
+      util.log "Thanks for upgrading SocketStream. Regenerating assets to include the latest client code..."
+      self.pack.js.lib()
+      $SS.internal.saveState()
+    
   
   _watchForChangesInDir: (dir, cb) ->
     fs.readdirSync(dir).map (file) ->
