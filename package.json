@@ -1,14 +1,14 @@
 {
   "name":         "socketstream",
   "description":  "Build phenomenally fast real-time apps on Node.js",
-  "version":      "0.0.7",
+  "version":      "0.0.8",
   "homepage":     "http://www.socketstream.org",
   "author":       "Owen Barnes <owen@socketstream.org>",
   "contributors": [
     "Paul Jensen <paulbjensen@gmail.com>"
   ],
   "dependencies": {
-    "coffee-script":  "= 1.0.0",
+    "coffee-script":  "= 1.0.1",
     "socket.io":      "= 0.6.10",
     "redis":          "= 0.5.2",
     "hiredis":        "= 0.1.6",
@@ -16,6 +16,7 @@
     "jade":           "= 0.6.0",
     "argsparser":     "= 0.0.3",
     "stylus":         "= 0.6.1",
+    "semver":         "= 1.0.1",
     "uglify-js":      "= 0.0.3"
   },
   "directories":  { "lib": "./lib" },
