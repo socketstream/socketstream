@@ -1,3 +1,12 @@
+0.0.9 / 2011-02-20
+==================
+
+  * Improvement: Massively refactored server and asset manager. Now much cleaner and starts up faster
+  * Improvement: Standardized server and console startup
+  * Improvement: New version of Socket.IO
+  * Improvement: Tagged recent releases in Github
+
+
 0.0.8 / 2011-02-20
 ==================
 

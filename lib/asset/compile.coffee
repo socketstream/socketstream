@@ -1,4 +1,6 @@
-# Asset Compiler - Transforms lovely languages into ancient text
+# Asset Compiler
+# --------------
+# Transforms lovely languages into ancient text
 
 fs = require('fs')
 util = require('util')
@@ -15,24 +17,24 @@ exports.compile =
     
     # Always include links to JS and CSS client-side pre-packed libraries
     inclusions = []
-    inclusions.push(exports.tag.js('assets', exports.assets.files.js.lib))
-    inclusions.push(exports.tag.css('assets', exports.assets.files.css.lib))
+    inclusions.push(tag.js('assets', exports.assets.files.js.lib))
+    inclusions.push(tag.css('assets', exports.assets.files.css.lib))
     
     # Typically when in Staging or Production assets are pre-packed, so we include links to them here
     if $SS.config.pack_assets
-      inclusions.push(exports.tag.js('assets', exports.assets.files.js.app))
-      inclusions.push(exports.tag.css('assets', exports.assets.files.css.app))
+      inclusions.push(tag.js('assets', exports.assets.files.js.app))
+      inclusions.push(tag.css('assets', exports.assets.files.css.app))
     # However, when in Development, we need to iterate through all dirs and include separate links to load each file
     else
       # Include client-side and shared CoffeeScript
       exports.assets.client_dirs.map (dir) ->
         files = utils.fileList "./app/#{dir}", 'app.coffee'
-        files.map (file) -> inclusions.push(exports.tag.js(dir, file))
+        files.map (file) -> inclusions.push(tag.js(dir, file))
       # Include Stylus files (additional files should be linked from app.styl)
-      inclusions.push(exports.tag.css('css', 'app.styl'))
+      inclusions.push(tag.css('css', 'app.styl'))
     
     # Include all jQuery templates, if present
-    inclusions = inclusions.concat(@_buildTemplates())
+    inclusions = inclusions.concat(buildTemplates())
     
     # Add code to call app.init() in client (this will be called as soon as SocketStream is ready)
     inclusions.push('<script type="text/javascript">$(document).ready(function() { app = new App(); app.init(); });</script>')
@@ -60,37 +62,42 @@ exports.compile =
         throw(err) if $SS.config.throw_errors
       cb {output: css, content_type: 'text/css'}
 
-  _buildTemplates: ->
-    output = []
-    files = utils.fileList './app/views'
-    files.filter((file) -> !file.match(/\.jade$/)).map (dir) =>
-      templates = utils.fileList "./app/views/#{dir}"
-      templates.map (template_name) =>
-        output.push(@_buildTemplate(dir + '/' + template_name))
-    output
 
-  _buildTemplate: (template_path) ->
-    path = template_path.split('/').join('-')
-    ext = path.split('.').reverse()[0]
-    id = path.replace('.' + ext, '')
-    file = fs.readFileSync('./app/views/' + template_path, 'utf8')
-    try
-      html = $SS.libs.jade.render(file);
-    catch e
-      console.error 'Unable to render jade template: ' + template_path
-      throw e
-    exports.tag.template(id, html)
+# PRIVATE
 
+
+# jQuery Templates
+
+buildTemplates = ->
+  output = []
+  files = utils.fileList './app/views'
+  files.filter((file) -> !file.match(/\.jade$/)).map (dir) =>
+    templates = utils.fileList "./app/views/#{dir}"
+    templates.map (template_name) =>
+      output.push(buildTemplate(dir + '/' + template_name))
+  output
+
+buildTemplate = (template_path) ->
+  path = template_path.split('/').join('-')
+  ext = path.split('.').reverse()[0]
+  id = path.replace('.' + ext, '')
+  file = fs.readFileSync('./app/views/' + template_path, 'utf8')
+  try
+    html = $SS.libs.jade.render(file);
+  catch e
+    console.error 'Unable to render jade template: ' + template_path
+    throw e
+  tag.template(id, html)
 
 
 # Helpers to generate HTML tags
-exports.tag =
+tag =
 
   css: (path, name) ->
     '<link href="/' + path + '/' + name + '" media="screen" rel="stylesheet" type="text/css">'
-    
+
   js: (path, name) ->
     '<script src="/' + path + '/' + name + '" type="text/javascript"></script>'
-  
+
   template: (id, contents) ->
     '<script id="' + id + '" type="text/html">' + contents + '</script>'
