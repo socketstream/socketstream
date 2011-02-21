@@ -79,10 +79,12 @@ listenForPubSubEvents = (socket) ->
         when 'user'
           client = $SS.users.connected[channel[2]]
           return if client and client.connected
+            $SS.sys.log.outgoing.event("User #{message.user_id}", message)
             client.send(message)
           else
             null
         when 'broadcast'
+          $SS.sys.log.outgoing.event("Broadcast", message)
           socket.broadcast(message)
 
 mainServer = ->
