@@ -113,12 +113,14 @@ loadProject = ->
   require.paths.unshift('./lib/server')
   require.paths.unshift('./app/shared')
   require.paths.unshift('./app/models')
+  
+  # Load logger
+  $SS.sys.log =     require('./logger.coffee')
 
   # Set default config and merge it with any application config file
   require('./configurator.coffee').configure()
 
   # Load key SocketStream internal system modules we will *always* need to load
-  $SS.sys.log =     require('./logger.coffee')
   $SS.sys.server =  require('./server.coffee')
   
   # Load Redis. Note these connections stay open so scripts will cease to terminate on their own once you call this
