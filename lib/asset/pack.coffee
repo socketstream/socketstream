@@ -72,7 +72,7 @@ exports.pack =
         util.log("  Compiled SocketStream client into JS")
         output += utils.minifyJS('client file', js)
       catch e
-        $SS.sys.log.error(['unable_to_compile_client', "Error: Unable to compile SocketStream client file to JS"])
+        $SS.sys.log.error.exception(['unable_to_compile_client', "Error: Unable to compile SocketStream client file to JS"])
         throw(e)
       fs.writeFileSync("#{system_path}/cached/lib.min.js", output)
       util.log("SocketStream system client files updated. Recompiling application lib file to include new code...")
