@@ -17,7 +17,7 @@
     "argsparser":     "= 0.0.3",
     "stylus":         "= 0.6.1",
     "semver":         "= 1.0.1",
-    "uglify-js":      "= 0.0.3"
+    "uglify-js":      "= 0.0.1"
   },
   "directories":  { "lib": "./lib" },
   "main":         "./lib/socketstream.js",
