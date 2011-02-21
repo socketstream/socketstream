@@ -12,13 +12,13 @@ Latest release: 0.0.11   ([view changelog](https://github.com/socketstream/socke
 * Works on all major browsers thanks to the excellent [Socket.IO](http://socket.io/)
 * Write client and server code in [Coffeescript](http://jashkenas.github.com/coffee-script/) or Javascript - your choice
 * Easily share code between the client and server. Ideal for business logic and model validation
-* Free HTTP API! All server-side code is also accessible over a high-speed request-based API
+* Free HTTP API. All server-side code is also accessible over a high-speed request-based API
 * Effortless, scalable, pub/sub baked right in. See examples below
-* Awesome asset packer! Automatically packages and [minifies](https://github.com/mishoo/UglifyJS) your client-side code
+* Integrated asset manager. Automatically packages and [minifies](https://github.com/mishoo/UglifyJS) your client-side code
 * Experimental out-of-the-box HTTPS support. See section below.
 * In-built User model with modular authentication
 * Uses [Redis](http://www.redis.io/) for fast session retrieval, pub/sub, list of users online, and any other data your app needs instantly
-* Nested namespaces allow building of large 'enterprise' apps (only without the slowness!)
+* Nested namespaces allow building of large 'enterprise' apps
 * Interactive console - just type 'socketstream console'
 * Bundled with jQuery 1.5. Easily add additional client libraries such as [Underscore.js](http://documentcloud.github.com/underscore/)
 * Easily create jQuery templates using the [official plugin](http://api.jquery.com/category/plugins/templates/). Works like partials in Rails.
