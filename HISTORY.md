@@ -1,3 +1,9 @@
+0.0.14 / 2011-02-21
+===================
+
+  * Improvement: Much better server/client application error reporting and highlighting
+
+
 0.0.13 / 2011-02-21
 ===================
 
