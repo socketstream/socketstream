@@ -17,19 +17,19 @@ exports.incoming =
       
   http: (actions, params, format) ->
     output 2, "API (#{format}) #{color('->', 'cyan')} #{actions.join('.')} #{parseParams(params)}"
+    
+  event: (type, event, params) ->
+    output 2, "#{type} #{color('=>', 'cyan')} #{event}#{parseParams(params)}"
 
 exports.outgoing =
-    
+
   socketio: (client, method) ->
     output 2, "#{client.sessionId} #{color('<-', 'green')} #{method.callee}"
   
-exports.publish =
-    
-  broadcast: (event, params) ->
-    output 2, "Broadcast #{color('=>', 'cyan')} #{event}#{parseParams(params)}"
-
-  user: (user_id, event, params) ->
-    output 2, "User #{user_id} #{color('=>', 'cyan')} #{event}#{parseParams(params)}"
+  event: (type, message) ->
+    if validLevel(2)
+      obj = JSON.parse(message) # Don't parse unless we want to log
+      util.log "#{type} #{color('<=', 'green')} #{obj.event}#{parseParams(obj.params)}"
   
 exports.error =
 

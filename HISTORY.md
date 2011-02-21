@@ -1,3 +1,10 @@
+0.0.12 / 2011-02-21
+===================
+
+  * Improvement: Incoming events now logged in the terminal even if they originate remotely
+  * Bug fix: Bumped uglify-js npm version. Should now install correctly
+
+
 0.0.11 / 2011-02-21
 ===================
 
