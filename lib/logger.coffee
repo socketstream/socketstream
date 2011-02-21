@@ -55,7 +55,10 @@ parseParams = (params) ->
 
 color = (msg, color) ->
   return msg unless $SS.config.enable_color
-  "\x1B[1;#{color_codes[color]}m#{msg}\x1b[0m"
+  msg_ary = msg.split('\n')
+  first_line = msg_ary[0]
+  other_lines = if msg_ary.length > 1 then '\n' + msg_ary.splice(1).join('\n') else ''
+  "\x1B[1;#{color_codes[color]}m#{first_line}\x1b[0m#{other_lines}"
 
 
 # List of UNIX terminal colors

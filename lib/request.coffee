@@ -38,8 +38,7 @@ exports.process = (action_array, params, session, user, cb) ->
     try
       method.apply(obj, args)
     catch e
-      throw e if $SS.config.throw_errors
-      console.error(e)
+      throw ['application_error', e.stack]
 
 loadKlass = (actions) ->
   mod_path = actions.join('/')
