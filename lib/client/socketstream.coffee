@@ -43,6 +43,7 @@ $SS.socket.connect()
 window.remote = ->
   args = arguments
   method = args[0]
+  method = "#{$SS.config.remote_prefix}.#{method}" if $SS.config.remote_prefix
   callback = args[args.length - 1]
   params = if args.length >= 3 then args[1] else null
   options = if args.length >= 4 then args[2] else null
