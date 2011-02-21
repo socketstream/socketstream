@@ -31,8 +31,14 @@ exports.publish =
   user: (user_id, event, params) ->
     output 2, "User #{user_id} #{color('=>', 'cyan')} #{event}#{parseParams(params)}"
   
-exports.error = (e) ->
-  output 1, color("Error: #{e[1]}", 'red')
+exports.error =
+
+  message: (message) ->
+    console.log 'here'
+    output 1, color("Error: #{message}", 'red')
+  
+  exception: (e) ->
+    output 1, color("Error: #{e[1]}", 'red')
 
 
 # Helpers

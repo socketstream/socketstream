@@ -1,3 +1,11 @@
+0.0.11 / 2011-02-21
+===================
+
+  * New feature: Added $SS.config.client.remote_prefix option to make it easy to maintain separate versions of your server api (e.g. 'v1')
+  * Improvement: More errors now appear red
+  * Improvement: SocketStream will fail to start up if JSON app config file is incorrect
+
+
 0.0.10 / 2011-02-20
 ===================
 

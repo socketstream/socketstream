@@ -40,6 +40,7 @@ setDefaults = ->
     # Set params which will be passed directly to the client when they connect
     # The client config should match the server as closly as possible
     client:
+      remote_prefix:    null      # automatically prefixes all remote calls. e.g. if your server api begins 'v1' remote('app.square') will become remote('v1.app.square')
       log:
         level:          2       	# 0 = none, 1 = calls only, 2 = calls + params, 3 = full
 
@@ -68,10 +69,12 @@ mergeAppConfigFile = ->
       try
         merge(app_config)
       catch e
-        console.error('App config file loaded and parsed as JSON but unable to merge. Check syntax carefully.')
+        throw ['app_config_unable_to_merge', 'App config file loaded and parsed as JSON but unable to merge. Check syntax carefully.']
     catch e
-      console.error('Loaded, but unable to parse app config file ' + config_file_name + '. Ensure it is in valid JSON format with quotes around all strings.')
+      throw ['app_config_cannot_parse_json','Loaded, but unable to parse app config file ' + config_file_name + '. Ensure it is in valid JSON format with quotes around all strings.']
   catch e
+    $SS.sys.log.error.exception(e)
+    throw true
 
 merge = (new_config) ->
   $SS.config = Object.extend($SS.config, new_config)
