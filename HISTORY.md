@@ -1,3 +1,10 @@
+0.0.13 / 2011-02-21
+===================
+
+  * Improvement: Extending objects in a much better way which won't break mongoose and other libs that iterate over an object
+  * Improvement: Redis config debugging
+
+
 0.0.12 / 2011-02-21
 ===================
 
