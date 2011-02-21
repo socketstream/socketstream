@@ -68,7 +68,7 @@ processIncomingCall = (data, client) ->
       throw ['invalid_message', 'Invalid websocket call. No action supplied']
   catch e
     client.remote('error', e, 'system')
-    $SS.sys.log.error(e)
+    $SS.sys.log.error.exception(e)
 
 # Redis Pub/Sub
 listenForPubSubEvents = (socket) ->
