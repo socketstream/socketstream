@@ -78,4 +78,4 @@ mergeAppConfigFile = ->
       throw 'App config error'
 
 merge = (new_config) ->
-  $SS.config = $SS.config.extend(new_config)
+  $SS.config.extend(new_config)
