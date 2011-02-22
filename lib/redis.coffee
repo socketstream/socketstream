@@ -24,7 +24,7 @@ open = (config) ->
     if valid(config)
       $SS.libs.redis.createClient(config.port, config.host, config.options)
   catch e
-    $SS.sys.log.error.exception(e)
+    $SS.log.error.exception(e)
     throw 'Unable to continue loading SocketStream'
 
 # Validates config params are set properly. This really needs tests!

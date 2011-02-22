@@ -1,3 +1,9 @@
+0.0.15 / 2011-02-22
+===================
+
+  * Improvement: Internal refactoring and ground work on Realtime Models
+
+
 0.0.14 / 2011-02-21
 ===================
 

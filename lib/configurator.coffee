@@ -74,7 +74,7 @@ mergeAppConfigFile = ->
       throw ['app_config_cannot_parse_json','Loaded, but unable to parse app config file ' + config_file_name + '. Ensure it is in valid JSON format with quotes around all strings.']
   catch e
     if typeof(e) == 'object' and e.length >= 2
-      $SS.sys.log.error.exception(e)
+      $SS.log.error.exception(e)
       throw 'App config error'
 
 merge = (new_config) ->
