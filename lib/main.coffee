@@ -14,7 +14,7 @@ exports.init = ->
     client:           {}              # Used to store any info about the client (the JS code that's sent to the browser)
     config:           {}              # Used to store server and client configuration
     libs:             {}              # Link all external modules we need throughout SocketStream here
-    sys:              {}              # Link all internal SocketStream modules we will always need to have loaded here
+    log:              {}              # Outputs to the terminal
     models:           {}              # Attach Realtime Models here
     redis:            {}              # Connect main and pubsub active connections here
     users:
@@ -84,13 +84,13 @@ exports.start =
   server: ->
     util.log('Starting SocketStream server...')
     loadProject()
-    $SS.sys.server.start()
+    require('./server.coffee').start()
     showWelcomeMessage("Running on Port #{$SS.config.port}")
     
   console: ->
     loadProject()
     repl = require('repl')
-    showWelcomeMessage('Control+C to quit console')
+    showWelcomeMessage('Control + C to quit console')
     repl.start('SocketStream > ')
 
 
@@ -115,13 +115,10 @@ loadProject = ->
   require.paths.unshift('./app/models')
 
   # Load logger
-  $SS.sys.log =     require('./logger.coffee')
+  $SS.log = require('./logger.coffee')
   
   # Set default config and merge it with any application config file
   require('./configurator.coffee').configure()
-  
-  # Load key SocketStream internal system modules we will *always* need to load
-  $SS.sys.server =  require('./server.coffee')
   
   # Load Redis. Note these connections stay open so scripts will cease to terminate on their own once you call this
   $SS.redis = require('./redis.coffee').connect()
@@ -130,7 +127,8 @@ loadProject = ->
   $SS.publish = require('./publish.coffee')
   
   load.dbConfigFile()
-
+  load.realtimeModels()
+  
 
 
 # PRIVATE HELPERS
@@ -181,7 +179,9 @@ load =
     try
       db_config_exists = require.resolve(db_config_file)
     require(db_config_file) if db_config_exists
-
+  
+  realtimeModels: ->
+    require('./realtime_models').init()
 
 showWelcomeMessage = (additional_text) ->
   util.puts "\n"

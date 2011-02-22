@@ -35,20 +35,20 @@ processHttpRequest = (request, response) ->
   else
     request.addListener 'end', ->
       static.serve(request, response)
-      $SS.sys.log.staticFile(request)
+      $SS.log.staticFile(request)
 
 # Socket.IO
 processNewConnection = (client) ->
   client.remote = (method, params, type, options = {}) ->
     message = {method: method, params: params, cb_id: method.cb_id, callee: method.callee, type: type}
     client.send(JSON.stringify(message))
-    $SS.sys.log.outgoing.socketio(client, method) if (type != 'system' and options and !options.silent)
+    $SS.log.outgoing.socketio(client, method) if (type != 'system' and options and !options.silent)
 
   client.session = new Session(client)
   client.session.process (session) ->
     if session.newly_created  
       client.remote('setSession', session.id, 'system')
-      $SS.sys.log.createNewSession(session)
+      $SS.log.createNewSession(session)
     client.remote('setConfig', $SS.config.client, 'system')
     client.remote('ready', {}, 'system')
       
@@ -63,12 +63,12 @@ processIncomingCall = (data, client) ->
       action_array = msg.method.split('.')
       Request.process action_array, msg.params, client.session, client.session.user, (params, options) ->
         client.remote(msg, params, 'callback', options)
-      $SS.sys.log.incoming.socketio(msg, client) if !(msg.options && msg.options.silent)
+      $SS.log.incoming.socketio(msg, client) if !(msg.options && msg.options.silent)
     else
       throw ['invalid_message', 'Invalid websocket call. No action supplied']
   catch e
     client.remote('error', e, 'system')
-    $SS.sys.log.error.exception(e)
+    $SS.log.error.exception(e)
 
 # Redis Pub/Sub
 listenForPubSubEvents = (socket) ->
@@ -79,12 +79,12 @@ listenForPubSubEvents = (socket) ->
         when 'user'
           client = $SS.users.connected[channel[2]]
           return if client and client.connected
-            $SS.sys.log.outgoing.event("User #{message.user_id}", message)
+            $SS.log.outgoing.event("User #{message.user_id}", message)
             client.send(message)
           else
             null
         when 'broadcast'
-          $SS.sys.log.outgoing.event("Broadcast", message)
+          $SS.log.outgoing.event("Broadcast", message)
           socket.broadcast(message)
 
 mainServer = ->

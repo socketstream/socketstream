@@ -38,7 +38,7 @@ process = (response, url, path, actions) ->
     Request.process actions, params, null, null, (data, options) =>
       out = output_formats[format](data)
       deliver(response, 200, out.content_type, out.output)
-    $SS.sys.log.incoming.http(actions, params, format)
+    $SS.log.incoming.http(actions, params, format)
   catch e
     showError(response, e)
 
@@ -52,7 +52,7 @@ showError = (response, error) ->
   output = '<h3>SocketStream API Error</h3>'
   output += error[1]
   deliver(response, 400, 'text/html', output)
-  $SS.sys.log.error.exception(error)
+  $SS.log.error.exception(error)
 
 # Attempts to make sense of the params passed in the query string
 parseParams = (url) ->
