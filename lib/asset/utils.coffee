@@ -5,11 +5,11 @@ util = require("util")
 
 exports.fileList = (path, first_file = null) ->
   try
-    files = fs.readdirSync(path).filter((file) -> !file.match(/(^_|^\.)/))
+    files = fs.readdirSync(path).filter((file) -> !file.match(/(^_|^\.)/)).sort()
     if first_file and files.include(first_file)
       files = files.delete(first_file)
       files.unshift(first_file) 
-    files.sort()
+    files
   catch e
     throw e unless e.code == 'ENOENT' # dir missing
     []

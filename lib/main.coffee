@@ -85,12 +85,13 @@ exports.start =
     util.log('Starting SocketStream server...')
     loadProject()
     require('./server.coffee').start()
-    showWelcomeMessage("Running on Port #{$SS.config.port}")
+    protocol = if $SS.config.ssl.enabled then $SS.log.color('https', 'green') else "http"
+    showBanner("Server running on #{protocol}://localhost:#{$SS.config.port}")
     
   console: ->
     loadProject()
     repl = require('repl')
-    showWelcomeMessage('Control + C to quit console')
+    showBanner('Control + C to quit the Interactive Console')
     repl.start('SocketStream > ')
 
 
@@ -183,10 +184,12 @@ load =
   realtimeModels: ->
     require('./realtime_models').init()
 
-showWelcomeMessage = (additional_text) ->
+showBanner = (additional_text) ->
+  num_models = $SS.model.keys().length
   util.puts "\n"
   util.puts "------------------------- SocketStream -------------------------"
   util.puts "  Version #{$SS.version} running in #{$SS.env}"
-  util.puts "  #{additional_text} | PID #{process.pid} | Startup time #{$SS.internal.uptime()}ms"
+  util.puts "  #{num_models} model#{'s' unless num_models == 1} loaded | PID #{process.pid} | Startup time #{$SS.internal.uptime()}ms"
+  util.puts "  #{additional_text}"
   util.puts "----------------------------------------------------------------"
   util.puts "\n"
