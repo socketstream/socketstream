@@ -1,3 +1,11 @@
+0.0.17 / 2011-02-23
+===================
+
+  * Bug fix: Sort order of client files
+  * Improvement: Startup banner now makes it apparent if you're running in HTTPS
+  * Ongoing experimental work on Realtime Models
+
+
 0.0.16 / 2011-02-22
 ===================
 
