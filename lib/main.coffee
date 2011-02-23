@@ -14,8 +14,8 @@ exports.init = ->
     client:           {}              # Used to store any info about the client (the JS code that's sent to the browser)
     config:           {}              # Used to store server and client configuration
     libs:             {}              # Link all external modules we need throughout SocketStream here
+    model:            {}              # Models are preloaded and placed here
     log:              {}              # Outputs to the terminal
-    models:           {}              # Attach Realtime Models here
     redis:            {}              # Connect main and pubsub active connections here
     users:
       connected:      {}              # Maintain a list of all connected users for pub/sub

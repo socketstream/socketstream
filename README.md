@@ -311,7 +311,7 @@ Our eventual goal is to make SocketStream run in HTTPS mode by default, using se
 
 To turn on HTTPS make sure you have the openssl library headers on your system before you ./configure the Node source code.
 
-On Ubuntu you can install them like with this command:
+On Ubuntu you can install them with:
 
     sudo apt-get install libssl-dev openssl
 
