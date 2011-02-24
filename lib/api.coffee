@@ -12,6 +12,7 @@
 
 url_lib = require('url')
 Request = require('./request')
+RTM = require('./realtime_models')
 
 exports.isValidRequest = (request) ->
   request.url.split('/')[1].toLowerCase() == $SS.config.api.prefix
@@ -27,21 +28,31 @@ exports.call = (request, response) ->
     deliver(response, 200, 'text/html', 'Browse public API. Coming soon.')
   # Or attempt to process request
   else
-    process(response, url, path, actions)
+    process(request, response, url, path, actions)
 
 # Process an API Request
-process = (response, url, path, actions) ->
+process = (request, response, url, path, actions) ->
   try
     params = parseParams(url)  
     format = parseFormat(path)
-  
-    Request.process actions, params, null, null, (data, options) =>
-      out = output_formats[format](data)
-      deliver(response, 200, out.content_type, out.output)
+    
+    # Rest is highly experimental / testing
+    if actions[0] == '_rest'
+      RTM.rest.processRequest actions.slice(1), params, request.method, format, (data) =>
+        out = output_formats[format](data)
+        deliver(response, 200, out.content_type, out.output)
+    
+    # Serve regular request to /app/server
+    else
+      Request.process actions, params, null, null, (data, options) =>
+        out = output_formats[format](data)
+        deliver(response, 200, out.content_type, out.output)
+    
     $SS.log.incoming.http(actions, params, format)
   catch e
     showError(response, e)
-
+    
+    
 # Deliver output to screen
 deliver = (response, code, type, body) ->
   response.writeHead(code, {'Content-type': type, 'Content-Length': body.length})
