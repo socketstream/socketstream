@@ -1,5 +1,6 @@
 # RTM Mongoose Adapter
 # --------------------
+# Wraps the Mongoose Adapter
 
 exports.init = (model_name, rtm) ->
   schema = new Schema(rtm.schema)
