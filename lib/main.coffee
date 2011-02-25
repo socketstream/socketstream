@@ -189,7 +189,7 @@ showBanner = (additional_text) ->
   util.puts "\n"
   util.puts "------------------------- SocketStream -------------------------"
   util.puts "  Version #{$SS.version} running in #{$SS.env}"
-  util.puts "  #{num_models} model#{'s' unless num_models == 1} loaded | PID #{process.pid} | Startup time #{$SS.internal.uptime()}ms"
+  util.puts "  #{num_models} model#{if num_models == 1 then '' else 's'} loaded | PID #{process.pid} | Startup time #{$SS.internal.uptime()}ms"
   util.puts "  #{additional_text}"
   util.puts "----------------------------------------------------------------"
   util.puts "\n"
