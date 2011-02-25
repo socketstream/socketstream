@@ -24,7 +24,7 @@ exports.call = (request, response) ->
   actions = action.split('/').slice(2)
 
   # Browse API if viewing root
-  if actions.length == 1
+  if actions.length <= 1
     deliver(response, 200, 'text/html', 'Browse public API. Coming soon.')
   # Or attempt to process request
   else
@@ -38,7 +38,7 @@ process = (request, response, url, path, actions) ->
     
     # Rest is highly experimental / testing
     if actions[0] == '_rest'
-      RTM.rest.processRequest actions.slice(1), params, request.method, format, (data) =>
+      RTM.rest.processRequest actions.slice(1), params, request, format, (data) =>
         out = output_formats[format](data)
         deliver(response, 200, out.content_type, out.output)
     
