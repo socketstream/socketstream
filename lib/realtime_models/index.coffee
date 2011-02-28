@@ -9,6 +9,9 @@ exports.rest = require('./rest.coffee')
 exports.init = ->
   loadModels()
 
+exports.broadcast = (msg) ->
+  $SS.publish.broadcast('rtm', msg)
+
 loadModels = ->
   # See if we have any models to load
   files = try
@@ -21,5 +24,6 @@ loadModels = ->
     models.forEach (model) ->
       model_name = model.split('/').pop()
       model_spec = require("#{$SS.root}/app/models/#{model_name}")[model_name]
-      $SS.model[model_name] = model_spec
-      $SS.model[model_name].db = require("./adapters/#{model_spec.adapter}").init(model_name, model_spec)
+      $SS.model[model_name] = require("./adapters/#{model_spec.adapter}").init(model_name, model_spec, exports)
+      Object.defineProperty($SS.model[model_name], '_rtm', {value: model_spec, enumerable: false})
+

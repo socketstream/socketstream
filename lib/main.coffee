@@ -34,7 +34,7 @@ exports.init = ->
   $SS.client.version = '0.0.1'
 
   # Set environment
-  env = process.env.NODE_ENV || 'development'
+  env = process.env.SS_ENV || 'development'
   $SS.env = env.toString().toLowerCase()
 
   # Load basic Array, String, JS extensions needed throughout SocketStream

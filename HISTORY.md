@@ -1,3 +1,11 @@
+0.0.18 / 2011-02-28
+===================
+
+  * Change: NODE_ENV is now SS_ENV
+  * Added info about Environment-based Configuration in README
+  * Ongoing work towards Realtime Models and REST support
+
+
 0.0.17 / 2011-02-23
 ===================
 
