@@ -31,6 +31,7 @@ exports.process = (action_array, params, session, user, cb) ->
     args.push(cb)
     
     # Check we have have the correct number of params
+    throw ['callback_missing',    "The #{action} action is missing the callback argument"]        if method.length == 0
     throw ['params_missing',      "The #{action} action expects params but none were sent"]       if method.length > args.length
     throw ['params_not_required', "The #{action} action was sent params but can't receive them"]  if method.length < args.length
 
