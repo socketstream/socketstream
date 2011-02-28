@@ -45,7 +45,7 @@ setDefaults = ->
         level:          2       	# 0 = none, 1 = calls only, 2 = calls + params, 3 = full
 
 # For now we override default config depending upon environment. This will still be overridden by any app config file in
-# /config/environments/NODE_ENV.js . We may want to remove this in the future and insist upon seperate app config files, ala Rails
+# /config/environments/SS_ENV.js . We may want to remove this in the future and insist upon seperate app config files, ala Rails
 setEnvironmentDefaults = ->
   override = switch $SS.env
     when 'development'
@@ -59,7 +59,7 @@ setEnvironmentDefaults = ->
           level: 0
   merge(override)
 
-# Merges custom app config specificed in /config/environments/NODE_ENV.js with SocketStream defaults if the file exists
+# Merges custom app config specificed in /config/environments/SS_ENV.js with SocketStream defaults if the file exists
 mergeAppConfigFile = ->
   try
     config_file_name = "/config/environments/#{$SS.env}.json"

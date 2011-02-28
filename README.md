@@ -2,7 +2,7 @@
 
 SocketStream makes it a breeze to build phenomenally fast, highly-scalable real-time web applications on Node.js.
 
-Latest release: 0.0.17   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+Latest release: 0.0.18   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 
 
 ### Features
@@ -233,7 +233,7 @@ The directories generated will be very familiar to Rails users. Here's a brief o
 
 #### /app/views
 * /app/views/app.jade must exist. This should contain all the static HTML your app needs in [Jade](http://jade-lang.com/) format (similar to HAML)
-* The HTML HEAD tag must contain '!= SocketStream'. This helper ensures all the correct libraries are loaded depending upon the environment (declared by NODE_ENV)
+* The HTML HEAD tag must contain '!= SocketStream'. This helper ensures all the correct libraries are loaded depending upon the environment (declared by SS_ENV)
 * Easily nest additional html as jQuery templates (similar to Rails partials). E.g /app/views/people/info.jade is accessible as $("#people-info").tmpl(myData)
 * Jade views and templates are automatically compiled and served on-the-fly in development and pre-compiled/compressed/cached in staging and production
 
@@ -259,9 +259,24 @@ Before starting up your new app, make sure you have Redis 2.2+ running on your l
 If all goes well you'll see the SocketStream banner coming up, then you're ready to start!
 
 
+### Environment-based Configuration
+
+SocketStream runs in __development__ mode by default, outputting all incoming and outgoing requests to the terminal, displaying all server-side exceptions in the browser console, and compiling all client assets on the fly.
+
+Two other 'preset' environments are available: __staging__ and __production__. Both will load SocketStream with sensible defaults for their intended use.
+
+Use the SS_ENV environment variable to start SocketStream in a different environment. E.g:
+
+    SS_ENV=staging socketstream start
+
+All default modes are fully configurable using an optional JSON file placed within /config/environments. An unlimited number of new environments may also be added.
+
+We will publish a full list of configurable params in the near future, but for now these can be viewed (and hence overridden in the config file), by typing $SS.config in the SocketStream console.
+
+
 ### Connecting to Redis
 
-Redis is automatically accesssible anywhere within your server-side code using the R global variable. E.g.
+Redis is automatically accessible anywhere within your server-side code using the R global variable. E.g.
 
     R.set("string key", "string val")
 

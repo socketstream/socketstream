@@ -38,21 +38,22 @@ process = (request, response, url, path, actions) ->
     
     # Rest is highly experimental / testing
     if actions[0] == '_rest'
-      RTM.rest.processRequest actions.slice(1), params, request, format, (data) =>
-        out = output_formats[format](data)
-        deliver(response, 200, out.content_type, out.output)
+      actions = actions.slice(1) # remove prefix
+      RTM.rest.processRequest actions, params, request, format, (data) -> reply(data, response, format)
+      $SS.log.incoming.rest(actions, params, format, request.method)
     
     # Serve regular request to /app/server
     else
-      Request.process actions, params, null, null, (data, options) =>
-        out = output_formats[format](data)
-        deliver(response, 200, out.content_type, out.output)
-    
-    $SS.log.incoming.http(actions, params, format)
+      Request.process actions, params, null, null, (data, options) -> reply(data, response, format)
+      $SS.log.incoming.api(actions, params, format)
   catch e
     showError(response, e)
-    
-    
+
+# Formats and deliver the object
+reply = (data, response, format) ->
+  out = output_formats[format](data)
+  deliver(response, 200, out.content_type, out.output)
+
 # Deliver output to screen
 deliver = (response, code, type, body) ->
   response.writeHead(code, {'Content-type': type, 'Content-Length': body.length})

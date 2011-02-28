@@ -45,7 +45,7 @@ loadKlass = (actions) ->
   file_path = "/app/server/#{mod_path}"
   mod_name = actions.pop().capitalized()
   try
-    klass = require("#{$SS.root}/#{file_path}")[mod_name]
+    klass = require("#{$SS.root}#{file_path}")[mod_name]
   catch e
     if $SS.config.throw_errors
       throw ['application_error', e.stack] 
