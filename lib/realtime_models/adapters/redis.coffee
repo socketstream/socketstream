@@ -3,9 +3,6 @@
 # A dead simple Redis adapter that obeys the same interface as Mongoose where possible
 # TODO: Add casting as per schema and validations
 
-# Set Redis key prefix
-key = "ss:rtm"
-
 # Instance methods
 class Model
   
@@ -27,7 +24,7 @@ class Model
     
     true
   
-  save: (cb = ->) ->    
+  save: (cb = ->) ->
     throw ['rtm_redis_no_id', 'You must specify an "id" before saving the model to Redis'] unless @doc.id?
     R.hmset key(@doc.id), @doc, (err, data) =>
       if err
@@ -62,8 +59,18 @@ Model.findById = (id, fields, cb) ->
       obj = new Model(data)
       obj.isNew = false
       cb(null, obj)
-      
 
+# Finds all the keys associated with this model, in no particular order
+Model.find = (where, fields, cb) ->
+  output = []
+  R.keys "#{key()}*", (err, keys) ->
+    total_num = keys.length
+    keys.forEach (key, i) ->
+      id = key.split(':').pop()
+      Model.findById id, {}, (err, data) ->
+        output.push(data)
+        return cb(null, output) if (i+1) == total_num # Only send reply once all callbacks have completed
+        
 # Export model
 exports.init = (name, definition, rtm) ->
   Model.rtm_name = name
@@ -72,5 +79,7 @@ exports.init = (name, definition, rtm) ->
   Model
 
 # Private methods
-key = (id) ->
-  "#{key}:#{Model.rtm_name}:#{id}"
+key = (id = null) ->
+  k = ["ss:rtm", Model.rtm_name]
+  k.push(id) if id?
+  k.join(':')
