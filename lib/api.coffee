@@ -12,6 +12,7 @@
 
 url_lib = require('url')
 Request = require('./request')
+RTM = require('./realtime_models')
 
 exports.isValidRequest = (request) ->
   request.url.split('/')[1].toLowerCase() == $SS.config.api.prefix
@@ -23,24 +24,35 @@ exports.call = (request, response) ->
   actions = action.split('/').slice(2)
 
   # Browse API if viewing root
-  if actions.length == 1
+  if actions.length <= 1
     deliver(response, 200, 'text/html', 'Browse public API. Coming soon.')
   # Or attempt to process request
   else
-    process(response, url, path, actions)
+    process(request, response, url, path, actions)
 
 # Process an API Request
-process = (response, url, path, actions) ->
+process = (request, response, url, path, actions) ->
   try
     params = parseParams(url)  
     format = parseFormat(path)
-  
-    Request.process actions, params, null, null, (data, options) =>
-      out = output_formats[format](data)
-      deliver(response, 200, out.content_type, out.output)
-    $SS.log.incoming.http(actions, params, format)
+    
+    # Rest is highly experimental / testing
+    if actions[0] == '_rest'
+      actions = actions.slice(1) # remove prefix
+      RTM.rest.processRequest actions, params, request, format, (data) -> reply(data, response, format)
+      $SS.log.incoming.rest(actions, params, format, request.method)
+    
+    # Serve regular request to /app/server
+    else
+      Request.process actions, params, null, null, (data, options) -> reply(data, response, format)
+      $SS.log.incoming.api(actions, params, format)
   catch e
     showError(response, e)
+
+# Formats and deliver the object
+reply = (data, response, format) ->
+  out = output_formats[format](data)
+  deliver(response, 200, out.content_type, out.output)
 
 # Deliver output to screen
 deliver = (response, code, type, body) ->

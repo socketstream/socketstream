@@ -15,9 +15,12 @@ exports.incoming =
   socketio: (data, client) ->
     output 2, "#{client.sessionId} #{exports.color('->', 'cyan')} #{data.method}#{parseParams(data.params)}"
       
-  http: (actions, params, format) ->
+  api: (actions, params, format) ->
     output 2, "API (#{format}) #{exports.color('->', 'cyan')} #{actions.join('.')} #{parseParams(params)}"
-    
+
+  rest: (actions, params, format, http_method) ->
+    output 2, "REST #{http_method} (#{format}) #{exports.color('->', 'cyan')} #{actions.join('.')} #{parseParams(params)}"
+
   event: (type, event, params) ->
     output 2, "#{type} #{exports.color('=>', 'cyan')} #{event}#{parseParams(params)}"
 
