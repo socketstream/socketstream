@@ -1,4 +1,6 @@
-# Setup Redis main (data) and pub/sub connections
+# Redis
+# -----
+# Setup Redis main (data) and pub/sub connections based upon the config params in $SS.config
 
 exports.connect = ->
   main:   main()

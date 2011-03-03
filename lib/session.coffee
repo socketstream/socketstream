@@ -1,3 +1,7 @@
+# Session
+# -------
+# Creates and maintains a persistent session in Redis once a visitor connects over websockets
+
 utils = require('./utils')
 
 class exports.Session

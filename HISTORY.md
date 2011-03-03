@@ -1,3 +1,10 @@
+0.0.21 / 2011-03-03
+===================
+
+  * Fixed bug loading multiple files within a nested directory and improved name spacing conflict resolution
+  * Added more boiler plate headers
+
+
 0.0.20 / 2011-03-03
 ===================
 
