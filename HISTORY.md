@@ -1,3 +1,11 @@
+0.0.20 / 2011-03-03
+===================
+
+  * Major change: /app/server files should now begin 'exports.actions =' with the all publicly exposed actions listed as before
+  * All private methods should now be listed outside of the exports.actions and be in the format 'method = () ->'.
+  * New feature: /app/server code now supports nested functions
+  
+
 0.0.19 / 2011-03-03
 ===================
 
