@@ -11,8 +11,9 @@
 # Note: Make sure you cast strings into the type of value you're expecting when using the HTTP API
 
 url_lib = require('url')
-Request = require('./request')
+Request = require('./request.coffee')
 RTM = require('./realtime_models')
+base64 = require('./base64.js')
 
 exports.isValidRequest = (request) ->
   request.url.split('/')[1].toLowerCase() == $SS.config.api.prefix
@@ -32,6 +33,9 @@ exports.call = (request, response) ->
 
 # Process an API Request
 process = (request, response, url, path, actions) ->
+  
+  #authenticate(request, response)
+
   try
     params = parseParams(url)  
     format = parseFormat(path)
@@ -86,6 +90,16 @@ parseFormat = (path) ->
   unless output_formats.keys().include(format)
     throw ['invalid_output_format', 'Invalid output format. Supported formats: ' + output_formats.keys().join(', ')]
   format
+    
+# Basic Auth if required
+authenticate = (request, response) ->
+  if request.headers.authorization
+    auth = request.headers.authorization.split(' ')
+    auth_type = auth[0]
+    credentials = base64.decode(auth[1]).split(':')
+  else
+    response.writeHead(401, {'WWW-Authenticate': 'Basic realm="Secure API"', 'Content-type': 'text/html'})
+    response.end('Not authorized')
 
 # Formats data for output
 output_formats =
