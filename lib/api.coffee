@@ -1,14 +1,13 @@
 # HTTP API
 # --------
-
-# Automatically makes all public methods within /app/server accesible over a HTTP API
+# Automatically makes all public methods within /app/server accesible over a HTTP request-based API
 
 # EXAMPLES:
 
-# /api/app/square.json?5 is the same as calling remote('app.square',5,cb) from the browser
+# /api/app/square.json?5 is the same as calling remote('app.square', 5, console.log) from the browser
 # To see the output on screen type type .html instead of .json
 # Pass objects in the query string: E.g. /api/user/add.json?name=Tom&age=21 is the same as remote('user.add',{name: 'Tom', age: 21},cb)
-# Note: Make sure you cast strings into the type of value you're expecting when using the HTTP API
+# Note: Make sure your application code casts strings into the type of value you're expecting when using the HTTP API
 
 url_lib = require('url')
 Request = require('./request.coffee')

@@ -217,15 +217,14 @@ load =
         dest[mod_name] = if name == 'shared' then (new mod[mod_name.capitalized()]) else mod.actions
         $SS.internal.counters.files_loaded[counter_name]++
       else
-        if dest.hasOwnProperty(element)
-          stop("Oops! Unable to load #{ary.join('/')} as it conflicts with a file called '#{element}' in the parent directory.\nPlease rename/remove one of them.")
-        else
-          dest[element] = {}
-          arguments.callee(destination, ary, path, counter_name, (index+1))
-  
-    slashes_to_remove = dir.split('/').length
+        dest[element] = {} unless dest.hasOwnProperty(element)
+        arguments.callee(destination, ary, path, counter_name, (index+1))
+
     try
-      file_utils.readDirSync(dir).files.forEach (path) ->
+      output = file_utils.readDirSync(dir)
+      slashes_to_remove = dir.split('/').length
+      check.forNameConflicts(output)
+      output.files.forEach (path) ->
         ary = path.split('/').slice(slashes_to_remove)
         recursively($SS[name], ary, path, name)
     catch e
@@ -233,13 +232,21 @@ load =
   
 
 check =
+
+  # Ensures you don't have a module and a folder of the same name (otherwise we can't map it to an object)
+  forNameConflicts: (output) ->
+    files_without_exts = output.files.map (file) -> file.split('.')[0]
+    output.dirs.forEach (dir) ->
+      files_without_exts.forEach (file) ->
+        if file == dir
+          fatal "Unable to load the #{dir} directory\nIt conflicts with a file of the same name in the parent directory. Please rename one of them."
   
   isValidProjectDir: ->
     dirs = fs.readdirSync($SS.root)
     if (!dirs.include('app') || !dirs.include('public')) # All other dirs are optional for now
-      throw 'Oops! Unable to start SocketStream here. Not a valid project directory'
+      fatal 'Unable to start SocketStream here. Not a valid project directory'
       
-stop = (message) ->
+fatal = (message) ->
   $SS.log.error.exception ['error', message]
   throw 'Unable to continue'
 

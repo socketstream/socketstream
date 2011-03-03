@@ -1,4 +1,6 @@
-# SocketStream Configurator
+# Configurator
+# ------------
+# Reads the application config files within /config/environmnets and merges these into the SocketStream defaults
 
 fs = require('fs')
 util = require('util')
@@ -7,7 +9,6 @@ exports.configure = ->
   setDefaults()
   setEnvironmentDefaults()
   mergeAppConfigFile()
-
 
 
 # Set sensible defaults so we can be up and running without an app-specific config file
