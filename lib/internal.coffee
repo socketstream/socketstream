@@ -8,6 +8,9 @@ exports.init = ->
 
   # Save a timestamp for benchmarking later
   @up_since = new Date
+  
+  # Counters
+  @counters = {files_loaded: { model: 0, server: 0, shared: 0}}
 
   # Parse package.json so we don't have to repeat ourselves
   @package_json = loadPackageJSON()

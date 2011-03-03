@@ -4,6 +4,9 @@
 # Remember, the process action needs to be written for speed
 
 url_lib = require('url')
+utils = require('./utils')
+
+prefix = '/app/server'
 
 exports.process = (action_array, params, session, user, cb) ->
   throw ['invalid_action_format', "Invalid action format"] unless typeof(action_array) == 'object'
@@ -13,13 +16,16 @@ exports.process = (action_array, params, session, user, cb) ->
   action = actions.pop()
 
   if action.charAt(0) == '_'
-    throw ['private_action', "Unable to access private action #{action}"]
-  else      
-    obj = loadKlass(actions)
-    
+    throw ['private_action', "Unable to access private action '#{action}'"]
+  else
+    obj = utils.getFromTree($SS.server, actions)
+
+    # Check module exists before we attempt to call a function on it
+    throw ['unable_to_find_module',"Unable to find the #{prefix}/#{actions.join('/')} module. Does the file exist?"] unless obj
+
     # Check to see method exists
     method = obj[action]
-    throw ['action_missing',"Unable to find the #{action} action. Action names are case sensitive"] unless method 
+    throw ['action_missing',"Unable to find the '#{action}' action in #{prefix}/#{actions.join('/')}. Action names are case sensitive"] unless method 
     
     # Inject 'helper functions'
     obj.session = session
@@ -40,22 +46,4 @@ exports.process = (action_array, params, session, user, cb) ->
       method.apply(obj, args)
     catch e
       throw ['application_error', e.stack]
-
-loadKlass = (actions) ->
-  mod_path = actions.join('/')
-  file_path = "/app/server/#{mod_path}"
-  mod_name = actions.pop().capitalized()
-  try
-    klass = require("#{$SS.root}#{file_path}")[mod_name]
-  catch e
-    if $SS.config.throw_errors
-      throw ['application_error', e.stack] 
-    else
-      throw ['unable_to_find_module',"Unable to find or parse module at #{file_path}"]
-  try
-    new klass
-  catch e
-    throw e if $SS.config.throw_errors
-    throw ['error_instantiating',"Unable to instantiate #{file_path}"]
-
 
