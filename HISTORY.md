@@ -1,3 +1,12 @@
+0.0.19 / 2011-03-03
+===================
+
+  * Major change: Files in /app/server are now recursively pre-loaded into $SS.server and instantiated upon startup. This allows for:
+  * New feature: Invoke any method within /app/server using the console or within other server-side files. E.g. $SS.server.app.square(25, console.log)
+  * New feature: Shared files within /app/shared are pre-loaded an accessible the same way using $SS.shared
+  * Improvement: Updated banner to reflect pre-loaded files
+
+
 0.0.18 / 2011-02-28
 ===================
 

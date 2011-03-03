@@ -3,7 +3,8 @@
 fs = require('fs')
 util = require('util')
 path = require('path')
-
+utils = require('./utils')
+file_utils = require('./utils/file')
 
 # Initialize SocketStream. This must always be run to set the basic environment
 exports.init = ->
@@ -14,9 +15,13 @@ exports.init = ->
     client:           {}              # Used to store any info about the client (the JS code that's sent to the browser)
     config:           {}              # Used to store server and client configuration
     libs:             {}              # Link all external modules we need throughout SocketStream here
-    model:            {}              # Models are preloaded and placed here
     log:              {}              # Outputs to the terminal
     redis:            {}              # Connect main and pubsub active connections here
+    
+    model:            {}              # Models are preloaded and placed here
+    server:           {}              # Server code is preloaded and placed here
+    shared:           {}              # Shared code is preloaded and placed here
+
     users:
       connected:      {}              # Maintain a list of all connected users for pub/sub
 
@@ -27,7 +32,7 @@ exports.init = ->
   # Properties and functions we need internally
   $SS.internal = require('./internal.coffee').init()
 
-  # Set sever version from package.json
+  # Set server version from package.json
   $SS.version = $SS.internal.package_json.version
 
   # Set client file version. Bumping this automatically triggers re-compliation of lib assets when a user upgrades
@@ -83,15 +88,15 @@ exports.start =
 
   server: ->
     util.log('Starting SocketStream server...')
-    loadProject()
+    load.project()
     require('./server.coffee').start()
     protocol = if $SS.config.ssl.enabled then $SS.log.color('https', 'green') else "http"
     showBanner("Server running on #{protocol}://localhost:#{$SS.config.port}")
     
   console: ->
-    loadProject()
+    load.project()
     repl = require('repl')
-    showBanner('Control + C to quit the Interactive Console')
+    showBanner('Press Control + C twice to quit the Interactive Console')
     repl.start('SocketStream > ')
 
 
@@ -103,46 +108,65 @@ exports.create =
     new gen.AppGenerator(name)
 
 
-# Start up the SocketStream environment based on the current project. Needed for the Server and Console
-loadProject = ->
-
-  check.isValidProjectDir()
-  load.externalLibs()
-  load.vendoredModules()
-
-  # Set Framework Paths
-  require.paths.unshift('./lib/server')
-  require.paths.unshift('./app/shared')
-  require.paths.unshift('./app/models')
-
-  # Load logger
-  $SS.log = require('./logger.coffee')
-  
-  # Set default config and merge it with any application config file
-  require('./configurator.coffee').configure()
-  
-  # Load Redis. Note these connections stay open so scripts will cease to terminate on their own once you call this
-  $SS.redis = require('./redis.coffee').connect()
-  
-  # Link SocketStream modules we offer as part of the Server API
-  $SS.publish = require('./publish.coffee')
-  
-  load.dbConfigFile()
-  load.realtimeModels()
-  
-
 
 # PRIVATE HELPERS
 
-check =
-  
-  isValidProjectDir: ->
-    dirs = fs.readdirSync($SS.root)
-    if (!dirs.include('app') || !dirs.include('public')) # All other dirs are optional for now
-      throw 'Oops! Unable to start SocketStream here. Not a valid project directory'
-
 load =
 
+  # Start up the SocketStream environment based on the current project
+  # Needs to run before the Server or Console can start
+  project: ->
+
+    check.isValidProjectDir()
+    load.externalLibs()
+    load.vendoredModules()
+
+    # Set Framework Paths
+    require.paths.unshift('./lib/server')
+    require.paths.unshift('./app/shared')
+    require.paths.unshift('./app/models')
+
+    # Load logger
+    $SS.log = require('./logger.coffee')
+    
+    # Set default config and merge it with any application config file
+    require('./configurator.coffee').configure()
+    
+    # Load Redis. Note these connections stay open so scripts will cease to terminate on their own once you call this
+    $SS.redis = require('./redis.coffee').connect()
+    
+    # Link SocketStream modules we offer as part of the Server API
+    $SS.publish = require('./publish.coffee')
+    
+    load.dbConfigFile()
+    load.files.all()
+  
+  # Server-side files
+  files:
+    
+    all: ->
+      @models() # loads into $SS.model
+      load.dirFiles("#{$SS.root}/app/server", 'server') # loads into $SS.server
+      load.dirFiles("#{$SS.root}/app/shared", 'shared') # loads into $SS.shared
+
+    # Pre-loads all code in /app/models into $SS.model
+    models: ->
+      # See if we have any models to load
+      files = try
+        fs.readdirSync("#{$SS.root}/app/models").filter((file) -> !file.match(/(^_|^\.)/))
+      catch e
+        []
+      # Preload all model definitions
+      if files.length > 0
+        models = files.map((file) -> file.split('.')[0])
+        models.forEach (model) ->
+          model_name = model.split('/').pop()
+          model_spec = require("#{$SS.root}/app/models/#{model_name}")[model_name]
+          $SS.model[model_name] = require("./realtime_models/adapters/#{model_spec.adapter}").init(model_name, model_spec, exports)
+          Object.defineProperty($SS.model[model_name], '_rtm', {value: model_spec, enumerable: false})
+          $SS.internal.counters.files_loaded.model++
+  
+       
   # Load any vendored modules
   vendoredModules: ->
     vendor_dir = "./vendor"
@@ -150,6 +174,7 @@ load =
       if exists
         fs.readdirSync(vendor_dir).forEach (name) ->
           require.paths.unshift("#{vendor_dir}/#{name}/lib")
+
 
   # Load external libs used throughout SocketStream and attach them to $SS.libs
   # We load the exact version specified in package.json to be sure everything works well together
@@ -181,15 +206,49 @@ load =
       db_config_exists = require.resolve(db_config_file)
     require(db_config_file) if db_config_exists
   
-  realtimeModels: ->
-    require('./realtime_models').init()
+  # Helper to recursively load all files in a dir and attach them to the $SS object
+  dirFiles: (dir, name) ->
+    recursively = (destination, ary, path, counter_name, index = 0) ->
+      element = ary[index]
+      mod_name = element.split('.')[0]
+      dest = utils.getFromTree(destination, ary, index)
+      if ary.length == (index + 1) # load the module and attach an instance
+        mod = require(path)
+        dest[mod_name] = new mod[mod_name.capitalized()]
+        $SS.internal.counters.files_loaded[counter_name]++
+      else # or continue traversing the path
+        if dest.hasOwnProperty(element)
+          stop("Oops! Unable to load #{ary.join('/')} as it conflicts with a file called '#{element}' in the parent directory.\nPlease rename/remove one of them.")
+        else
+          dest[element] = {}
+          arguments.callee(destination, ary, path, counter_name, (index+1))
+  
+    slashes_to_remove = dir.split('/').length
+    try
+      file_utils.readDirSync(dir).files.forEach (path) ->
+        ary = path.split('/').slice(slashes_to_remove)
+        recursively($SS[name], ary, path, name)
+    catch e
+      throw e unless e.code == 'ENOENT' # Ignore if optional dirs are missing
+  
+ 
+check =
+  
+  isValidProjectDir: ->
+    dirs = fs.readdirSync($SS.root)
+    if (!dirs.include('app') || !dirs.include('public')) # All other dirs are optional for now
+      throw 'Oops! Unable to start SocketStream here. Not a valid project directory'
+      
+stop = (message) ->
+  $SS.log.error.exception ['error', message]
+  throw 'Unable to continue'
 
 showBanner = (additional_text) ->
-  num_models = $SS.model.keys().length
+  counters = $SS.internal.counters.files_loaded
   util.puts "\n"
   util.puts "------------------------- SocketStream -------------------------"
-  util.puts "  Version #{$SS.version} running in #{$SS.env}"
-  util.puts "  #{num_models} model#{if num_models == 1 then '' else 's'} loaded | PID #{process.pid} | Startup time #{$SS.internal.uptime()}ms"
+  util.puts "  Version #{$SS.version} running in #{$SS.env} on PID #{process.pid}"
+  util.puts "  Loaded #{counters.model.pluralize('model')}, #{counters.server} server and #{counters.shared.pluralize('shared file')} in #{$SS.internal.uptime()}ms"
   util.puts "  #{additional_text}"
   util.puts "----------------------------------------------------------------"
   util.puts "\n"

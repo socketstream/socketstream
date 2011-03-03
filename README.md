@@ -2,7 +2,7 @@
 
 SocketStream makes it a breeze to build phenomenally fast, highly-scalable real-time web applications on Node.js.
 
-Latest release: 0.0.18   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+Latest release: 0.0.19   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 
 
 ### Features
@@ -19,7 +19,7 @@ Latest release: 0.0.18   ([view changelog](https://github.com/socketstream/socke
 * In-built User model with modular authentication
 * Uses [Redis](http://www.redis.io/) for fast session retrieval, pub/sub, list of users online, and any other data your app needs instantly
 * Nested namespaces allow building of large 'enterprise' apps
-* Interactive console - just type 'socketstream console'
+* Interactive console - just type 'socketstream console' and invoke any server-side method from there
 * Bundled with jQuery 1.5. Easily add additional client libraries such as [Underscore.js](http://documentcloud.github.com/underscore/)
 * Easily create jQuery templates using the [official plugin](http://api.jquery.com/category/plugins/templates/). Works like partials in Rails.
 * Uses [Jade](http://jade-lang.com/) to render static HTML
@@ -73,9 +73,13 @@ And you will see the following output:
 
     25 squared is 625
 
-You can also call this method over HTTP with the following URL:
+You can also call this server-side method over HTTP with the following URL:
 
-    /api/app/square.json?5           (Hint: use .html to output on screen)
+    /api/app/square.json?25           (Hint: use .html to output on screen)
+    
+Or even from the console (type 'socketstream console') or another server-side file using:
+
+    $SS.server.app.square(25, console.log)        (Hint: passing console.log as the callback prints the response in the terminal)
 
 Ready for something a bit more advanced? Let's take a look at reverse geocoding using HTML5 geolocation...
 
@@ -208,7 +212,8 @@ The directories generated will be very familiar to Rails users. Here's a brief o
 * All files in this directory behave similar to Controllers in traditional MVC frameworks
 * For example, to call app.init from the client and pass 25 as params, call remote('app.init',25,function(){ alert(this); }) in the client
 * All methods can be automatically accessed via the in-built HTTP API (e.g. /api/app/square.json?5)
-* The last argument must always be the callback (cb). If app.init were to call cb('hello it works') we would see this message popup
+* All server methods are pre-loaded and accessible via $SS.server in the console or from other server-side files
+* The last argument must always be the callback (cb). If app.init were to call cb('hello it works') we would see this message popup on the screen
 * If the method takes incoming params, these will be pushed into the first argument. The second must always be the callback.
 * Each file must begin 'class exports.' followed by the capitalized name of the file (e.g. 'class exports.User')
 * Server files can be nested. E.g. remote('users.online.yesterday') would reference the 'yesterday' method in /app/server/users/online.coffee
@@ -218,11 +223,11 @@ The directories generated will be very familiar to Rails users. Here's a brief o
 * The /app/server/app.coffee file must always be present
 
 #### /app/shared
-* All files within /app/shared will be converted to Javascript and sent to the client. In addition they can also be used server-side
+* All files within /app/shared will be converted to Javascript and sent to the client. In addition they can also be called server-side
 * Ideal for business logic and models that need to validate on the client (for speed) yet ensure integrity before saving to the DB
 * Start your file with the same header you would for a server file. E.g. class exports.Filter
 * Use it client-side by instantiating the class: filter = new exports.Filter
-* Use it server-side by first requiring the file, then instantiating the class: Filter = require('filter').Filter; filter = new Filter;
+* All shared methods are pre-loaded and accessible via $SS.shared in the console or from other server-side files
 * WARNING: All code within this folder will be sent to the client. Do not include any proprietary secret sauce or use database/filesystem calls
 
 #### /app/css
