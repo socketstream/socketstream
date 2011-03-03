@@ -1,4 +1,4 @@
-class exports.App
+exports.actions =
   
   init: (userAgent, cb) ->
     console.log "Welcome user of: #{userAgent}"

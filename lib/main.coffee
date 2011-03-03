@@ -212,11 +212,11 @@ load =
       element = ary[index]
       mod_name = element.split('.')[0]
       dest = utils.getFromTree(destination, ary, index)
-      if ary.length == (index + 1) # load the module and attach an instance
+      if ary.length == (index + 1)
         mod = require(path)
-        dest[mod_name] = new mod[mod_name.capitalized()]
+        dest[mod_name] = if name == 'shared' then (new mod[mod_name.capitalized()]) else mod.actions
         $SS.internal.counters.files_loaded[counter_name]++
-      else # or continue traversing the path
+      else
         if dest.hasOwnProperty(element)
           stop("Oops! Unable to load #{ary.join('/')} as it conflicts with a file called '#{element}' in the parent directory.\nPlease rename/remove one of them.")
         else
@@ -231,7 +231,7 @@ load =
     catch e
       throw e unless e.code == 'ENOENT' # Ignore if optional dirs are missing
   
- 
+
 check =
   
   isValidProjectDir: ->

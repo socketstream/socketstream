@@ -2,7 +2,7 @@
 
 SocketStream makes it a breeze to build phenomenally fast, highly-scalable real-time web applications on Node.js.
 
-Latest release: 0.0.19   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+Latest release: 0.0.20   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 
 
 ### Features
@@ -18,7 +18,7 @@ Latest release: 0.0.19   ([view changelog](https://github.com/socketstream/socke
 * Experimental out-of-the-box HTTPS support. See section below.
 * In-built User model with modular authentication
 * Uses [Redis](http://www.redis.io/) for fast session retrieval, pub/sub, list of users online, and any other data your app needs instantly
-* Nested namespaces allow building of large 'enterprise' apps
+* Nested namespaces and functions allow building of large 'enterprise' apps
 * Interactive console - just type 'socketstream console' and invoke any server-side method from there
 * Bundled with jQuery 1.5. Easily add additional client libraries such as [Underscore.js](http://documentcloud.github.com/underscore/)
 * Easily create jQuery templates using the [official plugin](http://api.jquery.com/category/plugins/templates/). Works like partials in Rails.
@@ -60,7 +60,7 @@ On the client side, add this to the /app/client/app.coffee file:
 
 And on the server, add this to /app/server/app.coffee
 
-    class exports.App
+    exports.actions =
 
       square: (number, cb) ->
         cb(number * number)
@@ -75,7 +75,7 @@ And you will see the following output:
 
 You can also call this server-side method over HTTP with the following URL:
 
-    /api/app/square.json?25           (Hint: use .html to output on screen)
+    /api/app/square.json?25                       (Hint: use .html to output on screen)
     
 Or even from the console (type 'socketstream console') or another server-side file using:
 
@@ -88,7 +88,7 @@ Ready for something a bit more advanced? Let's take a look at reverse geocoding 
 
 For the server code, create the file /app/server/geocode.coffee and paste in the following code:
 
-    class exports.Geocode
+    exports.actions =
 
       lookup: (coords_from_browser, cb) ->
         host = 'maps.googleapis.com'
@@ -99,16 +99,16 @@ For the server code, create the file /app/server/geocode.coffee and paste in the
         request = google.request 'GET', "/maps/api/geocode/json?sensor=true&latlng=#{r.latitude},#{r.longitude}"
         request.end()
         request.on 'error', (e) -> console.error "Unable to parse response from #{host}"
-        request.on 'response', (response) => @_parseResponse(response, cb)
+        request.on 'response', (response) => parseResponse(response, cb)
 
-      _parseResponse: (response, cb) -> # note: private methods beginning with an underscore cannot be called remotely
-        output = ''
-        response.setEncoding('utf8')
-        response.on 'data', (chunk) -> output += chunk
-        response.on 'end', ->
-          j = JSON.parse(output)
-          result = j.results[0]
-          cb(result)
+    parseResponse = (response, cb) ->  # note: private methods are written outside of exports.actions
+      output = ''
+      response.setEncoding('utf8')
+      response.on 'data', (chunk) -> output += chunk
+      response.on 'end', ->
+        j = JSON.parse(output)
+        result = j.results[0]
+        cb(result)
 
 
 To capture your location and output your address, lets's add this code into  /app/client/app.coffee
@@ -161,7 +161,7 @@ First let's listen out for an event called 'newMessage' on the client:
           
 Then, assuming we know the person's user_id, we can publish the event directly to them. On the server side you'd write:
 
-    class exports.App
+    exports.actions =
 
       testMessage: (user_id) ->
         $SS.publish.user(user_id, 'newMessage', 'Wow this is cool!')
@@ -213,14 +213,12 @@ The directories generated will be very familiar to Rails users. Here's a brief o
 * For example, to call app.init from the client and pass 25 as params, call remote('app.init',25,function(){ alert(this); }) in the client
 * All methods can be automatically accessed via the in-built HTTP API (e.g. /api/app/square.json?5)
 * All server methods are pre-loaded and accessible via $SS.server in the console or from other server-side files
-* The last argument must always be the callback (cb). If app.init were to call cb('hello it works') we would see this message popup on the screen
-* If the method takes incoming params, these will be pushed into the first argument. The second must always be the callback.
-* Each file must begin 'class exports.' followed by the capitalized name of the file (e.g. 'class exports.User')
+* If the method takes incoming params (optional), these will be pushed into the first argument. The last argument must always be the callback (cb)
+* All publicly available methods should be listed under 'exports.actions'. Private methods must be placed outside this scope and begin 'methodname = (params) ->'
 * Server files can be nested. E.g. remote('users.online.yesterday') would reference the 'yesterday' method in /app/server/users/online.coffee
-* All methods are publicly accessible unless they begin with an underscore - so be careful!
+* You may also nest objects within objects to provide namespacing within the same file
 * @session gives you direct access to the User's session
 * @user gives you direct access to your custom User instance. More on this coming soon
-* The /app/server/app.coffee file must always be present
 
 #### /app/shared
 * All files within /app/shared will be converted to Javascript and sent to the client. In addition they can also be called server-side
