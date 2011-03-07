@@ -8,7 +8,7 @@ utils = require('./utils')
 
 prefix = '/app/server'
 
-exports.process = (action_array, params, session, user, cb) ->
+exports.process = (action_array, params, session, cb) ->
   throw ['invalid_action_format', "Invalid action format"] unless typeof(action_array) == 'object'
   throw ['invalid_action_length', "Invalid action length"] unless action_array.length >= 2
 
@@ -26,7 +26,7 @@ exports.process = (action_array, params, session, user, cb) ->
   
   # Inject 'helper functions'
   obj.session = session
-  obj.user = user
+  obj.user = session.user
 
   # Build up args to pass to server action
   args = []

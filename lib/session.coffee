@@ -4,19 +4,58 @@
 
 utils = require('./utils')
 
-class exports.Session
+id_length = 32
 
-  id_length: 32  
-  newly_created: false
+# Process an incoming request over Websockets (retrieve an existing session or create a new one)
+exports.process = (client, cb) ->
+  cookies = getCookies(client)
+  if cookies && cookies.session_id && cookies.session_id.length == id_length
+    $SS.redis.main.hgetall "socketstream:session:#{cookies.session_id}", (err, data) ->
+      if err or data == null or data == undefined
+        newForWebsocket(client, cb)
+      else
+        session = new Session(cookies.session_id)
+        session.client = client
+        session.created_at = data.created_at
+        session.attributes = JSON.parse(data.attributes || '{}')
+        session.setUserId(data.user_id)
+        cb(session)
+  else
+    newForWebsocket(client, cb)
+
+# Create a new Session for every API call. We may change this in future
+exports.forAPI = (cb) ->
+  cb(new Session)
+
+
+# PRIVATE
+
+newForWebsocket = (client, cb) ->
+  session = new Session
+  session.client = client
+  session.save()
+  cb(session)
+  
+getCookies = (client) ->
+  try
+    utils.parseCookie(client.request.headers.cookie)
+  catch e
+    {}
+
+class Session
+
+  newly_created: null
   attributes: {}          # store a hash of serialised data in redis. e.g. {items_in_cart: 3}
   user_id: null           # null when no user logged in
   user: null              # attach an instance of your custom application User code here
   
-  constructor: (@client) ->
-    @cookies = try
-      utils.parseCookie(@client.request.headers.cookie)
-    catch e
-      {}
+  constructor: (@id) ->
+    if @id
+      @newly_created = false
+    else
+      @id = utils.randomString(id_length)
+      @created_at = Number(new Date())
+      @newly_created = true
   
   key: ->
     "socketstream:session:#{@id}"
@@ -24,25 +63,6 @@ class exports.Session
   pubsub_key: ->
     "socketstream:user:#{@user_id}"
 
-  process: (cb) ->
-    if @cookies && @cookies.session_id && @cookies.session_id.length == @id_length
-      $SS.redis.main.hgetall "socketstream:session:#{@cookies.session_id}", (err, data) =>
-        if err or data == null or data == undefined
-          @create(cb)
-        else
-          @id = @cookies.session_id
-          @attributes = JSON.parse(data.attributes || '{}')
-          @setUserId(data.user_id)
-          cb(@)
-    else
-      @create(cb)
-
-  create: (cb) ->
-    @id = utils.randomString(@id_length)
-    @created_at = Number(new Date())
-    $SS.redis.main.hset @key(), 'created_at', @created_at, (err, response) =>
-      @newly_created = true
-      cb(@)      
 
   # Authentication is provided by passing the name of a module which Node must be able to load, either from /lib/server, /vendor/module/lib, or from npm.
   # The module must implement an 'authenticate' function which expects a params object normally in the form of username and password, but could also be biometric or iPhone device id, SSO token, etc.
@@ -72,11 +92,12 @@ class exports.Session
     @user = null     # clear any attached custom User instance
     $SS.redis.pubsub.unsubscribe @pubsub_key()
     delete $SS.users.connected[@id]
-    @create (err, new_session) -> cb(new_session)
+    cb(new Session)
 
   loggedIn: ->
     @user_id?
 
   save: ->
+    $SS.redis.main.hset @key(), 'created_at', @created_at
     $SS.redis.main.hset @key(), 'attributes', JSON.stringify(@attributes)
     

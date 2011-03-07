@@ -10,9 +10,10 @@
 # Note: Make sure your application code casts strings into the type of value you're expecting when using the HTTP API
 
 url_lib = require('url')
-Request = require('./request.coffee')
-RTM = require('./realtime_models')
-base64 = require('./base64.js')
+session = require('../session.coffee')
+Request = require('../request.coffee')
+RTM = require('../realtime_models')
+base64 = require('../base64.js')
 
 exports.isValidRequest = (request) ->
   request.url.split('/')[1].toLowerCase() == $SS.config.api.prefix
@@ -33,24 +34,26 @@ exports.call = (request, response) ->
 # Process an API Request
 process = (request, response, url, path, actions) ->
   
-  #authenticate(request, response)
+  authenticate.init request, response, (session) ->
 
-  try
-    params = parseParams(url)  
-    format = parseFormat(path)
+    showError(response, ['api_invalid_credentials','Invalid username or password']) if session and !session.user_id
+
+    try
+      params = parseParams(url)  
+      format = parseFormat(path)
     
-    # Rest is highly experimental / testing
-    if actions[0] == '_rest'
-      actions = actions.slice(1) # remove prefix
-      RTM.rest.processRequest actions, params, request, format, (data) -> reply(data, response, format)
-      $SS.log.incoming.rest(actions, params, format, request.method)
+      # Rest is highly experimental / testing
+      if actions[0] == '_rest'
+        actions = actions.slice(1) # remove prefix
+        RTM.rest.processRequest actions, params, request, format, (data) -> reply(data, response, format)
+        $SS.log.incoming.rest(actions, params, format, request.method)
     
-    # Serve regular request to /app/server
-    else
-      Request.process actions, params, null, null, (data, options) -> reply(data, response, format)
-      $SS.log.incoming.api(actions, params, format)
-  catch e
-    showError(response, e)
+      # Serve regular request to /app/server
+      else
+        Request.process actions, params, session, (data, options) -> reply(data, response, format)
+        $SS.log.incoming.api(actions, params, format)
+    catch e
+      showError(response, e)
 
 # Formats and deliver the object
 reply = (data, response, format) ->
@@ -89,16 +92,37 @@ parseFormat = (path) ->
   unless output_formats.keys().include(format)
     throw ['invalid_output_format', 'Invalid output format. Supported formats: ' + output_formats.keys().join(', ')]
   format
+
+
+# Authenticate
+authenticate =
+  
+  init: (@request, @response, @cb) ->
     
-# Basic Auth if required
-authenticate = (request, response) ->
-  if request.headers.authorization
-    auth = request.headers.authorization.split(' ')
-    auth_type = auth[0]
-    credentials = base64.decode(auth[1]).split(':')
-  else
-    response.writeHead(401, {'WWW-Authenticate': 'Basic realm="Secure API"', 'Content-type': 'text/html'})
-    response.end('Not authorized')
+    #@cb(false) unless 
+    @basic()
+
+  # Basic Auth. Should only really be used when HTTPS is enabled
+  basic: ->
+    
+    if @request.headers.authorization
+      auth = @request.headers.authorization.split(' ')
+      details = base64.decode(auth[1]).split(':')
+      params = {username: details[0], password: details[1]}
+
+      # Create new session
+      session.forAPI (new_session) =>
+
+        # Try to authenticate user
+        new_session.authenticate 'custom_auth', params, (response) =>
+          if response.success
+            new_session.user_id = response.user_id
+          @cb(new_session)
+
+    else
+      @response.writeHead(401, {'WWW-Authenticate': 'Basic realm="Secure API"', 'Content-type': 'text/html'})
+      @response.end('Not authorized')
+
 
 # Formats data for output
 output_formats =

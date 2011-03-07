@@ -37,6 +37,9 @@ setDefaults = ->
     api:
       enabled:          true
       prefix:           'api'     # defines the URL namespace
+      auth:
+        basic:          false     # basic auth disabled by default. replace this with the name of the authentication module
+
     
     # Set params which will be passed directly to the client when they connect
     # The client config should match the server as closly as possible
