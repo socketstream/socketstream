@@ -2,7 +2,7 @@
 
 SocketStream makes it a breeze to build phenomenally fast, highly-scalable real-time web applications on Node.js.
 
-Latest release: 0.0.21   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+Latest release: 0.0.22   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 
 
 ### Features
@@ -342,6 +342,16 @@ Once Node has been compiled with TLS/HTTPS support, turn it on by creating a /co
     }
 
 We will continue enhancing the HTTPS experience over future releases until it's stable.
+
+
+### Users and Modular Authentication
+
+SocketStream includes out-of-the-box support for sessions. Unlike other frameworks which require additional plugins, SocketStream also includes support for authenticated users as standard. This is not only handy, but vital to the correct functioning of the pub/sub system and to the ability to authenticate when accessing the HTTP API.
+
+The means and mechanisms you use to authenticate uses are left completely open to the developer, as are the actions you take if a user authenticates incorrectly (e.g. lock out their account).
+
+SocketStream handles authentication by passing it off to a module which obeys a simple interface.
+
 
 
 ### Tests

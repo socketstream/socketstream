@@ -7,8 +7,8 @@ util = require('util')
 http = require('http')
 https = require('https')
 
-Session = require('./session').Session
-Request = require('./request')
+session = require('./session.coffee')
+Request = require('./request.coffee')
 
 asset = require('./asset')
 api = require('./api')
@@ -44,11 +44,11 @@ processNewConnection = (client) ->
     client.send(JSON.stringify(message))
     $SS.log.outgoing.socketio(client, method) if (type != 'system' and options and !options.silent)
 
-  client.session = new Session(client)
-  client.session.process (session) ->
-    if session.newly_created  
-      client.remote('setSession', session.id, 'system')
-      $SS.log.createNewSession(session)
+  session.process client, (this_session) ->
+    client.session = this_session
+    if client.session.newly_created  
+      client.remote('setSession', client.session.id, 'system')
+      $SS.log.createNewSession(client.session)
     client.remote('setConfig', $SS.config.client, 'system')
     client.remote('ready', {}, 'system')
       
@@ -61,7 +61,7 @@ processIncomingCall = (data, client) ->
       throw ['unable_to_parse_message', 'Unable to parse incoming websocket request']
     if msg && msg.method
       action_array = msg.method.split('.')
-      Request.process action_array, msg.params, client.session, client.session.user, (params, options) ->
+      Request.process action_array, msg.params, client.session, (params, options) ->
         client.remote(msg, params, 'callback', options)
       $SS.log.incoming.socketio(msg, client) if !(msg.options && msg.options.silent)
     else
