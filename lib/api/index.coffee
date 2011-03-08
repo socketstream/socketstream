@@ -37,23 +37,26 @@ exports.call = (request, response) ->
 
 # Process an API Request
 process = (request, response, url, path, actions) ->
-  authenticate.init request, response, (session) ->
-    try
-      params = parseParams(url)  
-      format = parseFormat(path)
+
+  # Create new session instance. This won't be stored in Redis as no client object is passed
+  session = new Session
+
+  try
+    params = parseParams(url)  
+    format = parseFormat(path)
+
+    # Rest is highly experimental / testing
+    if actions[0] == '_rest'
+      actions = actions.slice(1) # remove prefix
+      RTM.rest.processRequest actions, params, request, format, (data) -> reply(data, response, format)
+      $SS.log.incoming.rest(actions, params, format, request.method)
   
-      # Rest is highly experimental / testing
-      if actions[0] == '_rest'
-        actions = actions.slice(1) # remove prefix
-        RTM.rest.processRequest actions, params, request, format, (data) -> reply(data, response, format)
-        $SS.log.incoming.rest(actions, params, format, request.method)
-    
-      # Serve regular request to /app/server
-      else
-        Request.process actions, params, session, (data, options) -> reply(data, response, format)
-        $SS.log.incoming.api(actions, params, format)
-    catch e
-      showError(response, e)
+    # Serve regular request to /app/server
+    else
+      Request.process actions, params, session, (data, options) -> reply(data, response, format)
+      $SS.log.incoming.api(actions, params, format)
+  catch e
+    showError(response, e)
         
 # Formats and deliver the object
 reply = (data, response, format) ->
@@ -112,8 +115,7 @@ authenticate =
       details = base64.decode(auth[1]).split(':')
       params = {username: details[0], password: details[1]}
 
-      # Create new session instance. Won't be stored in Redis as no client is passed
-      session = new Session
+
       
       # Try to authenticate user
       session.authenticate $SS.config.api.auth.basic.module_name, params, (response) =>

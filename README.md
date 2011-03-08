@@ -346,53 +346,48 @@ We will continue enhancing the HTTPS experience over future releases until it's 
 
 ### Sessions
 
-SocketStream creates a new session when a visitor connects to the server for the first time, storing a session cookie in the browser and saving the session details to Redis. When the same visitor comes back (or presses refresh in the browser), the session is retrieved.
+SocketStream creates a new session when a browser connects to the server for the first time, storing a session cookie on the client and storing the details in Redis. When the same visitor returns (or presses refresh in the browser), the session is instantly retrieved.
 
-The current session object is 'injected' into the exports.actions variable within server-side code and hence can be accessed using @session
+The current session object is 'injected' into exports.actions within the server-side code and hence can be accessed using the @session variable.
+
+E.g.
+
+    exports.actions =
+    
+      getInfo: (cb) ->
+        cb("This session was created at #{@session.created_at}")
 
 
 ### Users and Modular Authentication
 
-As almost all web applications need the concept of an user currently logged in, even if just to administer a simple admin backend, we support this in the core of SocketStream. This is partly to make life easier for developers (no additional plugins to install), but also because a user ID is vital to the correct functioning of the pub/sub system and authenticated HTTP API requests.
+As almost all web applications need to support the concept of a 'current user ID', we have built this into the core of SocketStream. This is partly to make life easier for developers (no additional plugins to install), but also because a user ID is vital to the correct functioning of the pub/sub system and authenticating HTTP API requests.
 
-Authentication is performed by passing the name of a module which Node must be able to load, either from /lib/server, /vendor/module/lib, or from npm.
+Authentication can be performed by any custom module in /lib/server, /vendor/module_name/lib, or a common module from npm (e.g. Facebook Connect).
 The module must export an 'authenticate' function which expects a params object normally in the form of username and password, but could also be biometric or iPhone device id, SSO token, etc.
 
 The callback must be an object with a 'status' attribute (boolean) and a 'user_id' attribute (number or string) if successful.
-Additional info, such as number of tries remaining etc, can be passed back within the object and pushed upstream to the client. E.g:
+Additional info, such as number of tries remaining etc, can be passed back within the object and pushed upstream to the client if desired. E.g:
 
     exports.authenticate = (params, cb) ->
-      # do db lookup
+      # do db/third-party lookup
       if success
         cb({success: true, user_id: 21323, info: {username: 'joebloggs'}})
       else
         cb({success: false, info: {num_retries: 2}})
-      
-To link Authentication into your app, you'll need something like this in your /app/server code:
+
+To use Authentication in your app, you'll need an action like this in your /app/server code:
 
     exports.actions =
     
       authenticate: (params, cb) ->
         
-        @session.authenticate 'my_module_name', params, (response) ->
-          if response.success
-            @session.setUserId(response.user_id) # sets @session.user_id and enables pub/sub
-            # do other things when user successfully authenticates
-          else
-            # send error back to the client
-          cb(response)
-          
-Of course, as you write server-side actions that rely on the @session.user_id, you'll want to allow authenticated users to access these over the HTTP API.
+        @session.authenticate 'my_module_name', params, (response) =>
+          @session.setUserId(response.user_id) if response.success       # sets @session.user_id and sets up pub/sub
+          cb(response)                                                   # sends additional error info (num tries remaining etc) back to the client
 
-At present only Basic Auth is available (though remember this will run over HTTPS if enabled). We intend to introduce additional authentication options in the future.
+Support for authenticated API requests and a full custom user model is coming shortly.
 
-In order to tell the server to prompt for user credentials, put this in your server-side file:
-
-    exports.authentication_required = true
-    
-This will instruct the API server to prompt for credentials for all actions within this file AND any files below it in the tree (useful if you want to ensure every file within /app/server/user
-    
-            
+         
 ### Tests
 
 There are a handful of tests at the moment, but there will be more once the internal API becomes stable.

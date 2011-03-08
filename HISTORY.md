@@ -1,10 +1,9 @@
-0.0.22 / 2011-03-05
+0.0.22 / 2011-03-08
 ===================
 
-* New feature: User-authenticated HTTP API calls are now possible using Basic Auth (over HTTPS when enabled)
 * Updated README with details on how to use modular authentication within your app
 * Made Object.extend recursive
-* Refactored session code
+* Refactored session code to support forthcoming authenticated HTTP API
 * Bumped Jade release
 
 
