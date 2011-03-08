@@ -346,11 +346,9 @@ We will continue enhancing the HTTPS experience over future releases until it's 
 
 ### Sessions
 
-SocketStream creates a new session when a browser connects to the server for the first time, storing a session cookie on the client and storing the details in Redis. When the same visitor returns (or presses refresh in the browser), the session is instantly retrieved.
+SocketStream creates a new session when a browser connects to the server for the first time, storing a session cookie on the client and the details in Redis. When the same visitor returns (or presses refresh in the browser), the session is instantly retrieved.
 
-The current session object is 'injected' into exports.actions within the server-side code and hence can be accessed using the @session variable.
-
-E.g.
+The current session object is 'injected' into exports.actions within the server-side code and hence can be accessed using the @session variable. E.g.
 
     exports.actions =
     
@@ -358,15 +356,16 @@ E.g.
         cb("This session was created at #{@session.created_at}")
 
 
+
 ### Users and Modular Authentication
 
-As almost all web applications need to support the concept of a 'current user ID', we have built this into the core of SocketStream. This is partly to make life easier for developers (no additional plugins to install), but also because a user ID is vital to the correct functioning of the pub/sub system and authenticating HTTP API requests.
+As almost all web applications need to support the concept of a 'current user ID', we have built this into the core of SocketStream. This is partly to make life easier for developers (no additional plugins to install), but also because a user ID is vital to the correct functioning of the pub/sub system and authenticated API requests.
 
 Authentication can be performed by any custom module in /lib/server, /vendor/module_name/lib, or a common module from npm (e.g. Facebook Connect).
 The module must export an 'authenticate' function which expects a params object normally in the form of username and password, but could also be biometric or iPhone device id, SSO token, etc.
 
 The callback must be an object with a 'status' attribute (boolean) and a 'user_id' attribute (number or string) if successful.
-Additional info, such as number of tries remaining etc, can be passed back within the object and pushed upstream to the client if desired. E.g:
+Additional info, such as number of tries remaining etc, can be passed back within the object and pushed upstream to the client if desired. E.g.
 
     exports.authenticate = (params, cb) ->
       # do db/third-party lookup
@@ -380,10 +379,9 @@ To use Authentication in your app, you'll need an action like this in your /app/
     exports.actions =
     
       authenticate: (params, cb) ->
-        
         @session.authenticate 'my_module_name', params, (response) =>
           @session.setUserId(response.user_id) if response.success       # sets @session.user_id and sets up pub/sub
-          cb(response)                                                   # sends additional error info (num tries remaining etc) back to the client
+          cb(response)                                                   # sends additional info back to the client
 
 Support for authenticated API requests and a full custom user model is coming shortly.
 
