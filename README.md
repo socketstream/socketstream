@@ -2,7 +2,7 @@
 
 SocketStream makes it a breeze to build phenomenally fast, highly-scalable real-time web applications on Node.js.
 
-Latest release: 0.0.22   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+Latest release: 0.0.23   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 
 
 ### Features
@@ -51,8 +51,8 @@ For example, let's square a number on the server:
 
 On the client side, add this to the /app/client/app.coffee file:
 
-    class window.App
-
+    window.app =
+    
       square: (number) ->
         remote 'app.square', number, (response) ->
           console.log "#{number} squared is #{response}"
@@ -113,35 +113,34 @@ For the server code, create the file /app/server/geocode.coffee and paste in the
 
 To capture your location and output your address, lets's add this code into  /app/client/app.coffee
 
-    class window.App
+    window.app =
     
-      constructor: ->
-        @geocode = new App.geocode
-
       init: ->
         # Note: this app.init method will get automatically called once the socket is established and the session is ready
-        @geocode.determineLocation()
+        app.geocode.determineLocation()
 
 
 Then, purely to demonstrate a nice way to do client-side namespacing, let's create a new file called /app/client/geocode.coffee and paste this in:
 
-    class App.geocode
+    app.geocode =
 
       determineLocation: ->
         if navigator.geolocation
-          navigator.geolocation.getCurrentPosition(@_success, @_error)
+          navigator.geolocation.getCurrentPosition(success, error)
         else
           alert 'Oh dear. Geolocation is not supported by your browser. Time for an upgrade.'
 
-      _success: (coords_from_browser) ->
-        remote 'geocode.lookup', coords_from_browser, (response) ->
-          console.log response
-          alert 'You are currently at: ' + response.formatted_address
+    # Private functions
 
-      _error: (err) ->
-        console.error err
-        alert 'Oops. The browser cannot determine your location. Are you online?'
-        
+    success = (coords_from_browser) ->
+      remote 'geocode.lookup', coords_from_browser, (response) ->
+        console.log response
+        alert 'You are currently at: ' + response.formatted_address
+
+    error = (err) ->
+      console.error err
+      alert 'Oops. The browser cannot determine your location. Are you online?'
+
 Run this code and you should see your current location pop up (pretty accurate if you're on WiFi).
 Of course, you'll need to handle the many and various errors that could go wrong during this process with a callback to the client.
 
@@ -154,7 +153,7 @@ Want to build a chat app or push an notification to a particular user?
     
 First let's listen out for an event called 'newMessage' on the client:
 
-    class window.App
+    window.app =
 
       init: ->
         $SS.events.newMessage = (message) -> alert(message)
@@ -201,9 +200,9 @@ The directories generated will be very familiar to Rails users. Here's a brief o
 #### /app/client
 * All files within /app/client will be converted to Javascript and sent to the client
 * The app.init() function will be automatically called once the websocket connection is established
-* All client code can be called from the console using the 'app' variable (app is an instance of window.App)
+* All client code can be called from the console using the 'app' variable
 * If you have a Javascript library you wish to use (e.g. jQuery UI), put this in /lib/client instead
-* Nesting client files within folders is not supported yet. We will implement this once we settle on the best design
+* Nesting client files within folders is supported, however they are not automatically namespaced for you - yet!
 * The /app/client/app.coffee file must always be present
 * View incoming/outgoing calls in the browser console in development (controlled with $SS.config.client.log.level)
 * Coffeescript client files are automatically compiled and served on-the-fly in development mode and pre-compiled/minified/cached in staging and production
@@ -359,29 +358,34 @@ The current session object is 'injected' into exports.actions within the server-
 
 ### Users and Modular Authentication
 
-As almost all web applications need to support the concept of a 'current user ID', we have built this into the core of SocketStream. This is partly to make life easier for developers (no additional plugins to install), but also because a user ID is vital to the correct functioning of the pub/sub system and authenticated API requests.
+As almost all web applications have users which need to sign in and out, we have built the concept of a 'current user' into the core of SocketStream. This is partly to make life easier for developers, but also because a user ID is vital to the correct functioning of the pub/sub system and authenticating API requests.
 
-Authentication can be performed by any custom module in /lib/server, /vendor/module_name/lib, or a common module from npm (e.g. Facebook Connect).
-The module must export an 'authenticate' function which expects a params object normally in the form of username and password, but could also be biometric or iPhone device id, SSO token, etc.
-
-The callback must be an object with a 'status' attribute (boolean) and a 'user_id' attribute (number or string) if successful.
-Additional info, such as number of tries remaining etc, can be passed back within the object and pushed upstream to the client if desired. E.g.
+Authentication is completely modular and simple for developers to implement. Here's an example of a custom authentication module we've placed in /lib/server/custom_auth.coffee
 
     exports.authenticate = (params, cb) ->
-      # do db/third-party lookup
+      success = # do DB/third-party lookup
       if success
         cb({success: true, user_id: 21323, info: {username: 'joebloggs'}})
       else
         cb({success: false, info: {num_retries: 2}})
 
-To use Authentication in your app, you'll need an action like this in your /app/server code:
+Notice the first argument takes incoming params from the client, normally in the form of {username: 'something', password: 'secret'} but it could also contain a biometric ID, iPhone device ID, SSO token, etc.
+The second argument is the callback. This must return an object with a 'status' attribute (boolean) and a 'user_id' attribute (number or string) if successful. Additional info, such as number of tries remaining etc, can optionally be passed back within the object and pushed upstream to the client if desired.
+
+To use this custom authentication module within your app, you'll need to call @session.authenticate in your /app/server code, passing the name of the module you've just created as the first argument:
 
     exports.actions =
     
       authenticate: (params, cb) ->
-        @session.authenticate 'my_module_name', params, (response) =>
-          @session.setUserId(response.user_id) if response.success       # sets @session.user_id and sets up pub/sub
+        @session.authenticate 'custom_auth', params, (response) =>
+          @session.setUserId(response.user_id) if response.success       # sets @session.user_id and initiates pub/sub
           cb(response)                                                   # sends additional info back to the client
+
+      logout: (cb) ->
+        @session.logout(cb)                                              # disconnects pub/sub and returns a new Session object
+
+
+This modular approach allows you to offer your users multiple ways to authenticate. It also means you can pass the name of a NPM module for common authentication needs like Facebook Connect.
 
 Support for authenticated API requests and a full custom user model is coming shortly.
 

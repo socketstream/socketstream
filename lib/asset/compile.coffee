@@ -6,6 +6,7 @@ fs = require('fs')
 util = require('util')
 
 utils = require('./utils.coffee')
+file_utils = require('../utils/file')
 
 exports.init = (@assets) ->
   @
@@ -14,6 +15,7 @@ exports.compile =
 
   jade: (input_file_name, cb) ->
     file = "#{$SS.root}/app/views/#{input_file_name}"
+    
     
     # Always include links to JS and CSS client-side pre-packed libraries
     inclusions = []
@@ -28,8 +30,12 @@ exports.compile =
     else
       # Include client-side and shared CoffeeScript
       exports.assets.client_dirs.map (dir) ->
-        files = utils.fileList "./app/#{dir}", 'app.coffee'
-        files.map (file) -> inclusions.push(tag.js(dir, file))
+        path = "app/#{dir}"
+        files = file_utils.readDirSync(path).files
+        files = utils.ensureCorrectOrder(files)
+        files.map (file) ->
+          file = file.replace(path + '/', '')
+          inclusions.push(tag.js(dir, file))
       # Include Stylus files (additional files should be linked from app.styl)
       inclusions.push(tag.css('css', 'app.styl'))
     
@@ -37,13 +43,12 @@ exports.compile =
     inclusions = inclusions.concat(buildTemplates())
     
     # Add code to call app.init() in client (this will be called as soon as SocketStream is ready)
-    inclusions.push('<script type="text/javascript">$(document).ready(function() { app = new App(); app.init(); });</script>')
+    inclusions.push('<script type="text/javascript">$(document).ready(function() { app.init(); });</script>')
     
     $SS.libs.jade.renderFile file, {locals: {SocketStream: inclusions.join('')}}, (err, html) ->
       cb {output: html, content_type: 'text/html'}
 
-  coffee: (input_file_name, cb) ->
-    path = "app/#{input_file_name}"
+  coffee: (path, cb) ->
     input = fs.readFileSync "#{$SS.root}/#{path}", 'utf8'
     try
       js = $SS.libs.coffee.compile(input)

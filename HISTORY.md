@@ -1,3 +1,11 @@
+0.0.23 / 2011-03-10
+===================
+
+* New feature: Nested client files are now supported. The folder name they are placed in has no effect on the object namespace for now but is likely to in future
+* Major Change: The app.coffee client file is no longer a CoffeeScript class (it doesn't need to be) so it should now begin 'window.app ='
+* Improved User Authentication section in docs
+
+
 0.0.22 / 2011-03-08
 ===================
 
