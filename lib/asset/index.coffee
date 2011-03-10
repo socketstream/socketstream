@@ -80,3 +80,4 @@ findAssets = (cb) ->
     f = exports.files[ext]
     f[type] = file
   cb()
+  

@@ -9,6 +9,7 @@ EventEmitter = require('events').EventEmitter
 emitter = new EventEmitter
 
 utils = require('./utils.coffee')
+file_utils = require('../utils/file')
 
 # Define where the SocketStream client files live
 system_path = __dirname + '/../client'
@@ -37,18 +38,18 @@ exports.pack =
   js:
     
     app: ->
-      source_file_name = 'app.coffee'
+      first_file = 'app/client/app.coffee'
       output = []
 
       exports.assets.client_dirs.map (dir) ->
-        source_path = "./app/#{dir}"
-        files = utils.fileList source_path, source_file_name
-        files.map (file_name) ->
-          full_file_name = dir + '/' + file_name
-          util.log('  Compiling and adding ' + full_file_name)
-          exports.assets.compile.coffee full_file_name, (result) -> output.push(result.output)
+        path = "./app/#{dir}"
+        files = file_utils.readDirSync(path).files
+        files = utils.ensureCorrectOrder(files)
+        files.map (file) ->
+          util.log('  Compiling and adding ' + file)
+          exports.assets.compile.coffee file, (result) -> output.push(result.output)
       final_output = output.join("\n")
-      final_output = utils.minifyJS(source_file_name, final_output)
+      final_output = utils.minifyJS(first_file, final_output)
 
       deleteFilesInPublicDir(/^app.*js$/)
       exports.assets.files.js.app = "app_#{Date.now()}.js"

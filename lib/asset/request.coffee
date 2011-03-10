@@ -32,11 +32,11 @@ exports.request =
 parseURL = (url) ->
   extension = url.split('.').reverse()[0]
   path = url.split('/')
-  dir = path[1]; file = path[2]
+  dir = path[1]; file = path.splice(2)
   if isRoot(url)
     {name: 'app.jade', extension: 'jade'}
   else if extension == 'coffee' and exports.assets.client_dirs.include(dir)
-    {name: "#{dir}/#{file}", extension: extension}
+    {name: "app/#{dir}/#{file.join('/')}", extension: extension}
   else
     {name: file, extension: extension}
 
