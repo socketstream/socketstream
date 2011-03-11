@@ -34,7 +34,15 @@ $SS.socket.on 'message', (raw) ->
   data = JSON.parse(raw)
   data.type = 'event' if (!data.type)
   Request[data.type](data)
-
+  
+# Attempt reconnection if the connection is severed
+$SS.socket.on 'disconnect', ->
+  attemptReconnection = ->
+    unless $SS.socket.connected
+      $SS.socket.connect()
+      setTimeout(arguments.callee, 50)
+  attemptReconnection()
+ 
 # Connect!
 $SS.socket.connect()
 
