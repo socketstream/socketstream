@@ -26,7 +26,7 @@ $SS.events =
     @_events[name].push(funct)
   
   emit: (name, params) ->
-    _.each @_events[name], (event) -> event(params)
+    event(params) for event in @_events[name]
 
 # Setup the websocket connection
 $SS.socket = new io.Socket(document.location.hostname, {
