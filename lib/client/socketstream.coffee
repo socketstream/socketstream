@@ -7,20 +7,28 @@
 window.$SS =
 
   internal:                         # the place for everything the user doesn't need to access
-    cb_stack:       {}              # add callbacks to the stack   
-  
-  events:           {}              # attach event handlers here
+    cb_stack:       {}              # add callbacks to the stack
   
   config:                           # setup default config
     log:
       level:        0               # no client-side logging by default
 
-
 # Make the exports variable global so we can access code placed in /app/shared
 window.exports = {}
 
-# Setup the websocket connection
+# Event handling
+$SS.events =
 
+  _events: {}
+
+  on: (name, funct) ->
+    @_events[name] = [] unless @_events[name]?
+    @_events[name].push(funct)
+  
+  emit: (name, params) ->
+    _.each @_events[name], (event) -> event(params)
+
+# Setup the websocket connection
 $SS.socket = new io.Socket(document.location.hostname, {
   rememberTransport: false,
   port: document.location.port,
@@ -126,7 +134,7 @@ Request =
   
   event: (data) ->
     console.log('=> ' + data.event) if validLevel(2)
-    $SS.events[data.event](data.params)
+    $SS.events.emit(data.event, data.params)
 
 
 # PRIVATE HELPERS

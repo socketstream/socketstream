@@ -2,7 +2,7 @@
 
 SocketStream makes it a breeze to build phenomenally fast, highly-scalable real-time web applications on Node.js.
 
-Latest release: 0.0.23   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+Latest release: 0.0.24   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 
 
 ### Features
@@ -156,7 +156,7 @@ First let's listen out for an event called 'newMessage' on the client:
     window.app =
 
       init: ->
-        $SS.events.newMessage = (message) -> alert(message)
+        $SS.events.on('newMessage', (message) -> alert(message))
           
 Then, assuming we know the person's user_id, we can publish the event directly to them. On the server side you'd write:
 
@@ -394,13 +394,13 @@ Support for authenticated API requests and a full custom user model is coming sh
 
 Both websocket and 'flashsocket' tunnels are surprisingly resilient to failure; however, as developers we must always assume the connection will fail from time to time, especially as the client may be on an unstable mobile connection.
 
-Therefore we recommend binding a function to the 'disconnect' and 'connect' events within SocketIO as so:
+Therefore we recommend binding a function to the 'disconnect' and 'connect' events within the SocketIO client. For example:
 
-    $SS.socket.on('disconnect',function(){ alert('Connection Down') })
+    $SS.socket.on('disconnect', -> alert('Connection Down'))
     
-    $SS.socket.on('connect',function(){ alert('Connection Up') })
+    $SS.socket.on('connect', -> alert('Connection Up'))
 
-These events can be used to toggle an online/offline icon within the app, or better still, to dim the screen and show a 'Attempting to reconnect...' message to users.
+These events can be used client-side to toggle an online/offline icon within the app, or better still, to dim the screen and show a 'Attempting to reconnect...' message to users.
 
 At present requests sent to the server whist offline are queued on the browser and automatically executed once the connection is re-established. In the near future we will allow time-critical requests to be marked as such - essential for stock trading apps.
 

@@ -1,3 +1,10 @@
+0.0.24 / 2011-03-11
+===================
+
+* Change: To bind to multiple events client-side use $SS.event.on(event_name, function). This conforms to EventEmitter and SocketIO
+* Improvement: A severed connection will now automatically attempt to reconnect, even if no requests are pending
+
+
 0.0.23 / 2011-03-10
 ===================
 
