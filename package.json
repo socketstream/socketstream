@@ -15,7 +15,7 @@
     "node-static":    "= 0.5.3",
     "jade":           "= 0.8.1",
     "argsparser":     "= 0.0.3",
-    "stylus":         "= 0.6.1",
+    "stylus":         "= 0.7.4",
     "semver":         "= 1.0.1",
     "uglify-js":      "= 0.0.5"
   },

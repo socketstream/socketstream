@@ -12,6 +12,7 @@ Request = require('./request.coffee')
 
 asset = require('./asset')
 api = require('./api')
+RTM = require('./realtime_models')
 static = new($SS.libs.static.Server)('./public')
 
 exports.start = ->
@@ -50,6 +51,7 @@ processNewConnection = (client) ->
       client.remote('setSession', client.session.id, 'system')
       $SS.log.createNewSession(client.session)
     client.remote('setConfig', $SS.config.client, 'system')
+    client.remote('setModels', $SS.models.keys(), 'system')
     client.remote('ready', {}, 'system')
       
 processIncomingCall = (data, client) ->
@@ -59,14 +61,23 @@ processIncomingCall = (data, client) ->
       msg = JSON.parse(data)
     catch e
       throw ['unable_to_parse_message', 'Unable to parse incoming websocket request']
-    if msg && msg.method
-      action_array = msg.method.split('.')
-      Request.process action_array, msg.params, client.session, (params, options) ->
-        client.remote(msg, params, 'callback', options)
-      $SS.log.incoming.socketio(msg, client) if !(msg.options && msg.options.silent)
+    if msg
+
+      # RTM Request
+      if msg.rtm
+        RTM.call(msg, client)
+      # Server Request
+      else if msg.method
+        action_array = msg.method.split('.')
+        $SS.log.incoming.socketio(msg, client) if !(msg.options && msg.options.silent)
+        Request.process action_array, msg.params, client.session, (params, options) ->
+          client.remote(msg, params, 'callback', options)
+      else
+        throw []
     else
       throw ['invalid_message', 'Invalid websocket call. No action supplied']
   catch e
+    throw e
     client.remote('error', e, 'system')
     $SS.log.error.exception(e)
 
