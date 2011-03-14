@@ -18,7 +18,7 @@ exports.init = ->
     log:              {}              # Outputs to the terminal
     redis:            {}              # Connect main and pubsub active connections here
     
-    model:            {}              # Models are preloaded and placed here
+    models:           {}              # Models are preloaded and placed here
     server:           {}              # Server code is preloaded and placed here
     shared:           {}              # Shared code is preloaded and placed here
 
@@ -76,6 +76,7 @@ exports.process = (args) ->
         start (s)     Start server
         console (c)   Interactive console
         version (v)   Print version
+        new (n)       Create new project
 
       '''
     # Show this error if we're given an unknown command
@@ -149,7 +150,7 @@ load =
       load.dirFiles("#{$SS.root}/app/server", 'server') # loads into $SS.server
       load.dirFiles("#{$SS.root}/app/shared", 'shared') # loads into $SS.shared
 
-    # Pre-loads all code in /app/models into $SS.model
+    # Pre-loads all code in /app/models into $SS.models
     models: ->
       # See if we have any models to load
       files = try
@@ -162,8 +163,8 @@ load =
         models.forEach (model) ->
           model_name = model.split('/').pop()
           model_spec = require("#{$SS.root}/app/models/#{model_name}")[model_name]
-          $SS.model[model_name] = require("./realtime_models/adapters/#{model_spec.adapter}").init(model_name, model_spec, exports)
-          Object.defineProperty($SS.model[model_name], '_rtm', {value: model_spec, enumerable: false})
+          $SS.models[model_name] = require("./realtime_models/adapters/#{model_spec.adapter}").init(model_name, model_spec, exports)
+          Object.defineProperty($SS.models[model_name], '_rtm', {value: model_spec, enumerable: false})
           $SS.internal.counters.files_loaded.model++
   
        

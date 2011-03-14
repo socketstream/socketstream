@@ -15,6 +15,9 @@ exports.incoming =
   socketio: (data, client) ->
     output 2, "#{client.sessionId} #{exports.color('->', 'cyan')} #{data.method}#{parseParams(data.params)}"
       
+  rtm: (data, client) ->
+    output 2, "#{client.sessionId} #{exports.color('~>', 'cyan')} #{data.rtm}.#{data.action}#{parseParams(data.params)}"
+
   api: (actions, params, format) ->
     output 2, "API (#{format}) #{exports.color('->', 'cyan')} #{actions.join('.')} #{parseParams(params)}"
 
