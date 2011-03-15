@@ -72,23 +72,22 @@ window.remote = ->
   send({method: method, params: params, callee: method, options: options}, cb)
 
 
-# PRIVATE MODULES
-
 # Realtime Models
 class RTM
 
   findById: (id, cb) ->
     @_send('findById', id, cb)
-    
+
   find: () ->
     args = []
     args.push(arg) for arg in arguments
     cb = args.pop()
     @_send('find', args, cb)
-  
+
   _send: (action, params, cb) ->
     log 2, "<~ #{@name}.#{action}(#{params})"
     send({rtm: @name, action: action, params: params}, cb)
+
 
 # System commands
 System =
