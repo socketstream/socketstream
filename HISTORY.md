@@ -1,3 +1,10 @@
+0.0.25 / 2011-03-14
+===================
+
+* New feature: Refactored model loading code to support nested models in the same way as $SS.server
+* New feature: The HTTP API now supports authenticated requests over Basic Auth (over HTTPS when available). See README for details.
+
+
 0.0.24 / 2011-03-11
 ===================
 

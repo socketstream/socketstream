@@ -2,7 +2,7 @@
 
 SocketStream makes it a breeze to build phenomenally fast, highly-scalable real-time web applications on Node.js.
 
-Latest release: 0.0.24   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+Latest release: 0.0.25   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 
 
 ### Features
@@ -12,7 +12,7 @@ Latest release: 0.0.24   ([view changelog](https://github.com/socketstream/socke
 * Works on all major browsers thanks to the excellent [Socket.IO](http://socket.io/)
 * Write client and server code in [Coffeescript](http://jashkenas.github.com/coffee-script/) or Javascript - your choice
 * Easily share code between the client and server. Ideal for business logic and model validation
-* Free HTTP API. All server-side code is also accessible over a high-speed request-based API
+* Automatic HTTP API. All server-side code is also accessible over a high-speed request-based API
 * Effortless, scalable, pub/sub baked right in. See examples below
 * Integrated asset manager. Automatically packages and [minifies](https://github.com/mishoo/UglifyJS) your client-side code
 * Experimental out-of-the-box HTTPS support. See section below.
@@ -56,7 +56,6 @@ On the client side, add this to the /app/client/app.coffee file:
       square: (number) ->
         remote 'app.square', number, (response) ->
           console.log "#{number} squared is #{response}"
-
 
 And on the server, add this to /app/server/app.coffee
 
@@ -355,12 +354,11 @@ The current session object is 'injected' into exports.actions within the server-
         cb("This session was created at #{@session.created_at}")
 
 
-
 ### Users and Modular Authentication
 
-As almost all web applications have users which need to sign in and out, we have built the concept of a 'current user' into the core of SocketStream. This is partly to make life easier for developers, but also because a user ID is vital to the correct functioning of the pub/sub system and authenticating API requests.
+As almost all web applications have users which need to sign in and out, we have built the concept of a 'current user' into the core of SocketStream. This not only makes life easier for developers, but is vital to the correct functioning of the pub/sub system and authenticating API requests.
 
-Authentication is completely modular and simple for developers to implement. Here's an example of a custom authentication module we've placed in /lib/server/custom_auth.coffee
+Authentication is completely modular and trivial for developers to implement. Here's an example of a custom authentication module we've placed in /lib/server/custom_auth.coffee
 
     exports.authenticate = (params, cb) ->
       success = # do DB/third-party lookup
@@ -369,8 +367,9 @@ Authentication is completely modular and simple for developers to implement. Her
       else
         cb({success: false, info: {num_retries: 2}})
 
-Notice the first argument takes incoming params from the client, normally in the form of {username: 'something', password: 'secret'} but it could also contain a biometric ID, iPhone device ID, SSO token, etc.
-The second argument is the callback. This must return an object with a 'status' attribute (boolean) and a 'user_id' attribute (number or string) if successful. Additional info, such as number of tries remaining etc, can optionally be passed back within the object and pushed upstream to the client if desired.
+* Notice the first argument takes incoming params from the client, normally in the form of {username: 'something', password: 'secret'} but it could also contain a biometric ID, iPhone device ID, SSO token, etc.
+
+* The second argument is the callback. This must return an object with a 'status' attribute (boolean) and a 'user_id' attribute (number or string) if successful. Additional info, such as number of tries remaining etc, can optionally be passed back within the object and pushed upstream to the client if desired.
 
 To use this custom authentication module within your app, you'll need to call @session.authenticate in your /app/server code, passing the name of the module you've just created as the first argument:
 
@@ -387,7 +386,33 @@ To use this custom authentication module within your app, you'll need to call @s
 
 This modular approach allows you to offer your users multiple ways to authenticate. It also means you can pass the name of a NPM module for common authentication needs like Facebook Connect.
 
-Support for authenticated API requests and a full custom user model is coming shortly.
+__Important__
+
+Mark any files within /app/server which require authentication by placing this line at the top:
+
+    exports.authenticate = true
+
+This will check or prompt for a logged in user before and of the methods within that file are executed.
+
+
+### HTTP API
+
+The HTTP API allows all server-side actions to be accessed over a traditional HTTP request-based interface.
+
+It is enabled by default and can be configured with the following config variables:
+
+    $SS.config.api.enabled            Boolean       default: true         # Enables/disables the HTTP API
+    $SS.config.api.prefix             String        default: 'api'        # Sets the URL prefix (e.g. http://mysite.com/api
+
+The HTTP API also supports Basic Auth (which will run over HTTPS if enabled), allowing you to access methods which use @session.user_id or @user.
+
+By placing 'exports.authenticate = true' in the file (see above) the server will know to prompt for a username and password before allowing access any of the actions within that file. However, the API will need to know which module to authenticate against. Set the $SS.config.api.auth.basic.module_name variable by putting the following JSON in your config file:
+    
+    {
+      "api": { "auth": { "basic": { "module_name": "custom_auth"} } }
+    }
+
+Note: Basic Auth will pass the 'username' and 'password' params to your exports.authenticate function.
 
 
 ### Handling Disconnects
