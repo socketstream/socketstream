@@ -18,7 +18,7 @@ exports.init = ->
     log:              {}              # Outputs to the terminal
     redis:            {}              # Connect main and pubsub active connections here
     
-    model:            {}              # Models are preloaded and placed here
+    models:           {}              # Models are preloaded and placed here
     server:           {}              # Server code is preloaded and placed here
     shared:           {}              # Shared code is preloaded and placed here
 
@@ -139,33 +139,52 @@ load =
     $SS.publish = require('./publish.coffee')
     
     load.dbConfigFile()
-    load.files.all()
+    load.files()
   
   # Server-side files
-  files:
+  files: ->
     
-    all: ->
-      @models() # loads into $SS.model
-      load.dirFiles("#{$SS.root}/app/server", 'server') # loads into $SS.server
-      load.dirFiles("#{$SS.root}/app/shared", 'shared') # loads into $SS.shared
+    # Load Server-side functions into $SS.server
+    load.dirFiles "#{$SS.root}/app/server", 'server', (mod, mod_name, dest, ary) ->
+      dest[mod_name] = mod.actions
+      $SS.internal.authenticate[ary.join('.')] = mod.authenticate if mod.authenticate
+    
+    # Load Shared functions into $SS.shared
+    load.dirFiles "#{$SS.root}/app/shared", 'shared', (mod, mod_name, dest, ary) -> 
+      dest[mod_name] = new mod[mod_name.capitalized()]
 
-    # Pre-loads all code in /app/models into $SS.model
-    models: ->
-      # See if we have any models to load
-      files = try
-        fs.readdirSync("#{$SS.root}/app/models").filter((file) -> !file.match(/(^_|^\.)/))
-      catch e
-        []
-      # Preload all model definitions
-      if files.length > 0
-        models = files.map((file) -> file.split('.')[0])
-        models.forEach (model) ->
-          model_name = model.split('/').pop()
-          model_spec = require("#{$SS.root}/app/models/#{model_name}")[model_name]
-          $SS.model[model_name] = require("./realtime_models/adapters/#{model_spec.adapter}").init(model_name, model_spec, exports)
-          Object.defineProperty($SS.model[model_name], '_rtm', {value: model_spec, enumerable: false})
-          $SS.internal.counters.files_loaded.model++
+    # Load Realtime Models into $SS.models
+    load.dirFiles "#{$SS.root}/app/models", 'models', (mod, mod_name, dest, ary) ->
+      model_spec = mod[mod_name]
+      dest[mod_name] = require("./realtime_models/adapters/#{model_spec.adapter}").init(mod_name, model_spec, exports)
+      Object.defineProperty(dest[mod_name], '_rtm', {value: model_spec, enumerable: false})
   
+  # Helper to recursively load all files in a dir and attach them to an attribtue of the $SS object
+  dirFiles: (dir, name, action) ->
+    recursively = (destination, ary, path, counter_name, index = 0) ->
+      element = ary[index]
+      dest = utils.getFromTree(destination, ary, index)
+      if ary.length == (index + 1)
+        mod = require(path)
+        action(mod, element, dest, ary)
+        $SS.internal.counters.files_loaded[counter_name]++
+      else
+        dest[element] = {} unless dest.hasOwnProperty(element)
+        arguments.callee(destination, ary, path, counter_name, (index+1))
+
+    try
+      output = file_utils.readDirSync(dir)
+      slashes_to_remove = dir.split('/').length
+      check.forNameConflicts(output)
+      output.files.forEach (path) ->
+
+        ary = path.split('/').slice(slashes_to_remove)
+        mod_name = ary.pop()
+        ary.push(mod_name.split('.')[0])
+
+        recursively($SS[name], ary, path, name)
+    catch e
+      throw e unless e.code == 'ENOENT' # Ignore if optional dirs are missing
        
   # Load any vendored modules
   vendoredModules: ->
@@ -174,7 +193,6 @@ load =
       if exists
         fs.readdirSync(vendor_dir).forEach (name) ->
           require.paths.unshift("#{vendor_dir}/#{name}/lib")
-
 
   # Load external libs used throughout SocketStream and attach them to $SS.libs
   # We load the exact version specified in package.json to be sure everything works well together
@@ -206,30 +224,6 @@ load =
       db_config_exists = require.resolve(db_config_file)
     require(db_config_file) if db_config_exists
   
-  # Helper to recursively load all files in a dir and attach them to the $SS object
-  dirFiles: (dir, name) ->
-    recursively = (destination, ary, path, counter_name, index = 0) ->
-      element = ary[index]
-      mod_name = element.split('.')[0]
-      dest = utils.getFromTree(destination, ary, index)
-      if ary.length == (index + 1)
-        mod = require(path)
-        dest[mod_name] = if name == 'shared' then (new mod[mod_name.capitalized()]) else mod.actions
-        $SS.internal.counters.files_loaded[counter_name]++
-      else
-        dest[element] = {} unless dest.hasOwnProperty(element)
-        arguments.callee(destination, ary, path, counter_name, (index+1))
-
-    try
-      output = file_utils.readDirSync(dir)
-      slashes_to_remove = dir.split('/').length
-      check.forNameConflicts(output)
-      output.files.forEach (path) ->
-        ary = path.split('/').slice(slashes_to_remove)
-        recursively($SS[name], ary, path, name)
-    catch e
-      throw e unless e.code == 'ENOENT' # Ignore if optional dirs are missing
-  
 
 check =
 
@@ -255,7 +249,7 @@ showBanner = (additional_text) ->
   util.puts "\n"
   util.puts "------------------------- SocketStream -------------------------"
   util.puts "  Version #{$SS.version} running in #{$SS.env} on PID #{process.pid}"
-  util.puts "  Loaded #{counters.model.pluralize('model')}, #{counters.server} server and #{counters.shared.pluralize('shared file')} in #{$SS.internal.uptime()}ms"
+  util.puts "  Loaded #{counters.models.pluralize('model')}, #{counters.server} server and #{counters.shared.pluralize('shared file')} in #{$SS.internal.uptime()}ms"
   util.puts "  #{additional_text}"
   util.puts "----------------------------------------------------------------"
   util.puts "\n"
