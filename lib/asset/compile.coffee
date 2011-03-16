@@ -15,8 +15,7 @@ exports.compile =
 
   jade: (input_file_name, cb) ->
     file = "#{$SS.root}/app/views/#{input_file_name}"
-    
-    
+
     # Always include links to JS and CSS client-side pre-packed libraries
     inclusions = []
     inclusions.push(tag.js('assets', exports.assets.files.js.lib))
@@ -32,10 +31,11 @@ exports.compile =
       exports.assets.client_dirs.map (dir) ->
         path = "app/#{dir}"
         files = file_utils.readDirSync(path).files
-        files = utils.ensureCorrectOrder(files)
-        files.map (file) ->
-          file = file.replace(path + '/', '')
-          inclusions.push(tag.js(dir, file))
+        if files
+          files = utils.ensureCorrectOrder(files)
+          files.map (file) ->
+            file = file.replace(path + '/', '')
+            inclusions.push(tag.js(dir, file))
       # Include Stylus files (additional files should be linked from app.styl)
       inclusions.push(tag.css('css', 'app.styl'))
     
