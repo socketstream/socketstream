@@ -172,19 +172,18 @@ load =
         dest[element] = {} unless dest.hasOwnProperty(element)
         arguments.callee(destination, ary, path, counter_name, (index+1))
 
-    try
       output = file_utils.readDirSync(dir)
-      slashes_to_remove = dir.split('/').length
-      check.forNameConflicts(output)
-      output.files.forEach (path) ->
+      if output
+        slashes_to_remove = dir.split('/').length
+        check.forNameConflicts(output)
+        output.files.forEach (path) ->
 
-        ary = path.split('/').slice(slashes_to_remove)
-        mod_name = ary.pop()
-        ary.push(mod_name.split('.')[0])
+          ary = path.split('/').slice(slashes_to_remove)
+          mod_name = ary.pop()
+          ary.push(mod_name.split('.')[0])
 
-        recursively($SS[name], ary, path, name)
-    catch e
-      throw e unless e.code == 'ENOENT' # Ignore if optional dirs are missing
+          recursively($SS[name], ary, path, name)
+
        
   # Load any vendored modules
   vendoredModules: ->
