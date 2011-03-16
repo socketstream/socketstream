@@ -172,17 +172,17 @@ load =
         dest[element] = {} unless dest.hasOwnProperty(element)
         arguments.callee(destination, ary, path, counter_name, (index+1))
 
-      output = file_utils.readDirSync(dir)
-      if output
-        slashes_to_remove = dir.split('/').length
-        check.forNameConflicts(output)
-        output.files.forEach (path) ->
+    output = file_utils.readDirSync(dir)
+    if output
+      slashes_to_remove = dir.split('/').length
+      check.forNameConflicts(output)
+      output.files.forEach (path) ->
 
-          ary = path.split('/').slice(slashes_to_remove)
-          mod_name = ary.pop()
-          ary.push(mod_name.split('.')[0])
+        ary = path.split('/').slice(slashes_to_remove)
+        mod_name = ary.pop()
+        ary.push(mod_name.split('.')[0])
 
-          recursively($SS[name], ary, path, name)
+        recursively($SS[name], ary, path, name)
 
        
   # Load any vendored modules
