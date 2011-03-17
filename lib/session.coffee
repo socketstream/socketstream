@@ -12,14 +12,18 @@ exports.process = (client, cb) ->
   if cookies && cookies.session_id && cookies.session_id.length == id_length
     $SS.redis.main.hgetall "socketstream:session:#{cookies.session_id}", (err, data) ->
       if err or data == null or data == undefined
-        cb(new exports.Session(client))
+        cb(new exports.Session(client))           # session doesn't exist in Redis or is invalid
       else
-        existing_attrs = data
-        existing_attrs.id = cookies.session_id
-        cb(new exports.Session(client, existing_attrs))
+        data.id = cookies.session_id
+        cb(new exports.Session(client, data))     # session exists so pass through existing attrs
   else
-    cb(new exports.Session(client))
+    cb(new exports.Session(client))               # no cookie detected or invalid session id so create new session
     
+
+# Session Class
+# -------------
+# A new instance of Session is created each time a websocket client connects or an API request is received
+# Sessions created when using the API are not saved (at the moment)
 
 class exports.Session
 
@@ -38,7 +42,7 @@ class exports.Session
     else
       @id = utils.randomString(id_length)
       @created_at = Number(new Date)
-      @save() if @client # only save session for persistent (none-API) connections
+      @save() if @client # only save if this is a persistent (none-API) connection
   
   key: ->
     "socketstream:session:#{@id}"
@@ -46,17 +50,7 @@ class exports.Session
   pubsub_key: ->
     "socketstream:user:#{@user_id}"
 
-
-  # Authentication is provided by passing the name of a module which Node must be able to load, either from /lib/server, /vendor/module/lib, or from npm.
-  # The module must export an 'authenticate' function which expects a params object normally in the form of username and password, but could also be biometric or iPhone device id, SSO token, etc.
-  #
-  # The callback must be an object with a 'status' attribute (boolean) and a 'user_id' attribute (number or string) if successful.
-  #
-  # Additional info, such as number of tries remaining etc, can be passed back within the object and pushed upstream to the client. E.g:
-  #
-  # {success: true, user_id: 21323, info: {username: 'joebloggs'}}
-  # {success: false, info: {num_retries: 2}}
-  # {success: false, info: {num_retries: 0, lockout_duration_mins: 30}}
+  # Authentication. See README file for full details and examples
   authenticate: (module_name, params, cb) ->
     klass = require(module_name)
     klass.authenticate params, cb
@@ -69,7 +63,7 @@ class exports.Session
       $SS.redis.main.hset @key(), 'user_id', @user_id
       $SS.redis.pubsub.subscribe @pubsub_key()
       $SS.users.connected[@user_id] = @client
-    
+
   logout: (cb) ->
     @user_id = null  # clear user_id. note we are not erasing this in redis as it can be advantageous to keep this for retrospective analytics
     @user = null     # clear any attached custom User instance

@@ -19,67 +19,76 @@ exports.start = ->
   asset.init()
   server = mainServer()
   socket = $SS.libs.io.listen(server, {transports: ['websocket', 'flashsocket']})
-  socket.on('connection', processNewConnection)
-  socket.on('clientMessage', processIncomingCall)
+  socket.on('connection', process.socket.connection)
+  socket.on('clientMessage', process.socket.call)
   server.listen($SS.config.port)
   listenForPubSubEvents(socket)
 
 
 # PRIVATE
 
-# HTTP  
-processHttpRequest = (request, response) ->
-  if $SS.config.api.enabled and api.isValidRequest(request)
-    api.call(request, response)
-  else if !$SS.config.pack_assets and asset.request.valid(request.url)
-    asset.request.serve(request, response)
-  else
-    request.addListener 'end', ->
-      static.serve(request, response)
-      $SS.log.staticFile(request)
-
-# Socket.IO
-processNewConnection = (client) ->
-  client.remote = (method, params, type, options = {}) ->
-    message = {method: method, params: params, cb_id: method.cb_id, callee: method.callee, type: type}
-    client.send(JSON.stringify(message))
-    $SS.log.outgoing.socketio(client, method) if (type != 'system' and options and !options.silent)
-
-  session.process client, (this_session) ->
-    client.session = this_session
-    if client.session.newly_created  
-      client.remote('setSession', client.session.id, 'system')
-      $SS.log.createNewSession(client.session)
-    client.remote('setConfig', $SS.config.client, 'system')
-    client.remote('setModels', $SS.models.keys(), 'system')
-    client.remote('ready', {}, 'system')
-      
-processIncomingCall = (data, client) ->
-  return null unless client.session.id # drop all calls unless session is loaded
-  try
-    try
-      msg = JSON.parse(data)
-    catch e
-      throw ['unable_to_parse_message', 'Unable to parse incoming websocket request']
-    if msg
-
-      # RTM Request
-      if msg.rtm
-        RTM.call(msg, client)
-      # Server Request
-      else if msg.method
-        action_array = msg.method.split('.')
-        $SS.log.incoming.socketio(msg, client) if !(msg.options && msg.options.silent)
-        Request.process action_array, msg.params, client.session, (params, options) ->
-          client.remote(msg, params, 'callback', options)
+process =
+  
+  # HTTP
+  http:
+    
+    call: (request, response) ->
+      if $SS.config.api.enabled and api.isValidRequest(request)
+        api.call(request, response)
+      else if !$SS.config.pack_assets and asset.request.valid(request.url)
+        asset.request.serve(request, response)
       else
-        throw []
-    else
-      throw ['invalid_message', 'Invalid websocket call. No action supplied']
-  catch e
-    throw e
-    client.remote('error', e, 'system')
-    $SS.log.error.exception(e)
+        request.addListener 'end', ->
+          static.serve(request, response)
+          $SS.log.staticFile(request)
+          
+  
+  # Socket.IO
+  socket:
+  
+    connection: (client) ->
+      client.remote = (method, params, type, options = {}) ->
+        message = {method: method, params: params, cb_id: method.cb_id, callee: method.callee, type: type}
+        client.send(JSON.stringify(message))
+        $SS.log.outgoing.socketio(client, method) if (type != 'system' and options and !options.silent)
+
+      session.process client, (this_session) ->
+        client.session = this_session
+        if client.session.newly_created  
+          client.remote('setSession', client.session.id, 'system')
+          $SS.log.createNewSession(client.session)
+        client.remote('setConfig', $SS.config.client, 'system')
+        client.remote('setModels', $SS.models.keys(), 'system')
+        client.remote('ready', {}, 'system')
+      
+    call: (data, client) ->
+      return null unless client.session.id # drop all calls unless session is loaded
+      try
+        try
+          msg = JSON.parse(data)
+        catch e
+          throw ['unable_to_parse_message', 'Unable to parse incoming websocket request']
+        if msg
+
+          # RTM Request
+          if msg.rtm
+            RTM.call(msg, client)
+          # Server Request
+          else if msg.method
+            action_array = msg.method.split('.')
+            $SS.log.incoming.socketio(msg, client) if !(msg.options && msg.options.silent)
+            Request.process action_array, msg.params, client.session, (params, options) ->
+              client.remote(msg, params, 'callback', options)
+          else
+            throw []
+        else
+          throw ['invalid_message', 'Invalid websocket call. No action supplied']
+      catch e
+        client.remote('error', e, 'system')
+        $SS.log.error.exception(e)
+
+
+# PRIVATE HELPERS
 
 # Redis Pub/Sub
 listenForPubSubEvents = (socket) ->
@@ -98,11 +107,13 @@ listenForPubSubEvents = (socket) ->
           $SS.log.outgoing.event("Broadcast", message)
           socket.broadcast(message)
 
+# Load the correct server module depending upon HTTPS
 mainServer = ->
   if $SS.config.ssl.enabled
-    https.createServer(ssl.options, processHttpRequest)
+    https.createServer(ssl.options, process.http.call)
   else
-    http.createServer(processHttpRequest)
+    http.createServer(process.http.call)
+
 
 ssl =
 
