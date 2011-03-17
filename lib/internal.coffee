@@ -18,7 +18,7 @@ exports.init = ->
   # Parse package.json so we don't have to repeat ourselves
   @package_json = loadPackageJSON()
   
-  # Load last known state project was in, if it exists. We record this so we know when to upgrade project files
+  # Load last known state project was in, if it exists. We record this so we know when force a rebuild of client libraries on startup
   @last_known_state = loadState()
   
   @
@@ -27,12 +27,11 @@ exports.init = ->
 exports.uptime = ->
   (new Date) - @up_since
 
-
 # Saves the current state once we've processed changes
 exports.saveState = ->
   fs.writeFileSync(stateFile(), JSON.stringify(@currentState()))
   @last_known_state = @currentState()
-  
+
 exports.currentState = ->
   version:
     server: $SS.version
@@ -47,14 +46,14 @@ exports.clientVersionChanged = ->
 
 # HELPERS
 
-stateFile = ->
+stateFileName = ->
   "#{$SS.root}/.socketstream_state"
 
 loadState = ->
   try
-    JSON.parse(fs.readFileSync(stateFile()))
+    JSON.parse(fs.readFileSync(stateFileName()))
   catch e
-    {} # no big deal if the file get's deleted or mangled, we'll just regenerate it
+    {} # no big deal if the file get's deleted or mangled, we just regenerate it
 
 loadPackageJSON = ->
   try
