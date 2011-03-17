@@ -1,3 +1,10 @@
+0.0.26 / 2011-03-17
+===================
+
+* More refactoring and docs
+* More work on Realtime Models. Disabled by default as highly experimental. Can be enabled with $SS.config.rtm = true
+
+
 0.0.25 / 2011-03-14
 ===================
 

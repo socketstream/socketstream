@@ -46,9 +46,15 @@ setDefaults = ->
     # Set params which will be passed directly to the client when they connect
     # The client config should match the server as closly as possible
     client:
-      remote_prefix:    null      # automatically prefixes all remote calls. e.g. if your server api begins 'v1' remote('app.square') will become remote('v1.app.square')
+      remote_prefix:    null            # automatically prefixes all remote calls. e.g. if your server api begins 'v1' remote('app.square') will become remote('v1.app.square')
       log:
-        level:          2       	# 0 = none, 1 = calls only, 2 = calls + params, 3 = full
+        level:          2       	      # 0 = none, 1 = calls only, 2 = calls + params, 3 = full
+        
+    
+    # Realtime Models
+    rtm:
+      enabled:         false            # disabled by default as HIGHLY EXPERIMENTAL and subject to change
+
 
 # For now we override default config depending upon environment. This will still be overridden by any app config file in
 # /config/environments/SS_ENV.js . We may want to remove this in the future and insist upon seperate app config files, ala Rails

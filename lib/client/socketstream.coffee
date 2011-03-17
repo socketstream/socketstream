@@ -65,14 +65,12 @@ window.remote = ->
   cb = args[args.length - 1]
   params = if args.length >= 3 then args[1] else null
   options = if args.length >= 4 then args[2] else null
-  
   cb.options = options
-  
   console.log('<- ' + method) if (validLevel(4) && !(options && options.silent))
   send({method: method, params: params, callee: method, options: options}, cb)
 
 
-# Realtime Models
+# Realtime Models - Highly experimental. Disabled by default on the server
 class RTM
 
   findById: (id, cb) ->
@@ -85,7 +83,7 @@ class RTM
     @_send('find', args, cb)
 
   _send: (action, params, cb) ->
-    log 2, "<~ #{@name}.#{action}(#{params})"
+    log 2, "<~ #{@name}.#{action}"
     send({rtm: @name, action: action, params: params}, cb)
 
 
@@ -105,6 +103,7 @@ System =
   setConfig: (client_config) ->
     $SS.config = client_config || {}
   
+  # Passes through the names of RTM loaded on the server, if enabled
   setModels: (model_names) ->
     for name in model_names
       $SS.models[name] = new RTM
@@ -123,23 +122,21 @@ Request =
 
   callback: (data) ->
     cb = $SS.internal.cb_stack[data.cb_id]
-    silent = (cb.options and cb.options.silent)
     log 2, '-> ' + data.callee
     console.log(data.params) if data.params and validLevel(3) and !silent
+    silent = (cb.options and cb.options.silent)
     cb.funkt(data.params)
     delete $SS.internal.cb_stack[data.cb_id]
   
   event: (data) ->
-    console.log('=> ' + data.event) if validLevel(2)
+    log 2, "=> #{data.event}"
     $SS.events.emit(data.event, data.params)
 
   rtm: (data) ->
     cb = $SS.internal.cb_stack[data.cb_id]
-    log 2, "~> #{cb.msg.rtm}.#{cb.msg.action}(#{cb.msg.params})"
+    log 2, "~> #{cb.msg.rtm}.#{cb.msg.action}"
     cb.funkt(data.data)
     delete $SS.internal.cb_stack[data.cb_id]
-    #console.log('~> ' + data.event) if validLevel(2)
-  
 
 
 # PRIVATE HELPERS
