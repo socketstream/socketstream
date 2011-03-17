@@ -1,6 +1,6 @@
 # Realtime Models
 # ---------------
-# NOTE: All highly experimental and certain to change!
+# Realtime models are highly experimental and certain to change! Hence they are disabled on the client side by default.
 
 fs = require('fs')
 
@@ -11,11 +11,16 @@ exports.broadcast = (msg) ->
   $SS.publish.broadcast('rtm', msg)
 
 
-# Call from Public
+# RTM call from Client
 exports.call = (msg, client) ->
+
+  # Log the call
   $SS.log.incoming.rtm(msg, client)
-          
-  if $SS.models[msg.rtm]?
+  
+  # Try to grab the model
+  rtm = $SS.models[msg.rtm]
+
+  if rtm?
   
     # Define the callback which sends data back over the websocket
     cb = (err, data) ->
@@ -24,11 +29,8 @@ exports.call = (msg, client) ->
       reply.cb_id = msg.cb_id
       reply.type = 'rtm'
       client.send(JSON.stringify(reply))
-  
-    # Get hold of the model
-    rtm = $SS.models[msg.rtm]
 
-    # Hack to turn any where fields beginning with 'regexp:' into true regular expression objects as these will not pass through the JSON.stringifier
+    # Horrible temporary hack for Mongoose to turn any where fields beginning with 'regexp:' into true regular expression objects as these will not pass through the JSON.stringifier
     msg.params[0].keys().forEach (key) ->
       v = msg.params[0][key]
       if typeof(v) == 'string'
@@ -43,5 +45,5 @@ exports.call = (msg, client) ->
     # Execute the action!
     rtm[msg.action].apply(rtm, params)
   else
-    console.log (msg.rtm + ' is NOT found')
+    console.error msg.rtm + ' is NOT found'
   

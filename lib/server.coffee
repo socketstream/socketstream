@@ -12,8 +12,10 @@ Request = require('./request.coffee')
 
 asset = require('./asset')
 api = require('./api')
-RTM = require('./realtime_models')
 static = new($SS.libs.static.Server)('./public')
+
+# Only load Realtime Models if enabled. Disabled by default
+RTM = require('./realtime_models') if $SS.config.rtm.enabled
 
 exports.start = ->
   asset.init()
@@ -58,7 +60,7 @@ process =
           client.remote('setSession', client.session.id, 'system')
           $SS.log.createNewSession(client.session)
         client.remote('setConfig', $SS.config.client, 'system')
-        client.remote('setModels', $SS.models.keys(), 'system')
+        client.remote('setModels', $SS.models.keys(), 'system') if RTM
         client.remote('ready', {}, 'system')
       
     call: (data, client) ->
@@ -69,9 +71,8 @@ process =
         catch e
           throw ['unable_to_parse_message', 'Unable to parse incoming websocket request']
         if msg
-
           # RTM Request
-          if msg.rtm
+          if RTM and msg.rtm
             RTM.call(msg, client)
           # Server Request
           else if msg.method
@@ -80,7 +81,7 @@ process =
             Request.process action_array, msg.params, client.session, (params, options) ->
               client.remote(msg, params, 'callback', options)
           else
-            throw []
+            throw ['invalid_message_type', 'Invalid websocket call. Unable to handle message']
         else
           throw ['invalid_message', 'Invalid websocket call. No action supplied']
       catch e
@@ -114,7 +115,7 @@ mainServer = ->
   else
     http.createServer(process.http.call)
 
-
+# Load the SSL keys
 ssl =
 
   options:
