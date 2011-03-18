@@ -8,7 +8,8 @@ util = require('util')
 exports.configure = ->
   setDefaults()
   setEnvironmentDefaults()
-  mergeAppConfigFile()
+  mergeConfigFile("/config/app.json")
+  mergeConfigFile("/config/environments/#{$SS.env}.json")
 
 
 # Set sensible defaults so we can be up and running without an app-specific config file
@@ -42,7 +43,6 @@ setDefaults = ->
           module_name:  false           # replace this with the name of the authentication module. false = basic auth disabled
           realm:        'Secure API'    # realm name that pops up when you try to access a secure area
 
-    
     # Set params which will be passed directly to the client when they connect
     # The client config should match the server as closly as possible
     client:
@@ -50,7 +50,6 @@ setDefaults = ->
       log:
         level:          2       	      # 0 = none, 1 = calls only, 2 = calls + params, 3 = full
         
-    
     # Realtime Models
     rtm:
       enabled:         false            # disabled by default as HIGHLY EXPERIMENTAL and subject to change
@@ -71,19 +70,18 @@ setEnvironmentDefaults = ->
           level: 0
   merge(override)
 
-# Merges custom app config specificed in /config/environments/SS_ENV.js with SocketStream defaults if the file exists
-mergeAppConfigFile = ->
+# Merges custom app config file with SocketStream defaults if the file exists
+mergeConfigFile = (name) ->
   try
-    config_file_name = "/config/environments/#{$SS.env}.json"
-    config_file_body = fs.readFileSync($SS.root + config_file_name, 'utf-8')
+    config_file_body = fs.readFileSync($SS.root + name, 'utf-8')
     try
       app_config = JSON.parse(config_file_body)
       try
         merge(app_config)
       catch e
-        throw ['app_config_unable_to_merge', 'App config file loaded and parsed as JSON but unable to merge. Check syntax carefully.']
+        throw ['app_config_unable_to_merge', "App config file #{name} loaded and parsed as JSON but unable to merge. Check syntax carefully."]
     catch e
-      throw ['app_config_cannot_parse_json','Loaded, but unable to parse app config file ' + config_file_name + '. Ensure it is in valid JSON format with double quotes (not single!) around all strings.']
+      throw ['app_config_cannot_parse_json', "Loaded, but unable to parse app config file #{name}. Ensure it is in valid JSON format with double quotes (not single!) around all strings."]
   catch e
     if typeof(e) == 'object' and e.length >= 2
       $SS.log.error.exception(e)

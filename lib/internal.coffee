@@ -29,7 +29,7 @@ exports.uptime = ->
 
 # Saves the current state once we've processed changes
 exports.saveState = ->
-  fs.writeFileSync(stateFile(), JSON.stringify(@currentState()))
+  fs.writeFileSync(stateFileName(), JSON.stringify(@currentState()))
   @last_known_state = @currentState()
 
 exports.currentState = ->
