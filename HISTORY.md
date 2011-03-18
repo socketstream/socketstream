@@ -1,3 +1,10 @@
+0.0.27 / 2011-03-18
+===================
+
+* Added support for a new config file, /config/app.json, which loads first regardless of environment. The environment config file is then loaded and merged if present.
+* Major refactoring of client/server protocol to allow new message types and handlers to be registered in the future. Many more comments added
+
+
 0.0.26 / 2011-03-17
 ===================
 

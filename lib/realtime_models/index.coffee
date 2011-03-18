@@ -12,24 +12,13 @@ exports.broadcast = (msg) ->
 
 
 # RTM call from Client
-exports.call = (msg, client) ->
+exports.call = (msg, cb) ->
 
-  # Log the call
-  $SS.log.incoming.rtm(msg, client)
-  
   # Try to grab the model
   rtm = $SS.models[msg.rtm]
 
   if rtm?
   
-    # Define the callback which sends data back over the websocket
-    cb = (err, data) ->
-      reply = {}
-      reply.data = data
-      reply.cb_id = msg.cb_id
-      reply.type = 'rtm'
-      client.send(JSON.stringify(reply))
-
     # Horrible temporary hack for Mongoose to turn any where fields beginning with 'regexp:' into true regular expression objects as these will not pass through the JSON.stringifier
     msg.params[0].keys().forEach (key) ->
       v = msg.params[0][key]

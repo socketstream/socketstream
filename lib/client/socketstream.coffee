@@ -42,8 +42,13 @@ $SS.socket = new io.Socket(document.location.hostname, {
 # Process incoming messages over the websocket
 $SS.socket.on 'message', (raw) ->
   data = JSON.parse(raw)
-  data.type = 'event' if (!data.type)
-  Request[data.type](data)
+  if data.type
+    if Request[data.type]?
+      Request[data.type](data)
+    else
+      console.error("Error: Unable to find a message handler for '#{data.type}' requests! Dropping message")
+  else
+    console.error("Error: No message type specified. Dropping message")
   
 # Attempt reconnection if the connection is severed
 $SS.socket.on 'disconnect', ->
@@ -60,14 +65,21 @@ $SS.socket.connect()
 # Sends a command to /app/server code
 window.remote = ->
   args = arguments
-  method = args[0]
-  method = "#{$SS.config.remote_prefix}.#{method}" if $SS.config.remote_prefix
+  
+  # Assemble to message
+  msg = {type: 'server'}
+  msg.method  = args[0]
+  msg.method  = "#{$SS.config.remote_prefix}.#{msg.method}" if $SS.config.remote_prefix
+  msg.params  = if args.length >= 3 then args[1] else null
+  msg.options = if args.length >= 4 then args[2] else null
+  
+  # The callback is always the last arugment passed
   cb = args[args.length - 1]
-  params = if args.length >= 3 then args[1] else null
-  options = if args.length >= 4 then args[2] else null
-  cb.options = options
-  console.log('<- ' + method) if (validLevel(4) && !(options && options.silent))
-  send({method: method, params: params, callee: method, options: options}, cb)
+  cb.options = msg.options
+  
+  # Log if in Developer mode, then send
+  console.log('<- ' + msg.method) if (validLevel(4) && !(msg.options && msg.options.silent))
+  send(msg, cb)
 
 
 # Realtime Models - Highly experimental. Disabled by default on the server
@@ -84,7 +96,7 @@ class RTM
 
   _send: (action, params, cb) ->
     log 2, "<~ #{@name}.#{action}"
-    send({rtm: @name, action: action, params: params}, cb)
+    send({type: 'rtm', rtm: @name, action: action, params: params}, cb)
 
 
 # System commands
@@ -120,9 +132,9 @@ Request =
   system: (data) ->
     System[data.method](data.params)
 
-  callback: (data) ->
+  server: (data) ->
     cb = $SS.internal.cb_stack[data.cb_id]
-    log 2, '-> ' + data.callee
+    log 2, '-> ' + cb.msg.method
     console.log(data.params) if data.params and validLevel(3) and !silent
     silent = (cb.options and cb.options.silent)
     cb.funkt(data.params)
@@ -161,7 +173,7 @@ send = (msg, cb) ->
     # Wait 50 ms and try again if server is not ready
     if e == 'NOT_READY'
       retry_ms = 50
-      console.log "Server not ready. Waiting for #{retry_ms}ms and retrying..."
+      #console.log "Server not ready. Waiting for #{retry_ms}ms and retrying..."
       recursive = -> send.apply(@, args)
       setTimeout(recursive, retry_ms) 
     else

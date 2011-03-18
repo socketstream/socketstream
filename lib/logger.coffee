@@ -12,8 +12,9 @@ exports.createNewSession = (session) ->
 
 exports.incoming =
     
-  socketio: (data, client) ->
-    output 2, "#{client.sessionId} #{exports.color('->', 'cyan')} #{data.method}#{parseParams(data.params)}"
+  socketio: (msg, client) ->
+    if msg.options && !msg.options.silent
+      output 2, "#{client.sessionId} #{exports.color('->', 'cyan')} #{msg.method}#{parseParams(msg.params)}"
       
   rtm: (data, client) ->
     output 2, "#{client.sessionId} #{exports.color('~>', 'cyan')} #{data.rtm}.#{data.action}#{parseParams(data.params)}"
@@ -29,8 +30,9 @@ exports.incoming =
 
 exports.outgoing =
 
-  socketio: (client, method) ->
-    output 2, "#{client.sessionId} #{exports.color('<-', 'green')} #{method.callee}"
+  socketio: (msg, client) ->
+    if msg.options && !msg.options.silent
+      output 2, "#{client.sessionId} #{exports.color('<-', 'green')} #{msg.method.callee}"
   
   event: (type, message) ->
     if validLevel(2)

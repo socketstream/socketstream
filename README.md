@@ -2,7 +2,7 @@
 
 SocketStream makes it a breeze to build phenomenally fast, highly-scalable real-time web applications on Node.js.
 
-Latest release: 0.0.26   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+Latest release: 0.0.27   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 
 
 ### Features
@@ -74,7 +74,7 @@ And you will see the following output:
 
 You can also call this server-side method over HTTP with the following URL:
 
-    /api/app/square.json?25                       (Hint: use .html to output on screen)
+    /api/app/square?25                            (Hint: use .json to output to a file)
     
 Or even from the console (type 'socketstream console') or another server-side file using:
 
@@ -260,16 +260,18 @@ Before starting up your new app, make sure you have Redis 2.2+ running on your l
 If all goes well you'll see the SocketStream banner coming up, then you're ready to start!
 
 
-### Environment-based Configuration
+### Configuration Files
 
 SocketStream runs in __development__ mode by default, outputting all incoming and outgoing requests to the terminal, displaying all server-side exceptions in the browser console, and compiling all client assets on the fly.
 
 Two other 'preset' environments are available: __staging__ and __production__. Both will load SocketStream with sensible defaults for their intended use.
 
+Preset variables can be overwritten and augmented by two optional files if required: an application-wide config file placed in /config/app.json, and an environment-specific file placed in /config/environments/<SS_ENV>.json (e.g. /config/environments/development.json)
+
 Use the SS_ENV environment variable to start SocketStream in a different environment. E.g:
 
     SS_ENV=staging socketstream start
-
+    
 All default modes are fully configurable using an optional JSON file placed within /config/environments. An unlimited number of new environments may also be added.
 
 We will publish a full list of configurable params in the near future, but for now these can be viewed (and hence overridden in the config file), by typing $SS.config in the SocketStream console.

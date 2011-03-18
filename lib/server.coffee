@@ -44,25 +44,29 @@ process =
           static.serve(request, response)
           $SS.log.staticFile(request)
           
-  
   # Socket.IO
   socket:
   
+    # Called when Socket.IO establishes a connection to the server for the first time
     connection: (client) ->
-      client.remote = (method, params, type, options = {}) ->
-        message = {method: method, params: params, cb_id: method.cb_id, callee: method.callee, type: type}
-        client.send(JSON.stringify(message))
-        $SS.log.outgoing.socketio(client, method) if (type != 'system' and options and !options.silent)
-
-      session.process client, (this_session) ->
-        client.session = this_session
-        if client.session.newly_created  
-          client.remote('setSession', client.session.id, 'system')
-          $SS.log.createNewSession(client.session)
-        client.remote('setConfig', $SS.config.client, 'system')
-        client.remote('setModels', $SS.models.keys(), 'system') if RTM
-        client.remote('ready', {}, 'system')
+    
+      # Inject the 'remote' method into each client instance to 
+      client.remote = (msg) -> client.send(JSON.stringify(msg))
       
+      # Inject the 'system' helper method which calls an internal system command within the SocketStream client
+      client.system = (method, params = {}) -> client.remote({type: 'system', method: method, params: params})
+      
+      # Create a new session or retrieve an existing one
+      session.process client, (this_session) ->
+        client.session = this_session                                                # Inject the current session into the client
+        if client.session.newly_created                                       
+          client.system('setSession', client.session.id)                             # Instruct the SocketStream client to create a new cookie if required
+          $SS.log.createNewSession(client.session)                                   # And log this (for now)
+        client.system('setConfig', $SS.config.client)
+        client.system('setModels', $SS.models.keys()) if RTM                         # If RTM is enabled, transfer the list of models available to the client. Switched off by default.
+        client.system('ready')                                                       # Signal to the SocketStream client we're ready to accept incoming messages
+
+    # Called each time Socket.IO sends a message through to the server
     call: (data, client) ->
       return null unless client.session.id # drop all calls unless session is loaded
       try
@@ -71,28 +75,47 @@ process =
         catch e
           throw ['unable_to_parse_message', 'Unable to parse incoming websocket request']
         if msg
-          # RTM Request
-          if RTM and msg.rtm
-            RTM.call(msg, client)
-          # Server Request
-          else if msg.method
-            action_array = msg.method.split('.')
-            $SS.log.incoming.socketio(msg, client) if !(msg.options && msg.options.silent)
-            Request.process action_array, msg.params, client.session, (params, options) ->
-              client.remote(msg, params, 'callback', options)
+          throw ['missing_message_type', "Invalid websocket call. No message handler supplied. Make sure you specific the message 'type'"] unless msg.type
+          if process.socket.message[msg.type]?
+            process.socket.message[msg.type](msg, client) # Pass the message to the correct message handler
           else
-            throw ['invalid_message_type', 'Invalid websocket call. Unable to handle message']
+            throw ['invalid_message_type', "Invalid websocket call. No handler to process messages of type '#{msg.type}'"]
         else
           throw ['invalid_message', 'Invalid websocket call. No action supplied']
       catch e
-        client.remote('error', e, 'system')
+        client.system('error', e)
         $SS.log.error.exception(e)
-
+    
+    # Message Handlers (invoked according to the msg.type)
+    message:
+    
+      # Calls to /app/server code
+      server: (msg, client) ->
+        $SS.log.incoming.socketio(msg, client)                                                  # Log the incoming request
+        action_array = msg.method.split('.')                                                    # Turn the incoming action name into an array
+        Request.process action_array, msg.params, client.session, (params, options) ->          # Process the request. The Process module is also used by incoming API requests
+          $SS.log.outgoing.socketio(msg, client)                                                # Log the outgoing response
+          client.remote({type: 'server', cb_id: msg.cb_id, params: params, options: options})   # Send the response back. The cb_id will tell the SocketStream client which callback to execute
+      
+      # Calls to Realtime Models. Highly experimental and switched off by default
+      rtm: (msg, client) ->
+        if RTM
+          $SS.log.incoming.rtm(msg, client)                                                     # Log the incoming request
+          RTM.call msg, (err, data) ->
+            client.remote({type: 'rtm', cb_id: msg.cb_id, data: data})                          # Send the response back. The cb_id will tell the SocketStream client which callback to execute
+      
 
 # PRIVATE HELPERS
 
 # Redis Pub/Sub
 listenForPubSubEvents = (socket) ->
+  
+  # Appends the message type. TODO: Perform sanity check before blindling forwarding on
+  parse = (message) ->
+    msg = JSON.parse(message)
+    msg.type = 'event'
+    msg
+
   $SS.redis.pubsub.on 'message', (channel, message) =>
     channel = channel.split(':')
     if channel && channel[0] == 'socketstream'
@@ -101,12 +124,12 @@ listenForPubSubEvents = (socket) ->
           client = $SS.users.connected[channel[2]]
           return if client and client.connected
             $SS.log.outgoing.event("User #{message.user_id}", message)
-            client.send(message)
+            client.remote parse(message)
           else
             null
         when 'broadcast'
           $SS.log.outgoing.event("Broadcast", message)
-          socket.broadcast(message)
+          socket.broadcast JSON.stringify(parse(message))
 
 # Load the correct server module depending upon HTTPS
 mainServer = ->
