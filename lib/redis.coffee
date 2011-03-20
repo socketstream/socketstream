@@ -42,4 +42,3 @@ valid = (config) ->
     throw ['redis_config_port_nan','Redis port number must be a number']
 
   true
-
