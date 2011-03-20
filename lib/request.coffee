@@ -43,4 +43,3 @@ exports.process = (action_array, params, session, cb) ->
     method.apply(obj, args)
   catch e
     throw ['application_error', e.stack]
-

@@ -70,7 +70,7 @@ class exports.Session
     if @client
       $SS.redis.pubsub.unsubscribe @pubsub_key()
       delete $SS.users.connected[@id]
-    cb(new exports.Session(@client))
+    cb({})
 
   loggedIn: ->
     @user_id?

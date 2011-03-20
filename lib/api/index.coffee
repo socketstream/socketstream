@@ -13,7 +13,7 @@ url_lib = require('url')
 Session = require('../session.coffee').Session
 Request = require('../request.coffee')
 RTM = require('../realtime_models')
-base64 = require('../base64.js')
+base64 = require('../utils/base64.js')
 
 exports.isValidRequest = (request) ->
   request.url.split('/')[1].toLowerCase() == $SS.config.api.prefix

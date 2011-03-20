@@ -1,3 +1,10 @@
+0.0.28 / 2011-03-20
+===================
+
+* Fixed bug on macs where .DS_Store file would be loaded in Developer mode
+* General code tidying
+
+
 0.0.27 / 2011-03-18
 ===================
 
