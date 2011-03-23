@@ -1,3 +1,10 @@
+0.0.29 / 2011-03-23
+===================
+
+* Updated and tested npm dependencies
+* Better client-side logging: method and params now shown together on same line
+
+
 0.0.28 / 2011-03-20
 ===================
 
