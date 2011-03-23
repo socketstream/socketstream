@@ -1,3 +1,10 @@
+0.0.30 / 2011-03-23
+===================
+
+* $SS.env can now be called within the client
+* Fixed bug when re-generating client-side files
+
+
 0.0.29 / 2011-03-23
 ===================
 
