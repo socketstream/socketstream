@@ -2,7 +2,7 @@
 
 SocketStream makes it a breeze to build phenomenally fast, highly-scalable real-time web applications on Node.js.
 
-Latest release: 0.0.30   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+Latest release: 0.0.31   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 
 
 ### Features
@@ -272,9 +272,18 @@ Use the SS_ENV environment variable to start SocketStream in a different environ
 
     SS_ENV=staging socketstream start
     
-All default modes are fully configurable using an optional JSON file placed within /config/environments. An unlimited number of new environments may also be added.
+All default modes are fully configurable using an optional JSON file placed within /config/environments. An unlimited number of new environments may also be added. You can easily tell which environment in running by calling $SS.env in the server or client.
 
 We will publish a full list of configurable params in the near future, but for now these can be viewed (and hence overridden in the config file), by typing $SS.config in the SocketStream console.
+
+
+### Logging
+
+Client and server-side logging is switched on by default in __development__ and __staging__ and off in __production__. It can be controlled manually via $SS.config.log.level and $SS.config.client.log.level. Four levels of logging are available ranging from none (0) to highly verbose (4). The default level is 3.
+
+Occasionally you'll want to 'silence' some requests to the server which are called repeatedly (e.g. confirming a user is online) in order to see the wood from the trees. Add the 'silent' option to your 'remote' commands, e.g.
+
+    remote('user.confirm_online', user_id, {silent: true})
 
 
 ### Connecting to Redis
