@@ -1,3 +1,11 @@
+0.0.31 / 2011-03-23
+===================
+
+* Added 'silent message' option to 'remote' command to prevent logging
+* Added a section about Logging to the README
+* Fixed server-side logging bug
+
+
 0.0.30 / 2011-03-23
 ===================
 

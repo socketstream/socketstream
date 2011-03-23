@@ -140,7 +140,7 @@ Request =
 
   server: (data) ->
     cb = $SS.internal.cb_stack[data.cb_id]
-    silent = (cb.options and cb.options.silent)
+    silent = (cb.msg.options and cb.msg.options.silent)
     log(2, '-> ' + cb.msg.method, data.params) unless silent
     cb.funkt(data.params)
     delete $SS.internal.cb_stack[data.cb_id]
