@@ -134,9 +134,8 @@ Request =
 
   server: (data) ->
     cb = $SS.internal.cb_stack[data.cb_id]
-    log 2, '-> ' + cb.msg.method
-    console.log(data.params) if data.params and validLevel(3) and !silent
     silent = (cb.options and cb.options.silent)
+    log(2, '-> ' + cb.msg.method, data.params) unless silent
     cb.funkt(data.params)
     delete $SS.internal.cb_stack[data.cb_id]
   
@@ -181,8 +180,11 @@ send = (msg, cb) ->
   
   undefined # Always return this
 
-log = (level, msg) ->
-  console.log(msg) if validLevel(level)
+log = (level, msg, params) ->
+  if validLevel(level)
+    o = [msg]
+    o.push(params) if params and validLevel(3)
+    console.log.apply(console, o)
 
 error = (e) ->
   console.error(e) if validLevel(1)
