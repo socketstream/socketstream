@@ -9,6 +9,8 @@ window.exports = {}
 # Set the $SS global variable. Wherever possible this should behave in the same was as the server
 window.$SS =
 
+  env:              null            # environment variable set upon connection to the server
+
   models:           {}              # load models into here
 
   internal:                         # the place for everything the user doesn't need to access
@@ -110,6 +112,10 @@ System =
   setSession: (id) ->
     setCookie('session_id', id)
     log 2, '-> Started new session: ' + id
+  
+  # Set the $SS.env variable. Useful for client-side scripts which need to behave differently depending upon environment loaded
+  setEnvironment: (env) ->
+    $SS.env = env
   
   # Takes the $SS.config.client object set in the server's config file
   setConfig: (client_config) ->

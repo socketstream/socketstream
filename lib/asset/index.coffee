@@ -28,13 +28,14 @@ exports.public_path =   './public/assets'
 exports.client_dirs =   ['client', 'shared']
 
 exports.init = ->
+  findAssets =>
+    ensureAssetsExist()
+    upgradeAssetsIfRequired()
   if $SS.config.pack_assets
     @pack.all()
   else
     @monitor()
-  findAssets =>
-    ensureAssetsExist()
-    upgradeAssetsIfRequired()
+
 
 # Monitor file changes (useful when developing)
 exports.monitor = ->
@@ -68,7 +69,7 @@ ensureAssetsExist = ->
 upgradeAssetsIfRequired = ->
   if $SS.internal.clientVersionChanged()
     util.log "Thanks for upgrading SocketStream. Regenerating assets to include the latest client code..."
-    exports.pack.js.lib()
+    exports.pack.js.system()
     $SS.internal.saveState()
 
 findAssets = (cb) ->

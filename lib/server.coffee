@@ -62,7 +62,8 @@ process =
         if client.session.newly_created                                       
           client.system('setSession', client.session.id)                             # Instruct the SocketStream client to create a new cookie if required
           $SS.log.createNewSession(client.session)                                   # And log this (for now)
-        client.system('setConfig', $SS.config.client)
+        client.system('setEnvironment', $SS.env)                                     # Makes the $SS.env variable available client-side. Can be useful within client code
+        client.system('setConfig', $SS.config.client)                                # Copies any client configuration settings from the app config files to the client
         client.system('setModels', $SS.models.keys()) if RTM                         # If RTM is enabled, transfer the list of models available to the client. Switched off by default.
         client.system('ready')                                                       # Signal to the SocketStream client we're ready to accept incoming messages
 
