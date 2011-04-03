@@ -1,3 +1,13 @@
+0.0.32 / 2011-04-03
+===================
+
+* Improved client re-connection code
+* /public/images folder now created by app generator
+* Added $SS.config.redis.key_prefix variable which defaults to 'ss'
+* Updated Socket.IO, Jade and Stylus
+* Started work on publish to group and users online (wip)
+
+
 0.0.31 / 2011-03-23
 ===================
 

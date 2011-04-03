@@ -33,6 +33,7 @@ setDefaults = ->
       host:             '127.0.0.1'
       port: 		        6379
       options:		      {}
+      key_prefix:       'ss'              # all keys created by SocketStream are prefixed with this value
     
     # Configures the HTTP request-based API
     api:
@@ -49,6 +50,13 @@ setDefaults = ->
       remote_prefix:    null            # automatically prefixes all remote calls. e.g. if your server api begins 'v1' remote('app.square') will become remote('v1.app.square')
       log:
         level:          2       	      # 0 = none, 1 = calls only, 2 = calls + params, 3 = full
+    
+    # Users
+    users:
+      online:
+        enabled:        true            # enable tracking of users online in Redis. see $SS.users.online
+        mins:           2               # number of mins we wait between confirmations before assuming they have gone offline
+        keep_historic:  false           # do not delete the ss:online:at:<minuteCode> keys we use to work out who's online (useful for analytics)
         
     # Realtime Models
     rtm:

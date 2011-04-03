@@ -5,12 +5,13 @@
 utils = require('./utils')
 
 id_length = 32
+key = $SS.config.redis.key_prefix
 
 # Process an incoming request where we have a persistent client (not the API)
 exports.process = (client, cb) ->
   cookies = getCookies(client)
   if cookies && cookies.session_id && cookies.session_id.length == id_length
-    $SS.redis.main.hgetall "socketstream:session:#{cookies.session_id}", (err, data) ->
+    $SS.redis.main.hgetall "#{key}:session:#{cookies.session_id}", (err, data) ->
       if err or data == null or data == undefined
         cb(new exports.Session(client))           # session doesn't exist in Redis or is invalid
       else
@@ -45,10 +46,10 @@ class exports.Session
       @save() if @client # only save if this is a persistent (none-API) connection
   
   key: ->
-    "socketstream:session:#{@id}"
+    "#{key}:session:#{@id}"
     
   pubsub_key: ->
-    "socketstream:user:#{@user_id}"
+    "#{key}:user:#{@user_id}"
 
   # Authentication. See README file for full details and examples
   authenticate: (module_name, params, cb) ->
@@ -63,13 +64,15 @@ class exports.Session
       $SS.redis.main.hset @key(), 'user_id', @user_id
       $SS.redis.pubsub.subscribe @pubsub_key()
       $SS.users.connected[@user_id] = @client
+      $SS.users.online.add(@user_id) if $SS.config.users.online.enabled
 
   logout: (cb) ->
-    @user_id = null  # clear user_id. note we are not erasing this in redis as it can be advantageous to keep this for retrospective analytics
-    @user = null     # clear any attached custom User instance
     if @client
       $SS.redis.pubsub.unsubscribe @pubsub_key()
-      delete $SS.users.connected[@id]
+      delete $SS.users.connected[@user_id]
+      $SS.users.online.remove(@user_id) if $SS.config.users.online.enabled
+    @user_id = null  # clear user_id. note we are not erasing this in redis as it can be advantageous to keep this for retrospective analytics
+    @user = null     # clear any attached custom User instance
     cb({})
 
   loggedIn: ->

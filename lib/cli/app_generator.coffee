@@ -23,7 +23,7 @@ class exports.AppGenerator
         throw e
   
   makeDirectories: ->
-    directories = ['/app', '/app/client', '/app/css', '/app/server', '/app/shared', '/app/views', '/lib', '/lib/client', '/lib/css', '/lib/server', '/public', '/config', '/public/assets', '/vendor']
+    directories = ['/app', '/app/client', '/app/css', '/app/server', '/app/shared', '/app/views', '/lib', '/lib/client', '/lib/css', '/lib/server', '/public', '/public/assets', '/public/images', '/config', '/vendor']
     fs.mkdirSync @name + directory, @dir_mode for directory in directories
     
   makeFiles: ->
