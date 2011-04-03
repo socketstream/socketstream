@@ -55,7 +55,7 @@ $SS.socket.on 'message', (raw) ->
 # Attempt reconnection if the connection is severed
 $SS.socket.on 'disconnect', ->
   attemptReconnection = ->
-    unless $SS.socket.connected
+    unless $SS.socket.connecting
       $SS.socket.connect()
       setTimeout(arguments.callee, 50)
   attemptReconnection()
@@ -68,14 +68,14 @@ $SS.socket.connect()
 window.remote = ->
   args = arguments
   
-  # Assemble to message
+  # Assemble message
   msg = {type: 'server'}
   msg.method  = args[0]
   msg.method  = "#{$SS.config.remote_prefix}.#{msg.method}" if $SS.config.remote_prefix
   msg.params  = if args.length >= 3 then args[1] else null
   msg.options = if args.length >= 4 then args[2] else null
   
-  # The callback is always the last arugment passed
+  # The callback is always the last argument passed
   cb = args[args.length - 1]
   cb.options = msg.options
   

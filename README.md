@@ -2,7 +2,7 @@
 
 SocketStream makes it a breeze to build phenomenally fast, highly-scalable real-time web applications on Node.js.
 
-Latest release: 0.0.31   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+Latest release: 0.0.32   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 
 
 ### Features
@@ -45,7 +45,7 @@ Note: While SocketStream is a perfect fit for all manner of modern applications 
 
 ### Quick Example
 
-The key to using socket stream is the `remote` method which is available anywhere within the client app.
+The key to using SocketStream is the `remote` method which is available anywhere within the client app.
 
 For example, let's square a number on the server:
 
@@ -110,12 +110,12 @@ For the server code, create the file /app/server/geocode.coffee and paste in the
         cb(result)
 
 
-To capture your location and output your address, lets's add this code into  /app/client/app.coffee
+To capture your location and output your address, lets's add this code in /app/client/app.coffee
 
     window.app =
     
       init: ->
-        # Note: this app.init method will get automatically called once the socket is established and the session is ready
+        # Note: the app.init method automatically gets called once the socket is established and the session is ready
         app.geocode.determineLocation()
 
 
@@ -164,7 +164,7 @@ Then, assuming we know the person's user_id, we can publish the event directly t
       testMessage: (user_id) ->
         $SS.publish.user(user_id, 'newMessage', 'Wow this is cool!')
 
-Pretty cool eh? But it gets better. We don't have to worry which server the user is connected to. The message will always be routed to the correct server as each SocketStream server subscribes to the same instance of Redis.
+Pretty cool eh? But it gets better. We don't have to worry which server instance the user is connected to. The message will always be routed to the correct server as each SocketStream server subscribes to the same instance of Redis.
 
 What happens if we want to notify every user when data has changed, or let everyone know the system is going down for maintenance? Simple, just use the broadcast method:
 
@@ -188,7 +188,7 @@ Ready to give it a whirl? SocketStream is highly experimental at the moment, but
 
 For now clone this project to a directory and link it as a local npm package with:
 
-    npm link
+    sudo npm link
 
 To generate a new empty SocketStream project, simply type:
 
@@ -262,7 +262,7 @@ If all goes well you'll see the SocketStream banner coming up, then you're ready
 
 ### Configuration Files
 
-SocketStream runs in __development__ mode by default, outputting all incoming and outgoing requests to the terminal, displaying all server-side exceptions in the browser console, and compiling all client assets on the fly.
+SocketStream runs in __development__ mode by default, outputting all incoming and outgoing requests to the terminal, displaying all server-side exceptions in the browser console, and compiling all client assets on the fly in order to aid debugging.
 
 Two other 'preset' environments are available: __staging__ and __production__. Both will load SocketStream with sensible defaults for their intended use.
 

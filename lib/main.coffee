@@ -7,7 +7,7 @@ utils = require('./utils')
 file_utils = require('./utils/file')
 
 # Initialize SocketStream. This must always be run to set the basic environment
-exports.init = ->
+exports.init = (load_project = false) ->
 
   # Define global $SS variable
   global.$SS =
@@ -21,10 +21,6 @@ exports.init = ->
     models:           {}              # Models are preloaded and placed here
     server:           {}              # Server code is preloaded and placed here
     shared:           {}              # Shared code is preloaded and placed here
-
-    users:
-      connected:      {}              # Maintain a list of all connected users for pub/sub
-
 
   # Set root dir
   $SS.root = fs.realpathSync()
@@ -44,6 +40,11 @@ exports.init = ->
 
   # Load basic Array, String, JS extensions needed throughout SocketStream
   require('./extensions')
+  
+  # Load User helpers
+  $SS.users = require('./users.coffee')
+  
+  load.project() if load_project
 
   @
 
