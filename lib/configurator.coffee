@@ -55,12 +55,12 @@ setDefaults = ->
     users:
       online:
         enabled:        true            # enable tracking of users online in Redis. see $SS.users.online
-        mins:           2               # number of mins we wait between confirmations before assuming they have gone offline
-        keep_historic:  false           # do not delete the ss:online:at:<minuteCode> keys we use to work out who's online (useful for analytics)
+        mins:           2               # number of mins we wait between confirmations before assuming the user has gone offline
+        keep_historic:  false           # do not delete the ss:online:at:<minuteCode> keys we use to work out who's online (can be useful for analytics)
         
     # Realtime Models
     rtm:
-      enabled:         false            # disabled by default as HIGHLY EXPERIMENTAL and subject to change
+      enabled:          false           # disabled by default as HIGHLY EXPERIMENTAL and subject to change
 
 
 # For now we override default config depending upon environment. This will still be overridden by any app config file in

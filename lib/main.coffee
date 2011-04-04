@@ -41,9 +41,6 @@ exports.init = (load_project = false) ->
   # Load basic Array, String, JS extensions needed throughout SocketStream
   require('./extensions')
   
-  # Load User helpers
-  $SS.users = require('./users.coffee')
-  
   load.project() if load_project
 
   @
@@ -106,9 +103,7 @@ exports.start =
 exports.create =
 
   project: (name) ->
-    gen = require('./cli/app_generator.coffee')
-    new gen.AppGenerator(name)
-
+    require('./generator.coffee').generate(name)
 
 
 # PRIVATE HELPERS
@@ -139,6 +134,7 @@ load =
     
     # Link SocketStream modules we offer as part of the Server API
     $SS.publish = require('./publish.coffee')
+    $SS.users = require('./users.coffee')
     
     load.dbConfigFile()
     load.files()
