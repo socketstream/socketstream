@@ -1,3 +1,12 @@
+0.0.33 / 2011-04-04
+===================
+
+* Bug fix
+* Improved Redis error checking
+* Upgraded jQuery to 1.5.2
+* Refactored app generator
+
+
 0.0.32 / 2011-04-03
 ===================
 

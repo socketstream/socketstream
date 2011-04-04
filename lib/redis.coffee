@@ -34,9 +34,8 @@ valid = (config) ->
   unless typeof(config) == 'object'
     throw ['redis_config_not_valid_object', 'Redis config is not a valid object']
 
-  required_params = ['host','options','port']
-  unless JSON.stringify(config.keys().sort()) == JSON.stringify(required_params) # sometimes you just miss ruby
-    throw ['redis_config_no_required_params', "Redis config does not contain required params (#{required_params.join(',')})"]
+  ['host','options','port'].forEach (param) ->
+    throw ['redis_config_no_required_params', "Redis config is missing the '#{param}' param"] unless $SS.config.redis.hasOwnProperty(param)
    
   unless typeof(config.port) == 'number'
     throw ['redis_config_port_nan','Redis port number must be a number']
