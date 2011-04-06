@@ -23,7 +23,7 @@ exports.start = ->
   socket = $SS.libs.io.listen(server, {transports: ['websocket', 'flashsocket']})
   socket.on('connection', process.socket.connection)
   socket.on('clientMessage', process.socket.call)
-  server.listen($SS.config.port)
+  server.listen($SS.config.port, $SS.config.hostname)
   listenForPubSubEvents(socket)
 
 
