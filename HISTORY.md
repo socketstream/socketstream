@@ -1,3 +1,10 @@
+0.0.34 / 2011-04-06
+===================
+
+* Bug fixes
+* New $SS.config.hostname option allows server to be bound to a particular hostname
+
+
 0.0.33 / 2011-04-04
 ===================
 
