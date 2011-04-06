@@ -119,7 +119,7 @@ listenForPubSubEvents = (socket) ->
 
   $SS.redis.pubsub.on 'message', (channel, message) =>
     channel = channel.split(':')
-    if channel && channel[0] == 'socketstream'
+    if channel && channel[0] == $SS.config.redis.key_prefix
       switch channel[1]
         when 'user'
           client = $SS.users.connected[channel[2]]
