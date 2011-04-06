@@ -16,7 +16,7 @@ exports.configure = ->
 setDefaults = ->
   $SS.config =
     port:               3000		          # if you want to run on port 80 or 443 node must be run as root
-    hostname:           null              # allows the server to be bound to a particular IP. listens on all by default
+    hostname:           '0.0.0.0'         # allows the server to be bound to a particular IP. listens on all by default
     enable_color:       true              # use colors when outputting to terminal
     pack_assets:        true      	      # set this to false when developing to force the serving of all asset requests live
     throw_errors:       true      	      # this needs to be false in production or the server will quit on any error
