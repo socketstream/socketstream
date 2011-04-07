@@ -55,9 +55,8 @@ $SS.socket.on 'message', (raw) ->
 # Attempt reconnection if the connection is severed
 $SS.socket.on 'disconnect', ->
   attemptReconnection = ->
-    unless $SS.socket.connecting
-      $SS.socket.connect()
-      setTimeout(arguments.callee, 50)
+    $SS.socket.connect() unless $SS.socket.connecting
+    setTimeout(arguments.callee, 50)
   attemptReconnection()
  
 # Connect!

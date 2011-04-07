@@ -1,3 +1,10 @@
+0.0.35 / 2011-04-07
+===================
+
+* Improved reconnection to server
+* Hostname now shown on boilerplate upon server startup
+
+
 0.0.34 / 2011-04-06
 ===================
 
