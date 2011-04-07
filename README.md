@@ -353,6 +353,8 @@ Once Node has been compiled with TLS/HTTPS support, turn it on by creating a /co
     {
       "ssl": {"enabled": true}
     }
+    
+Note: We have found Safari will not support secure websockets without a valid (i.e. not a self-signed) certificate. If you wish to experiment with HTTPS whilst developing we recommend using Chrome at the moment.
 
 We will continue enhancing the HTTPS experience over future releases until it's stable.
 
