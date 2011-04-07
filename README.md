@@ -20,7 +20,7 @@ Latest release: 0.0.35   ([view changelog](https://github.com/socketstream/socke
 * Uses [Redis](http://www.redis.io/) for fast session retrieval, pub/sub, list of users online, and any other data your app needs instantly
 * Nested namespaces and functions allow building of large 'enterprise' apps
 * Interactive console - just type 'socketstream console' and invoke any server-side method from there
-* Bundled with jQuery 1.5. Easily add additional client libraries such as [Underscore.js](http://documentcloud.github.com/underscore/)
+* Bundled with jQuery 1.5.2. Easily add additional client libraries such as [Underscore.js](http://documentcloud.github.com/underscore/)
 * Easily create jQuery templates using the [official plugin](http://api.jquery.com/category/plugins/templates/). Works like partials in Rails.
 * Uses [Jade](http://jade-lang.com/) to render static HTML
 * Uses [Stylus](http://learnboost.github.com/stylus/) for CSS
@@ -30,6 +30,10 @@ Latest release: 0.0.35   ([view changelog](https://github.com/socketstream/socke
 ### Introduction
 
 SocketStream is a new full stack web framework built around the [Single-page Application](http://en.wikipedia.org/wiki/Single-page_application) paradigm. It embraces websockets, in-memory datastores (Redis), and client-side rendering to provide an ultra-responsive experience that will amaze your users.
+
+Project status: Highly experimental but usable. Improving almost every day.
+
+A request: I wish to keep SocketStream under-the-radar for now whilst I build a public website for it and, most importantly, figure out a good way to test the code (now the API has settled down somewhat). If you've discovered this project and wish to contribute, that would be awesome! But please don't tweet about it or post it on Hacker News just yet. Thank you.
 
 
 ### How does it work?
