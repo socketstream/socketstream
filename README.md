@@ -1,8 +1,9 @@
-## SocketStream
+![SocketStream!](https://github.com/socketstream/socketstream/tree/master/lib/generator_files/logo.png)
+
 
 SocketStream makes it a breeze to build phenomenally fast, highly-scalable real-time web applications on Node.js.
 
-Latest release: 0.0.35   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+Latest release: 0.0.36   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 
 
 ### Features
