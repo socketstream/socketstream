@@ -1,3 +1,10 @@
+0.0.36 / 2011-04-10
+===================
+
+* Introducing the SocketStream logo
+* Improved new project startup page
+
+
 0.0.35 / 2011-04-07
 ===================
 

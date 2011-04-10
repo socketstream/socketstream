@@ -3,6 +3,7 @@
 # Generates skeleton files needed to create a new SocketStream application
 
 fs = require 'fs'
+util = require 'util'
 
 dir_mode = 0755
 
@@ -29,18 +30,25 @@ makeDirectories = (name) ->
   directories = ['/app', '/app/client', '/app/css', '/app/server', '/app/shared', '/app/views', '/lib', '/lib/client', '/lib/css', '/lib/server', '/public', '/public/assets', '/public/images', '/config', '/vendor']
   fs.mkdirSync name + directory, dir_mode for directory in directories
 
-makeFiles = (name) ->
-  filesDir = "#{__dirname}/generator_files"
+makeFiles = (dir) ->
+  source_dir = "#{__dirname}/generator_files"
   files = [
-    {fileName: '/app/client/app.coffee',        dataFile: '/app.client.coffee'}
-    {fileName: '/app/server/app.coffee',        dataFile: '/app.server.coffee'}
-    {fileName: '/app/views/app.jade',           dataFile: '/app.jade'}
-    {fileName: '/app/css/app.styl',             dataFile: '/app.styl'}
-    {fileName: '/config/db.coffee',             dataFile: '/config.db.coffee'}
-    {fileName: '/lib/css/reset.css',            dataFile: '/reset.css'}
-    {fileName: '/lib/client/jquery-1.5.min.js', dataFile: '/lib.client.jquery.min.js'}
+    {destination: '/app/client/app.coffee',        source: '/app.client.coffee'}
+    {destination: '/app/server/app.coffee',        source: '/app.server.coffee'}
+    {destination: '/app/views/app.jade',           source: '/app.jade'}
+    {destination: '/app/css/app.styl',             source: '/app.styl'}
+    {destination: '/app/css/helpers.styl',         source: '/helpers.styl'}
+    {destination: '/config/db.coffee',             source: '/config.db.coffee'}
+    {destination: '/lib/css/reset.css',            source: '/reset.css'}
+    {destination: '/lib/client/jquery-1.5.min.js', source: '/lib.client.jquery.min.js'}
+    {destination: '/public/images/logo.png',       source: '/logo.png'}
   ]
-  fs.writeFileSync name + file.fileName, fs.readFileSync(filesDir + file.dataFile, 'utf-8') for file in files
+  copyFile(source_dir + file.source, dir + file.destination) for file in files
+
+copyFile = (source, destination) ->
+  read = fs.createReadStream(source)
+  write = fs.createWriteStream(destination)
+  util.pump read, write
 
 showFinishText = (name) ->
   console.log "Success! Created app #{name}. You can now run the app:"
