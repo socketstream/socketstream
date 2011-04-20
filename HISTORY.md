@@ -1,3 +1,11 @@
+0.0.37 / 2011-04-20
+===================
+
+* $SS is now aliased as SS by default in both the server and client, meaning you no longer need the dollar symbol when calling the API
+* However, if the SS variable conflicts with something in your project, you may easily change it in the config: $SS.config.ss_var and $SS.config.client.ss_var
+* All docs have been updated accordingly. Remember this is just an alias - existing code will not break
+
+
 0.0.36 / 2011-04-10
 ===================
 

@@ -32,7 +32,7 @@ exports.init = (load_project = false) ->
   $SS.version = $SS.internal.package_json.version
 
   # Set client file version. Bumping this automatically triggers re-compliation of lib assets when a user upgrades
-  $SS.client.version = '0.0.6'
+  $SS.client.version = '0.0.7'
 
   # Set environment
   env = process.env.SS_ENV || 'development'
@@ -136,7 +136,13 @@ load =
     $SS.publish = require('./publish.coffee')
     $SS.users = require('./users.coffee')
     
+    # Parse app and environment config files
     load.dbConfigFile()
+    
+    # Alias $SS to $SS.config.ss_var to allow for 'SS' use or other custom variable name
+    global[$SS.config.ss_var] = $SS if $SS.config.ss_var
+    
+    # Load application files within /app
     load.files()
   
   # Server-side files

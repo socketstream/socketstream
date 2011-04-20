@@ -3,7 +3,7 @@
 
 SocketStream makes it a breeze to build phenomenally fast, highly-scalable real-time web applications on Node.js.
 
-Latest release: 0.0.36   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+Latest release: 0.0.37   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 
 
 ### Features
@@ -83,7 +83,9 @@ You can also call this server-side method over HTTP with the following URL:
     
 Or even from the console (type 'socketstream console') or another server-side file using:
 
-    $SS.server.app.square(25, console.log)        (Hint: passing console.log as the callback prints the response in the terminal)
+    SS.server.app.square(25, console.log)         (Hint: passing console.log as the callback prints the response in the terminal)
+
+Note the 'SS' variable is a bit like the dollar sign $ in jQuery - it's the main way into the SocketStream API. Like jQuery you may also use another global variable name if you wish.
 
 Ready for something a bit more advanced? Let's take a look at reverse geocoding using HTML5 geolocation...
 
@@ -160,20 +162,20 @@ First let's listen out for an event called 'newMessage' on the client:
     window.app =
 
       init: ->
-        $SS.events.on('newMessage', (message) -> alert(message))
+        SS.events.on('newMessage', (message) -> alert(message))
           
 Then, assuming we know the person's user_id, we can publish the event directly to them. On the server side you'd write:
 
     exports.actions =
 
       testMessage: (user_id) ->
-        $SS.publish.user(user_id, 'newMessage', 'Wow this is cool!')
+        SS.publish.user(user_id, 'newMessage', 'Wow this is cool!')
 
 Pretty cool eh? But it gets better. We don't have to worry which server instance the user is connected to. The message will always be routed to the correct server as each SocketStream server subscribes to the same instance of Redis.
 
 What happens if we want to notify every user when data has changed, or let everyone know the system is going down for maintenance? Simple, just use the broadcast method:
 
-    $SS.publish.broadcast('flash', {type: 'notification', message: 'Notice: This service is going down in 10 minutes'})
+    SS.publish.broadcast('flash', {type: 'notification', message: 'Notice: This service is going down in 10 minutes'})
     
 Ah, but you have thousands of users across hundreds of servers you say? No problem. The workload is distributed across every connected Node.js instance by design. I'm sure you can see where this is going... ;-)
 
@@ -204,18 +206,18 @@ The directories generated will be very familiar to Rails users. Here's a brief o
 #### /app/client
 * All files within /app/client will be converted to Javascript and sent to the client
 * The app.init() function will be automatically called once the websocket connection is established
-* All client code can be called from the console using the 'app' variable
+* All client code can be called from the browser's console using the 'app' variable
 * If you have a Javascript library you wish to use (e.g. jQuery UI), put this in /lib/client instead
 * Nesting client files within folders is supported, however they are not automatically namespaced for you - yet!
 * The /app/client/app.coffee file must always be present
-* View incoming/outgoing calls in the browser console in development (controlled with $SS.config.client.log.level)
+* View incoming/outgoing calls in the browser console in development (controlled with SS.config.client.log.level)
 * Coffeescript client files are automatically compiled and served on-the-fly in development mode and pre-compiled/minified/cached in staging and production
 
 #### /app/server
 * All files in this directory behave similar to Controllers in traditional MVC frameworks
 * For example, to call app.init from the client and pass 25 as params, call remote('app.init',25,function(){ alert(this); }) in the client
 * All methods can be automatically accessed via the in-built HTTP API (e.g. /api/app/square.json?5)
-* All server methods are pre-loaded and accessible via $SS.server in the console or from other server-side files
+* All server methods are pre-loaded and accessible via SS.server in the console or from other server-side files
 * If the method takes incoming params (optional), these will be pushed into the first argument. The last argument must always be the callback (cb)
 * All publicly available methods should be listed under 'exports.actions'. Private methods must be placed outside this scope and begin 'methodname = (params) ->'
 * Server files can be nested. E.g. remote('users.online.yesterday') would reference the 'yesterday' method in /app/server/users/online.coffee
@@ -228,7 +230,7 @@ The directories generated will be very familiar to Rails users. Here's a brief o
 * Ideal for business logic and models that need to validate on the client (for speed) yet ensure integrity before saving to the DB
 * Start your file with the same header you would for a server file. E.g. class exports.Filter
 * Use it client-side by instantiating the class: filter = new exports.Filter
-* All shared methods are pre-loaded and accessible via $SS.shared in the console or from other server-side files
+* All shared methods are pre-loaded and accessible via SS.shared in the console or from other server-side files
 * WARNING: All code within this folder will be sent to the client. Do not include any proprietary secret sauce or use database/filesystem calls
 
 #### /app/css
@@ -277,14 +279,14 @@ Use the SS_ENV environment variable to start SocketStream in a different environ
 
     SS_ENV=staging socketstream start
     
-All default modes are fully configurable using an optional JSON file placed within /config/environments. An unlimited number of new environments may also be added. You can easily tell which environment in running by calling $SS.env in the server or client.
+All default modes are fully configurable using an optional JSON file placed within /config/environments. An unlimited number of new environments may also be added. You can easily tell which environment in running by calling SS.env in the server or client.
 
-We will publish a full list of configurable params in the near future, but for now these can be viewed (and hence overridden in the config file), by typing $SS.config in the SocketStream console.
+We will publish a full list of configurable params in the near future, but for now these can be viewed (and hence overridden in the config file), by typing SS.config in the SocketStream console.
 
 
 ### Logging
 
-Client and server-side logging is switched on by default in __development__ and __staging__ and off in __production__. It can be controlled manually via $SS.config.log.level and $SS.config.client.log.level. Four levels of logging are available ranging from none (0) to highly verbose (4). The default level is 3.
+Client and server-side logging is switched on by default in __development__ and __staging__ and off in __production__. It can be controlled manually via SS.config.log.level and SS.config.client.log.level. Four levels of logging are available ranging from none (0) to highly verbose (4). The default level is 3.
 
 Occasionally you'll want to 'silence' some requests to the server which are called repeatedly (e.g. confirming a user is online) in order to see the wood from the trees. Add the 'silent' option to your 'remote' commands, e.g.
 
@@ -329,7 +331,7 @@ As this file is loaded after the environment config is processed, you can put yo
 
 Then access them inside /config/db.coffee as so:
 
-    config = $SS.config.db.mongo
+    config = SS.config.db.mongo
     global.M = new Db(config.database, new Server(config.host, config.port))
 
 We've not tested SocketStream with CouchDB, MySQL, or any other DB, but the principals should be the same.
@@ -419,12 +421,12 @@ The HTTP API allows all server-side actions to be accessed over a traditional HT
 
 It is enabled by default and can be configured with the following config variables:
 
-    $SS.config.api.enabled            Boolean       default: true         # Enables/disables the HTTP API
-    $SS.config.api.prefix             String        default: 'api'        # Sets the URL prefix (e.g. http://mysite.com/api
+    SS.config.api.enabled            Boolean       default: true         # Enables/disables the HTTP API
+    SS.config.api.prefix             String        default: 'api'        # Sets the URL prefix (e.g. http://mysite.com/api
 
 The HTTP API also supports Basic Auth (which will run over HTTPS if enabled), allowing you to access methods which use @session.user_id or @user.
 
-By placing 'exports.authenticate = true' in the file (see above) the server will know to prompt for a username and password before allowing access any of the actions within that file. However, the API will need to know which module to authenticate against. Set the $SS.config.api.auth.basic.module_name variable by putting the following JSON in your config file:
+By placing 'exports.authenticate = true' in the file (see above) the server will know to prompt for a username and password before allowing access any of the actions within that file. However, the API will need to know which module to authenticate against. Set the SS.config.api.auth.basic.module_name variable by putting the following JSON in your config file:
     
     {
       "api": { "auth": { "basic": { "module_name": "custom_auth"} } }
@@ -439,9 +441,9 @@ Both websocket and 'flashsocket' tunnels are surprisingly resilient to failure; 
 
 Therefore we recommend binding a function to the 'disconnect' and 'connect' events within the SocketIO client. For example:
 
-    $SS.socket.on('disconnect', -> alert('Connection Down'))
+    SS.socket.on('disconnect', -> alert('Connection Down'))
     
-    $SS.socket.on('connect', -> alert('Connection Up'))
+    SS.socket.on('connect', -> alert('Connection Up'))
 
 These events can be used client-side to toggle an online/offline icon within the app, or better still, to dim the screen and show a 'Attempting to reconnect...' message to users.
 

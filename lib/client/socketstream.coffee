@@ -11,12 +11,14 @@ window.$SS =
 
   env:              null            # environment variable set upon connection to the server
 
-  models:           {}              # load models into here
+  server:           {}              # load server functions into here
+  shared:           {}              # load shared functions into here
+  models:           {}              # load real time models into here
 
   internal:                         # the place for everything the user doesn't need to access
     cb_stack:       {}              # add callbacks to the stack
   
-  config:                           # setup default config
+  config:                           # setup default config. this gets overwritten upon connection to server
     log:
       level:        0               # no client-side logging by default
 
@@ -116,9 +118,12 @@ System =
   setEnvironment: (env) ->
     $SS.env = env
   
-  # Takes the $SS.config.client object set in the server's config file
+  # Copy the config from the server into $SS.config
   setConfig: (client_config) ->
     $SS.config = client_config || {}
+
+    # Alias $SS to $SS.config.ss_var. Default is 'SS'
+    window[$SS.config.ss_var] = $SS if $SS.config.ss_var
   
   # Passes through the names of RTM loaded on the server, if enabled
   setModels: (model_names) ->

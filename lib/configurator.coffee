@@ -15,6 +15,7 @@ exports.configure = ->
 # Set sensible defaults so we can be up and running without an app-specific config file
 setDefaults = ->
   $SS.config =
+    ss_var:             'SS'              # the main SocketStream global variable server-side
     port:               3000		          # if you want to run on port 80 or 443 node must be run as root
     hostname:           '0.0.0.0'         # allows the server to be bound to a particular IP. listens on all by default
     enable_color:       true              # use colors when outputting to terminal
@@ -48,6 +49,7 @@ setDefaults = ->
     # Set params which will be passed directly to the client when they connect
     # The client config should match the server as closly as possible
     client:
+      ss_var:           'SS'            # the main SocketStream global variable client-side
       remote_prefix:    null            # automatically prefixes all remote calls. e.g. if your server api begins 'v1' remote('app.square') will become remote('v1.app.square')
       log:
         level:          2       	      # 0 = none, 1 = calls only, 2 = calls + params, 3 = full
