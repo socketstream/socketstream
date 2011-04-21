@@ -32,7 +32,7 @@ exports.init = (load_project = false) ->
   $SS.version = $SS.internal.package_json.version
 
   # Set client file version. Bumping this automatically triggers re-compliation of lib assets when a user upgrades
-  $SS.client.version = '0.0.7'
+  $SS.client.version = '0.0.8'
 
   # Set environment
   env = process.env.SS_ENV || 'development'
@@ -187,6 +187,9 @@ load =
         ary.push(mod_name.split('.')[0])
 
         recursively($SS[name], ary, path, name)
+        
+        # Turn the API tree into a string we can easily send to the client to be re-constructed into functions
+        $SS.internal.api_string[name] = apiToString($SS[name])
 
        
   # Load any vendored modules
@@ -242,10 +245,16 @@ check =
     dirs = fs.readdirSync($SS.root)
     if (!dirs.include('app') || !dirs.include('public')) # All other dirs are optional for now
       fatal 'Unable to start SocketStream here. Not a valid project directory'
-      
+
 fatal = (message) ->
   $SS.log.error.exception ['error', message]
   throw 'Unable to continue'
+
+# We convert the object tree for sending in the most condensed way possible. The client will re-construct the api into SS.server and SS.shared from this string
+apiToString = (obj) ->
+  util.inspect(SS.server).replace(/\[Function\]/g, 'true')
+
+
 
 showBanner = (additional_text) ->
   counters = $SS.internal.counters.files_loaded

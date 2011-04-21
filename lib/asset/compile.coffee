@@ -42,9 +42,6 @@ exports.compile =
     # Include all jQuery templates, if present
     inclusions = inclusions.concat(buildTemplates())
     
-    # Add code to call app.init() in client (this will be called as soon as SocketStream is ready)
-    inclusions.push('<script type="text/javascript">$(document).ready(function() { app.init(); });</script>')
-    
     $SS.libs.jade.renderFile file, {locals: {SocketStream: inclusions.join('')}}, (err, html) ->
       cb {output: html, content_type: 'text/html'}
 

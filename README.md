@@ -3,7 +3,7 @@
 
 SocketStream makes it a breeze to build phenomenally fast, highly-scalable real-time web applications on Node.js.
 
-Latest release: 0.0.37   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+Latest release: 0.0.38   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 
 
 ### Features
@@ -50,26 +50,24 @@ Note: While SocketStream is a perfect fit for all manner of modern applications 
 
 ### Quick Example
 
-The key to using SocketStream is the `remote` method which is available anywhere within the client app.
+The key to using SocketStream is the 'SS' global variable which can be called anywhere within your server or client-side code.
 
-For example, let's square a number on the server:
-
-On the client side, add this to the /app/client/app.coffee file:
-
-    window.app =
-    
-      square: (number) ->
-        remote 'app.square', number, (response) ->
-          console.log "#{number} squared is #{response}"
-
-And on the server, add this to /app/server/app.coffee
+For example, let's write a simple server-side function which squares a number. Add this to the /app/server/app.coffee file:
 
     exports.actions =
 
       square: (number, cb) ->
         cb(number * number)
 
-Refresh your page then type this into the browser console:
+To call this from the browser add the following to the /app/client/app.coffee file:
+
+    window.app =
+    
+      square: (number) ->
+        SS.server.app.square number, (response) ->
+          console.log "#{number} squared is #{response}"
+
+Restart the server, refresh your page, then type this into the browser console:
 
     app.square(25)
 
@@ -81,11 +79,11 @@ You can also call this server-side method over HTTP with the following URL:
 
     /api/app/square?25                            (Hint: use .json to output to a file)
     
-Or even from the console (type 'socketstream console') or another server-side file using:
+Or even directly from the server-side console (type 'socketstream console') OR the browser's console OR another server-side file:
 
-    SS.server.app.square(25, console.log)         (Hint: passing console.log as the callback prints the response in the terminal)
+    SS.server.app.square(25, function(x){ console.log(x) })
 
-Note the 'SS' variable is a bit like the dollar sign $ in jQuery - it's the main way into the SocketStream API. Like jQuery you may also use another global variable name if you wish.
+Note the 'SS' variable is a bit like the dollar sign $ in jQuery - it's the main way into the SocketStream API. Like jQuery you may also use another global variable name if you wish. We do our best to keep the API between client and server identical wherever possible.
 
 Ready for something a bit more advanced? Let's take a look at reverse geocoding using HTML5 geolocation...
 
@@ -139,7 +137,7 @@ Then, purely to demonstrate a nice way to do client-side namespacing, let's crea
     # Private functions
 
     success = (coords_from_browser) ->
-      remote 'geocode.lookup', coords_from_browser, (response) ->
+      SS.server.geocode.lookup coords_from_browser, (response) ->
         console.log response
         alert 'You are currently at: ' + response.formatted_address
 
@@ -215,12 +213,12 @@ The directories generated will be very familiar to Rails users. Here's a brief o
 
 #### /app/server
 * All files in this directory behave similar to Controllers in traditional MVC frameworks
-* For example, to call app.init from the client and pass 25 as params, call remote('app.init',25,function(){ alert(this); }) in the client
+* For example, to call app.init from the client and pass 25 as params, call SS.server.app.init(25,function(){ alert(this); }) in the client
 * All methods can be automatically accessed via the in-built HTTP API (e.g. /api/app/square.json?5)
 * All server methods are pre-loaded and accessible via SS.server in the console or from other server-side files
 * If the method takes incoming params (optional), these will be pushed into the first argument. The last argument must always be the callback (cb)
 * All publicly available methods should be listed under 'exports.actions'. Private methods must be placed outside this scope and begin 'methodname = (params) ->'
-* Server files can be nested. E.g. remote('users.online.yesterday') would reference the 'yesterday' method in /app/server/users/online.coffee
+* Server files can be nested. E.g. SS.server.users.online.yesterday() would call the 'yesterday' method in /app/server/users/online.coffee
 * You may also nest objects within objects to provide namespacing within the same file
 * @session gives you direct access to the User's session
 * @user gives you direct access to your custom User instance. More on this coming soon
@@ -288,9 +286,9 @@ We will publish a full list of configurable params in the near future, but for n
 
 Client and server-side logging is switched on by default in __development__ and __staging__ and off in __production__. It can be controlled manually via SS.config.log.level and SS.config.client.log.level. Four levels of logging are available ranging from none (0) to highly verbose (4). The default level is 3.
 
-Occasionally you'll want to 'silence' some requests to the server which are called repeatedly (e.g. confirming a user is online) in order to see the wood from the trees. Add the 'silent' option to your 'remote' commands, e.g.
+Occasionally you'll want to 'silence' some requests to the server which are called repeatedly (e.g. confirming a user is online) in order to see the wood from the trees. Add the 'silent' option to your SS.server commands, e.g.
 
-    remote('user.confirm_online', user_id, {silent: true})
+    SS.server.user.confirm_online(user_id, {silent: true})
 
 
 ### Connecting to Redis

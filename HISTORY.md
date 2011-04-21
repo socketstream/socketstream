@@ -1,3 +1,14 @@
+0.0.38 / 2011-04-21
+===================
+
+* Major change to the client-side API: The 'remote' global method is deprecated in favour of 'SS.server' followed by the server-side function you wish to invoke.
+* Advantages are: 1) A 100% consistent experience between server and client  2) Automatic auto-completion of the server-side API in the browser command line. Woo!
+* The window.remote global function will stay around for a while whilst existing apps are converted but will be removed before 0.1.0
+* Also: Speeded up initial client/server protocol by combining multiple system messages into one
+* Changed the way the app is initialized - no longer requires JavaScript code to be injected into the HTML
+* Experimenting with Tim Caswell's client-side module loader. More on this soon
+
+
 0.0.37 / 2011-04-20
 ===================
 

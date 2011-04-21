@@ -59,13 +59,13 @@ process =
       # Create a new session or retrieve an existing one
       session.process client, (this_session) ->
         client.session = this_session                                                # Inject the current session into the client
-        if client.session.newly_created                                       
-          client.system('setSession', client.session.id)                             # Instruct the SocketStream client to create a new cookie if required
-          $SS.log.createNewSession(client.session)                                   # And log this (for now)
-        client.system('setEnvironment', $SS.env)                                     # Makes the $SS.env variable available client-side. Can be useful within client code
-        client.system('setConfig', $SS.config.client)                                # Copies any client configuration settings from the app config files to the client
-        client.system('setModels', $SS.models.keys()) if RTM                         # If RTM is enabled, transfer the list of models available to the client. Switched off by default.
-        client.system('ready')                                                       # Signal to the SocketStream client we're ready to accept incoming messages
+        client.system 'init',
+          session_id:       client.session.id
+          env:              $SS.env                                                  # Makes the $SS.env variable available client-side. Can be useful within client code
+          config:           $SS.config.client                                        # Copies any client configuration settings from the app config files to the client
+          api:                                                                       
+            server:         $SS.internal.api_string.server                           # Transmits a string representation of the Server API
+            models:         (if RTM then SS.models.keys() else [])                   # Transmits a list of Realtime Models exposed to the client if RTM is enabled (disabled by default)
 
     # Called each time Socket.IO sends a message through to the server
     call: (data, client) ->

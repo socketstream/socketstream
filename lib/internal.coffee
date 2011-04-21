@@ -21,6 +21,9 @@ exports.init = ->
   # Load last known state project was in, if it exists. We record this so we know when force a rebuild of client libraries on startup
   @last_known_state = loadState()
   
+  # API String
+  @api_string = {}
+  
   @
 
 # System uptime in ms (is this in Node anywhere?)

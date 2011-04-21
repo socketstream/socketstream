@@ -66,6 +66,8 @@ $SS.socket.connect()
 
 
 # Sends a command to /app/server code
+# Important: This global method should no longer be used directly. It will be renamed/removed in a future release
+# Instead call SS.server followed by the remote function you wish to invoke
 window.remote = ->
   args = arguments
   
@@ -105,31 +107,38 @@ class RTM
 # System commands
 System =
 
-  # Tells the client the session has been setup and we're ready to send requests
-  ready: ->
-    $SS.socket.ready = true
-
-  # Uses the setCookie method as defined in helpers
-  setSession: (id) ->
-    setCookie('session_id', id)
-    log 2, '-> Started new session: ' + id
+  # Setup the connection with everything we need to know before we can start processing requests
+  init: (data) ->
   
-  # Set the $SS.env variable. Useful for client-side scripts which need to behave differently depending upon environment loaded
-  setEnvironment: (env) ->
-    $SS.env = env
-  
-  # Copy the config from the server into $SS.config
-  setConfig: (client_config) ->
-    $SS.config = client_config || {}
+    # Set the $SS.env variable. Useful for client-side scripts which need to behave differently depending upon environment loaded
+    $SS.env = data.env                              
+    
+    # Copy the client config from the server into $SS.config
+    $SS.config = data.config || {}                  
 
     # Alias $SS to $SS.config.ss_var. Default is 'SS'
     window[$SS.config.ss_var] = $SS if $SS.config.ss_var
+
+    # Save the Session ID in a cookie (uses the setCookie method as defined in helpers)
+    setCookie('session_id', data.session_id)
   
-  # Passes through the names of RTM loaded on the server, if enabled
-  setModels: (model_names) ->
-    for name in model_names
+    # Passes through the names of RTMs loaded on the server, if any
+    for name in data.api.models
       $SS.models[name] = new RTM
       $SS.models[name].name = name
+  
+    # Load Server API tree into $SS.server
+    eval('$SS.server = ' + data.api.server)
+    setupAPI($SS.server, [])
+    
+    # Indicate we're ready to send
+    $SS.socket.ready = true
+    
+    # When the DOM has loaded, call the init method
+    if $
+      $(document).ready -> app.init()
+    else
+      app.init()
   
   # Displays any application errors in the browser's console
   error: (details) ->
@@ -158,6 +167,24 @@ Request =
     log 2, "~> #{cb.msg.rtm}.#{cb.msg.action}"
     cb.funkt(data.data)
     delete $SS.internal.cb_stack[data.cb_id]
+
+
+
+# EXPERIMENTAL MODULE LOADER
+
+# Super-simple module loading from Tim Caswell: https://gist.github.com/926811
+window.define = (name, fn) ->
+  window.defs = {} unless window.defs
+  window.defs[name] = fn
+
+window.require = (name) ->
+  return modules[name] if modules and modules.hasOwnProperty(name)
+  if window.defs and window.defs.hasOwnProperty(name)
+    modules = {} unless modules
+    fn = window.defs[name]
+    window.defs[name] = -> throw new Error("Circular Dependency")
+    return modules[name] = fn()
+  throw new Error("Module not found: #{name}")
 
 
 # PRIVATE HELPERS
@@ -201,3 +228,13 @@ error = (e) ->
 
 validLevel = (level) ->
   $SS.config.log.level >= level
+  
+setupAPI = (root, ary) ->
+  for key, value of root
+    ns = ary.slice(0)
+    ns.push(key)
+    if typeof(value) == 'object'
+      setupAPI(root[key], ns)
+    else
+      # For now we just pass the command through to the existing 'remote' function. This will be refactored in the future
+      root[key] = new Function('remote.apply(window, ["' + ns.join('.') + '"].concat(Array.prototype.slice.call(arguments, 0)))')
