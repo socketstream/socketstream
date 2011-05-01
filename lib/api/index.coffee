@@ -129,12 +129,10 @@ authenticate = (request, response, actions, session, cb) ->
 output_formats =
 
   json: (data) ->
-    output = JSON.stringify(data)
-    {output: output, content_type: 'text/json'}
+    {output: JSON.stringify(data), content_type: 'text/json'}
 
   # TODO: improve with syntax highlighting
   html: (data) ->
-    output = JSON.stringify(data)
-    {output: output, content_type: 'text/html'}
+    {output: JSON.stringify(data), content_type: 'text/html'}
     
   # TODO: add XML once we find a great lightweight object.toXML() library
