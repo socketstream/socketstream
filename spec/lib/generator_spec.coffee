@@ -1,33 +1,31 @@
-cli     = require '../../../lib/cli.coffee'
-fs      = require 'fs'
+generator = require '../../lib/generator.coffee'
+fs        = require 'fs'
 #request = require('request')
 #exec    = require('child_process').exec
 
 appName = 'tasty'
 mode    = 0755
 
-listFiles = (dir) ->
-  fs.readdirSync(dir).sort()
+listFiles = (dir) -> fs.readdirSync(dir).sort()
 
-describe 'cli.coffee', ->
+describe 'lib/generator.coffee', ->
   
-  beforeEach ->
-    new cli.AppGenerator appName
+  beforeEach -> generator.generate appName
   
   afterEach ->
     # remove files
-    files = ['/app/client/app.coffee', '/app/css/app.styl', '/app/server/app.coffee', '/app/views/app.jade', '/app.coffee', '/lib/css/reset.css', '/lib/client/jquery-1.5.min.js']
+    files = ['/app/client/app.coffee', '/app/css/app.styl', '/app/css/helpers.styl', '/app/server/app.coffee', '/app/views/app.jade', '/config/db.coffee', '/lib/css/reset.css', '/lib/client/jquery-1.5.min.js', '/public/images/logo.png']
     fs.unlinkSync appName + file, mode for file in files
     # then remove directories, in order of most nested
-    directories = ['/app/client', '/app/css', '/app/server', '/app/views', '/app', '/lib/client', '/lib/css', '/lib/server', '/lib', '/public/assets', '/public', '/vendor']
+    directories = ['/app/client', '/app/css', '/app/server', '/app/shared', '/app/views', '/app', '/config', '/lib/client', '/lib/css', '/lib/server', '/lib', '/public/assets', '/public/images', '/public', '/vendor']
     fs.rmdirSync appName + directory, mode for directory in directories
     fs.rmdirSync appName, mode
     
   it 'should generate a new application in the given directory', ->
-    expect(listFiles appName).toEqual ['app','app.coffee','lib','public','vendor']
-    expect(listFiles appName + '/app').toEqual ['client', 'css', 'server', 'views']
+    expect(listFiles appName).toEqual ['app','config','lib','public','vendor']
+    expect(listFiles appName + '/app').toEqual ['client', 'css', 'server', 'shared','views']
     expect(listFiles appName + '/lib').toEqual ['client', 'css', 'server']
-    expect(listFiles appName + '/public').toEqual ['assets']
+    expect(listFiles appName + '/public').toEqual ['assets', 'images']
     # TODO check that other relevant files exist
 
   # getHomepage = (cb) ->

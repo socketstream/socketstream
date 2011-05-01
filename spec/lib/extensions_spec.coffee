@@ -1,4 +1,4 @@
-require '../../lib/utils.js'
+require '../../lib/extensions.js'
 
 describe "Object.extend", ->
   

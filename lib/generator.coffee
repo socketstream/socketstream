@@ -8,7 +8,7 @@ util = require 'util'
 dir_mode = 0755
 
 exports.generate = (name) ->
-  return console.log "Please provide a name for your application: $> socketstream <MyAppName>" if name is undefined
+  return console.log "Please provide a name for your application: $> socketstream new <MyAppName>" if name is undefined
   if makeRootDirectory(name)
     makeDirectories(name)
     makeFiles(name)
