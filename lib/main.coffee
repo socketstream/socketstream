@@ -219,10 +219,13 @@ load =
         version =   $SS.internal.package_json.dependencies[lib[1]].substring(2)
       catch e
         throw "Unable to find #{npm_name} within the package.json dependencies"
-      try
+      try        
         $SS.libs[lib[0]] = require("#{npm_name}@#{version}")
       catch e
-        throw "Unable to start SocketStream as we're missing the correct version of #{npm_name}.\nPlease install with 'sudo npm install #{npm_name}@#{version}'"
+        try
+          $SS.libs[lib[0]] = require("#{npm_name}")
+        catch e
+          throw "Unable to start SocketStream as we're missing #{npm_name}.\nPlease install with 'npm install #{npm_name}'. Please also check the version number if you're using a version of npm below 1.0"
 
   dbConfigFile: ->
     db_config_file = $SS.root + '/config/db'
