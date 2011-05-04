@@ -3,7 +3,7 @@
 
 SocketStream makes it a breeze to build phenomenally fast, highly-scalable real-time web applications on Node.js.
 
-Latest release: 0.0.38   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+Latest release: 0.0.39   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 
 
 ### Features
@@ -17,7 +17,7 @@ Latest release: 0.0.38   ([view changelog](https://github.com/socketstream/socke
 * Effortless, scalable, pub/sub baked right in. See examples below
 * Integrated asset manager. Automatically packages and [minifies](https://github.com/mishoo/UglifyJS) your client-side code
 * Experimental out-of-the-box HTTPS support. See section below.
-* In-built User model with modular authentication
+* In-built User model with modular authentication. Automatically keeps track of users online (see below).
 * Uses [Redis](http://www.redis.io/) for fast session retrieval, pub/sub, list of users online, and any other data your app needs instantly
 * Nested namespaces and functions allow building of large 'enterprise' apps
 * Interactive console - just type 'socketstream console' and invoke any server-side method from there
@@ -34,7 +34,7 @@ SocketStream is a new full stack web framework built around the [Single-page App
 
 Project status: Highly experimental but usable. Improving almost every day.
 
-A request: I wish to keep SocketStream under-the-radar for now whilst I build a public website for it and, most importantly, figure out a good way to test the code (now the API has settled down somewhat). If you've discovered this project and wish to contribute, that would be awesome! But please don't tweet about it or post it on Hacker News just yet. Thank you.
+A request: I wish to keep SocketStream under-the-radar for now whilst I build a public website for it and, most importantly, figure out a good way to test the code (now the API has settled down somewhat). See 'The Road to 0.1.0' at the end of the page. If you've discovered this project and wish to contribute, that would be awesome! But please don't tweet about it or post it on Hacker News just yet. Thank you.
 
 
 ### How does it work?
@@ -83,7 +83,7 @@ Or even directly from the server-side console (type 'socketstream console') OR t
 
     SS.server.app.square(25, function(x){ console.log(x) })
 
-Note the 'SS' variable is a bit like the dollar sign $ in jQuery - it's the main way into the SocketStream API. Like jQuery you may also use another global variable name if you wish. We do our best to keep the API between client and server identical wherever possible.
+Note the 'SS' variable is a bit like the dollar sign $ in jQuery - it's the main way into the SocketStream API. We do our best to keep the API between client and server identical wherever possible.
 
 Ready for something a bit more advanced? Let's take a look at reverse geocoding using HTML5 geolocation...
 
@@ -374,7 +374,7 @@ The current session object is 'injected' into exports.actions within the server-
 
 ### Users and Modular Authentication
 
-As almost all web applications have users which need to sign in and out, we have built the concept of a 'current user' into the core of SocketStream. This not only makes life easier for developers, but is vital to the correct functioning of the pub/sub system and authenticating API requests.
+As almost all web applications have users which need to sign in and out, we have built the concept of a 'current user' into the core of SocketStream. This not only makes life easier for developers, but is vital to the correct functioning of the pub/sub system, authenticating API requests, and tracking which users are currently online (see section below).
 
 Authentication is completely modular and trivial for developers to implement. Here's an example of a custom authentication module we've placed in /lib/server/custom_auth.coffee
 
@@ -411,6 +411,21 @@ Mark any files within /app/server which require authentication by placing this l
     exports.authenticate = true
 
 This will check or prompt for a logged in user before and of the methods within that file are executed.
+
+
+### Users Online
+
+Once users are able to authenticate and log in, you'll probably want to keep track of who's online - especially if you're creating a real-time chat or social app. Luckily we've built this feature right into the framework.
+
+When a user successfully authenticates (see section above) we store their User ID within Redis. You may obtain an array of User IDs online right now by calling this method in your server-side code:
+
+    SS.users.online.now()
+
+If a user logs out, they will immediately be removed from this list. But what happens if a user simply closes down their browser or they lose their connection?
+
+By default the SocketStream client sends an ultra-lightweight 'heartbeat' signal to the server every 30 seconds confirming the user is still online. On the server side, a process runs every minute to ensure users who have failed to check in within the last minute are 'purged' from the list of users online. All timings can be configured using SS.config.client.heartbeat_interval and the SS.config.users.online params.
+
+Note: The 'Users Online' feature is enabled by default as the overhead is minimal. If you don't need this feature you can easily disable it by setting SS.config.users.online.enabled to false in the app config file.
 
 
 ### HTTP API
@@ -460,6 +475,29 @@ Then run jasbin in the SocketStream directory:
   
     cd socketstream/
     jasbin
+    
+
+### The Road to 0.1.0
+
+0.1.0 will be the first public release of SocketStream - the one we will publish to NPM and announce on Hacker News, Reddit, Twitter, etc.
+
+Why are we waiting? Because developers are busy people and we want to make sure everyone who invests time trying out SocketStream has an enjoyable and productive experience. That means we need more documentation, install guides for major platforms, better error handling, example code and easy ways to get support.
+
+Remaining tasks for 0.1.0:
+
+* Support publishing events to groups of users (in progress)
+* Support client-side 'requires' allowing for namespacing and client/server API compatibility (in progress)
+* Improve working with shared code
+* Improve error handling and the throwing of errors
+* Stabilize API to ensure minimal code changes in the future
+
+In addition, the following needs to be in place:
+
+* SocketStream.org public website (in progress)
+* At least two example/demo applications available on GitHub
+* Review available testing frameworks and document ways these can be used with SS
+* A brief guide to deploying and scaling
+* Setup a SocketStream Google Group
 
 
 ### Contributors

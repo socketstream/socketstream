@@ -63,6 +63,7 @@ process =
           session_id:       client.session.id
           env:              $SS.env                                                  # Makes the $SS.env variable available client-side. Can be useful within client code
           config:           $SS.config.client                                        # Copies any client configuration settings from the app config files to the client
+          heartbeat:        $SS.config.users.online.enabled                          # Let's the client know if User Online tracking is enabled. Change heartbeat timing with $SS.config.client.heartbeat_seconds (default = 60)
           api:                                                                       
             server:         $SS.internal.api_string.server                           # Transmits a string representation of the Server API
             models:         (if RTM then SS.models.keys() else [])                   # Transmits a list of Realtime Models exposed to the client if RTM is enabled (disabled by default)
@@ -89,7 +90,11 @@ process =
     
     # Message Handlers (invoked according to the msg.type)
     message:
-    
+      
+      # Confirms the user is still online
+      heartbeat: (msg, client) ->
+        $SS.users.online.confirm(client.session.user_id) if client.session.user_id
+
       # Calls to /app/server code
       server: (msg, client) ->
         $SS.log.incoming.socketio(msg, client)                                                  # Log the incoming request

@@ -1,13 +1,13 @@
 # Socket Stream Client
 # --------------------
 
-# Compiled, minified and cached before being sent to client
+# This file is compiled, minified and cached before being sent to client
 
 # Make the exports variable global so we can access code placed in /app/shared
 window.exports = {}
 
-# Set the $SS global variable. Wherever possible this should behave in the same was as the server
-window.$SS =
+# Set the SS global variable. Wherever possible this should behave in the same was as the server
+window.SS =
 
   env:              null            # environment variable set upon connection to the server
 
@@ -21,9 +21,12 @@ window.$SS =
   config:                           # setup default config. this gets overwritten upon connection to server
     log:
       level:        0               # no client-side logging by default
+      
+# Maintain compatibility with $SS in previous versions
+window.$SS = window.SS
 
 # Event handling
-$SS.events =
+SS.events =
 
   _events: {}
 
@@ -35,7 +38,7 @@ $SS.events =
     event(params) for event in @_events[name]
 
 # Setup the websocket connection
-$SS.socket = new io.Socket(document.location.hostname, {
+SS.socket = new io.Socket(document.location.hostname, {
   rememberTransport: false,
   port: document.location.port,
   secure: (document.location.protocol == 'https:'),
@@ -44,7 +47,7 @@ $SS.socket = new io.Socket(document.location.hostname, {
 })
 
 # Process incoming messages over the websocket
-$SS.socket.on 'message', (raw) ->
+SS.socket.on 'message', (raw) ->
   data = JSON.parse(raw)
   if data.type
     if Request[data.type]?
@@ -55,14 +58,14 @@ $SS.socket.on 'message', (raw) ->
     console.error("Error: No message type specified. Dropping message")
   
 # Attempt reconnection if the connection is severed
-$SS.socket.on 'disconnect', ->
+SS.socket.on 'disconnect', ->
   attemptReconnection = ->
-    $SS.socket.connect() unless $SS.socket.connecting
-    setTimeout(arguments.callee, 50)
+    SS.socket.connect() unless SS.socket.connecting
+    setTimeout arguments.callee, 100
   attemptReconnection()
  
 # Connect!
-$SS.socket.connect()
+SS.socket.connect()
 
 
 # Sends a command to /app/server code
@@ -74,7 +77,7 @@ window.remote = ->
   # Assemble message
   msg = {type: 'server'}
   msg.method  = args[0]
-  msg.method  = "#{$SS.config.remote_prefix}.#{msg.method}" if $SS.config.remote_prefix
+  msg.method  = "#{SS.config.remote_prefix}.#{msg.method}" if SS.config.remote_prefix
   msg.params  = if args.length >= 3 then args[1] else null
   msg.options = if args.length >= 4 then args[2] else null
   
@@ -109,36 +112,39 @@ System =
 
   # Setup the connection with everything we need to know before we can start processing requests
   init: (data) ->
-  
-    # Set the $SS.env variable. Useful for client-side scripts which need to behave differently depending upon environment loaded
-    $SS.env = data.env                              
     
-    # Copy the client config from the server into $SS.config
-    $SS.config = data.config || {}                  
-
-    # Alias $SS to $SS.config.ss_var. Default is 'SS'
-    window[$SS.config.ss_var] = $SS if $SS.config.ss_var
+    console.log data
+  
+    # Set the SS.env variable. Useful for client-side scripts which need to behave differently depending upon environment loaded
+    SS.env = data.env                              
+    
+    # Copy the client config from the server into SS.config
+    SS.config = data.config || {}                  
 
     # Save the Session ID in a cookie (uses the setCookie method as defined in helpers)
     setCookie('session_id', data.session_id)
   
     # Passes through the names of RTMs loaded on the server, if any
     for name in data.api.models
-      $SS.models[name] = new RTM
-      $SS.models[name].name = name
+      SS.models[name] = new RTM
+      SS.models[name].name = name
   
-    # Load Server API tree into $SS.server
-    eval('$SS.server = ' + data.api.server)
-    setupAPI($SS.server, [])
+    # Load Server API tree into SS.server
+    eval('SS.server = ' + data.api.server)
+    setupAPI(SS.server, [])
     
     # Indicate we're ready to send
-    $SS.socket.ready = true
+    SS.socket.ready = true
     
-    # When the DOM has loaded, call the init method
+    # When the DOM has loaded, call the init method. If we're using jQuery, make sure the DOM has loaded first
     if $
       $(document).ready -> app.init()
     else
       app.init()
+      
+    # If User Online tracking is enabled, send a heartbeat to the server every SS.config.users.online.heartbeat_secs
+    sendHeartbeat() if data.heartbeat
+      
   
   # Displays any application errors in the browser's console
   error: (details) ->
@@ -152,22 +158,21 @@ Request =
     System[data.method](data.params)
 
   server: (data) ->
-    cb = $SS.internal.cb_stack[data.cb_id]
+    cb = SS.internal.cb_stack[data.cb_id]
     silent = (cb.msg.options and cb.msg.options.silent)
     log(2, '-> ' + cb.msg.method, data.params) unless silent
     cb.funkt(data.params)
-    delete $SS.internal.cb_stack[data.cb_id]
+    delete SS.internal.cb_stack[data.cb_id]
   
   event: (data) ->
     log 2, "=> #{data.event}"
-    $SS.events.emit(data.event, data.params)
+    SS.events.emit(data.event, data.params)
 
   rtm: (data) ->
-    cb = $SS.internal.cb_stack[data.cb_id]
+    cb = SS.internal.cb_stack[data.cb_id]
     log 2, "~> #{cb.msg.rtm}.#{cb.msg.action}"
     cb.funkt(data.data)
-    delete $SS.internal.cb_stack[data.cb_id]
-
+    delete SS.internal.cb_stack[data.cb_id]
 
 
 # EXPERIMENTAL MODULE LOADER
@@ -192,17 +197,17 @@ window.require = (name) ->
 send = (msg, cb) ->
   args = arguments
   try
-    if ($SS.socket.connected == false && $SS.socket.connecting == false)
-      $SS.socket.ready = false
-      $SS.socket.connect()
+    if (SS.socket.connected == false && SS.socket.connecting == false)
+      SS.socket.ready = false
+      SS.socket.connect()
       throw 'NOT_READY'  
     else
-      if $SS.socket.ready == true
+      if SS.socket.ready == true
         cb_id = Math.random().toString().split('.')[1]
-        window.$SS.internal.cb_stack[cb_id] = {funkt: cb, msg: msg}
+        window.SS.internal.cb_stack[cb_id] = {funkt: cb, msg: msg}
         msg.cb_id = cb_id
         msg = JSON.stringify(msg)
-        $SS.socket.send(msg)
+        SS.socket.send(msg)
       else
         throw 'NOT_READY'
   catch e
@@ -227,7 +232,7 @@ error = (e) ->
   console.error(e) if validLevel(1)
 
 validLevel = (level) ->
-  $SS.config.log.level >= level
+  SS.config.log.level >= level
   
 setupAPI = (root, ary) ->
   for key, value of root
@@ -238,3 +243,7 @@ setupAPI = (root, ary) ->
     else
       # For now we just pass the command through to the existing 'remote' function. This will be refactored in the future
       root[key] = new Function('remote.apply(window, ["' + ns.join('.') + '"].concat(Array.prototype.slice.call(arguments, 0)))')
+
+sendHeartbeat = ->
+  send {type: 'heartbeat'}, ->
+  setTimeout arguments.callee, (SS.config.heartbeat_interval * 1000)

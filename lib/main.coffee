@@ -32,7 +32,7 @@ exports.init = (load_project = false) ->
   $SS.version = $SS.internal.package_json.version
 
   # Set client file version. Bumping this automatically triggers re-compliation of lib assets when a user upgrades
-  $SS.client.version = '0.0.8'
+  $SS.client.version = '0.0.9'
 
   # Set environment
   env = process.env.SS_ENV || 'development'
@@ -90,6 +90,7 @@ exports.start =
     load.project()
     require('./server.coffee').start()
     protocol = if $SS.config.ssl.enabled then $SS.log.color('https', 'green') else "http"
+    $SS.users.online.update() if $SS.config.users.online.enabled
     showBanner("Server running on #{protocol}://#{$SS.config.hostname}:#{$SS.config.port}")
     
   console: ->

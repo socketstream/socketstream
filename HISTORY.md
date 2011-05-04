@@ -1,3 +1,11 @@
+0.0.39 / 2011-05-04
+===================
+
+* Added 'Users Online' feature and API to make it easy to create real-time chat/social apps. Documented in README
+* Added 'The Road to 0.1.0' in the README
+* Removed ability to configure global client-side variable name for now - it's not 100% stable. $SS and SS both work but SS is now recommended.
+
+
 0.0.38 / 2011-04-21
 ===================
 
