@@ -36,6 +36,7 @@ exports.compile =
           files.map (file) ->
             file = file.replace(path + '/', '')
             inclusions.push(tag.js(dir, file))
+
       # Include Stylus files (additional files should be linked from app.styl)
       inclusions.push(tag.css('css', 'app.styl'))
     
@@ -48,6 +49,8 @@ exports.compile =
   coffee: (path, cb) ->
     input = fs.readFileSync "#{$SS.root}/#{path}", 'utf8'
     try
+      file_ary = path.split('.')[0].split('/')
+      input = namespaceSharedFile(input, file_ary) if file_ary[1] == 'shared'
       js = $SS.libs.coffee.compile(input)
       cb {output: js, content_type: 'text/javascript'}
     catch e
@@ -103,3 +106,13 @@ tag =
 
   template: (id, contents) ->
     '<script id="' + id + '" type="text/html">' + contents + '</script>'
+    
+# Namespace code in Shared Files
+# Changes 'exports.X' statements to 'SS.shared.X' to ensure the API is consistent between server and client without any additional overhead
+namespaceSharedFile = (input, file_ary) ->
+  ns = file_ary.splice(2)
+  prefix = ns.map (x, i) -> # The prefix ensure we only attach functions to initialized objects
+    level = ns.slice(0, i + 1).join('.')
+    "SS.shared.#{level} = {} unless SS.shared.#{level}"
+  prefix.join("\n") + "\n" + input.replace(/exports\./g, 'SS.shared.' + ns.join('.') + '.')
+

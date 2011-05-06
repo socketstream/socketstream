@@ -3,7 +3,7 @@
 
 SocketStream makes it a breeze to build phenomenally fast, highly-scalable real-time web applications on Node.js.
 
-Latest release: 0.0.39   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+Latest release: 0.0.40   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 
 
 ### Features
@@ -224,12 +224,7 @@ The directories generated will be very familiar to Rails users. Here's a brief o
 * @user gives you direct access to your custom User instance. More on this coming soon
 
 #### /app/shared
-* All files within /app/shared will be converted to Javascript and sent to the client. In addition they can also be called server-side
-* Ideal for business logic and models that need to validate on the client (for speed) yet ensure integrity before saving to the DB
-* Start your file with the same header you would for a server file. E.g. class exports.Filter
-* Use it client-side by instantiating the class: filter = new exports.Filter
-* All shared methods are pre-loaded and accessible via SS.shared in the console or from other server-side files
-* WARNING: All code within this folder will be sent to the client. Do not include any proprietary secret sauce or use database/filesystem calls
+* See 'Sharing Code' section below
 
 #### /app/css
 * /app/css/app.stly must exist. This should contain your stylesheet code in [Stylus](http://learnboost.github.com/stylus/) format (similar to SASS)
@@ -360,6 +355,27 @@ Note: We have found Safari will not support secure websockets without a valid (i
 We will continue enhancing the HTTPS experience over future releases until it's stable.
 
 
+### Sharing Code
+
+One of the great advantages SocketStream provides is the ability to share the same JavaScript/CoffeeScript code between client and server. Of course you can always copy and paste code between files, but we provide something better: a really neat way to organise and call code which can be executed in both environments.
+
+Simply add a new file within /app/shared and export the functions, properties, objects or even CoffeeScript classes you wish to share. For example, let's create a file called /app/shared/calculate.coffee and paste the following in it:
+
+    exports.circumference = (radius = 1) ->
+      2 * estimatePi() * radius
+
+    estimatePi = -> 355/113
+    
+
+This can now be executed by calling SS.shared.calculate.circumference(20) from anywhere within your server OR client code! This makes /app/shared the ideal home for calculations, formatting helpers and model validations - among other things.
+
+All Shared code is pre-loaded and added to the SS.shared API tree which may be inspected at any time from the server or browser's console. You'll notice estimatePi() does not appear in the API tree as this is a private function (though the code is still sent to the client).
+    
+Nested namespaces using folders and object trees are fully supported, as are calls to other SS.shared functions and even SS.server functions. Pretty cool eh?
+
+**Warning** All code within /app/shared will be compressed and transmitted to the client upon initial connection. So make sure you don't include any proprietary secret sauce or use any database/filesystem calls.
+
+
 ### Sessions
 
 SocketStream creates a new session when a browser connects to the server for the first time, storing a session cookie on the client and the details in Redis. When the same visitor returns (or presses refresh in the browser), the session is instantly retrieved.
@@ -487,7 +503,6 @@ Remaining tasks for 0.1.0:
 
 * Support publishing events to groups of users (in progress)
 * Support client-side 'requires' allowing for namespacing and client/server API compatibility (in progress)
-* Improve working with shared code
 * Improve error handling and the throwing of errors
 * Stabilize API to ensure minimal code changes in the future
 

@@ -1,3 +1,10 @@
+0.0.40 / 2011-05-06
+===================
+
+* Huge improvements to the way Shared code works. Classes are no longer required but are still supported. Added new section to README
+* Shared code can now be executed directly from the client via SS.shared (exactly the same syntax as the server :-)
+
+
 0.0.39 / 2011-05-04
 ===================
 

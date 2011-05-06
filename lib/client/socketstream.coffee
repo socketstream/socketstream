@@ -3,9 +3,6 @@
 
 # This file is compiled, minified and cached before being sent to client
 
-# Make the exports variable global so we can access code placed in /app/shared
-window.exports = {}
-
 # Set the SS global variable. Wherever possible this should behave in the same was as the server
 window.SS =
 
