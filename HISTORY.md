@@ -1,3 +1,10 @@
+0.0.41 / 2011-05-10
+===================
+
+* Updated NPM packages
+* Changed client code to prevent re-calling app.init when the connection comes back up
+
+
 0.0.40 / 2011-05-06
 ===================
 

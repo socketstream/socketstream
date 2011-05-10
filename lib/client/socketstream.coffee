@@ -6,6 +6,7 @@
 # Set the SS global variable. Wherever possible this should behave in the same was as the server
 window.SS =
 
+  started:          null            # datetime since app.init was called
   env:              null            # environment variable set upon connection to the server
 
   server:           {}              # load server functions into here
@@ -109,8 +110,6 @@ System =
 
   # Setup the connection with everything we need to know before we can start processing requests
   init: (data) ->
-    
-    console.log data
   
     # Set the SS.env variable. Useful for client-side scripts which need to behave differently depending upon environment loaded
     SS.env = data.env                              
@@ -133,14 +132,11 @@ System =
     # Indicate we're ready to send
     SS.socket.ready = true
     
-    # When the DOM has loaded, call the init method. If we're using jQuery, make sure the DOM has loaded first
-    if $
-      $(document).ready -> app.init()
-    else
-      app.init()
-      
     # If User Online tracking is enabled, send a heartbeat to the server every SS.config.users.online.heartbeat_secs
     sendHeartbeat() if data.heartbeat
+    
+    # Call app.init (if not previously run)
+    start()
       
   
   # Displays any application errors in the browser's console
@@ -190,6 +186,15 @@ window.require = (name) ->
 
 
 # PRIVATE HELPERS
+
+start = ->
+  unless SS.started
+    # When the DOM has loaded, call the init method. If we're using jQuery, make sure the DOM has loaded first
+    if jQuery
+      jQuery(document).ready -> app.init()
+    else
+      app.init()
+    SS.started = new Date
 
 send = (msg, cb) ->
   args = arguments
