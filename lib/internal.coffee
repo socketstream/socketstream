@@ -37,12 +37,12 @@ exports.saveState = ->
 
 exports.currentState = ->
   version:
-    server: $SS.version
-    client: $SS.client.version
+    server: SS.version
+    client: SS.client.version
 
 exports.clientVersionChanged = ->
   try
-    $SS.libs.semver.gt @currentState().version.client, @last_known_state.version.client
+    SS.libs.semver.gt @currentState().version.client, @last_known_state.version.client
   catch e
     true
 
@@ -50,7 +50,7 @@ exports.clientVersionChanged = ->
 # HELPERS
 
 stateFileName = ->
-  "#{$SS.root}/.socketstream_state"
+  "#{SS.root}/.socketstream_state"
 
 loadState = ->
   try

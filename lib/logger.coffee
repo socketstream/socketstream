@@ -50,7 +50,7 @@ exports.error =
 
 # Color helper
 exports.color = (msg, color) ->
-  return msg unless $SS.config.enable_color
+  return msg unless SS.config.enable_color
   msg_ary = msg.split('\n')
   first_line = msg_ary[0]
   other_lines = if msg_ary.length > 1 then '\n' + msg_ary.splice(1).join('\n') else ''
@@ -62,7 +62,7 @@ output = (level, msg) ->
   util.log(msg) if validLevel(level)
 
 validLevel = (level) ->
-  $SS.config.log.level >= level
+  SS.config.log.level >= level
 
 parseParams = (params) ->
   params = util.inspect(params) if params and validLevel(3)

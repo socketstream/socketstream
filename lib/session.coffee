@@ -5,13 +5,13 @@
 utils = require('./utils')
 
 id_length = 32
-key = $SS.config.redis.key_prefix
+key = SS.config.redis.key_prefix
 
 # Process an incoming request where we have a persistent client (not the API)
 exports.process = (client, cb) ->
   cookies = getCookies(client)
   if cookies && cookies.session_id && cookies.session_id.length == id_length
-    $SS.redis.main.hgetall "#{key}:session:#{cookies.session_id}", (err, data) ->
+    SS.redis.main.hgetall "#{key}:session:#{cookies.session_id}", (err, data) ->
       if err or data == null or data == undefined
         cb(new exports.Session(client))           # session doesn't exist in Redis or is invalid
       else
@@ -61,16 +61,16 @@ class exports.Session
     return null unless user_id
     @user_id = user_id
     if @client
-      $SS.redis.main.hset @key(), 'user_id', @user_id
-      $SS.redis.pubsub.subscribe @pubsub_key()
-      $SS.users.connected[@user_id] = @client
-      $SS.users.online.add(@user_id) if $SS.config.users.online.enabled
+      SS.redis.main.hset @key(), 'user_id', @user_id
+      SS.redis.pubsub.subscribe @pubsub_key()
+      SS.users.connected[@user_id] = @client
+      SS.users.online.add(@user_id) if SS.config.users.online.enabled
 
   logout: (cb) ->
     if @client
-      $SS.redis.pubsub.unsubscribe @pubsub_key()
-      delete $SS.users.connected[@user_id]
-      $SS.users.online.remove(@user_id) if $SS.config.users.online.enabled
+      SS.redis.pubsub.unsubscribe @pubsub_key()
+      delete SS.users.connected[@user_id]
+      SS.users.online.remove(@user_id) if SS.config.users.online.enabled
     @user_id = null  # clear user_id. note we are not erasing this in redis as it can be advantageous to keep this for retrospective analytics
     @user = null     # clear any attached custom User instance
     cb({})
@@ -79,8 +79,8 @@ class exports.Session
     @user_id?
 
   save: ->
-    $SS.redis.main.hset @key(), 'created_at', @created_at
-    $SS.redis.main.hset @key(), 'attributes', JSON.stringify(@attributes)
+    SS.redis.main.hset @key(), 'created_at', @created_at
+    SS.redis.main.hset @key(), 'attributes', JSON.stringify(@attributes)
 
 
 # PRIVATE

@@ -31,7 +31,7 @@ exports.init = ->
   findAssets =>
     ensureAssetsExist()
     upgradeAssetsIfRequired()
-  if $SS.config.pack_assets
+  if SS.config.pack_assets
     @pack.all()
   else
     @monitor()
@@ -64,13 +64,13 @@ ensureAssetsExist = ->
   unless exports.files.js.lib? and exports.files.css.lib? and exports.files.css.app?
     util.log "It looks like this is the first time you're running SocketStream. Generating asset files..."
     exports.pack.all()
-    $SS.internal.saveState()
+    SS.internal.saveState()
 
 upgradeAssetsIfRequired = ->
-  if $SS.internal.clientVersionChanged()
+  if SS.internal.clientVersionChanged()
     util.log "Thanks for upgrading SocketStream. Regenerating assets to include the latest client code..."
     exports.pack.js.system()
-    $SS.internal.saveState()
+    SS.internal.saveState()
 
 findAssets = (cb) ->
   files = utils.fileList exports.public_path

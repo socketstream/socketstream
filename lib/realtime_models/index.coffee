@@ -8,14 +8,14 @@ exports.rest = require('./rest.coffee')
 
 # Broadcast an update
 exports.broadcast = (msg) ->
-  $SS.publish.broadcast('rtm', msg)
+  SS.publish.broadcast('rtm', msg)
 
 
 # RTM call from Client
 exports.call = (msg, cb) ->
 
   # Try to grab the model
-  rtm = $SS.models[msg.rtm]
+  rtm = SS.models[msg.rtm]
 
   if rtm?
   

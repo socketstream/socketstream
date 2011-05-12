@@ -5,7 +5,7 @@
 exports.processRequest = (actions, params, request, format, cb) ->
   model_name = actions[0]
   action = actions[1]
-  model = $SS.models[model_name]
+  model = SS.models[model_name]
   throw ['model_not_found',"The '#{model_name}' model you are looking for can not be found"] if model == undefined
   throw ['model_not_rtm',"The '#{model_name}' model does not appear to be a valid Realtime Model"] unless model._rtm?
   throw ['rest_not_enabled','REST support is not enabled for this model'] unless model._rtm.rest and model._rtm.rest.enabled

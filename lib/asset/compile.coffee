@@ -14,7 +14,7 @@ exports.init = (@assets) ->
 exports.compile =
 
   jade: (input_file_name, cb) ->
-    file = "#{$SS.root}/app/views/#{input_file_name}"
+    file = "#{SS.root}/app/views/#{input_file_name}"
 
     # Always include links to JS and CSS client-side pre-packed libraries
     inclusions = []
@@ -22,7 +22,7 @@ exports.compile =
     inclusions.push(tag.css('assets', exports.assets.files.css.lib))
     
     # Typically when in Staging or Production assets are pre-packed, so we include links to them here
-    if $SS.config.pack_assets
+    if SS.config.pack_assets
       inclusions.push(tag.js('assets', exports.assets.files.js.app))
       inclusions.push(tag.css('assets', exports.assets.files.css.app))
     # However, when in Development, we need to iterate through all dirs and include separate links to load each file
@@ -43,28 +43,28 @@ exports.compile =
     # Include all jQuery templates, if present
     inclusions = inclusions.concat(buildTemplates())
     
-    $SS.libs.jade.renderFile file, {locals: {SocketStream: inclusions.join('')}}, (err, html) ->
+    SS.libs.jade.renderFile file, {locals: {SocketStream: inclusions.join('')}}, (err, html) ->
       cb {output: html, content_type: 'text/html'}
 
   coffee: (path, cb) ->
-    input = fs.readFileSync "#{$SS.root}/#{path}", 'utf8'
+    input = fs.readFileSync "#{SS.root}/#{path}", 'utf8'
     try
       file_ary = path.split('.')[0].split('/')
       input = namespaceSharedFile(input, file_ary) if file_ary[1] == 'shared'
-      js = $SS.libs.coffee.compile(input)
+      js = SS.libs.coffee.compile(input)
       cb {output: js, content_type: 'text/javascript'}
     catch e
       util.log("\x1B[1;31mError: Unable to compile Coffeescript file #{path} to JS\x1B[0m")
-      throw(e) if $SS.config.throw_errors
+      throw(e) if SS.config.throw_errors
 
   styl: (input_file_name, cb) ->
     dir = "app/css"
     path = "#{dir}/#{input_file_name}"
-    input = fs.readFileSync "#{$SS.root}/#{path}", 'utf8'
-    $SS.libs.stylus.render input, { filename: input_file_name, paths: [dir], compress: $SS.config.pack_assets}, (err, css) ->
+    input = fs.readFileSync "#{SS.root}/#{path}", 'utf8'
+    SS.libs.stylus.render input, { filename: input_file_name, paths: [dir], compress: SS.config.pack_assets}, (err, css) ->
       if err
         util.log("\x1B[1;31mError: Unable to compile Stylus file #{path} to CSS\x1B[0m")
-        throw(err) if $SS.config.throw_errors
+        throw(err) if SS.config.throw_errors
       cb {output: css, content_type: 'text/css'}
 
 
@@ -88,7 +88,7 @@ buildTemplate = (template_path) ->
   id = path.replace('.' + ext, '')
   file = fs.readFileSync('./app/views/' + template_path, 'utf8')
   try
-    html = $SS.libs.jade.render(file);
+    html = SS.libs.jade.render(file);
   catch e
     console.error 'Unable to render jade template: ' + template_path
     throw e

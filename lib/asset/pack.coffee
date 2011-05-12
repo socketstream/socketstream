@@ -69,12 +69,12 @@ exports.pack =
       output = utils.concatFiles("#{system_path}/js")
       client = fs.readFileSync client_file_path, 'utf8'
       try
-        js = $SS.libs.coffee.compile(client)
+        js = SS.libs.coffee.compile(client)
         util.log("  Compiled SocketStream client into JS")
         output += utils.minifyJS('client file', js)
         fs.writeFileSync("#{system_path}/cached/lib.min.js", output)
       catch e
-        $SS.log.error.exception(['unable_to_compile_client', "Error: Unable to compile or save the SocketStream client file to JS"])
+        SS.log.error.exception(['unable_to_compile_client', "Error: Unable to compile or save the SocketStream client file to JS"])
         throw(e)
       util.log("SocketStream system client files updated. Recompiling application lib file to include new code...")
       exports.assets.pack.js.lib()

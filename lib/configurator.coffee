@@ -9,12 +9,12 @@ exports.configure = ->
   setDefaults()
   setEnvironmentDefaults()
   mergeConfigFile("/config/app.json")
-  mergeConfigFile("/config/environments/#{$SS.env}.json")
+  mergeConfigFile("/config/environments/#{SS.env}.json")
 
 
 # Set sensible defaults so we can be up and running without an app-specific config file
 setDefaults = ->
-  $SS.config =
+  SS.config =
     ss_var:             'SS'                  # the main SocketStream global variable server-side
     port:               3000		              # if you want to run on port 80 or 443 node must be run as root
     hostname:           '0.0.0.0'             # allows the server to be bound to a particular IP. listens on all by default
@@ -24,7 +24,7 @@ setDefaults = ->
 
     # Logger (only to the terminal for now)
     log:
-      level:            3         	          # 0 = none, 1 = calls only, 2 = calls + params, 3 = full
+      level:            3         	          # 0 = none, 1 = calls only, 2 = calls + params, 3 = full, 4 = everything
     
     # SSL (experimental)
     ssl:
@@ -50,7 +50,7 @@ setDefaults = ->
     # The client config should match the server as closly as possible
     client:
       remote_prefix:          null            # automatically prefixes all remote calls. e.g. if your server api begins 'v1' remote('app.square') will become remote('v1.app.square')
-      heartbeat_interval:     30              # interval in seconds between heartbeats sent to the server to confirm user is online. a lower value increases server and bandwith use. ignored if $SS.config.users.online.enabled is false
+      heartbeat_interval:     30              # interval in seconds between heartbeats sent to the server to confirm user is online. a lower value increases server and bandwith use. ignored if SS.config.users.online.enabled is false
       log:
         level:                2       	      # 0 = none, 1 = calls only, 2 = calls + params, 3 = full
     
@@ -70,7 +70,7 @@ setDefaults = ->
 # For now we override default config depending upon environment. This will still be overridden by any app config file in
 # /config/environments/SS_ENV.js . We may want to remove this in the future and insist upon seperate app config files, ala Rails
 setEnvironmentDefaults = ->
-  override = switch $SS.env
+  override = switch SS.env
     when 'development'
       pack_assets: false
     when 'production'
@@ -85,7 +85,7 @@ setEnvironmentDefaults = ->
 # Merges custom app config file with SocketStream defaults if the file exists
 mergeConfigFile = (name) ->
   try
-    config_file_body = fs.readFileSync($SS.root + name, 'utf-8')
+    config_file_body = fs.readFileSync(SS.root + name, 'utf-8')
     try
       app_config = JSON.parse(config_file_body)
       try
@@ -96,8 +96,8 @@ mergeConfigFile = (name) ->
       throw ['app_config_cannot_parse_json', "Loaded, but unable to parse app config file #{name}. Ensure it is in valid JSON format with double quotes (not single!) around all strings."]
   catch e
     if typeof(e) == 'object' and e.length >= 2
-      $SS.log.error.exception(e)
+      SS.log.error.exception(e)
       throw 'App config error'
 
 merge = (new_config) ->
-  $SS.config.extend(new_config)
+  SS.config.extend(new_config)

@@ -1,3 +1,11 @@
+0.0.42 / 2011-05-12
+===================
+
+* Moved noisy 'Updating list of Users Online' messages to new SS.config.log.level of 4
+* Converted all internal code to use SS instead of $SS
+* Updated README to make it easier to see what the project's about
+
+
 0.0.41 / 2011-05-10
 ===================
 

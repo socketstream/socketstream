@@ -5,7 +5,7 @@
 
 sys = require('sys')
 
-key = $SS.config.redis.key_prefix
+key = SS.config.redis.key_prefix
 
 # Users Connected (to this server instance)
 exports.connected = []
@@ -36,10 +36,10 @@ exports.online =
   # SS.users.online.update() to union all the users who've confirmed within the last SS.config.users.online.mins_until_offline (default = 2)
   # and remove everyone else. As Redis evolves we should be able to find more efficient ways to do this.
   update: ->
-    sys.log "INFO: Updating list of Users Online..."
+    sys.log "INFO: Updating list of Users Online..." if SS.config.log.level >= 4
     
     # Concat all the User IDs which have been online within the last X minutes in a temporary key "ss:online:recent"
-    keys = [0..($SS.config.users.online.mins_until_offline - 1)].map (mins_ago) -> "#{key}:online:at:#{minuteCode(mins_ago)}"
+    keys = [0..(SS.config.users.online.mins_until_offline - 1)].map (mins_ago) -> "#{key}:online:at:#{minuteCode(mins_ago)}"
     args = ["#{key}:online:recent"].concat(keys)
     R.sunionstore.apply(R, args)
     
@@ -47,14 +47,14 @@ exports.online =
     R.sinterstore "#{key}:online:now", "#{key}:online:now", "#{key}:online:recent"
     
     # Run this again in SS.config.users.online.update_secs seconds (default = 60)
-    setTimeout arguments.callee, ($SS.config.users.online.update_interval * 1000)
+    setTimeout arguments.callee, (SS.config.users.online.update_interval * 1000)
     
     # Delete old timestamp keys we no longer need (unless we choose to keep them for analytical purposes)
-    unless $SS.config.users.online.keep_historic
-      keys = [0..($SS.config.users.online.mins_until_offline)].map (mins_ago) -> "#{key}:online:at:#{minuteCode(mins_ago)}"
+    unless SS.config.users.online.keep_historic
+      keys = [0..(SS.config.users.online.mins_until_offline)].map (mins_ago) -> "#{key}:online:at:#{minuteCode(mins_ago)}"
       R.del.apply(R, keys)
     
-    sys.log "INFO: List of Users Online updated"
+    sys.log "INFO: List of Users Online updated" if SS.config.log.level >= 4
 
 
 # Private Helpers

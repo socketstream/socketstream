@@ -16,7 +16,7 @@ RTM = require('../realtime_models')
 base64 = require('../utils/base64.js')
 
 exports.isValidRequest = (request) ->
-  request.url.split('/')[1].toLowerCase() == $SS.config.api.prefix
+  request.url.split('/')[1].toLowerCase() == SS.config.api.prefix
 
 exports.call = (request, response) ->
   url = url_lib.parse(request.url, true)
@@ -49,14 +49,14 @@ process = (request, response, url, path, actions) ->
     if actions[0] == '_rest'
       actions = actions.slice(1) # remove prefix
       RTM.rest.processRequest actions, params, request, format, (data) -> reply(data, response, format)
-      $SS.log.incoming.rest(actions, params, format, request.method)
+      SS.log.incoming.rest(actions, params, format, request.method)
   
     # Serve regular request to /app/server
     else
       authenticate request, response, actions, session, (success) ->
         if success
           Request.process actions, params, session, (data, options) -> reply(data, response, format)
-          $SS.log.incoming.api(actions, params, format)
+          SS.log.incoming.api(actions, params, format)
   catch e
     showError(response, e)
         
@@ -75,7 +75,7 @@ showError = (response, error) ->
   output = '<h3>SocketStream API Error</h3>'
   output += error[1]
   deliver(response, 400, 'text/html', output)
-  $SS.log.error.exception(error)
+  SS.log.error.exception(error)
 
 # Attempts to make sense of the params passed in the query string
 parseParams = (url) ->
@@ -101,7 +101,7 @@ parseFormat = (path) ->
 # Authenticate. Only Basic Auth is supported at the moment, but this can and should run over HTTPs
 authenticate = (request, response, actions, session, cb) ->
   mod_path = actions.slice(0,-1).join('.')
-  if $SS.internal.authenticate[mod_path]
+  if SS.internal.authenticate[mod_path]
     if request.headers.authorization
       
       auth = request.headers.authorization.split(' ')
@@ -109,7 +109,7 @@ authenticate = (request, response, actions, session, cb) ->
       params = {username: details[0], password: details[1]}
 
       # Try to authenticate user
-      session.authenticate $SS.config.api.auth.basic.module_name, params, (reply) ->
+      session.authenticate SS.config.api.auth.basic.module_name, params, (reply) ->
         if reply.success
           session.setUserId(reply.user_id)
           cb(true)
@@ -118,7 +118,7 @@ authenticate = (request, response, actions, session, cb) ->
           cb(false)
       
     else
-      response.writeHead(401, {'WWW-Authenticate': 'Basic realm="' + $SS.config.api.auth.basic.realm + '"', 'Content-type': 'text/html'})
+      response.writeHead(401, {'WWW-Authenticate': 'Basic realm="' + SS.config.api.auth.basic.realm + '"', 'Content-type': 'text/html'})
       response.end('Not authorized')
       cb(false)
   else

@@ -1,9 +1,16 @@
 ![SocketStream!](https://github.com/socketstream/socketstream/raw/master/lib/generator_files/logo.png)
 
 
-SocketStream makes it a breeze to build phenomenally fast, highly-scalable real-time web applications on Node.js.
+Latest release: 0.0.42   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 
-Latest release: 0.0.41   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+
+### Introduction
+
+SocketStream is a new full stack web framework built around the [Single-page Application](http://en.wikipedia.org/wiki/Single-page_application) paradigm. It embraces websockets, in-memory datastores (Redis), and client-side rendering to provide an ultra-responsive experience that will amaze your users.
+
+Project status: Highly experimental but usable. Improving almost every day.
+
+**A request:** I wish to keep SocketStream under-the-radar for now whilst I build a public website for it and, most importantly, figure out a good way to test the code (now the API has settled down somewhat). See 'The Road to 0.1.0' at the end of the page. If you've discovered this project and wish to contribute, that would be awesome! But please don't tweet about it or post it on Hacker News just yet. Thank you.
 
 
 ### Features
@@ -26,15 +33,6 @@ Latest release: 0.0.41   ([view changelog](https://github.com/socketstream/socke
 * Uses [Jade](http://jade-lang.com/) to render static HTML
 * Uses [Stylus](http://learnboost.github.com/stylus/) for CSS
 * MIT Licence
-
-
-### Introduction
-
-SocketStream is a new full stack web framework built around the [Single-page Application](http://en.wikipedia.org/wiki/Single-page_application) paradigm. It embraces websockets, in-memory datastores (Redis), and client-side rendering to provide an ultra-responsive experience that will amaze your users.
-
-Project status: Highly experimental but usable. Improving almost every day.
-
-A request: I wish to keep SocketStream under-the-radar for now whilst I build a public website for it and, most importantly, figure out a good way to test the code (now the API has settled down somewhat). See 'The Road to 0.1.0' at the end of the page. If you've discovered this project and wish to contribute, that would be awesome! But please don't tweet about it or post it on Hacker News just yet. Thank you.
 
 
 ### How does it work?
@@ -427,6 +425,8 @@ Mark any files within /app/server which require authentication by placing this l
     exports.authenticate = true
 
 This will check or prompt for a logged in user before and of the methods within that file are executed.
+
+Once a user has been authenticated, their User ID is accessible by calling @session.user_id anywhere in your /app/server code.
 
 
 ### Users Online

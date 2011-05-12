@@ -1,6 +1,6 @@
 # Asset Request Server
 # --------------------
-# Compiles and serves assets live in development mode (or whenever $SS.config.pack_assets != true)
+# Compiles and serves assets live in development mode (or whenever SS.config.pack_assets != true)
 
 util = require('util')
 

@@ -9,8 +9,8 @@ file_utils = require('./utils/file')
 # Initialize SocketStream. This must always be run to set the basic environment
 exports.init = (load_project = false) ->
 
-  # Define global $SS variable
-  global.$SS =
+  # Define global SS variable
+  global.SS =
     internal:         {}              # Used to store variables used internally
     client:           {}              # Used to store any info about the client (the JS code that's sent to the browser)
     config:           {}              # Used to store server and client configuration
@@ -23,20 +23,20 @@ exports.init = (load_project = false) ->
     shared:           {}              # Shared code is preloaded and placed here
 
   # Set root dir
-  $SS.root = fs.realpathSync()
+  SS.root = fs.realpathSync()
 
   # Properties and functions we need internally
-  $SS.internal = require('./internal.coffee').init()
+  SS.internal = require('./internal.coffee').init()
 
   # Set server version from package.json
-  $SS.version = $SS.internal.package_json.version
+  SS.version = SS.internal.package_json.version
 
   # Set client file version. Bumping this automatically triggers re-compliation of lib assets when a user upgrades
-  $SS.client.version = '0.0.11'
+  SS.client.version = '0.0.11'
 
   # Set environment
   env = process.env.SS_ENV || 'development'
-  $SS.env = env.toString().toLowerCase()
+  SS.env = env.toString().toLowerCase()
 
   # Load basic Array, String, JS extensions needed throughout SocketStream
   require('./extensions')
@@ -66,7 +66,7 @@ exports.process = (args) ->
     when 'new', 'n'
       exports.create.project(params[0])
     when 'version', 'v'
-      console.log('v' + $SS.version)
+      console.log('v' + SS.version)
     when 'help', 'h'
       console.log '''
       SocketStream Command Line Help
@@ -89,9 +89,9 @@ exports.start =
     util.log('Starting SocketStream server...')
     load.project()
     require('./server.coffee').start()
-    protocol = if $SS.config.ssl.enabled then $SS.log.color('https', 'green') else "http"
-    $SS.users.online.update() if $SS.config.users.online.enabled
-    showBanner("Server running on #{protocol}://#{$SS.config.hostname}:#{$SS.config.port}")
+    protocol = if SS.config.ssl.enabled then SS.log.color('https', 'green') else "http"
+    SS.users.online.update() if SS.config.users.online.enabled
+    showBanner("Server running on #{protocol}://#{SS.config.hostname}:#{SS.config.port}")
     
   console: ->
     load.project()
@@ -125,23 +125,23 @@ load =
     require.paths.unshift('./app/models')
 
     # Load logger
-    $SS.log = require('./logger.coffee')
+    SS.log = require('./logger.coffee')
     
     # Set default config and merge it with any application config file
     require('./configurator.coffee').configure()
     
     # Load Redis. Note these connections stay open so scripts will cease to terminate on their own once you call this
-    $SS.redis = require('./redis.coffee').connect()
+    SS.redis = require('./redis.coffee').connect()
     
     # Link SocketStream modules we offer as part of the Server API
-    $SS.publish = require('./publish.coffee')
-    $SS.users = require('./users.coffee')
+    SS.publish = require('./publish.coffee')
+    SS.users = require('./users.coffee')
     
     # Parse app and environment config files
     load.dbConfigFile()
     
-    # Alias $SS to $SS.config.ss_var to allow for 'SS' use or other custom variable name
-    global[$SS.config.ss_var] = $SS if $SS.config.ss_var
+    # Alias SS to SS.config.ss_var to allow for other custom variable name if desired
+    global[SS.config.ss_var] = SS if SS.config.ss_var and SS.config.ss_var != 'SS'
     
     # Load application files within /app
     load.files()
@@ -149,22 +149,22 @@ load =
   # Server-side files
   files: ->
     
-    # Load Server-side functions into $SS.server
-    load.dirFiles "#{$SS.root}/app/server", 'server', (mod, mod_name, dest, ary) ->
+    # Load Server-side functions into SS.server
+    load.dirFiles "#{SS.root}/app/server", 'server', (mod, mod_name, dest, ary) ->
       dest[mod_name] = mod.actions
-      $SS.internal.authenticate[ary.join('.')] = mod.authenticate if mod.authenticate
+      SS.internal.authenticate[ary.join('.')] = mod.authenticate if mod.authenticate
     
-    # Load Shared functions into $SS.shared
-    load.dirFiles "#{$SS.root}/app/shared", 'shared', (mod, mod_name, dest, ary) -> 
+    # Load Shared functions into SS.shared
+    load.dirFiles "#{SS.root}/app/shared", 'shared', (mod, mod_name, dest, ary) -> 
       dest[mod_name] = mod
 
-    # Load Realtime Models into $SS.models
-    load.dirFiles "#{$SS.root}/app/models", 'models', (mod, mod_name, dest, ary) ->
+    # Load Realtime Models into SS.models
+    load.dirFiles "#{SS.root}/app/models", 'models', (mod, mod_name, dest, ary) ->
       model_spec = mod[mod_name]
       dest[mod_name] = require("./realtime_models/adapters/#{model_spec.adapter}").init(mod_name, model_spec, exports)
       Object.defineProperty(dest[mod_name], '_rtm', {value: model_spec, enumerable: false})
   
-  # Helper to recursively load all files in a dir and attach them to an attribtue of the $SS object
+  # Helper to recursively load all files in a dir and attach them to an attribtue of the SS object
   dirFiles: (dir, name, action) ->
     recursively = (destination, ary, path, counter_name, index = 0) ->
       element = ary[index]
@@ -172,7 +172,7 @@ load =
       if ary.length == (index + 1)
         mod = require(path)
         action(mod, element, dest, ary)
-        $SS.internal.counters.files_loaded[counter_name]++
+        SS.internal.counters.files_loaded[counter_name]++
       else
         dest[element] = {} unless dest.hasOwnProperty(element)
         arguments.callee(destination, ary, path, counter_name, (index+1))
@@ -187,10 +187,10 @@ load =
         mod_name = ary.pop()
         ary.push(mod_name.split('.')[0])
 
-        recursively($SS[name], ary, path, name)
+        recursively(SS[name], ary, path, name)
         
         # Turn the API tree into a string we can easily send to the client to be re-constructed into functions
-        $SS.internal.api_string[name] = apiToString($SS[name])
+        SS.internal.api_string[name] = apiToString(SS[name])
 
        
   # Load any vendored modules
@@ -201,7 +201,7 @@ load =
         fs.readdirSync(vendor_dir).forEach (name) ->
           require.paths.unshift("#{vendor_dir}/#{name}/lib")
 
-  # Load external libs used throughout SocketStream and attach them to $SS.libs
+  # Load external libs used throughout SocketStream and attach them to SS.libs
   # We load the exact version specified in package.json to be sure everything works well together
   # Hopefully in the future this will be possible automatically
   externalLibs: ->
@@ -217,19 +217,19 @@ load =
     ].forEach (lib) ->
       npm_name =  lib[1]
       try
-        version =   $SS.internal.package_json.dependencies[lib[1]].substring(2)
+        version =   SS.internal.package_json.dependencies[lib[1]].substring(2)
       catch e
         throw "Unable to find #{npm_name} within the package.json dependencies"
       try        
-        $SS.libs[lib[0]] = require("#{npm_name}@#{version}")
+        SS.libs[lib[0]] = require("#{npm_name}@#{version}")
       catch e
         try
-          $SS.libs[lib[0]] = require("#{npm_name}")
+          SS.libs[lib[0]] = require("#{npm_name}")
         catch e
           throw "Unable to start SocketStream as we're missing #{npm_name}.\nPlease install with 'npm install #{npm_name}'. Please also check the version number if you're using a version of npm below 1.0"
 
   dbConfigFile: ->
-    db_config_file = $SS.root + '/config/db'
+    db_config_file = SS.root + '/config/db'
     try
       db_config_exists = require.resolve(db_config_file)
     require(db_config_file) if db_config_exists
@@ -246,12 +246,12 @@ check =
           fatal "Unable to load the #{dir} directory\nIt conflicts with a file of the same name in the parent directory. Please rename one of them."
   
   isValidProjectDir: ->
-    dirs = fs.readdirSync($SS.root)
+    dirs = fs.readdirSync(SS.root)
     if (!dirs.include('app') || !dirs.include('public')) # All other dirs are optional for now
       fatal 'Unable to start SocketStream here. Not a valid project directory'
 
 fatal = (message) ->
-  $SS.log.error.exception ['error', message]
+  SS.log.error.exception ['error', message]
   throw 'Unable to continue'
 
 # We convert the object tree for sending in the most condensed way possible. The client will re-construct the api into SS.server and SS.shared from this string
@@ -261,11 +261,11 @@ apiToString = (obj) ->
 
 
 showBanner = (additional_text) ->
-  counters = $SS.internal.counters.files_loaded
+  counters = SS.internal.counters.files_loaded
   util.puts "\n"
   util.puts "------------------------- SocketStream -------------------------"
-  util.puts "  Version #{$SS.version} running in #{$SS.env} on PID #{process.pid}"
-  util.puts "  Loaded #{counters.models.pluralize('model')}, #{counters.server} server and #{counters.shared.pluralize('shared file')} in #{$SS.internal.uptime()}ms"
+  util.puts "  Version #{SS.version} running in #{SS.env} on PID #{process.pid}"
+  util.puts "  Loaded #{counters.models.pluralize('model')}, #{counters.server} server and #{counters.shared.pluralize('shared file')} in #{SS.internal.uptime()}ms"
   util.puts "  #{additional_text}"
   util.puts "----------------------------------------------------------------"
   util.puts "\n"
