@@ -1,7 +1,7 @@
 ![SocketStream!](https://github.com/socketstream/socketstream/raw/master/lib/generator_files/logo.png)
 
 
-Latest release: 0.0.42   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+Latest release: 0.0.43   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 
 
 ### Introduction
@@ -16,12 +16,12 @@ Project status: Highly experimental but usable. Improving almost every day.
 ### Features
 
 * True bi-directional communication using websockets (or flash sockets)
-* Crazy fast! Starts up instantly. No HTTP handshaking/headers/routing to slow you down
+* Crazy fast! Starts up instantly. No HTTP handshaking/headers/routing to slow down every request
 * Works on all major browsers thanks to the excellent [Socket.IO](http://socket.io/)
 * Write client and server code in [Coffeescript](http://jashkenas.github.com/coffee-script/) or Javascript - your choice
 * Easily share code between the client and server. Ideal for business logic and model validation
 * Automatic HTTP API. All server-side code is also accessible over a high-speed request-based API
-* Effortless, scalable, pub/sub baked right in. See examples below
+* Effortless, scalable, pub/sub baked right in - including Private Channels. See examples below
 * Integrated asset manager. Automatically packages and [minifies](https://github.com/mishoo/UglifyJS) your client-side code
 * Experimental out-of-the-box HTTPS support. See section below.
 * In-built User model with modular authentication. Automatically keeps track of users online (see below).
@@ -160,7 +160,7 @@ First let's listen out for an event called 'newMessage' on the client:
       init: ->
         SS.events.on('newMessage', (message) -> alert(message))
           
-Then, assuming we know the person's user_id, we can publish the event directly to them. On the server side you'd write:
+Then, assuming we know the person's user id, we can publish the event directly to them. On the server side you'd write:
 
     exports.actions =
 
@@ -169,11 +169,7 @@ Then, assuming we know the person's user_id, we can publish the event directly t
 
 Pretty cool eh? But it gets better. We don't have to worry which server instance the user is connected to. The message will always be routed to the correct server as each SocketStream server subscribes to the same instance of Redis.
 
-What happens if we want to notify every user when data has changed, or let everyone know the system is going down for maintenance? Simple, just use the broadcast method:
-
-    SS.publish.broadcast('flash', {type: 'notification', message: 'Notice: This service is going down in 10 minutes'})
-    
-Ah, but you have thousands of users across hundreds of servers you say? No problem. The workload is distributed across every connected Node.js instance by design. I'm sure you can see where this is going... ;-)
+Want to know how to broadcast a message to all users, or implement private channels? Take a look at the 'More Pub/Sub' section below.
 
 
 ### Requirements
@@ -279,9 +275,9 @@ We will publish a full list of configurable params in the near future, but for n
 
 Client and server-side logging is switched on by default in __development__ and __staging__ and off in __production__. It can be controlled manually via SS.config.log.level and SS.config.client.log.level. Four levels of logging are available ranging from none (0) to highly verbose (4). The default level is 3.
 
-Occasionally you'll want to 'silence' some requests to the server which are called repeatedly (e.g. confirming a user is online) in order to see the wood from the trees. Add the 'silent' option to your SS.server commands, e.g.
+Occasionally you'll want to 'silence' some requests to the server which are called repeatedly (e.g. sending location data) in order to see the wood from the trees. Add the 'silent' option to your SS.server commands, e.g.
 
-    SS.server.user.confirm_online(user_id, {silent: true})
+    SS.server.user.updatePosition(latestPosition, {silent: true})
 
 
 ### Connecting to Redis
@@ -326,31 +322,6 @@ Then access them inside /config/db.coffee as so:
     global.M = new Db(config.database, new Server(config.host, config.port))
 
 We've not tested SocketStream with CouchDB, MySQL, or any other DB, but the principals should be the same.
-
-
-### HTTPS / SSL
-
-HTTPS support is currently highly experimental and hence is switched off by default.
-
-Our eventual goal is to make SocketStream run in HTTPS mode by default, using self-signed certificates (included within SocketStream) if commercial ones are not provided.
-
-To turn on HTTPS make sure you have the openssl library headers on your system before you ./configure the Node source code.
-
-On Ubuntu you can install them with:
-
-    sudo apt-get install libssl-dev openssl
-
-Hint: You may need to install/run pkg-config after doing this.
-
-Once Node has been compiled with TLS/HTTPS support, turn it on by creating a /config/environments/development.json file and putting this inside:
-
-    {
-      "ssl": {"enabled": true}
-    }
-    
-Note: We have found Safari will not support secure websockets without a valid (i.e. not a self-signed) certificate. If you wish to experiment with HTTPS whilst developing we recommend using Chrome at the moment.
-
-We will continue enhancing the HTTPS experience over future releases until it's stable.
 
 
 ### Sharing Code
@@ -409,11 +380,11 @@ To use this custom authentication module within your app, you'll need to call @s
     
       authenticate: (params, cb) ->
         @session.authenticate 'custom_auth', params, (response) =>
-          @session.setUserId(response.user_id) if response.success       # sets @session.user_id and initiates pub/sub
+          @session.setUserId(response.user_id) if response.success       # sets @session.user.id and initiates pub/sub
           cb(response)                                                   # sends additional info back to the client
 
       logout: (cb) ->
-        @session.logout(cb)                                              # disconnects pub/sub and returns a new Session object
+        @session.user.logout(cb)                                         # disconnects pub/sub and returns a new Session object
 
 
 This modular approach allows you to offer your users multiple ways to authenticate. It also means you can pass the name of a NPM module for common authentication needs like Facebook Connect.
@@ -426,22 +397,53 @@ Mark any files within /app/server which require authentication by placing this l
 
 This will check or prompt for a logged in user before and of the methods within that file are executed.
 
-Once a user has been authenticated, their User ID is accessible by calling @session.user_id anywhere in your /app/server code.
+Once a user has been authenticated, their User ID is accessible by calling @session.user.id anywhere in your /app/server code.
 
 
-### Users Online
+### Tracking Users Online
 
 Once users are able to authenticate and log in, you'll probably want to keep track of who's online - especially if you're creating a real-time chat or social app. Luckily we've built this feature right into the framework.
 
 When a user successfully authenticates (see section above) we store their User ID within Redis. You may obtain an array of User IDs online right now by calling this method in your server-side code:
 
-    SS.users.online.now()
+    SS.users.online.now (data) -> console.log(data)
 
 If a user logs out, they will immediately be removed from this list. But what happens if a user simply closes down their browser or they lose their connection?
 
 By default the SocketStream client sends an ultra-lightweight 'heartbeat' signal to the server every 30 seconds confirming the user is still online. On the server side, a process runs every minute to ensure users who have failed to check in within the last minute are 'purged' from the list of users online. All timings can be configured using SS.config.client.heartbeat_interval and the SS.config.users.online params.
 
 Note: The 'Users Online' feature is enabled by default as the overhead is minimal. If you don't need this feature you can easily disable it by setting SS.config.users.online.enabled to false in the app config file.
+
+
+### More Pub/Sub
+
+In addition to the SS.publish.user() method documented above, there are two additional publish commands which allow you to easily message users in bulk.
+
+To send a notification to all users (for example to let everyone know the system is going down for maintenance), use the broadcast method:
+
+    SS.publish.broadcast('flash', {type: 'notification', message: 'Notice: This service is going down in 10 minutes'})
+    
+Sometimes you may prefer to send events to a sub-set of connected users, for example if you have a chat apps with multiple rooms. SocketStream has a cool feature called Private Channels which let you do just that, across multiple servers, with the minimum of overhead.
+
+The syntax is similar to the command above with an extra initial argument specifying the channel name (or names as an array):
+
+    SS.publish.channel(['disney', 'kids'], 'newMessage', {from: 'mickymouse', message: 'Has anyone seen Tom?'})
+    
+Users can subscribe to an unlimited number of channels using the following commands (which must be run inside you /app/server code). E.g:
+
+    @session.channel.subscribe('disney', cb)    # note: multiple channel names can be passed as an array 
+    
+    @session.channel.unsubscribe('kids', cb)    # note: multiple channel names can be passed as an array 
+    
+    @session.channel.list()                     # shows which channels the client is currently subscribed to
+
+If the channel name you specify does not exist it will be automatically created. Channel names can be any valid JavaScript object key. If the client gets disconnected and re-connects to another server instance they will automatically be re-subscribed to the same channels, providing they retain the same session ID. Be sure to catch for any errors when using these commands.
+
+**Notes**
+
+The SocketStream Pub/Sub system has been designed from the ground up with horizontal scalability and high-throughput in mind. The 'broadcast' and 'channel' commands will be automatically load-balanced across multiple instances of SocketStream when clustering is made available in the future.
+
+Note, however, that messages are never stored or logged. This means if a client/user is offline the message will be lost rather than queued. Hence, if you're implementing a real time chat app we recommend storing messages in a database (or messaging server) before publishing them.
 
 
 ### HTTP API
@@ -453,7 +455,7 @@ It is enabled by default and can be configured with the following config variabl
     SS.config.api.enabled            Boolean       default: true         # Enables/disables the HTTP API
     SS.config.api.prefix             String        default: 'api'        # Sets the URL prefix (e.g. http://mysite.com/api
 
-The HTTP API also supports Basic Auth (which will run over HTTPS if enabled), allowing you to access methods which use @session.user_id or @user.
+The HTTP API also supports Basic Auth (which will run over HTTPS if enabled), allowing you to access methods which use @session.user.id
 
 By placing 'exports.authenticate = true' in the file (see above) the server will know to prompt for a username and password before allowing access any of the actions within that file. However, the API will need to know which module to authenticate against. Set the SS.config.api.auth.basic.module_name variable by putting the following JSON in your config file:
     
@@ -479,18 +481,34 @@ These events can be used client-side to toggle an online/offline icon within the
 At present requests sent to the server whist offline are queued on the browser and automatically executed once the connection is re-established. In the near future we will allow time-critical requests to be marked as such - essential for stock trading apps.
 
 
+### HTTPS / SSL
+
+HTTPS support is currently highly experimental and hence is switched off by default.
+
+Our eventual goal is to make SocketStream run in HTTPS mode by default, using self-signed certificates (included within SocketStream) if commercial ones are not provided.
+
+To turn on HTTPS make sure you have the openssl library headers on your system before you ./configure the Node source code.
+
+On Ubuntu you can install them with:
+
+    sudo apt-get install libssl-dev openssl
+
+Hint: You may need to install/run pkg-config after doing this.
+
+Once Node has been compiled with TLS/HTTPS support, turn it on by creating a /config/environments/development.json file and putting this inside:
+
+    {
+      "ssl": {"enabled": true}
+    }
+    
+Note: We have found Safari will not support secure websockets without a valid (i.e. not a self-signed) certificate. If you wish to experiment with HTTPS whilst developing we recommend using Chrome at the moment.
+
+We will continue enhancing the HTTPS experience over future releases until it's stable.
+
+
 ### Tests
 
-There are a handful of tests at the moment, but there will be more once the internal API becomes stable.
-
-If you wish to run the test suite, install jasbin:
-
-    npm install jasbin
-
-Then run jasbin in the SocketStream directory:
-  
-    cd socketstream/
-    jasbin
+There are a handful of tests at the moment, but there will be more once the internal API becomes stable. It is one of the major things we need to get right before announcing SocketStream to the world.
     
 
 ### The Road to 0.1.0
@@ -501,14 +519,13 @@ Why are we waiting? Because developers are busy people and we want to make sure 
 
 Remaining tasks for 0.1.0:
 
-* Support publishing events to groups of users (in progress)
 * Support client-side 'requires' allowing for namespacing and client/server API compatibility (in progress)
-* Improve error handling and the throwing of errors
+* Improve error handling and standardize throwing of errors
 * Stabilize API to ensure minimal code changes in the future
 
 In addition, the following needs to be in place:
 
-* SocketStream.org public website (in progress)
+* SocketStream.org public website with live demos (in progress)
 * At least two example/demo applications available on GitHub
 * Review available testing frameworks and document ways these can be used with SS
 * A brief guide to deploying and scaling

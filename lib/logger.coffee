@@ -4,11 +4,10 @@
 
 util = require("util")
 
-exports.staticFile = (request) ->
-  output 1, "STATIC: #{request.url}"
+exports.serve =
 
-exports.createNewSession = (session) ->
-  output 1, exports.color("Creating new session: #{session.id}", 'magenta')
+  staticFile: (request) ->
+    output 1, "STATIC: #{request.url}"
 
 exports.incoming =
     
@@ -16,6 +15,9 @@ exports.incoming =
     if !(msg.options && msg.options.silent)
       output 2, "#{client.sessionId} #{exports.color('->', 'cyan')} #{msg.method}#{parseParams(msg.params)}"
       
+  event: (type, message) ->
+    output 2, "#{type} #{exports.color('=>', 'cyan')} #{message.event}#{parseParams(message.params)}"
+
   rtm: (data, client) ->
     output 2, "#{client.sessionId} #{exports.color('~>', 'cyan')} #{data.rtm}.#{data.action}#{parseParams(data.params)}"
 
@@ -25,28 +27,46 @@ exports.incoming =
   rest: (actions, params, format, http_method) ->
     output 2, "REST #{http_method} (#{format}) #{exports.color('->', 'cyan')} #{actions.join('.')} #{parseParams(params)}"
 
-  event: (type, event, params) ->
-    output 2, "#{type} #{exports.color('=>', 'cyan')} #{event}#{parseParams(params)}"
-
 exports.outgoing =
 
   socketio: (msg, client) ->
     if !(msg.options && msg.options.silent)
       output 2, "#{client.sessionId} #{exports.color('<-', 'green')} #{msg.method}"
   
-  event: (type, message) ->
-    if validLevel(2)
-      obj = JSON.parse(message) # Don't parse unless we want to log
-      util.log "#{type} #{exports.color('<=', 'green')} #{obj.event}#{parseParams(obj.params)}"
-  
+  event: (type, event, params) ->
+    output 2, "#{type} #{exports.color('<=', 'green')} #{event}#{parseParams(params)}"
+      
+exports.users =
+
+  online:
+    
+    update:
+      
+      start: ->
+        output 4, "INFO: Updating list of Users Online..."
+        
+      complete: ->
+        output 4, "INFO: List of Users Online updated"  
+
 exports.error =
 
   message: (message) ->
-    console.log 'here'
     output 1, exports.color("Error: #{message}", 'red')
   
   exception: (e) ->
     output 1, exports.color("Error: #{e[1]}", 'red')
+
+
+exports.pubsub =
+
+  channels:
+  
+    subscribe: (user_id, channel) ->
+      output 4, "User ID #{user_id} has subscribed to channel '#{channel}'"
+    
+    unsubscribe: (user_id, channel) ->
+      output 4, "User ID #{user_id} has unsubscribed from channel '#{channel}'"
+
 
 # Color helper
 exports.color = (msg, color) ->

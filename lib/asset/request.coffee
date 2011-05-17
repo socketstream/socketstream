@@ -11,12 +11,12 @@ exports.request =
   
   responds_to:  ['coffee', 'styl']
 
-  valid: (url) ->
+  isValidRequest: (url) ->
     return true if isRoot(url)
     file_extension = url.split('.').reverse()[0]
     @responds_to.include(file_extension)
   
-  serve: (request, response) ->
+  call: (request, response) ->
     file = parseURL(request.url)
     request.ss_benchmark_start = new Date
     exports.assets.compile[file.extension] file.name, (result) ->

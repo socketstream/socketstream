@@ -20,7 +20,7 @@ window.SS =
     log:
       level:        0               # no client-side logging by default
       
-# Maintain compatibility with $SS in previous versions
+# Maintain compatibility with $SS in previous versions. Will be removed before 0.1.0
 window.$SS = window.SS
 
 # Event handling
@@ -33,7 +33,10 @@ SS.events =
     @_events[name].push(funct)
   
   emit: (name, params) ->
-    event(params) for event in @_events[name]
+    if @_events[name]
+      event(params) for event in @_events[name]
+    else
+      console.error "Error: Received incoming '#{name}' event but no event handlers registered"
 
 # Setup the websocket connection
 SS.socket = new io.Socket(document.location.hostname, {
@@ -51,9 +54,9 @@ SS.socket.on 'message', (raw) ->
     if Request[data.type]?
       Request[data.type](data)
     else
-      console.error("Error: Unable to find a message handler for '#{data.type}' requests! Dropping message")
+      console.error "Error: Unable to find a message handler for '#{data.type}' requests! Dropping message"
   else
-    console.error("Error: No message type specified. Dropping message")
+    console.error "Error: No message type specified. Dropping message"
   
 # Attempt reconnection if the connection is severed
 SS.socket.on 'disconnect', ->
@@ -137,7 +140,7 @@ System =
     
     # Call app.init (if not previously run)
     start()
-      
+
   
   # Displays any application errors in the browser's console
   error: (details) ->

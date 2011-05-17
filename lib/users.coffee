@@ -3,13 +3,12 @@
 # Manages users online within the cluster and connected to this particular instance
 # TODO: Handle errors by processing callbacks
 
-sys = require('sys')
+util = require('util')
 
 key = SS.config.redis.key_prefix
 
 # Users Connected (to this server instance)
 exports.connected = []
-
 
 # Users Online
 exports.online =
@@ -36,7 +35,7 @@ exports.online =
   # SS.users.online.update() to union all the users who've confirmed within the last SS.config.users.online.mins_until_offline (default = 2)
   # and remove everyone else. As Redis evolves we should be able to find more efficient ways to do this.
   update: ->
-    sys.log "INFO: Updating list of Users Online..." if SS.config.log.level >= 4
+    SS.log.users.online.update.start()
     
     # Concat all the User IDs which have been online within the last X minutes in a temporary key "ss:online:recent"
     keys = [0..(SS.config.users.online.mins_until_offline - 1)].map (mins_ago) -> "#{key}:online:at:#{minuteCode(mins_ago)}"
@@ -53,8 +52,8 @@ exports.online =
     unless SS.config.users.online.keep_historic
       keys = [0..(SS.config.users.online.mins_until_offline)].map (mins_ago) -> "#{key}:online:at:#{minuteCode(mins_ago)}"
       R.del.apply(R, keys)
-    
-    sys.log "INFO: List of Users Online updated" if SS.config.log.level >= 4
+      
+    SS.log.users.online.update.complete()
 
 
 # Private Helpers

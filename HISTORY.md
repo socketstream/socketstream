@@ -1,3 +1,15 @@
+0.0.43 / 2011-05-17
+===================
+
+* IMPORTANT API CHANGE: @session.loggedIn() is now @session.user.loggedIn() , @session.logout() is now @session.user.logout()
+* Major refactor of sessions and pubsub system to improve readability and allow support for...
+* New feature: Private Channels. Publish events to unlimited channels across servers using SS.publish.channel(). See new 'More Pub/Sub' section of README
+* SS.server code now be nested up to 1000 levels in one file
+* Client now displays a warning if it receives an unregistered event
+* Server now warns if attempting to call a reserved action name (currently only 'session' and 'user')
+* Tidied up some logging
+
+
 0.0.42 / 2011-05-12
 ===================
 

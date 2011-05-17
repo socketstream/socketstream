@@ -8,7 +8,7 @@ util = require('util')
 utils = require('./utils.coffee')
 file_utils = require('../utils/file')
 
-exports.init = (@assets) ->
+exports.init = (@assets) -> 
   @
 
 exports.compile =
@@ -61,7 +61,7 @@ exports.compile =
     dir = "app/css"
     path = "#{dir}/#{input_file_name}"
     input = fs.readFileSync "#{SS.root}/#{path}", 'utf8'
-    SS.libs.stylus.render input, { filename: input_file_name, paths: [dir], compress: SS.config.pack_assets}, (err, css) ->
+    SS.libs.stylus.render input, {filename: input_file_name, paths: [dir], compress: SS.config.pack_assets}, (err, css) ->
       if err
         util.log("\x1B[1;31mError: Unable to compile Stylus file #{path} to CSS\x1B[0m")
         throw(err) if SS.config.throw_errors

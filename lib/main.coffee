@@ -32,7 +32,7 @@ exports.init = (load_project = false) ->
   SS.version = SS.internal.package_json.version
 
   # Set client file version. Bumping this automatically triggers re-compliation of lib assets when a user upgrades
-  SS.client.version = '0.0.11'
+  SS.client.version = '0.0.12'
 
   # Set environment
   env = process.env.SS_ENV || 'development'
@@ -134,7 +134,7 @@ load =
     SS.redis = require('./redis.coffee').connect()
     
     # Link SocketStream modules we offer as part of the Server API
-    SS.publish = require('./publish.coffee')
+    SS.publish = require('./pubsub.coffee').publish
     SS.users = require('./users.coffee')
     
     # Parse app and environment config files
@@ -256,8 +256,7 @@ fatal = (message) ->
 
 # We convert the object tree for sending in the most condensed way possible. The client will re-construct the api into SS.server and SS.shared from this string
 apiToString = (obj) ->
-  util.inspect(SS.server).replace(/\[Function\]/g, 'true')
-
+  util.inspect(SS.server, false, 1000).replace(/\[Function\]/g, 'true')
 
 
 showBanner = (additional_text) ->

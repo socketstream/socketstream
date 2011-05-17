@@ -24,6 +24,9 @@ exports.init = ->
   # API String
   @api_string = {}
   
+  # Private Channels for Pub/Sub
+  @channels = {}
+  
   @
 
 # System uptime in ms (is this in Node anywhere?)

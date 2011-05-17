@@ -1,6 +1,7 @@
 # HTTP API
 # --------
 # Automatically makes all public methods within /app/server accesible over a HTTP request-based API
+# This module will only be loaded if SS.config.api.enabled == true
 
 # EXAMPLES:
 

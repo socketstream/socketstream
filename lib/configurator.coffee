@@ -64,7 +64,12 @@ setDefaults = ->
         
     # Realtime Models
     rtm:
-      enabled:          false                 # disabled by default as HIGHLY EXPERIMENTAL and subject to change
+      enabled:                false           # disabled by default as HIGHLY EXPERIMENTAL and subject to change
+    
+    # Web Admin
+    admin:
+      enabled:                false
+      prefix:                 'admin'         
 
 
 # For now we override default config depending upon environment. This will still be overridden by any app config file in

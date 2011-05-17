@@ -22,7 +22,8 @@ exports.process = (action_array, params, session, cb) ->
 
   # Check to see method exists
   method = obj[action]
-  throw ['action_missing',"Unable to find the '#{action}' action in #{prefix}/#{actions.join('/')}. Action names are case sensitive"] unless method 
+  throw ['action_reserved',"Unable to call the '#{action}' action as this is a reserved word. Please choose an alternative action name"] if action in ['session','user']
+  throw ['action_missing',"Unable to find the '#{action}' action in #{prefix}/#{actions.join('/')}. Action names are case sensitive"] unless method
   
   # Inject 'helper functions'
   obj.session = session
