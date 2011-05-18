@@ -35,6 +35,7 @@ setDefaults = ->
       host:                   '127.0.0.1'
       port: 		              6379
       options:		            {}
+      db_index:               0               # select your databases/keyspace from 0 - 15 (the max redis supports by default)
       key_prefix:             'ss'            # all keys created by SocketStream are prefixed with this value
     
     # Configures the HTTP request-based API
@@ -96,13 +97,13 @@ mergeConfigFile = (name) ->
       try
         merge(app_config)
       catch e
-        throw ['app_config_unable_to_merge', "App config file #{name} loaded and parsed as JSON but unable to merge. Check syntax carefully."]
+        throw new Error("App config file #{name} loaded and parsed as JSON but unable to merge. Check syntax carefully.")
     catch e
-      throw ['app_config_cannot_parse_json', "Loaded, but unable to parse app config file #{name}. Ensure it is in valid JSON format with double quotes (not single!) around all strings."]
+      throw new Error("Loaded, but unable to parse app config file #{name}. Ensure it is in valid JSON format with double quotes (not single!) around all strings.")
   catch e
-    if typeof(e) == 'object' and e.length >= 2
+    unless e.code == 'EBADF' # Do no warn if config file is not present - that's ok
       SS.log.error.exception(e)
-      throw 'App config error'
+      throw new Error('App config error')
 
 merge = (new_config) ->
   SS.config.extend(new_config)

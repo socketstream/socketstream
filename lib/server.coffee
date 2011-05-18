@@ -24,7 +24,7 @@ RTM = require('./realtime_models') if SS.config.rtm.enabled
 exports.start = ->
   asset.init()
   server = mainServer()
-  socket = SS.libs.io.listen(server, {transports: ['websocket', 'flashsocket']})
+  socket = SS.internal.socket = SS.libs.io.listen(server, {transports: ['websocket', 'flashsocket']})
   socket.on('connection', process.socket.connection)
   socket.on('clientMessage', process.socket.call)
   socket.on('clientDisconnect', process.socket.disconnection)
@@ -92,23 +92,24 @@ process =
         try
           msg = JSON.parse(data)
         catch e
-          throw ['unable_to_parse_message', 'Unable to parse incoming websocket request']
+          throw new Error("Unable to parse incoming websocket request")
         if msg
-          throw ['missing_message_type', "Invalid websocket call. No message handler supplied. Make sure you specific the message 'type'"] unless msg.type
+          throw new Error("Invalid websocket call. No message handler supplied. Make sure you specific the message 'type'") unless msg.type
           if process.socket.message[msg.type]?
             process.socket.message[msg.type](msg, client) # Pass the message to the correct message handler
           else
-            throw ['invalid_message_type', "Invalid websocket call. No handler to process messages of type '#{msg.type}'"]
+            throw new Error("Invalid websocket call. No handler to process messages of type '#{msg.type}'")
         else
-          throw ['invalid_message', 'Invalid websocket call. No action supplied']
+          throw new Error("Invalid websocket call. No action supplied")
       catch e
-        client.system('error', e)
+        client.system('error', e.toString())
         SS.log.error.exception(e)
     
     # Called when a Socket.IO client disconnects (e.g. User shuts down the browser window)
     disconnection: (client) ->
       client.session.init()
       client.session._cleanup()  # removes this dead client from any channels
+      client.session.emit('disconnect', client.session)
     
 
     # Message Handlers (invoked according to the msg.type)

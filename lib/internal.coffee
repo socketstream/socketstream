@@ -27,6 +27,8 @@ exports.init = ->
   # Private Channels for Pub/Sub
   @channels = {}
   
+  @socket = null
+  
   @
 
 # System uptime in ms (is this in Node anywhere?)

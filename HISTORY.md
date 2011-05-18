@@ -1,3 +1,11 @@
+0.0.44 / 2011-05-18
+===================
+
+* Multiple Redis databases are now supported by setting SS.config.redis.db_index. Defaults to 0, the Redis default. Documented in README
+* Sessions now extend Event Emitter in order to fire custom server-side code when the websocket connection is lost. Documented in README
+* Improved the way errors are thrown
+
+
 0.0.43 / 2011-05-17
 ===================
 

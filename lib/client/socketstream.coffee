@@ -141,10 +141,9 @@ System =
     # Call app.init (if not previously run)
     start()
 
-  
   # Displays any application errors in the browser's console
   error: (details) ->
-    error('SocketStream Application Error: ' + details[1])
+    error('SocketStream Server - ' + details)
 
 
 # Incoming requests are sent to one of the following processors

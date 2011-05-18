@@ -32,7 +32,7 @@ exports.init = (load_project = false) ->
   SS.version = SS.internal.package_json.version
 
   # Set client file version. Bumping this automatically triggers re-compliation of lib assets when a user upgrades
-  SS.client.version = '0.0.12'
+  SS.client.version = '0.0.13'
 
   # Set environment
   env = process.env.SS_ENV || 'development'
@@ -219,21 +219,20 @@ load =
       try
         version =   SS.internal.package_json.dependencies[lib[1]].substring(2)
       catch e
-        throw "Unable to find #{npm_name} within the package.json dependencies"
+        throw new Error("Unable to find #{npm_name} within the package.json dependencies")
       try        
         SS.libs[lib[0]] = require("#{npm_name}@#{version}")
       catch e
         try
           SS.libs[lib[0]] = require("#{npm_name}")
         catch e
-          throw "Unable to start SocketStream as we're missing #{npm_name}.\nPlease install with 'npm install #{npm_name}'. Please also check the version number if you're using a version of npm below 1.0"
+          throw new Error("Unable to start SocketStream as we're missing #{npm_name}.\nPlease install with 'npm install #{npm_name}'. Please also check the version number if you're using a version of npm below 1.0")
 
   dbConfigFile: ->
     db_config_file = SS.root + '/config/db'
     try
       db_config_exists = require.resolve(db_config_file)
     require(db_config_file) if db_config_exists
-  
 
 check =
 

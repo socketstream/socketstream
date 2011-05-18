@@ -2,6 +2,7 @@
 # -------
 # Creates and maintains a persistent session in Redis once a visitor connects over websockets
 
+events = require('events').EventEmitter
 utils = require('./utils')
 pubsub = require('./pubsub.coffee')
 
@@ -28,7 +29,7 @@ exports.process = (client, cb) ->
 # A new instance of Session is created each time a websocket client connects or an API request is received
 # Sessions created when using the API are not saved (at the moment)
 
-class exports.Session
+class exports.Session extends events
   
   constructor: (@client = null, existing_attrs = null) ->
     @attributes = {}            # store a hash of serialised data in redis. e.g. {items_in_cart: 3}
@@ -98,7 +99,7 @@ class exports.Session
     loggedIn: ->
       @session.user_id?
       
-    logout: (cb) ->
+    logout: (cb = ->) ->
       if @session.client
         SS.redis.pubsub.unsubscribe @key()
         delete SS.users.connected[@session.user_id]

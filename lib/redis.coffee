@@ -10,14 +10,14 @@ exports.connect = ->
 main = ->
   config = SS.config.redis
   global.R = open(config)
-  R.select(0)
+  R.select(config.db_index)
   R
 
 # Redis requires a seperate connection for PubSub data
 pubsub = ->
   config = SS.config.redis_pubsub || SS.config.redis
   conn = open(config)
-  conn.select(0)
+  conn.select(config.db_index)
   conn
 
 # Opens Redis connection if config is valid

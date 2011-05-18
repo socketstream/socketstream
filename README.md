@@ -1,7 +1,7 @@
 ![SocketStream!](https://github.com/socketstream/socketstream/raw/master/lib/generator_files/logo.png)
 
 
-Latest release: 0.0.43   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+Latest release: 0.0.44   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 
 
 ### Introduction
@@ -288,7 +288,9 @@ Redis is automatically accessible anywhere within your server-side code using th
 
     R.get("string key", (err, data) -> console.log(data))    # prints 'string val'
 
-All internal SocketStream keys and channels are prefixed with 'socketstream:', so feel free to use anything else.
+The Redis host, port and database/keyspace index are all configurable via the SS.config.redis params. You may wish to set a different SS.config.redis.db_index for your development/staging/production environments to ensure data is kept separate.
+
+All internal SocketStream keys and pub/sub channels are prefixed with 'ss:', so feel free to start your application key names with anything else.
 
 [View full list of commands](http://redis.io/commands)
 
@@ -470,13 +472,28 @@ Note: Basic Auth will pass the 'username' and 'password' params to your exports.
 
 Both websocket and 'flashsocket' tunnels are surprisingly resilient to failure; however, as developers we must always assume the connection will fail from time to time, especially as the client may be on an unstable mobile connection.
 
-Therefore we recommend binding a function to the 'disconnect' and 'connect' events within the SocketIO client. For example:
+**Client Side**
+
+We recommend binding a function to the 'disconnect' and 'connect' events provided by the SocketStream client (courtesy of Socket.IO). For example:
 
     SS.socket.on('disconnect', -> alert('Connection Down'))
     
     SS.socket.on('connect', -> alert('Connection Up'))
 
-These events can be used client-side to toggle an online/offline icon within the app, or better still, to dim the screen and show a 'Attempting to reconnect...' message to users.
+These events can be used client side to toggle an online/offline icon within the app, or better still, to dim the screen and show a 'Attempting to reconnect...' message to users.
+
+**Server Side**
+
+As SocketStream can automatically detect when a client is no longer connected (e.g. they have closed down the browser tab), you may wish to run a server-side function to automatically logout the user, cleanup the database, or broadcast a message. In this case we recommend binding the following event handler to a server method which is invoked once when a user first hits you app, typically SS.server.app.init():
+
+    exports.actions =
+    
+      init: (cb) ->
+        @session.on 'disconnect', (session) ->
+          console.log "User ID #{session.user_id} has just logged out!"
+          session.user.logout()
+
+**Note**
 
 At present requests sent to the server whist offline are queued on the browser and automatically executed once the connection is re-established. In the near future we will allow time-critical requests to be marked as such - essential for stock trading apps.
 
@@ -520,7 +537,6 @@ Why are we waiting? Because developers are busy people and we want to make sure 
 Remaining tasks for 0.1.0:
 
 * Support client-side 'requires' allowing for namespacing and client/server API compatibility (in progress)
-* Improve error handling and standardize throwing of errors
 * Stabilize API to ensure minimal code changes in the future
 
 In addition, the following needs to be in place:

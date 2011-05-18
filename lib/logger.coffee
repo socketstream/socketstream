@@ -54,7 +54,7 @@ exports.error =
     output 1, exports.color("Error: #{message}", 'red')
   
   exception: (e) ->
-    output 1, exports.color("Error: #{e[1]}", 'red')
+    output 1, exports.color(e.toString(), 'red')
 
 
 exports.pubsub =
