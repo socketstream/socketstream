@@ -3,6 +3,8 @@
 
 Latest release: 0.0.44   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 
+Twitter: socketstream   -   Google Group: http://groups.google.com/group/socketstream
+
 
 ### Introduction
 
