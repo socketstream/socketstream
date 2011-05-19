@@ -43,11 +43,11 @@ exports.pack =
 
       exports.assets.client_dirs.map (dir) ->
         path = "./app/#{dir}"
-        files = file_utils.readDirSync(path).files
-        files = utils.ensureCorrectOrder(files)
-        files.map (file) ->
-          util.log('  Compiling and adding ' + file)
-          exports.assets.compile.coffee file, (result) -> output.push(result.output)
+        if files = file_utils.readDirSync(path).files
+          files = utils.ensureCorrectOrder(files, first_file) 
+          files.forEach (file) ->
+            util.log('  Compiling and adding ' + file)
+            exports.assets.compile.coffee file, (result) -> output.push(result.output)
       final_output = output.join("\n")
       final_output = utils.minifyJS(first_file, final_output)
 

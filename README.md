@@ -1,7 +1,7 @@
 ![SocketStream!](https://github.com/socketstream/socketstream/raw/master/lib/generator_files/logo.png)
 
 
-Latest release: 0.0.44   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+Latest release: 0.0.45   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 
 Twitter: socketstream   -   Google Group: http://groups.google.com/group/socketstream
 
@@ -30,7 +30,7 @@ Project status: Highly experimental but usable. Improving almost every day.
 * Uses [Redis](http://www.redis.io/) for fast session retrieval, pub/sub, list of users online, and any other data your app needs instantly
 * Nested namespaces and functions allow building of large 'enterprise' apps
 * Interactive console - just type 'socketstream console' and invoke any server-side method from there
-* Bundled with jQuery 1.5.2. Easily add additional client libraries such as [Underscore.js](http://documentcloud.github.com/underscore/)
+* Bundled with jQuery 1.6.1. Easily add additional client libraries such as [Underscore.js](http://documentcloud.github.com/underscore/)
 * Easily create jQuery templates using the [official plugin](http://api.jquery.com/category/plugins/templates/). Works like partials in Rails.
 * Uses [Jade](http://jade-lang.com/) to render static HTML
 * Uses [Stylus](http://learnboost.github.com/stylus/) for CSS

@@ -1,9 +1,14 @@
-Here is an example that shows how to install socketstream and it's dependencies. Since project is highly experimental it relies on not yet packaged releases of:
+Install Instructions
+====================
 
-* redis
-* node.js
+SocketStream runs on all UNIX based platforms, including OS X and Linux.
+
+TODO: Provide Mac OS X installation instructions
+
 
 ### Ubuntu 10.04 server installation
+
+Here is an example that shows how to install SocketStream and it's dependencies on Ubuntu Server, including building Redis and Node.js from source:
 
     # get prerequisites
     sudo apt-get install build-essential automake git-core curl libssl-dev -y
@@ -29,18 +34,18 @@ Here is an example that shows how to install socketstream and it's dependencies.
     export PATH=$HOME/local/node/bin:$PATH
     
     # install npm
-    curl http://npmjs.org/install.sh | sh
+    curl http://npmjs.org/install.sh | sudo sh
     
     # build socketstream
     cd ~
     git clone https://github.com/socketstream/socketstream.git
     cd socketstream
-    npm link
+    sudo npm link
     
-    # test socketstream
+    # create a new socketstream project called 'test'
     cd ~
     socketstream new test
     
     # run test app
     cd test
-    sudo env PATH=$PATH socketstream start
+    socketstream start

@@ -56,7 +56,6 @@ exports.error =
   exception: (e) ->
     output 1, exports.color(e.toString(), 'red')
 
-
 exports.pubsub =
 
   channels:

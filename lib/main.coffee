@@ -215,9 +215,9 @@ load =
       ['redis',     'redis']
       ['semver',    'semver']
     ].forEach (lib) ->
-      npm_name =  lib[1]
+      npm_name = lib[1]
       try
-        version =   SS.internal.package_json.dependencies[lib[1]].substring(2)
+        version = SS.internal.package_json.dependencies[lib[1]].substring(2)
       catch e
         throw new Error("Unable to find #{npm_name} within the package.json dependencies")
       try        
@@ -233,6 +233,7 @@ load =
     try
       db_config_exists = require.resolve(db_config_file)
     require(db_config_file) if db_config_exists
+
 
 check =
 

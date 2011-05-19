@@ -1,3 +1,12 @@
+0.0.45 / 2011-05-19
+===================
+
+* Fixed bug when attempting to pack assets with no /app/shared directory present
+* Included client disconnect/reconnect example actions in generated new project code
+* Upgraded jQuery to 1.6.1
+* Other minor changes
+
+
 0.0.44 / 2011-05-18
 ===================
 

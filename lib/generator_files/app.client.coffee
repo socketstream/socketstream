@@ -2,5 +2,12 @@ window.app =
   
   # This method is called automatically when the websocket connection is established. Do not rename/delete
   init: ->
-    SS.server.app.init navigator.userAgent, (response) ->
-      $('#message-from-server').text(response)
+    SS.server.app.init (response) ->
+      $('#message').text(response)
+    
+    SS.socket.on 'disconnect', ->
+      $('#message').text('SocketStream server has gone down :-(')
+
+    SS.socket.on 'connect', ->
+      $('#message').text('SocketStream server is back up :-)')
+      
