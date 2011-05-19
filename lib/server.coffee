@@ -107,10 +107,10 @@ process =
     
     # Called when a Socket.IO client disconnects (e.g. User shuts down the browser window)
     disconnection: (client) ->
-      client.session.init()
-      client.session._cleanup()  # removes this dead client from any channels
-      client.session.emit('disconnect', client.session)
-    
+	  if client.session
+        client.session.init()
+        client.session._cleanup()  # removes this dead client from any channels
+        client.session.emit('disconnect', client.session)
 
     # Message Handlers (invoked according to the msg.type)
     message:

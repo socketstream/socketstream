@@ -1,3 +1,9 @@
+0.0.46 / 2011-05-19
+===================
+
+* Fixed bug which appears when too many clients disconnect at once
+
+
 0.0.45 / 2011-05-19
 ===================
 
