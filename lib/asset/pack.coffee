@@ -74,8 +74,8 @@ exports.pack =
         output += utils.minifyJS('client file', js)
         fs.writeFileSync("#{system_path}/cached/lib.min.js", output)
       catch e
-        SS.log.error.exception(['unable_to_compile_client', "Error: Unable to compile or save the SocketStream client file to JS"])
-        throw(e)
+        SS.log.error.exception("Error: Unable to compile or save the SocketStream client file to JS")
+        throw new Error(e)
       util.log("SocketStream system client files updated. Recompiling application lib file to include new code...")
       exports.assets.pack.js.lib()
     

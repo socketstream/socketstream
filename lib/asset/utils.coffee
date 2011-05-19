@@ -19,8 +19,15 @@ exports.concatFiles = (path) ->
   files.map (file_name) ->
     util.log "  Concatenating file #{file_name}"
     output = fs.readFileSync("#{path}/#{file_name}", 'utf8')
+    if file_name.match(/\.coffee/)
+      util.log "  Compiling #{file_name} into JS..."
+      try
+        output = SS.libs.coffee.compile(output) 
+      catch e
+        util.log "\x1B[1;31mError: Unable to compile CoffeeScript file #{path} to JS\x1B[0m"
+        throw new Error(e) 
     output = exports.minifyJS(file_name, output) if file_name.match(/\.(coffee|js)/) and !file_name.match(/\.min/)
-    output += ';' if file_name.match(/\.(js)/) # Ensures the file ends with a semicolon. Many libs don't and would otherwise break when concatenated
+    output += ';' # Ensures the file ends with a semicolon. Many libs don't and would otherwise break when concatenated
     output
   .join("\n")
 

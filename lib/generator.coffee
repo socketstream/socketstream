@@ -40,7 +40,7 @@ makeFiles = (dir) ->
     {destination: '/app/css/helpers.styl',         source: '/helpers.styl'}
     {destination: '/config/db.coffee',             source: '/config.db.coffee'}
     {destination: '/lib/css/reset.css',            source: '/reset.css'}
-    {destination: '/lib/client/jquery-1.5.min.js', source: '/lib.client.jquery.min.js'}
+    {destination: '/lib/client/jquery.min.js',     source: '/lib.client.jquery.min.js'}
     {destination: '/public/images/logo.png',       source: '/logo.png'}
   ]
   copyFile(source_dir + file.source, dir + file.destination) for file in files

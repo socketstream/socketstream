@@ -54,8 +54,8 @@ exports.compile =
       js = SS.libs.coffee.compile(input)
       cb {output: js, content_type: 'text/javascript'}
     catch e
-      util.log("\x1B[1;31mError: Unable to compile Coffeescript file #{path} to JS\x1B[0m")
-      throw(e) if SS.config.throw_errors
+      util.log("\x1B[1;31mError: Unable to compile CoffeeScript file #{path} to JS\x1B[0m")
+      throw new Error(e) if SS.config.throw_errors
 
   styl: (input_file_name, cb) ->
     dir = "app/css"
@@ -64,7 +64,7 @@ exports.compile =
     SS.libs.stylus.render input, {filename: input_file_name, paths: [dir], compress: SS.config.pack_assets}, (err, css) ->
       if err
         util.log("\x1B[1;31mError: Unable to compile Stylus file #{path} to CSS\x1B[0m")
-        throw(err) if SS.config.throw_errors
+        throw new Error(err) if SS.config.throw_errors
       cb {output: css, content_type: 'text/css'}
 
 
@@ -91,7 +91,7 @@ buildTemplate = (template_path) ->
     html = SS.libs.jade.render(file);
   catch e
     console.error 'Unable to render jade template: ' + template_path
-    throw e
+    throw new Error(e)
   tag.template(id, html)
 
 

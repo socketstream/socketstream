@@ -1,7 +1,7 @@
 ![SocketStream!](https://github.com/socketstream/socketstream/raw/master/lib/generator_files/logo.png)
 
 
-Latest release: 0.0.46   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+Latest release: 0.0.47   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 
 Twitter: socketstream   -   Google Group: http://groups.google.com/group/socketstream
 
@@ -538,6 +538,7 @@ Why are we waiting? Because developers are busy people and we want to make sure 
 
 Remaining tasks for 0.1.0:
 
+* Make it easier to work with /lib/client files. New files are currently not detected when added - it's quite hard to fix
 * Support client-side 'requires' allowing for namespacing and client/server API compatibility (in progress)
 * Stabilize API to ensure minimal code changes in the future
 
@@ -547,7 +548,6 @@ In addition, the following needs to be in place:
 * At least two example/demo applications available on GitHub
 * Review available testing frameworks and document ways these can be used with SS
 * A brief guide to deploying and scaling
-* Setup a SocketStream Google Group
 
 
 ### Contributors

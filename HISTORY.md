@@ -1,3 +1,9 @@
+0.0.47 / 2011-05-19
+===================
+
+* .coffee files can now be placed in /lib/client and will be transparently compiled
+
+
 0.0.46 / 2011-05-19
 ===================
 
