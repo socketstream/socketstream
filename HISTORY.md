@@ -1,3 +1,10 @@
+0.0.49 / 2011-05-23
+===================
+
+* Fixed bug concerning dropping clients without active sessions
+* Added Known Issues section to README
+
+
 0.0.48 / 2011-05-23
 ===================
 

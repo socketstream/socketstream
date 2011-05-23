@@ -89,7 +89,7 @@ process =
 
     # Called each time Socket.IO sends a message through to the server
     call: (data, client) ->
-      return null unless client.session.id # drop all calls unless session is loaded
+      return null unless client.session # drop all calls unless session is loaded
       client.session.init()
       try
         try

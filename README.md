@@ -1,7 +1,7 @@
 ![SocketStream!](https://github.com/socketstream/socketstream/raw/master/lib/generator_files/logo.png)
 
 
-Latest release: 0.0.48   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+Latest release: 0.0.49   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 
 Twitter: socketstream   -   Google Group: http://groups.google.com/group/socketstream
 
@@ -529,6 +529,11 @@ We will continue enhancing the HTTPS experience over future releases until it's 
 
 There are a handful of tests at the moment, but there will be more once the internal API becomes stable. It is one of the major things we need to get right before announcing SocketStream to the world.
     
+
+### Known Issues
+
+* Any manipulation of $('body') using jQuery, e.g. $('body').hide(), under Firefox 4 disrupts the flashsocket connection. Until we figure out what's causing this bizarre bug, best avoid calling $('body') in your code.
+
 
 ### The Road to 0.1.0
 
