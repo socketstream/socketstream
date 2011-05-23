@@ -1,3 +1,13 @@
+0.0.48 / 2011-05-23
+===================
+
+* .js files are now fully supported in /app/client, along with .coffee. Mix and match as you wish
+* If a lib file fails to compile it will be automatically regenerated next time - no more empty files
+* Refactored code to pre-parse incoming URLs to reduce duplicate parsing later down the line
+* Improved API errors
+* Lots of other refactoring and minor improvements
+
+
 0.0.47 / 2011-05-19
 ===================
 

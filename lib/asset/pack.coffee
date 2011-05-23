@@ -20,12 +20,18 @@ exports.init = (@assets) ->
 exports.pack =
   
   all: ->
-    util.log "Pre-packing all client assets..."
-    @js.lib()
-    @js.app()
-    @css.lib()
-    @css.app()
-    @html.app()
+    try
+      util.log "Pre-packing all client assets..."
+      @js.lib()
+      @js.app()
+      @css.lib()
+      @css.app()
+      @html.app()
+    catch e
+      # Remove the .socketstream_state file to force asset files to rebuild next time instead of leaving empty files
+      SS.internal.state.reset()
+      SS.log.error.exception e
+      throw 'Error: Unable to pack client assets. Files will be re-generated next time'
   
   html:
     
@@ -38,18 +44,21 @@ exports.pack =
   js:
     
     app: ->
-      first_file = 'app/client/app.coffee'
       output = []
-
       exports.assets.client_dirs.map (dir) ->
         path = "./app/#{dir}"
         if files = file_utils.readDirSync(path).files
-          files = utils.ensureCorrectOrder(files, first_file) 
+          files = utils.ensureCorrectOrder(files)
           files.forEach (file) ->
-            util.log('  Compiling and adding ' + file)
-            exports.assets.compile.coffee file, (result) -> output.push(result.output)
+            if file.split('.')[1] == 'coffee'
+              util.log('  Compiling and adding ' + file)
+              exports.assets.compile.coffee file, (result) -> output.push(result.output)
+            else
+              util.log('  Adding ' + file)
+              js = fs.readFileSync "#{SS.root}/#{file}", 'utf8'
+              output.push(js)
       final_output = output.join("\n")
-      final_output = utils.minifyJS(first_file, final_output)
+      final_output = utils.minifyJS('application code', final_output)
 
       deleteFilesInPublicDir(/^app.*js$/)
       exports.assets.files.js.app = "app_#{Date.now()}.js"

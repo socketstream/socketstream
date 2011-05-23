@@ -16,7 +16,7 @@ exports.process = (action_array, params, session, cb) ->
   action = actions.pop()
 
   obj = utils.getFromTree(SS.server, actions)
-
+  
   # Check module exists before we attempt to call a function on it
   throw new Error("Unable to find the #{prefix}/#{actions.join('/')} module. Does the file exist?") unless obj
 

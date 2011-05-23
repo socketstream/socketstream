@@ -8,6 +8,9 @@ exports.serve =
 
   staticFile: (request) ->
     output 1, "STATIC: #{request.url}"
+  
+  compiled: (file, benchmark_result) ->
+    output 2, "DEV INFO: Compiled and served #{file} in #{benchmark_result}ms"
 
 exports.incoming =
     

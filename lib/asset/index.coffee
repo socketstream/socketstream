@@ -64,13 +64,16 @@ ensureAssetsExist = ->
   unless exports.files.js.lib? and exports.files.css.lib? and exports.files.css.app?
     util.log "It looks like this is the first time you're running SocketStream. Generating asset files..."
     exports.pack.all()
-    SS.internal.saveState()
+    SS.internal.state.save()
 
 upgradeAssetsIfRequired = ->
-  if SS.internal.clientVersionChanged()
-    util.log "Thanks for upgrading SocketStream. Regenerating assets to include the latest client code..."
+  if (upgraded = SS.internal.state.clientVersionUpgraded()) or SS.internal.state.missing()
+    if upgraded
+      util.log "Thanks for upgrading SocketStream. Regenerating assets to include the latest client code..."
+    else
+      util.log "Regenerating client asset files..."
     exports.pack.js.system()
-    SS.internal.saveState()
+    SS.internal.state.save()
 
 findAssets = (cb) ->
   files = utils.fileList exports.public_path

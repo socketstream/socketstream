@@ -19,7 +19,7 @@ exports.init = ->
   @package_json = loadPackageJSON()
   
   # Load last known state project was in, if it exists. We record this so we know when force a rebuild of client libraries on startup
-  @last_known_state = loadState()
+  @state = state.init()
   
   # API String
   @api_string = {}
@@ -27,41 +27,53 @@ exports.init = ->
   # Private Channels for Pub/Sub
   @channels = {}
   
-  @socket = null
-  
   @
 
 # System uptime in ms (is this in Node anywhere?)
 exports.uptime = ->
   (new Date) - @up_since
 
-# Saves the current state once we've processed changes
-exports.saveState = ->
-  fs.writeFileSync(stateFileName(), JSON.stringify(@currentState()))
-  @last_known_state = @currentState()
 
-exports.currentState = ->
-  version:
-    server: SS.version
-    client: SS.client.version
+# SocketStream State
+# Used to determin when client assets need to be rebuilt or other upgrade tasks run
+state =
 
-exports.clientVersionChanged = ->
-  try
-    SS.libs.semver.gt @currentState().version.client, @last_known_state.version.client
-  catch e
-    true
+  init: ->
+    @file_name = "#{SS.root}/.socketstream_state"
+    @last_known = @load()
+    @
+    
+  current: ->
+    version:
+      server: SS.version
+      client: SS.client.version
+
+  save: ->
+    fs.writeFileSync(@file_name, JSON.stringify(@current()))
+    @last_known = @current()
+    
+  load: ->
+    try
+      JSON.parse(fs.readFileSync(@file_name))
+    catch e
+      {} # no big deal if the file get's deleted or mangled, we just regenerate it
+
+  clientVersionUpgraded: ->
+    try
+      SS.libs.semver.gt @current().version.client, @last_known.version.client
+    catch e
+      false
+  
+  # The last known state was never loaded
+  missing: ->
+    typeof(@last_known.version) != 'object'
+
+  # Deletes the state file, forcing rebuild of assets etc next time round
+  reset: ->
+    fs.unlinkSync @file_name
 
 
 # HELPERS
-
-stateFileName = ->
-  "#{SS.root}/.socketstream_state"
-
-loadState = ->
-  try
-    JSON.parse(fs.readFileSync(stateFileName()))
-  catch e
-    {} # no big deal if the file get's deleted or mangled, we just regenerate it
 
 loadPackageJSON = ->
   try

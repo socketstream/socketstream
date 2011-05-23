@@ -57,6 +57,12 @@ exports.compile =
       util.log("\x1B[1;31mError: Unable to compile CoffeeScript file #{path} to JS\x1B[0m")
       throw new Error(e) if SS.config.throw_errors
 
+  js: (path, cb) ->
+    js = fs.readFileSync "#{SS.root}/#{path}", 'utf8'
+    file_ary = path.split('.')[0].split('/')
+    js = namespaceSharedFile(input, file_ary) if file_ary[1] == 'shared'
+    cb {output: js, content_type: 'text/javascript'}
+
   styl: (input_file_name, cb) ->
     dir = "app/css"
     path = "#{dir}/#{input_file_name}"

@@ -9,38 +9,32 @@ exports.init = (@assets) ->
 
 exports.request =
   
-  responds_to:  ['coffee', 'styl']
-
-  isValidRequest: (url) ->
-    return true if isRoot(url)
-    file_extension = url.split('.').reverse()[0]
-    @responds_to.include(file_extension)
+  isValidRequest: (request) ->
+    url = request.parsedURL
+    return true if url.isRoot or url.extension == 'styl'
+    isValidScript(url)
   
   call: (request, response) ->
-    file = parseURL(request.url)
+    file = urlToFile(request.parsedURL)
     request.ss_benchmark_start = new Date
     exports.assets.compile[file.extension] file.name, (result) ->
       response.writeHead(200, {'Content-type': result.content_type, 'Content-Length': result.output.length})
       response.end(result.output)
       benchmark_result = (new Date) - request.ss_benchmark_start
-      util.log("DEV INFO: Compiled and served #{file.name} in #{benchmark_result}ms")
+      SS.log.serve.compiled(file.name, benchmark_result)
 
 
 # PRIVATE
 
 # Parse incoming URL depending on file extension
-parseURL = (url) ->
-  extension = url.split('.').reverse()[0]
-  path = url.split('/')
-  dir = path[1]; file = path.splice(2)
-  if isRoot(url)
+urlToFile = (url) ->
+  if url.isRoot
     {name: 'app.jade', extension: 'jade'}
-  else if extension == 'coffee' and exports.assets.client_dirs.include(dir)
-    {name: "app/#{dir}/#{file.join('/')}", extension: extension}
+  else if isValidScript(url)
+    {name: "app/#{url.initialDir}/#{url.path}", extension: url.extension}
   else
-    {name: file, extension: extension}
+    {name: url.path, extension: url.extension}
 
-# Determins if we're looking for the root of the site, ignoring any hashes or anything in the query string
-isRoot = (url) ->
-   u = url.split('?')[0].split('/')
-   u.length == 2 and !u[1].match(/\./)
+# Excludes lib_*.js asset files
+isValidScript = (url) ->
+  ['coffee', 'js'].include(url.extension) and exports.assets.client_dirs.include(url.initialDir)

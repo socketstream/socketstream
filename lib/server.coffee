@@ -24,12 +24,13 @@ RTM = require('./realtime_models') if SS.config.rtm.enabled
 exports.start = ->
   asset.init()
   server = mainServer()
-  socket = SS.internal.socket = SS.libs.io.listen(server, {transports: ['websocket', 'flashsocket']})
+  socket = SS.libs.io.listen(server, {transports: ['websocket', 'flashsocket']})
   socket.on('connection', process.socket.connection)
   socket.on('clientMessage', process.socket.call)
   socket.on('clientDisconnect', process.socket.disconnection)
   server.listen(SS.config.port, SS.config.hostname)
   pubsub.listen(socket)
+  SS.internal.state.save()
 
 
 # PRIVATE
@@ -42,16 +43,18 @@ process =
     # Every incoming HTTP request goes though this method, so it must be optimized at all times
     call: (request, response) ->
 
+      appendParsedURL(request)
+
       # If this is an API request
       if api and api.isValidRequest(request)
         api.call(request, response)
-        
+
       # If this is a Web Admin request
-      if admin and admin.isValidRequest(request)
+      else if admin and admin.isValidRequest(request)
         admin.call(request, response)
 
       # If we're not packing assets, serve them live (typically in development)
-      else if !SS.config.pack_assets and asset.request.isValidRequest(request.url)
+      else if !SS.config.pack_assets and asset.request.isValidRequest(request)
         asset.request.call(request, response)
 
       # By default, try to serve a static file
@@ -143,6 +146,20 @@ mainServer = ->
     https.createServer(ssl.options, process.http.call)
   else
     http.createServer(process.http.call)
+
+# Parses incoming URL into file extension, initial dir etc and adds this object to request.parsedURL
+appendParsedURL = (request) ->
+  raw = request.url
+  [no_params, params] = raw.split('?')
+  [url, extension] = no_params.split('.')
+  [ignore, initialDir, actions...] = url.split('/')
+  request.parsedURL = 
+    extension:   (if extension and extension != '/' then extension.toLowerCase() else null)
+    initialDir:  (if initialDir then initialDir.toLowerCase() else null)
+    actions:     (actions || null)
+    params:      (params || null)
+    path:        (if actions.length > 0 then [actions.join('/'), extension].join('.') else '')
+    isRoot:      (u = url.split('?')[0].split('/'); u.length == 2 and !u[1].match(/\./))
 
 # Load the SSL keys
 ssl =
