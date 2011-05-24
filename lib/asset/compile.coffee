@@ -6,7 +6,7 @@ fs = require('fs')
 util = require('util')
 
 utils = require('./utils.coffee')
-file_utils = require('../utils/file')
+file_utils = require('../utils/file.js')
 
 exports.init = (@assets) -> 
   @
@@ -42,25 +42,28 @@ exports.compile =
     
     # Include all jQuery templates, if present
     inclusions = inclusions.concat(buildTemplates())
-    
     SS.libs.jade.renderFile file, {locals: {SocketStream: inclusions.join('')}}, (err, html) ->
       cb {output: html, content_type: 'text/html'}
+
 
   coffee: (path, cb) ->
     input = fs.readFileSync "#{SS.root}/#{path}", 'utf8'
     try
       file_ary = path.split('.')[0].split('/')
-      input = namespaceSharedFile(input, file_ary) if file_ary[1] == 'shared'
+      input = namespaceSharedFile(input, file_ary, 'coffee') if file_ary[1] == 'shared'
       js = SS.libs.coffee.compile(input)
       cb {output: js, content_type: 'text/javascript'}
-    catch e
-      util.log("\x1B[1;31mError: Unable to compile CoffeeScript file #{path} to JS\x1B[0m")
-      throw new Error(e) if SS.config.throw_errors
+    catch err
+      e = new Error(e)
+      e.name = "Unable to compile CoffeeScript file #{path} to JS"
+      e.message = err.message
+      e.stack = err.stack
+      throw e if SS.config.throw_errors
 
   js: (path, cb) ->
     js = fs.readFileSync "#{SS.root}/#{path}", 'utf8'
     file_ary = path.split('.')[0].split('/')
-    js = namespaceSharedFile(input, file_ary) if file_ary[1] == 'shared'
+    js = namespaceSharedFile(js, file_ary, 'js') if file_ary[1] == 'shared'
     cb {output: js, content_type: 'text/javascript'}
 
   styl: (input_file_name, cb) ->
@@ -69,8 +72,11 @@ exports.compile =
     input = fs.readFileSync "#{SS.root}/#{path}", 'utf8'
     SS.libs.stylus.render input, {filename: input_file_name, paths: [dir], compress: SS.config.pack_assets}, (err, css) ->
       if err
-        util.log("\x1B[1;31mError: Unable to compile Stylus file #{path} to CSS\x1B[0m")
-        throw new Error(err) if SS.config.throw_errors
+        e = Error(err)
+        e.name = "Unable to compile Stylus file #{path} to CSS"
+        e.message = err.message
+        e.stack = err.stack
+        throw e if SS.config.throw_errors
       cb {output: css, content_type: 'text/css'}
 
 
@@ -114,11 +120,15 @@ tag =
     '<script id="' + id + '" type="text/html">' + contents + '</script>'
     
 # Namespace code in Shared Files
-# Changes 'exports.X' statements to 'SS.shared.X' to ensure the API is consistent between server and client without any additional overhead
-namespaceSharedFile = (input, file_ary) ->
+namespaceSharedFile = (input, file_ary, type) ->
   ns = file_ary.splice(2)
-  prefix = ns.map (x, i) -> # The prefix ensure we only attach functions to initialized objects
+  # Add file prefix to ensure we only attach functions to initialized objects
+  prefix = ns.map (x, i) -> 
     level = ns.slice(0, i + 1).join('.')
-    "SS.shared.#{level} = {} unless SS.shared.#{level}"
+    if type == 'coffee'
+      "SS.shared.#{level} = {} unless SS.shared.#{level}"
+    else
+      "if (typeof(SS.shared.#{level}) == 'undefined') SS.shared.#{level} = {};"
+  # Replace calls to exports.X with 'SS.shared.X' to ensure the API is consistent between server and client without any additional overhead
   prefix.join("\n") + "\n" + input.replace(/exports\./g, 'SS.shared.' + ns.join('.') + '.')
 

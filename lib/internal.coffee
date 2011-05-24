@@ -70,7 +70,10 @@ state =
 
   # Deletes the state file, forcing rebuild of assets etc next time round
   reset: ->
-    fs.unlinkSync @file_name
+    try
+      fs.unlinkSync @file_name
+    catch e
+      # do nothing if file doesn't exist
 
 
 # HELPERS

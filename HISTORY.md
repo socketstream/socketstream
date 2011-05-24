@@ -1,3 +1,11 @@
+0.0.50 / 2011-05-24
+===================
+
+* Major enhancement: Errors in client-side .coffee and .stylus files no longer kill the server
+* A new SocketStream error page is sent instead, showing the backtrace on screen, as well as in the console
+* .js files are now fully supported in /app/shared, along with .coffee. Mix and match as you wish
+
+
 0.0.49 / 2011-05-23
 ===================
 

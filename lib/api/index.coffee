@@ -14,6 +14,7 @@ url_lib = require('url')
 Session = require('../session.coffee').Session
 Request = require('../request.coffee')
 base64 = require('../utils/base64.js')
+server = require('../utils/server.coffee')
 RTM = require('../realtime_models') if SS.config.rtm.enabled
 
 exports.isValidRequest = (request) ->
@@ -27,7 +28,7 @@ exports.call = (request, response) ->
 
   # Browse API if viewing root
   if actions.length <= 1
-    deliver(response, 200, 'text/html', 'Browse public API. Coming soon.')
+    server.deliver(response, 200, 'text/html', 'Browse public API. Coming soon.')
   # Or attempt to process request
   else
     process(request, response, url, actions)
@@ -62,24 +63,12 @@ process = (request, response, url, actions) ->
           Request.process actions, params, session, (data, options) -> reply(data, response, format)
           SS.log.incoming.api(actions, params, format)
   catch e
-    showError(response, e)
+    server.showError(response, e)
         
 # Formats and deliver the object
 reply = (data, response, format) ->
   out = output_formats[format](data)
-  deliver(response, 200, out.content_type, out.output)
-
-# Deliver output to screen
-deliver = (response, code, type, body) ->
-  response.writeHead(code, {'Content-type': type, 'Content-Length': body.length})
-  response.end(body)
-
-# Show and error on the screen. TODO: Log to exception handling system
-showError = (response, error) ->
-  output = '<h3>SocketStream API Error</h3>'
-  output += error
-  deliver(response, 400, 'text/html', output)
-  SS.log.error.exception(error)
+  server.deliver(response, 200, out.content_type, out.output)
 
 # Attempts to make sense of the params passed in the query string
 parseParams = (url) ->
@@ -112,7 +101,7 @@ authenticate = (request, response, actions, session, cb) ->
           session.setUserId(reply.user_id)
           cb(true)
         else
-          showError(response, 'Invalid username or password')
+          server.showError(response, 'Invalid username or password')
           cb(false)
       
     else

@@ -21,6 +21,7 @@ admin = require('./admin')  if SS.config.admin.enabled
 # Only load Realtime Models if enabled. Disabled by default
 RTM = require('./realtime_models') if SS.config.rtm.enabled
 
+# The main method called when starting the server ('socketstream start')
 exports.start = ->
   asset.init()
   server = mainServer()
