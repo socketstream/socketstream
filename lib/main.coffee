@@ -114,9 +114,14 @@ load =
   # Start up the SocketStream environment based on the current project
   # Needs to run before the Server or Console can start
   project: ->
+  
+    # Load logger
+    SS.log = require('./logger.coffee')
 
+    # Load the basics and run a number of checks
     check.isValidProjectDir()
     load.externalLibs()
+    check.versionIsCorrect()
     load.vendoredModules()
 
     # Set Framework Paths
@@ -124,9 +129,6 @@ load =
     require.paths.unshift('./app/shared')
     require.paths.unshift('./app/models')
 
-    # Load logger
-    SS.log = require('./logger.coffee')
-    
     # Set default config and merge it with any application config file
     require('./configurator.coffee').configure()
     
@@ -145,6 +147,9 @@ load =
     
     # Load application files within /app
     load.files()
+    
+    # Save current state
+    SS.internal.state.save()
   
   # Server-side files
   files: ->
@@ -245,14 +250,26 @@ check =
         if file == dir
           fatal "Unable to load the #{dir} directory\nIt conflicts with a file of the same name in the parent directory. Please rename one of them."
   
+  # Quick check to make sure we have two key ingredients for a valid project
   isValidProjectDir: ->
     dirs = fs.readdirSync(SS.root)
     if (!dirs.include('app') || !dirs.include('public')) # All other dirs are optional for now
       fatal 'Unable to start SocketStream here. Not a valid project directory'
-
+  
+  # Version numbers
+  versionIsCorrect: ->
+    out_of_date = try
+       SS.libs.semver.gt(SS.internal.state.last_known.version.server, SS.version)
+    catch e
+      false
+    fatal("This application is running an outdated version of SocketStream.\nPlease upgrade to #{SS.internal.state.last_known.version.server} or above to ensure the app runs as expected, or delete the .socketstream_state file to override this error.") if out_of_date
+      
+      
+    
+# Throw a fatal error
 fatal = (message) ->
-  SS.log.error.exception ['error', message]
-  throw 'Unable to continue'
+  SS.log.error.message message
+  throw 'Unable to continue: '
 
 # We convert the object tree for sending in the most condensed way possible. The client will re-construct the api into SS.server and SS.shared from this string
 apiToString = (obj) ->

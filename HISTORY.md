@@ -1,3 +1,11 @@
+0.0.51 / 2011-05-25
+===================
+
+* Errors in client-side .jade files are now caught in development (once new Jade released is pushed to npm)
+* Now prevents you from starting a project with an outdated version of SocketStream (can be overridden) 
+* Fixed bug preventing /favicon.ico from being served
+
+
 0.0.50 / 2011-05-24
 ===================
 

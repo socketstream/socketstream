@@ -72,7 +72,7 @@ exports.pubsub =
 
 # Color helper
 exports.color = (msg, color) ->
-  return msg unless SS.config.enable_color
+  return msg if SS.config.loaded and !SS.config.enable_color
   msg_ary = msg.split('\n')
   first_line = msg_ary[0]
   other_lines = if msg_ary.length > 1 then '\n' + msg_ary.splice(1).join('\n') else ''
@@ -84,6 +84,7 @@ output = (level, msg) ->
   util.log(msg) if validLevel(level)
 
 validLevel = (level) ->
+  return true unless SS.config.log # config may not be loaded yet
   SS.config.log.level >= level
 
 parseParams = (params) ->

@@ -15,6 +15,7 @@ exports.configure = ->
 # Set sensible defaults so we can be up and running without an app-specific config file
 setDefaults = ->
   SS.config =
+    loaded:             true                  # allows us to check the app's config has been loaded
     ss_var:             'SS'                  # the main SocketStream global variable server-side
     port:               3000		              # if you want to run on port 80 or 443 node must be run as root
     hostname:           '0.0.0.0'             # allows the server to be bound to a particular IP. listens on all by default

@@ -42,9 +42,16 @@ exports.compile =
     
     # Include all jQuery templates, if present
     inclusions = inclusions.concat(buildTemplates())
-    SS.libs.jade.renderFile file, {locals: {SocketStream: inclusions.join('')}}, (err, html) ->
+    
+    # Replace the 'SocketStream' magic keyword within the jade file with all the asset inclusions
+    locals = {locals: {SocketStream: inclusions.join('')}}
+    
+    SS.libs.jade.renderFile file, locals, (err, html) ->
+      if err
+        e = new Error(err)
+        e.name = "Unable to compile Jade file #{file} to HTML"
+        throw e if SS.config.throw_errors
       cb {output: html, content_type: 'text/html'}
-
 
   coffee: (path, cb) ->
     input = fs.readFileSync "#{SS.root}/#{path}", 'utf8'
@@ -54,10 +61,8 @@ exports.compile =
       js = SS.libs.coffee.compile(input)
       cb {output: js, content_type: 'text/javascript'}
     catch err
-      e = new Error(e)
+      e = new Error(err)
       e.name = "Unable to compile CoffeeScript file #{path} to JS"
-      e.message = err.message
-      e.stack = err.stack
       throw e if SS.config.throw_errors
 
   js: (path, cb) ->
@@ -74,8 +79,6 @@ exports.compile =
       if err
         e = Error(err)
         e.name = "Unable to compile Stylus file #{path} to CSS"
-        e.message = err.message
-        e.stack = err.stack
         throw e if SS.config.throw_errors
       cb {output: css, content_type: 'text/css'}
 

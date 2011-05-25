@@ -31,7 +31,6 @@ exports.start = ->
   socket.on('clientDisconnect', process.socket.disconnection)
   server.listen(SS.config.port, SS.config.hostname)
   pubsub.listen(socket)
-  SS.internal.state.save()
 
 
 # PRIVATE
@@ -160,7 +159,7 @@ appendParsedURL = (request) ->
     actions:     (actions || null)
     params:      (params || null)
     path:        (if actions.length > 0 then [actions.join('/'), extension].join('.') else '')
-    isRoot:      (u = url.split('?')[0].split('/'); u.length == 2 and !u[1].match(/\./))
+    isRoot:      (u = url.split('?')[0].split('/'); u.length == 2 and !raw.match(/\./))
 
 # Load the SSL keys
 ssl =
