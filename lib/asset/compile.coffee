@@ -57,7 +57,7 @@ exports.compile =
     input = fs.readFileSync "#{SS.root}/#{path}", 'utf8'
     try
       file_ary = path.split('.')[0].split('/')
-      input = namespaceSharedFile(input, file_ary, 'coffee') if file_ary[1] == 'shared'
+      input = namespaceClientFile(input, file_ary, 'coffee')
       js = SS.libs.coffee.compile(input)
       cb {output: js, content_type: 'text/javascript'}
     catch err
@@ -68,7 +68,7 @@ exports.compile =
   js: (path, cb) ->
     js = fs.readFileSync "#{SS.root}/#{path}", 'utf8'
     file_ary = path.split('.')[0].split('/')
-    js = namespaceSharedFile(js, file_ary, 'js') if file_ary[1] == 'shared'
+    js = namespaceClientFile(js, file_ary, 'js')
     cb {output: js, content_type: 'text/javascript'}
 
   styl: (input_file_name, cb) ->
@@ -122,16 +122,17 @@ tag =
   template: (id, contents) ->
     '<script id="' + id + '" type="text/html">' + contents + '</script>'
     
-# Namespace code in Shared Files
-namespaceSharedFile = (input, file_ary, type) ->
+# Namespace code in Client and Shared Files
+namespaceClientFile = (input, file_ary, ext) ->
+  type = file_ary[1]
   ns = file_ary.splice(2)
   # Add file prefix to ensure we only attach functions to initialized objects
   prefix = ns.map (x, i) -> 
     level = ns.slice(0, i + 1).join('.')
-    if type == 'coffee'
-      "SS.shared.#{level} = {} unless SS.shared.#{level}"
+    if ext == 'coffee'
+      "SS.#{type}.#{level} = {} unless SS.#{type}.#{level}"
     else
-      "if (typeof(SS.shared.#{level}) == 'undefined') SS.shared.#{level} = {};"
-  # Replace calls to exports.X with 'SS.shared.X' to ensure the API is consistent between server and client without any additional overhead
-  prefix.join("\n") + "\n" + input.replace(/exports\./g, 'SS.shared.' + ns.join('.') + '.')
+      "if (typeof(SS.#{type}.#{level}) == 'undefined') SS.#{type}.#{level} = {};"
+  # Replace calls to exports.X with 'SS.{type}.X' to ensure the API is consistent between server and client without any additional overhead
+  prefix.join("\n") + "\n" + input.replace(/exports\./g, "SS.#{type}." + ns.join('.') + '.')
 

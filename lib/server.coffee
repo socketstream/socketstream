@@ -15,8 +15,9 @@ pubsub  = require('./pubsub.coffee')
 static  = new(SS.libs.static.Server)('./public')
 
 # Load optional modules
-api   = require('./api')    if SS.config.api.enabled
-admin = require('./admin')  if SS.config.admin.enabled
+limiter = require('./limiter.coffee')   if SS.config.limiter.enabled
+api     = require('./api')              if SS.config.api.enabled
+admin   = require('./admin')            if SS.config.admin.enabled
 
 # Only load Realtime Models if enabled. Disabled by default
 RTM = require('./realtime_models') if SS.config.rtm.enabled
@@ -89,9 +90,20 @@ process =
 
     # Called each time Socket.IO sends a message through to the server
     call: (data, client) ->
-      return null unless client.session # drop all calls unless session is loaded
-      client.session.init()
+
+      # Silently drop all calls if...
+      return null if client.rps_exceeded  # client has exceeded the number of requests-per-second
+      return null unless client.session   # session is not loaded
+
+      # Prevent obvious DDOS abuse caused by repeated calls to SS.server from a particular client
+      # The number of requests per second can be adjusted with SS.config.limiter.websockets.rps
+      if limiter and limiter.exceeded(client)
+        SS.log.incoming.rpsExceeded(client)
+        return null
+
+      # Attempt to process the request
       try
+        client.session.init()  # Necessary to correctly initiate sub-objects
         try
           msg = JSON.parse(data)
         catch e
@@ -159,7 +171,7 @@ appendParsedURL = (request) ->
     actions:     (actions || null)
     params:      (params || null)
     path:        (if actions.length > 0 then [actions.join('/'), extension].join('.') else '')
-    isRoot:      (u = url.split('?')[0].split('/'); u.length == 2 and !raw.match(/\./))
+    isRoot:      (u = url.split('?')[0].split('/'); u.length == 2 and !raw.split('?')[0].match(/\./))
 
 # Load the SSL keys
 ssl =

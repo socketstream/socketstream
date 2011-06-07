@@ -1,3 +1,14 @@
+0.0.52 / 2011-06-07
+===================
+
+* Major update with an IMPORTANT API CHANGE!
+* Client files are now namespaced in exactly the same way as Shared files. Existing apps will not break, but look at the README to see the new best practice
+* Added very basic rate limiting. This is turned off by default whilst we try it out in the real world, but can be switched on with SS.config.limiter.enabled = true. See new Security section in README
+* Improved initial creation of client libs
+* A fair bit of internal refactoring
+* Added Security and Scaling sections to README
+
+
 0.0.51 / 2011-05-25
 ===================
 

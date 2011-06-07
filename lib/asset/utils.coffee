@@ -47,9 +47,10 @@ exports.minifyJS = (file_name, orig_code) ->
 # When serving client files app.coffee or app.js must always be loaded first, so we're ensuring this here for now.
 # This is only temporary as big changes are coming to the way we serve and organise client files
 exports.ensureCorrectOrder = (files) ->
-  first_file = files.filter (path) ->
+  matches = files.filter (path) ->
     file = path.split('/').reverse()[0]
     file.split('.')[0] == 'app'
+  first_file = matches[0]
   if files.include(first_file) 
     files = files.delete(first_file)
     files.unshift(first_file)

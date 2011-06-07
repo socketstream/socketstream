@@ -22,16 +22,19 @@ exports.pack =
   all: ->
     try
       util.log "Pre-packing all client assets..."
-      @js.lib()
+      @libs()
       @js.app()
-      @css.lib()
       @css.app()
       @html.app()
     catch e
-      # Remove the .socketstream_state file to force asset files to rebuild next time instead of leaving empty files
+      # Removes the .socketstream_state file to force asset files to rebuild next time instead of leaving empty/broken files
       SS.internal.state.reset()
       SS.log.error.exception e
       throw 'Error: Unable to pack client assets. Files will be re-generated next time'
+  
+  libs: ->
+    @js.lib()
+    @css.lib()
   
   html:
     

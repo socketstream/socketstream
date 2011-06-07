@@ -29,6 +29,9 @@ exports.incoming =
 
   rest: (actions, params, format, http_method) ->
     output 2, "REST #{http_method} (#{format}) #{exports.color('->', 'cyan')} #{actions.join('.')} #{parseParams(params)}"
+    
+  rpsExceeded: (client) ->
+    output 2, "ALERT: Subsequent requests from Client ID: #{client.sessionId}, Session ID: #{client.session.id}, IP: #{client.connection.remoteAddress} will be dropped as requests-per-second over #{SS.config.limiter.websockets.rps}"
 
 exports.outgoing =
 

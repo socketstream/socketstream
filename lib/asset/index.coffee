@@ -36,7 +36,6 @@ exports.init = ->
   else
     @monitor()
 
-
 # Monitor file changes (useful when developing)
 exports.monitor = ->
   emitter.on 'regenerate_html', ->
@@ -61,10 +60,15 @@ watchForChangesInDir = (dir, cb) ->
         cb()
 
 ensureAssetsExist = ->
-  unless exports.files.js.lib? and exports.files.css.lib? and exports.files.css.app?
-    util.log "It looks like this is the first time you're running SocketStream. Generating asset files..."
-    exports.pack.all()
-    SS.internal.state.save()
+  unless exports.files.js.lib? and exports.files.css.lib?
+    util.log "Generating essential asset files to get you started..."
+    try
+      exports.pack.libs()
+      SS.internal.state.save()
+    catch e
+      SS.internal.state.reset()
+      SS.log.error.exception e
+      throw 'Error: Unable to generate client assets libraries. Please ensure you have the latest version of SocketStream and try again.'
 
 upgradeAssetsIfRequired = ->
   if (upgraded = SS.internal.state.clientVersionUpgraded()) or SS.internal.state.missing()

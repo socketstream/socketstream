@@ -63,7 +63,14 @@ setDefaults = ->
         mins_until_offline:   2               # number of mins we wait from receiving the last heartbeat before assuming the user has gone offline
         update_interval:      60              # interval in seconds between the User Online update process runs. this purges users no longer online
         keep_historic:        false           # do not delete the ss:online:at:<minuteCode> keys we use to work out who's online (can be useful for analytics)
-        
+    
+    # Limiter
+    limiter:
+      enabled:                false           # enables basic rate limiting (off by default for now)
+      websockets:
+        rps:                  15              # requests per second which can be executed per-client before requests are dropped
+    
+    
     # Realtime Models
     rtm:
       enabled:                false           # disabled by default as HIGHLY EXPERIMENTAL and subject to change
@@ -71,7 +78,7 @@ setDefaults = ->
     # Web Admin
     admin:
       enabled:                false
-      prefix:                 'admin'         
+      prefix:                 'admin'    
 
 
 # For now we override default config depending upon environment. This will still be overridden by any app config file in

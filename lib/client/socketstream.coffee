@@ -9,6 +9,7 @@ window.SS =
   started:          null            # datetime since app.init was called
   env:              null            # environment variable set upon connection to the server
 
+  client:           {}              # load client functions into here
   server:           {}              # load server functions into here
   shared:           {}              # load shared functions into here
   models:           {}              # load real time models into here
@@ -170,30 +171,17 @@ Request =
     delete SS.internal.cb_stack[data.cb_id]
 
 
-# EXPERIMENTAL MODULE LOADER
-
-# Super-simple module loading from Tim Caswell: https://gist.github.com/926811
-window.define = (name, fn) ->
-  window.defs = {} unless window.defs
-  window.defs[name] = fn
-
-window.require = (name) ->
-  return modules[name] if modules and modules.hasOwnProperty(name)
-  if window.defs and window.defs.hasOwnProperty(name)
-    modules = {} unless modules
-    fn = window.defs[name]
-    window.defs[name] = -> throw new Error("Circular Dependency")
-    return modules[name] = fn()
-  throw new Error("Module not found: #{name}")
-
-
 # PRIVATE HELPERS
 
 start = ->
   unless SS.started
     # When the DOM has loaded, call the init method. If we're using jQuery, make sure the DOM has loaded first
     if jQuery
-      jQuery(document).ready -> app.init()
+      jQuery(document).ready ->
+        try
+          SS.client.app.init() # new style since 0.0.52
+        catch e
+          app.init() # maintain compatibilty with older versions until 0.1.0
     else
       app.init()
     SS.started = new Date

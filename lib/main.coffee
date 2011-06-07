@@ -1,4 +1,6 @@
-# Socket Stream
+# Main SocketStream Loader
+# ------------------------
+# Should load everything you need (in the right order) and nothing else
 
 fs = require('fs')
 util = require('util')
@@ -32,7 +34,7 @@ exports.init = (load_project = false) ->
   SS.version = SS.internal.package_json.version
 
   # Set client file version. Bumping this automatically triggers re-compliation of lib assets when a user upgrades
-  SS.client.version = '0.0.13'
+  SS.client.version = '0.0.14'
 
   # Set environment
   env = process.env.SS_ENV || 'development'
@@ -144,33 +146,47 @@ load =
     
     # Alias SS to SS.config.ss_var to allow for other custom variable name if desired
     global[SS.config.ss_var] = SS if SS.config.ss_var and SS.config.ss_var != 'SS'
+
+    # Load file 'trees' for each app folder
+    trees = load.fileTrees()
     
-    # Load application files within /app
-    load.files()
+    # Check none of the files and dirs conflict
+    check.forNameConflicts(trees)
+    
+    # Load application files within /app/shared and /app/server
+    load.serverSideFiles(trees)
     
     # Save current state
     SS.internal.state.save()
   
+  # Turns directories into an object tree
+  fileTrees: ->
+    ['client','shared','server','models'].map (api) ->
+      try
+        file_utils.readDirSync("#{SS.root}/app/#{api}")
+      catch e
+        {}
+  
   # Server-side files
-  files: ->
+  serverSideFiles: (trees) ->
+    
+    # Load Shared functions into SS.shared
+    load.loadApiTree "#{SS.root}/app/shared", trees[1], (mod, mod_name, dest, ary) -> 
+      dest[mod_name] = mod
     
     # Load Server-side functions into SS.server
-    load.dirFiles "#{SS.root}/app/server", 'server', (mod, mod_name, dest, ary) ->
+    load.loadApiTree "#{SS.root}/app/server", trees[2], (mod, mod_name, dest, ary) ->
       dest[mod_name] = mod.actions
       SS.internal.authenticate[ary.join('.')] = mod.authenticate if mod.authenticate
     
-    # Load Shared functions into SS.shared
-    load.dirFiles "#{SS.root}/app/shared", 'shared', (mod, mod_name, dest, ary) -> 
-      dest[mod_name] = mod
-
     # Load Realtime Models into SS.models
-    load.dirFiles "#{SS.root}/app/models", 'models', (mod, mod_name, dest, ary) ->
+    load.loadApiTree "#{SS.root}/app/models", trees[3], (mod, mod_name, dest, ary) ->
       model_spec = mod[mod_name]
       dest[mod_name] = require("./realtime_models/adapters/#{model_spec.adapter}").init(mod_name, model_spec, exports)
       Object.defineProperty(dest[mod_name], '_rtm', {value: model_spec, enumerable: false})
   
   # Helper to recursively load all files in a dir and attach them to an attribtue of the SS object
-  dirFiles: (dir, name, action) ->
+  loadApiTree: (dir, tree, action) ->
     recursively = (destination, ary, path, counter_name, index = 0) ->
       element = ary[index]
       dest = utils.getFromTree(destination, ary, index)
@@ -182,22 +198,21 @@ load =
         dest[element] = {} unless dest.hasOwnProperty(element)
         arguments.callee(destination, ary, path, counter_name, (index+1))
 
-    output = file_utils.readDirSync(dir)
-    if output
-      slashes_to_remove = dir.split('/').length
-      check.forNameConflicts(output)
-      output.files.forEach (path) ->
+    if tree
+      path = dir.split('/')
+      slashes_to_remove = path.length
+      api_name = path.reverse()[0]
+      tree.files.forEach (path) ->
 
         ary = path.split('/').slice(slashes_to_remove)
         mod_name = ary.pop()
         ary.push(mod_name.split('.')[0])
 
-        recursively(SS[name], ary, path, name)
+        recursively(SS[api_name], ary, path, api_name)
         
         # Turn the API tree into a string we can easily send to the client to be re-constructed into functions
-        SS.internal.api_string[name] = apiToString(SS[name])
+        SS.internal.api_string[api_name] = apiToString(SS[api_name])
 
-       
   # Load any vendored modules
   vendoredModules: ->
     vendor_dir = "./vendor"
@@ -243,12 +258,15 @@ load =
 check =
 
   # Ensures you don't have a module and a folder of the same name (otherwise we can't map it to an object)
-  forNameConflicts: (output) ->
-    files_without_exts = output.files.map (file) -> file.split('.')[0]
-    output.dirs.forEach (dir) ->
-      files_without_exts.forEach (file) ->
-        if file == dir
-          fatal "Unable to load the #{dir} directory\nIt conflicts with a file of the same name in the parent directory. Please rename one of them."
+  forNameConflicts: (trees) ->
+    trees.forEach (tree) ->
+      if tree
+        files_without_exts = tree.files.map (file) ->
+          file.split('.')[0]
+        tree.dirs.forEach (dir) ->
+          files_without_exts.forEach (file) ->
+            if file == dir
+              fatal "Unable to load the #{dir} directory\nIt conflicts with a file of the same name in the parent directory. Please rename one of them."
   
   # Quick check to make sure we have two key ingredients for a valid project
   isValidProjectDir: ->
@@ -263,9 +281,8 @@ check =
     catch e
       false
     fatal("This application is running an outdated version of SocketStream.\nPlease upgrade to #{SS.internal.state.last_known.version.server} or above to ensure the app runs as expected, or delete the .socketstream_state file to override this error.") if out_of_date
-      
-      
-    
+
+
 # Throw a fatal error
 fatal = (message) ->
   SS.log.error.message message
@@ -275,7 +292,7 @@ fatal = (message) ->
 apiToString = (obj) ->
   util.inspect(SS.server, false, 1000).replace(/\[Function\]/g, 'true')
 
-
+# Show welcome banner
 showBanner = (additional_text) ->
   counters = SS.internal.counters.files_loaded
   util.puts "\n"

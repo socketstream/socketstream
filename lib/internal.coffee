@@ -50,7 +50,6 @@ state =
 
   save: ->
     fs.writeFileSync(@file_name, JSON.stringify(@current()))
-    @last_known = @current()
     
   load: ->
     try

@@ -1,7 +1,7 @@
 ![SocketStream!](https://github.com/socketstream/socketstream/raw/master/lib/generator_files/logo.png)
 
 
-Latest release: 0.0.51   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+Latest release: 0.0.52   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 
 Twitter: socketstream   -   Google Group: http://groups.google.com/group/socketstream
 
@@ -20,16 +20,16 @@ Project status: Highly experimental but usable. Improving almost every day.
 * True bi-directional communication using websockets (or flash sockets)
 * Crazy fast! Starts up instantly. No HTTP handshaking/headers/routing to slow down every request
 * Works on all major browsers thanks to the excellent [Socket.IO](http://socket.io/)
-* Write client and server code in [Coffeescript](http://jashkenas.github.com/coffee-script/) or Javascript - your choice
+* Write all code in [Coffeescript](http://jashkenas.github.com/coffee-script/) or Javascript - your choice
 * Easily share code between the client and server. Ideal for business logic and model validation
 * Automatic HTTP API. All server-side code is also accessible over a high-speed request-based API
 * Effortless, scalable, pub/sub baked right in - including Private Channels. See examples below
-* Integrated asset manager. Automatically packages and [minifies](https://github.com/mishoo/UglifyJS) your client-side code
+* Integrated asset manager. Automatically packages and [minifies](https://github.com/mishoo/UglifyJS) all client-side assets
 * Experimental out-of-the-box HTTPS support. See section below.
 * In-built User model with modular authentication. Automatically keeps track of users online (see below).
 * Uses [Redis](http://www.redis.io/) for fast session retrieval, pub/sub, list of users online, and any other data your app needs instantly
-* Nested namespaces and functions allow building of large 'enterprise' apps
 * Interactive console - just type 'socketstream console' and invoke any server-side method from there
+* A simple, consistent way to namespace large code bases across the front and back end using 'API Trees'
 * Bundled with jQuery 1.6.1. Easily add additional client libraries such as [Underscore.js](http://documentcloud.github.com/underscore/)
 * Easily create jQuery templates using the [official plugin](http://api.jquery.com/category/plugins/templates/). Works like partials in Rails.
 * Uses [Jade](http://jade-lang.com/) to render static HTML
@@ -61,15 +61,13 @@ For example, let's write a simple server-side function which squares a number. A
 
 To call this from the browser add the following to the /app/client/app.coffee file:
 
-    window.app =
-    
-      square: (number) ->
-        SS.server.app.square number, (response) ->
-          console.log "#{number} squared is #{response}"
+    exports.square = (number) ->
+      SS.server.app.square number, (response) ->
+        console.log "#{number} squared is #{response}"
 
 Restart the server, refresh your page, then type this into the browser console:
 
-    app.square(25)
+    SS.client.app.square(25)
 
 And you will see the following output:
 
@@ -117,22 +115,18 @@ For the server code, create the file /app/server/geocode.coffee and paste in the
 
 To capture your location and output your address, lets's add this code in /app/client/app.coffee
 
-    window.app =
-    
-      init: ->
-        # Note: the app.init method automatically gets called once the socket is established and the session is ready
-        app.geocode.determineLocation()
+    # Note: the SS.client.app.init() method automatically gets called once the socket is established and the session is ready
+    exports.init = ->
+      SS.client.geocode.determineLocation()
 
 
-Then, purely to demonstrate a nice way to do client-side namespacing, let's create a new file called /app/client/geocode.coffee and paste this in:
+Then, purely to demonstrate a nice way to do client-side namespacing (more info below), let's create a new file called /app/client/geocode.coffee and paste this in:
 
-    app.geocode =
-
-      determineLocation: ->
-        if navigator.geolocation
-          navigator.geolocation.getCurrentPosition(success, error)
-        else
-          alert 'Oh dear. Geolocation is not supported by your browser. Time for an upgrade.'
+    exports.determineLocation = ->
+      if navigator.geolocation
+        navigator.geolocation.getCurrentPosition(success, error)
+      else
+        alert 'Oh dear. Geolocation is not supported by your browser. Time for an upgrade.'
 
     # Private functions
 
@@ -148,7 +142,7 @@ Then, purely to demonstrate a nice way to do client-side namespacing, let's crea
 Run this code and you should see your current location pop up (pretty accurate if you're on WiFi).
 Of course, you'll need to handle the many and various errors that could go wrong during this process with a callback to the client.
 
-**Bonus tip:** Want to run this again? Just type 'app.geocode.determineLocation()' from the browser console. All client-side functions can be called this way.
+**Bonus tip:** Want to run this again? Just type 'SS.client.geocode.determineLocation()' in the browser console. All 'exported' client-side functions can be called this way.
 
 
 ### Pub/Sub Example
@@ -157,10 +151,8 @@ Want to build a chat app or push an notification to a particular user?
     
 First let's listen out for an event called 'newMessage' on the client:
 
-    window.app =
-
-      init: ->
-        SS.events.on('newMessage', (message) -> alert(message))
+    exports.init = ->
+      SS.events.on('newMessage', (message) -> alert(message))
           
 Then, assuming we know the person's user id, we can publish the event directly to them. On the server side you'd write:
 
@@ -198,14 +190,12 @@ To generate a new empty SocketStream project, simply type:
 The directories generated will be very familiar to Rails users. Here's a brief overview:
 
 #### /app/client
-* All files within /app/client will be converted to Javascript and sent to the client
-* The app.init() function will be automatically called once the websocket connection is established
-* All client code can be called from the browser's console using the 'app' variable
+* All files within /app/client will be sent to the client. CoffeeScript files will automatically be converted to JavaScript
 * If you have a Javascript library you wish to use (e.g. jQuery UI), put this in /lib/client instead
-* Nesting client files within folders is supported, however they are not automatically namespaced for you - yet!
-* The /app/client/app.coffee file must always be present
 * View incoming/outgoing calls in the browser console in development (controlled with SS.config.client.log.level)
-* Coffeescript client files are automatically compiled and served on-the-fly in development mode and pre-compiled/minified/cached in staging and production
+* The SS.client.app.init() function will be automatically called once the websocket connection is established
+* Hence the /app/client/app.coffee (or app.js) file must always be present
+* Nesting client files within multiple folders is supported. See section below on Namespacing
 
 #### /app/server
 * All files in this directory behave similar to Controllers in traditional MVC frameworks
@@ -328,11 +318,38 @@ Then access them inside /config/db.coffee as so:
 We've not tested SocketStream with CouchDB, MySQL, or any other DB, but the principals should be the same.
 
 
+### Namespacing (client and shared code)
+
+One of the trickiest problems to solve in this new exciting world of rich JavaScript-based web apps is where to put all of those files and how to organise them as your project grows.
+
+SocketStream's novel approach is to turn all your Client and Shared files into an 'API tree' which can be called from a global variable (SS.client and SS.shared respectively). Server code works slightly differently but essentially follows the same API Tree approach (in this case for SS.server).
+
+The rule is simple: Every object, function and variable will automatically remain private inside your file unless you prefix it with 'exports.'. Once you do, it will be added to the API tree and can be easily referenced or invoked from any file in the same environment.
+
+For example, let's create a file called /app/client/navbar.coffee and paste the following in it:
+
+    areas = ['Home', 'Products', 'Contact Us']
+   
+    exports.draw = ->
+      areas.forEach (area) ->
+        render(area)
+        console.log(area + ' has been rendered')
+
+    render = (area) ->
+      $('body').append("<li>#{area}</li>")
+    
+In this case the 'draw' method has been made public and can now be executed by calling SS.client.navbar.draw() from anywhere in your client code, or directly in the browser's console. The 'areas' variable and 'render' function both remain private within that file (thanks to closures) and will never pollute the global namespace.
+
+Nested namespaces using multiple folders and deep object trees are fully supported. SocketStream does a quick check when it starts up to ensure file and folder names don't conflict in the same branch. We think API trees are one of the coolest features of SocketStream. Let us know what you think.
+
+
 ### Sharing Code
 
-One of the great advantages SocketStream provides is the ability to share the same JavaScript/CoffeeScript code between client and server. Of course you can always copy and paste code between files, but we provide something better: a really neat way to organise and call code which can be executed in both environments.
+One of the great advantages SocketStream provides is the ability to share the same JavaScript/CoffeeScript code between client and server. Of course you can always copy and paste code between files, but we provide a more elegant solution:
 
-Simply add a new file within /app/shared and export the functions, properties, objects or even CoffeeScript classes you wish to share. For example, let's create a file called /app/shared/calculate.coffee and paste the following in it:
+Shared code is written and namespaced in exactly the same way as Client code, but it is designed to run in both environments. Simply add a new file within /app/shared and export the functions, properties, objects or even CoffeeScript classes you wish to share.
+
+For example, let's create a file called /app/shared/calculate.coffee and paste the following in it:
 
     exports.circumference = (radius = 1) ->
       2 * estimatePi() * radius
@@ -340,11 +357,9 @@ Simply add a new file within /app/shared and export the functions, properties, o
     estimatePi = -> 355/113
     
 
-This can now be executed by calling SS.shared.calculate.circumference(20) from anywhere within your server OR client code! This makes /app/shared the ideal home for calculations, formatting helpers and model validations - among other things.
+This can now be executed by calling SS.shared.calculate.circumference(20) from anywhere within your server OR client code! This makes /app/shared the ideal place to write calculations, formatting helpers and model validations - among other things. Just remember never to reference the DOM, any back-end DBs or Node.js libraries as this code needs to remain 'pure' enough to run on both the server or browser.
 
-All Shared code is pre-loaded and added to the SS.shared API tree which may be inspected at any time from the server or browser's console. You'll notice estimatePi() does not appear in the API tree as this is a private function (though the code is still sent to the client).
-    
-Nested namespaces using folders and object trees are fully supported, as are calls to other SS.shared functions and even SS.server functions. Pretty cool eh?
+All Shared code is pre-loaded and added to the SS.shared API tree which may be inspected at any time from the server or browser's console. You'll notice estimatePi() does not appear in the API tree as this is a private function (although the code is still transmitted to the client).
 
 **Warning** All code within /app/shared will be compressed and transmitted to the client upon initial connection. So make sure you don't include any proprietary secret sauce or use any database/filesystem calls.
 
@@ -525,6 +540,36 @@ Note: We have found Safari will not support secure websockets without a valid (i
 We will continue enhancing the HTTPS experience over future releases until it's stable.
 
 
+### Security
+
+So how secure is SocketStream? Well, to be honest - we just don't know. The entire stack, from Node.js right up to the SocketStream client is brand new and no part of it is claiming to be production-ready just yet. So for now we recommend using SocketStream internally, behind a firewall.
+
+Of course, if you're feeling adventurous, you're more than welcome to experiment with hosting public SocketStream websites; like we do with www.socketstream.org. Just make sure there is no sensitive data on the server and you can easily restore everything should it become compromised.
+
+If you are especially gifted at spotting vulnerabilities, or come across a potential security hole while looking through the source code, please let us know. We'd really appreciate it. It will bring us closer to the day when we're happy to recommend SocketStream for public websites.
+
+
+__XSS Attacks__
+
+A quick reminder: SocketStream is just as vulnerable to XSS attacks as other web frameworks. We advise filtering-out any malicious user generated content (UGC) both at input stage (in your /app/server code), as well as in the client before outputting UGC onto the screen. We will include 'helpers' for this in the future.
+
+It is all too easy to append a line of JavaScript code to the end of a user-submitted link which wraps calls to 'SS.server' in a while loop. Which brings us on nicely to...
+
+
+__Rate Limiting and DDOS Protection__
+
+SocketStream can provide basic protection against DDOS attacks by identifying clients attempting to make over SS.config.limiter.websockets.rps (default 15) requests over the websocket per second.
+
+When this occurs you'll be notified of the offending client in the console and all subsequent requests from that client will be silently dropped. This feature is switched off for now whilst we experiment with it in the real world, but can be optionally enabled with SS.config.limiter.enabled = true.
+
+
+### Scaling Up
+
+One instance of SocketStream should be able to comfortably support a few thousand simultaneously connect clients, depending upon the back-end work that needs to be done to service them. But what happens when your app goes viral and one server instance is no longer enough?
+
+Right now we don't have a definitive answer, but we have a number of innovative ideas around horizontal scaling and utilising multiple CPU cores. We have already begun experimenting with these and will implement and document the best solutions in the coming months. If you are interested in working on this problem, be sure to get in touch so we can share some of our latest thinking.
+
+
 ### Tests
 
 There are a handful of tests at the moment, but there will be more once the internal API becomes stable. It is one of the major things we need to get right before announcing SocketStream to the world.
@@ -532,6 +577,7 @@ There are a handful of tests at the moment, but there will be more once the inte
 
 ### Known Issues
 
+* New files added to /lib/client files will not be detected until you restart the server and touch one of the /lib/client files. We will fix this
 * Any manipulation of $('body') using jQuery, e.g. $('body').hide(), under Firefox 4 disrupts the flashsocket connection. Until we figure out what's causing this bizarre bug, best avoid calling $('body') in your code.
 
 
@@ -544,7 +590,7 @@ Why are we waiting? Because developers are busy people and we want to make sure 
 Remaining tasks for 0.1.0:
 
 * Make it easier to work with /lib/client files. New files are currently not detected when added - it's quite hard to fix
-* Support client-side 'requires' allowing for namespacing and client/server API compatibility (in progress)
+* Work out how to integrate custom user models
 * Stabilize API to ensure minimal code changes in the future
 
 In addition, the following needs to be in place:
@@ -552,7 +598,6 @@ In addition, the following needs to be in place:
 * SocketStream.org public website with live demos (in progress)
 * At least two example/demo applications available on GitHub
 * Review available testing frameworks and document ways these can be used with SS
-* A brief guide to deploying and scaling
 
 
 ### Contributors

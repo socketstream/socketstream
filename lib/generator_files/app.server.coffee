@@ -1,3 +1,5 @@
+# Server-side Code
+
 exports.actions =
   
   init: (cb) ->
