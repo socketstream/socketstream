@@ -69,22 +69,24 @@ SS.socket.on 'disconnect', ->
 # Connect!
 SS.socket.connect()
 
+# Define the default callback - simply to console.log out the server's response. Used for debugging from the console
+default_cb = (server_response) -> console.log(server_response)
 
 # Sends a command to /app/server code
-# Important: This global method should no longer be used directly. It will be renamed/removed in a future release
-# Instead call SS.server followed by the remote function you wish to invoke
-window.remote = ->
+SS.internal.remote = ->
   args = arguments
   
   # Assemble message
   msg = {type: 'server'}
   msg.method  = args[0]
   msg.method  = "#{SS.config.remote_prefix}.#{msg.method}" if SS.config.remote_prefix
-  msg.params  = if args.length >= 3 then args[1] else null
+  msg.params  = args[1]
   msg.options = if args.length >= 4 then args[2] else null
   
-  # The callback is always the last argument passed
-  cb = args[args.length - 1]
+  # Test to see if the last argument passed is a callback function. It should be, however if we're just testing
+  # out a function from the browser's console, use the default callback which simply console.log's the response
+  last_arg = args[args.length - 1]
+  cb = if typeof(last_arg) == 'function' then last_arg else default_cb
   cb.options = msg.options
   
   # Log if in Developer mode, then send
@@ -186,7 +188,7 @@ start = ->
       app.init()
     SS.started = new Date
 
-send = (msg, cb) ->
+send = (msg, cb = null) ->
   args = arguments
   try
     if (SS.socket.connected == false && SS.socket.connecting == false)
@@ -195,9 +197,10 @@ send = (msg, cb) ->
       throw 'NOT_READY'  
     else
       if SS.socket.ready == true
-        cb_id = Math.random().toString().split('.')[1]
-        window.SS.internal.cb_stack[cb_id] = {funkt: cb, msg: msg}
-        msg.cb_id = cb_id
+        if cb
+          cb_id = Math.random().toString().split('.')[1]
+          SS.internal.cb_stack[cb_id] = {funkt: cb, msg: msg}
+          msg.cb_id = cb_id
         msg = JSON.stringify(msg)
         SS.socket.send(msg)
       else
@@ -233,9 +236,8 @@ setupAPI = (root, ary) ->
     if typeof(value) == 'object'
       setupAPI(root[key], ns)
     else
-      # For now we just pass the command through to the existing 'remote' function. This will be refactored in the future
-      root[key] = new Function('remote.apply(window, ["' + ns.join('.') + '"].concat(Array.prototype.slice.call(arguments, 0)))')
+      root[key] = new Function('SS.internal.remote.apply(window, ["' + ns.join('.') + '"].concat(Array.prototype.slice.call(arguments, 0)))')
 
 sendHeartbeat = ->
-  send {type: 'heartbeat'}, ->
+  send({type: 'heartbeat'}) if SS.socket.connected
   setTimeout arguments.callee, (SS.config.heartbeat_interval * 1000)

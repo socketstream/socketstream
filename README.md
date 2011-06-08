@@ -1,7 +1,7 @@
 ![SocketStream!](https://github.com/socketstream/socketstream/raw/master/lib/generator_files/logo.png)
 
 
-Latest release: 0.0.52   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+Latest release: 0.0.53   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 
 Twitter: socketstream   -   Google Group: http://groups.google.com/group/socketstream
 
@@ -20,16 +20,16 @@ Project status: Highly experimental but usable. Improving almost every day.
 * True bi-directional communication using websockets (or flash sockets)
 * Crazy fast! Starts up instantly. No HTTP handshaking/headers/routing to slow down every request
 * Works on all major browsers thanks to the excellent [Socket.IO](http://socket.io/)
-* Write all code in [Coffeescript](http://jashkenas.github.com/coffee-script/) or Javascript - your choice
+* Write all code in [CoffeeScript](http://jashkenas.github.com/coffee-script/) or JavaScript - your choice
 * Easily share code between the client and server. Ideal for business logic and model validation
 * Automatic HTTP API. All server-side code is also accessible over a high-speed request-based API
 * Effortless, scalable, pub/sub baked right in - including Private Channels. See examples below
 * Integrated asset manager. Automatically packages and [minifies](https://github.com/mishoo/UglifyJS) all client-side assets
 * Experimental out-of-the-box HTTPS support. See section below.
 * In-built User model with modular authentication. Automatically keeps track of users online (see below).
-* Uses [Redis](http://www.redis.io/) for fast session retrieval, pub/sub, list of users online, and any other data your app needs instantly
 * Interactive console - just type 'socketstream console' and invoke any server-side method from there
-* A simple, consistent way to namespace large code bases across the front and back end using 'API Trees'
+* 'API Trees' offer a simple, consistent way to namespace large code bases across the front and back end
+* Uses [Redis](http://www.redis.io/) for fast session retrieval, pub/sub, list of users online, and any other data your app needs instantly
 * Bundled with jQuery 1.6.1. Easily add additional client libraries such as [Underscore.js](http://documentcloud.github.com/underscore/)
 * Easily create jQuery templates using the [official plugin](http://api.jquery.com/category/plugins/templates/). Works like partials in Rails.
 * Uses [Jade](http://jade-lang.com/) to render static HTML
@@ -43,9 +43,12 @@ SocketStream automatically compresses and minifies all the static HTML, CSS and 
 
 From then on all application data is sent and received as serialized JSON objects over a websocket (or 'flash socket') tunnel, instantly established when the client connects and automatically re-established if broken.
 
-All this means no more connection latency, HTTP header overhead, or slow AJAX calls. Just true bi-directional, asynchronous, 'streaming' communication between client and server.
+All this means no more connection latency, HTTP header overhead, or clunky AJAX calls. Just true bi-directional, asynchronous, 'streaming' communication between client and server.
 
-Note: While SocketStream is a perfect fit for all manner of modern applications which require real-time data (chat, stock trading, location monitoring, analytics, etc), it would make a poor choice for a blog or other content-rich site which requires unique URLs for search engine optimization.
+
+### What can I create with it?
+
+SocketStream is a perfect fit for all manner of modern applications which require real-time data (chat, stock trading, location monitoring, analytics, etc). However, it would make a poor choice for a blog or other content-rich site which requires unique URLs for search engine optimization.
 
 
 ### Quick Example
@@ -75,11 +78,11 @@ And you will see the following output:
 
 You can also call this server-side method over HTTP with the following URL:
 
-    /api/app/square?25                            (Hint: use .json to output to a file)
+    /api/app/square?25                        (Hint: use .json to output to a file)
     
 Or even directly from the server-side console (type 'socketstream console') OR the browser's console OR another server-side file:
 
-    SS.server.app.square(25, function(x){ console.log(x) })
+    SS.server.app.square(25)                  (Note: If no callback is supplied the default is to 'console.log')
 
 Note the 'SS' variable is a bit like the dollar sign $ in jQuery - it's the main way into the SocketStream API. We do our best to keep the API between client and server identical wherever possible.
 
@@ -120,7 +123,7 @@ To capture your location and output your address, lets's add this code in /app/c
       SS.client.geocode.determineLocation()
 
 
-Then, purely to demonstrate a nice way to do client-side namespacing (more info below), let's create a new file called /app/client/geocode.coffee and paste this in:
+Then, purely to demonstrate client-side namespacing (see section below), let's create a new file called /app/client/geocode.coffee and paste this in:
 
     exports.determineLocation = ->
       if navigator.geolocation
@@ -179,7 +182,7 @@ Want to know how to broadcast a message to all users, or implement private chann
 
 Ready to give it a whirl? SocketStream is highly experimental at the moment, but we're using it in new projects and improving it every day.
 
-For now clone this project to a directory and link it as a local npm package with:
+For now clone this project to a directory and link it as a local NPM package with:
 
     sudo npm link
 
@@ -191,16 +194,16 @@ The directories generated will be very familiar to Rails users. Here's a brief o
 
 #### /app/client
 * All files within /app/client will be sent to the client. CoffeeScript files will automatically be converted to JavaScript
-* If you have a Javascript library you wish to use (e.g. jQuery UI), put this in /lib/client instead
-* View incoming/outgoing calls in the browser console in development (controlled with SS.config.client.log.level)
+* If you have a JavaScript library you wish to use (e.g. jQuery UI), put this in /lib/client instead
+* View incoming/outgoing calls in the browser console in development mode
 * The SS.client.app.init() function will be automatically called once the websocket connection is established
 * Hence the /app/client/app.coffee (or app.js) file must always be present
 * Nesting client files within multiple folders is supported. See section below on Namespacing
 
 #### /app/server
 * All files in this directory behave similar to Controllers in traditional MVC frameworks
-* For example, to call app.init from the client and pass 25 as params, call SS.server.app.init(25,function(){ alert(this); }) in the client
-* All methods can be automatically accessed via the in-built HTTP API (e.g. /api/app/square.json?5)
+* For example, to call app.init from the client and pass 25 as params, call SS.server.app.init(25) in the client
+* All methods can be automatically accessed via the built-in HTTP API (e.g. /api/app/square.json?5)
 * All server methods are pre-loaded and accessible via SS.server in the console or from other server-side files
 * If the method takes incoming params (optional), these will be pushed into the first argument. The last argument must always be the callback (cb)
 * All publicly available methods should be listed under 'exports.actions'. Private methods must be placed outside this scope and begin 'methodname = (params) ->'
@@ -221,7 +224,7 @@ The directories generated will be very familiar to Rails users. Here's a brief o
 #### /app/views
 * /app/views/app.jade must exist. This should contain all the static HTML your app needs in [Jade](http://jade-lang.com/) format (similar to HAML)
 * The HTML HEAD tag must contain '!= SocketStream'. This helper ensures all the correct libraries are loaded depending upon the environment (declared by SS_ENV)
-* Easily nest additional html as jQuery templates (similar to Rails partials). E.g /app/views/people/info.jade is accessible as $("#people-info").tmpl(myData)
+* Easily nest additional html as jQuery templates (similar to Rails partials). E.g /app/views/people/info.jade is accessible as $("#people-info").tmpl(myData). Make sure you install the jQuery Template library first
 * Jade views and templates are automatically compiled and served on-the-fly in development and pre-compiled/compressed/cached in staging and production
 
 #### /lib
@@ -252,15 +255,23 @@ SocketStream runs in __development__ mode by default, outputting all incoming an
 
 Two other 'preset' environments are available: __staging__ and __production__. Both will load SocketStream with sensible defaults for their intended use.
 
-Preset variables can be overwritten and augmented by two optional files if required: an application-wide config file placed in /config/app.json, and an environment-specific file placed in /config/environments/<SS_ENV>.json (e.g. /config/environments/development.json)
+Preset variables can be overwritten and augmented by two optional files if required: an application-wide config file placed in /config/app.json, and an environment-specific file placed in /config/environments/<SS_ENV>.json (e.g. /config/environments/development.json) which will override any values in app.json.
 
 Use the SS_ENV environment variable to start SocketStream in a different environment. E.g:
 
     SS_ENV=staging socketstream start
     
-All default modes are fully configurable using an optional JSON file placed within /config/environments. An unlimited number of new environments may also be added. You can easily tell which environment in running by calling SS.env in the server or client.
+All default modes are fully configurable using an optional JSON file placed within /config/environments. An unlimited number of new environments may also be added. You can easily tell which environment in running by typing SS.env in the server or client.
 
 We will publish a full list of configurable params in the near future, but for now these can be viewed (and hence overridden in the config file), by typing SS.config in the SocketStream console.
+
+Throughout this README you'll see repeated references to config variables which look something like this:
+
+    SS.config.limiter.enabled
+
+In this case, you could change the value of the variable by adding the following JSON in your config file:
+
+    {"limiter": {"enabled": true}}
 
 
 ### Logging
@@ -282,18 +293,18 @@ Redis is automatically accessible anywhere within your server-side code using th
 
 The Redis host, port and database/keyspace index are all configurable via the SS.config.redis params. You may wish to set a different SS.config.redis.db_index for your development/staging/production environments to ensure data is kept separate.
 
-All internal SocketStream keys and pub/sub channels are prefixed with 'ss:', so feel free to start your application key names with anything else.
+All internal SocketStream keys and pub/sub channels are prefixed with 'ss:', so feel free to use anything else in your application.
 
 [View full list of commands](http://redis.io/commands)
 
 
 ### Connecting to Databases
 
-Building a great DB connection framework is very much a focus for a future releases, but this is how we're connecting to mongoDB today.
+Building a great DB connection framework is very much a focus for a future releases, but this is how we're connecting to mongoDB today:
 
-The /config/db.coffee (or .js) file is loaded automatically at startup, if present. So you can do something like this:
+The /config/db.coffee (or .js) file is loaded automatically at startup (if present). So you can do something like this:
 
-    mongodb = require('mongodb')   # installed by npm
+    mongodb = require('mongodb')   # installed by NPM
     Db = mongodb.Db
     Connection = mongodb.Connection
     Server = mongodb.Server
@@ -318,7 +329,7 @@ Then access them inside /config/db.coffee as so:
 We've not tested SocketStream with CouchDB, MySQL, or any other DB, but the principals should be the same.
 
 
-### Namespacing (client and shared code)
+### Namespacing (Client and Shared code)
 
 One of the trickiest problems to solve in this new exciting world of rich JavaScript-based web apps is where to put all of those files and how to organise them as your project grows.
 
@@ -341,6 +352,12 @@ For example, let's create a file called /app/client/navbar.coffee and paste the 
 In this case the 'draw' method has been made public and can now be executed by calling SS.client.navbar.draw() from anywhere in your client code, or directly in the browser's console. The 'areas' variable and 'render' function both remain private within that file (thanks to closures) and will never pollute the global namespace.
 
 Nested namespaces using multiple folders and deep object trees are fully supported. SocketStream does a quick check when it starts up to ensure file and folder names don't conflict in the same branch. We think API trees are one of the coolest features of SocketStream. Let us know what you think.
+
+**Tip** If you'd like to save on keystrokes, feel free to alias SS.client with something shorter. E.g:
+
+    window.C = SS.client
+    
+    C.navbar.draw()
 
 
 ### Sharing Code
@@ -414,9 +431,9 @@ Mark any files within /app/server which require authentication by placing this l
 
     exports.authenticate = true
 
-This will check or prompt for a logged in user before and of the methods within that file are executed.
+This will check or prompt for a logged in user before any of the methods within that file are executed.
 
-Once a user has been authenticated, their User ID is accessible by calling @session.user.id anywhere in your /app/server code.
+Once a user has been authenticated, their User ID is accessible by calling @session.user_id anywhere in your /app/server code.
 
 
 ### Tracking Users Online
@@ -442,13 +459,13 @@ To send a notification to all users (for example to let everyone know the system
 
     SS.publish.broadcast('flash', {type: 'notification', message: 'Notice: This service is going down in 10 minutes'})
     
-Sometimes you may prefer to send events to a sub-set of connected users, for example if you have a chat apps with multiple rooms. SocketStream has a cool feature called Private Channels which let you do just that, across multiple servers, with the minimum of overhead.
+Sometimes you may prefer to send events to a sub-set of connected users, for example if you have a chat apps with multiple rooms. SocketStream has a cool feature called Private Channels which let you do just that, across multiple servers, with minimum overhead.
 
 The syntax is similar to the command above with an extra initial argument specifying the channel name (or names as an array):
 
     SS.publish.channel(['disney', 'kids'], 'newMessage', {from: 'mickymouse', message: 'Has anyone seen Tom?'})
     
-Users can subscribe to an unlimited number of channels using the following commands (which must be run inside you /app/server code). E.g:
+Users can subscribe to an unlimited number of channels using the following commands (which must be run inside your /app/server code). E.g:
 
     @session.channel.subscribe('disney', cb)    # note: multiple channel names can be passed as an array 
     
@@ -474,7 +491,7 @@ It is enabled by default and can be configured with the following config variabl
     SS.config.api.enabled            Boolean       default: true         # Enables/disables the HTTP API
     SS.config.api.prefix             String        default: 'api'        # Sets the URL prefix (e.g. http://mysite.com/api
 
-The HTTP API also supports Basic Auth (which will run over HTTPS if enabled), allowing you to access methods which use @session.user.id
+The HTTP API also supports Basic Auth (which will run over HTTPS if enabled), allowing you to access methods which use @session.user_id
 
 By placing 'exports.authenticate = true' in the file (see above) the server will know to prompt for a username and password before allowing access any of the actions within that file. However, the API will need to know which module to authenticate against. Set the SS.config.api.auth.basic.module_name variable by putting the following JSON in your config file:
     
@@ -535,7 +552,7 @@ Once Node has been compiled with TLS/HTTPS support, turn it on by creating a /co
       "ssl": {"enabled": true}
     }
     
-Note: We have found Safari will not support secure websockets without a valid (i.e. not a self-signed) certificate. If you wish to experiment with HTTPS whilst developing we recommend using Chrome at the moment.
+Note: We have found Safari will not support secure websockets without a valid (i.e. not self-signed) certificate. If you wish to experiment with HTTPS whilst developing we recommend using Chrome at the moment.
 
 We will continue enhancing the HTTPS experience over future releases until it's stable.
 
@@ -558,14 +575,14 @@ It is all too easy to append a line of JavaScript code to the end of a user-subm
 
 __Rate Limiting and DDOS Protection__
 
-SocketStream can provide basic protection against DDOS attacks by identifying clients attempting to make over SS.config.limiter.websockets.rps (default 15) requests over the websocket per second.
+SocketStream can provide basic protection against DDOS attacks by identifying clients attempting to make over 15 requests per second over the websocket connection (configurable with SS.config.limiter.websockets.rps).
 
 When this occurs you'll be notified of the offending client in the console and all subsequent requests from that client will be silently dropped. This feature is switched off for now whilst we experiment with it in the real world, but can be optionally enabled with SS.config.limiter.enabled = true.
 
 
 ### Scaling Up
 
-One instance of SocketStream should be able to comfortably support a few thousand simultaneously connect clients, depending upon the back-end work that needs to be done to service them. But what happens when your app goes viral and one server instance is no longer enough?
+One instance of SocketStream should be able to comfortably support a few thousand simultaneously connected clients, depending upon the back-end work that needs to be done to service them. But what happens when your app goes viral and one server instance is no longer enough?
 
 Right now we don't have a definitive answer, but we have a number of innovative ideas around horizontal scaling and utilising multiple CPU cores. We have already begun experimenting with these and will implement and document the best solutions in the coming months. If you are interested in working on this problem, be sure to get in touch so we can share some of our latest thinking.
 
@@ -609,7 +626,7 @@ We welcome contributions from forward-thinking hackers keen to redefine what's p
 
 The best developers take 10 lines of code and come up with a completely new design that needs 3. If you're one of these rare breed of people we'd love to have you onboard as a potential member of our core team. Test writers and creators of beautiful documentation will receive our maximum appreciation and support as they seek to keep up with a rapidly moving target.
 
-Before you add a major new feature to SocketStream and submit a pull request, bear in mind our goal is to ensure the core stays lean, robust, and breathtakingly fast. Additional non-core functionality should be provided by npm modules. We'll make this possible/easier as time goes on.
+Before you add a major new feature to SocketStream and submit a pull request, bear in mind our goal is to ensure the core stays lean, robust, and breathtakingly fast. Additional non-core functionality should be provided by NPM modules. We'll make this possible/easier as time goes on.
 
 If you wish to discuss an idea, or want to chat about anything else, email us at info@socketstream.org
 

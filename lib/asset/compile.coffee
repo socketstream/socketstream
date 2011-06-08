@@ -18,16 +18,20 @@ exports.compile =
 
     # Always include links to JS and CSS client-side pre-packed libraries
     inclusions = []
-    inclusions.push(tag.js('assets', exports.assets.files.js.lib))
-    inclusions.push(tag.css('assets', exports.assets.files.css.lib))
     
-    # Typically when in Staging or Production assets are pre-packed, so we include links to them here
+    # Include CSS
+    inclusions.push(tag.css('assets', exports.assets.files.css.lib))
+    if SS.config.pack_assets
+      inclusions.push(tag.css('assets', exports.assets.files.css.app))
+    else
+      inclusions.push(tag.css('css', 'app.styl')) # additional files should be linked from app.styl
+    
+    # Include JS
+    inclusions.push(tag.js('assets', exports.assets.files.js.lib))
     if SS.config.pack_assets
       inclusions.push(tag.js('assets', exports.assets.files.js.app))
-      inclusions.push(tag.css('assets', exports.assets.files.css.app))
-    # However, when in Development, we need to iterate through all dirs and include separate links to load each file
     else
-      # Include client-side and shared CoffeeScript
+      # When in Development/Staging, we need to iterate through all dirs and include separate links to load each file
       exports.assets.client_dirs.map (dir) ->
         path = "app/#{dir}"
         files = file_utils.readDirSync(path).files
@@ -36,9 +40,6 @@ exports.compile =
           files.map (file) ->
             file = file.replace(path + '/', '')
             inclusions.push(tag.js(dir, file))
-
-      # Include Stylus files (additional files should be linked from app.styl)
-      inclusions.push(tag.css('css', 'app.styl'))
     
     # Include all jQuery templates, if present
     inclusions = inclusions.concat(buildTemplates())

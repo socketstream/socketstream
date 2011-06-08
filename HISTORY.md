@@ -1,3 +1,12 @@
+0.0.53 / 2011-06-08
+===================
+
+* Calls to SS.server actions from the browser will automatically output to the browser's console if no callback function is provided (makes testing/debugging SS.server actions much easier!)
+* Heartbeats from the client are now sent and processed more efficiently
+* The HTML output now lists links to CSS files before JavaScript files, as recommended by the Chrome Audit tool
+* Updated the README
+
+
 0.0.52 / 2011-06-07
 ===================
 

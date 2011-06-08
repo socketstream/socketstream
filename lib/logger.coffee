@@ -33,6 +33,9 @@ exports.incoming =
   rpsExceeded: (client) ->
     output 2, "ALERT: Subsequent requests from Client ID: #{client.sessionId}, Session ID: #{client.session.id}, IP: #{client.connection.remoteAddress} will be dropped as requests-per-second over #{SS.config.limiter.websockets.rps}"
 
+  rawMessage: (data, client) ->
+    output 5, "DEBUG: Raw message from #{client.sessionId} - #{data}"
+
 exports.outgoing =
 
   socketio: (msg, client) ->

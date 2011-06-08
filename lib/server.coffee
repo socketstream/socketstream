@@ -90,6 +90,9 @@ process =
 
     # Called each time Socket.IO sends a message through to the server
     call: (data, client) ->
+      
+      # Log each message for debugging (only when log_level >= 5)
+      SS.log.incoming.rawMessage(data, client)
 
       # Silently drop all calls if...
       return null if client.rps_exceeded  # client has exceeded the number of requests-per-second
