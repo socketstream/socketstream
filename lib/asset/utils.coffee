@@ -19,7 +19,7 @@ exports.concatFiles = (path) ->
   files.map (file_name) ->
     util.log "  Concatenating file #{file_name}"
     output = fs.readFileSync("#{path}/#{file_name}", 'utf8')
-    if file_name.match(/\.coffee/)
+    if file_name.match(/\.coffee$/i)
       util.log "  Compiling #{file_name} into JS..."
       try
         output = SS.libs.coffee.compile(output) 

@@ -73,9 +73,12 @@ exports.pack =
       output = utils.concatFiles('./lib/client')
       util.log("  Appending SocketStream client files...")
       output += fs.readFileSync("#{system_path}/cached/lib.min.js", 'utf8')
-      fs.writeFile("#{exports.assets.public_path}/#{exports.assets.files.js.lib}", output)
+      fs.writeFileSync("#{exports.assets.public_path}/#{exports.assets.files.js.lib}", output)
       emitter.emit('regenerate_html')
     
+    # SocketStream developers only!
+    # Should only ever be called when modifying a SocketStream client lib file directly.
+    # Will only save correctly if package is linked with 'sudo npm link'
     system: ->
       client_file_path = "#{system_path}/socketstream.coffee"
       output = utils.concatFiles("#{system_path}/js")
@@ -97,14 +100,14 @@ exports.pack =
       deleteFilesInPublicDir(/^app.*css$/)
       exports.assets.files.css.app = "app_#{Date.now()}.css"
       exports.assets.compile.styl 'app.styl', (result) ->
-        fs.writeFile("#{exports.assets.public_path}/#{exports.assets.files.css.app}", result.output)
+        fs.writeFileSync("#{exports.assets.public_path}/#{exports.assets.files.css.app}", result.output)
         util.log('Stylus files compiled into CSS')
       
     lib: ->
       deleteFilesInPublicDir(/^lib.*css$/)
       output = utils.concatFiles("./lib/css")
       exports.assets.files.css.lib = "lib_#{Date.now()}.css"
-      fs.writeFile("#{exports.assets.public_path}/#{exports.assets.files.css.lib}", output)
+      fs.writeFileSync("#{exports.assets.public_path}/#{exports.assets.files.css.lib}", output)
       util.log('CSS libs concatenated')
       emitter.emit('regenerate_html')
 

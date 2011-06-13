@@ -1,3 +1,10 @@
+0.0.54 / 2011-06-13
+===================
+
+* Now works fine if installed as an NPM package as well as 'sudo npm link'
+* Minor bug fixes
+
+
 0.0.53 / 2011-06-08
 ===================
 

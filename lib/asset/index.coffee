@@ -65,6 +65,7 @@ ensureAssetsExist = ->
     try
       exports.pack.libs()
       SS.internal.state.save()
+      SS.internal.state.last_known = SS.internal.state.current()
     catch e
       SS.internal.state.reset()
       SS.log.error.exception e
@@ -76,7 +77,7 @@ upgradeAssetsIfRequired = ->
       util.log "Thanks for upgrading SocketStream. Regenerating assets to include the latest client code..."
     else
       util.log "Regenerating client asset files..."
-    exports.pack.js.system()
+    exports.pack.js.lib()
     SS.internal.state.save()
 
 findAssets = (cb) ->
