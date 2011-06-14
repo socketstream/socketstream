@@ -1,5 +1,5 @@
-# HTTP API
-# --------
+# Middleware: HTTP API
+# --------------------
 # Automatically makes all public methods within /app/server accesible over a HTTP request-based API
 # This module will only be loaded if SS.config.api.enabled == true
 
@@ -11,11 +11,11 @@
 # Note: Make sure your application code casts strings into the type of value you're expecting when using the HTTP API
 
 url_lib = require('url')
-Session = require('../session.coffee').Session
-Request = require('../request.coffee')
-base64 = require('../utils/base64.js')
-server = require('../utils/server.coffee')
-RTM = require('../realtime_models') if SS.config.rtm.enabled
+Session = require('../../session.coffee').Session
+Request = require('../../request.coffee')
+base64 = require('../../utils/base64.js')
+server = require('../../utils/server.coffee')
+RTM = require('../../realtime_models') if SS.config.rtm.enabled
 
 exports.isValidRequest = (request) ->
   request.parsedURL.initialDir == SS.config.api.prefix

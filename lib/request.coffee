@@ -1,7 +1,7 @@
 # Incoming Data Request Handler
 # -----------------------------
 # Used to handle Socket.IO and API requests
-# Remember, the process action needs to be written for speed
+# Remember, the process action needs to be written with speed in mind as everything flows through it!
 
 url_lib = require('url')
 utils = require('./utils')

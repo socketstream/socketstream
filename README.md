@@ -1,7 +1,7 @@
 ![SocketStream!](https://github.com/socketstream/socketstream/raw/master/lib/generator_files/logo.png)
 
 
-Latest release: 0.0.54   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+Latest release: 0.0.55   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 
 Twitter: socketstream   -   Google Group: http://groups.google.com/group/socketstream
 
@@ -75,6 +75,8 @@ Restart the server, refresh your page, then type this into the browser console:
 And you will see the following output:
 
     25 squared is 625
+    
+The eagle-eyed among you will notice SS.client.app.square(25) actually returned 'undefined'. That's fine. We're only interested in the asynchronous response sent from the server once it has processed your request. 
 
 You can also call this server-side method over HTTP with the following URL:
 
@@ -82,9 +84,11 @@ You can also call this server-side method over HTTP with the following URL:
     
 Or even directly from the server-side console (type 'socketstream console') OR the browser's console OR another server-side file:
 
-    SS.server.app.square(25)                  (Note: If no callback is supplied the default is to 'console.log')
+    SS.server.app.square(25, function(x){ console.log(x) })
+    
+Note the 'console.log' callback is automatically inserted if you're calling SS.server methods from the browser.
 
-Note the 'SS' variable is a bit like the dollar sign $ in jQuery - it's the main way into the SocketStream API. We do our best to keep the API between client and server identical wherever possible.
+You will notice by now that the 'SS' variable is similar to the dollar sign $ in jQuery - it's the main way into the SocketStream API. We do our best to keep the API between client and server identical wherever possible.
 
 Ready for something a bit more advanced? Let's take a look at reverse geocoding using HTML5 geolocation...
 
@@ -557,6 +561,21 @@ Note: We have found Safari will not support secure websockets without a valid (i
 We will continue enhancing the HTTPS experience over future releases until it's stable.
 
 
+### Incompatible Browsers
+
+By default SocketStream will attempt to serve real time content to all browsers - either using native websockets (if available) or by falling back to 'flashsockets'.
+
+As flashsockets are not ideal (more overhead, initial connection latency) you may prefer to enable Strict Mode:
+
+    SS.config.browser_check.strict = true
+    
+Once set, only browsers with native websocket support (currently Chrome 4 and above and Safari 5 and above) will be allowed to connect to your app. All others will be shown a static page at /static/incompatible_browsers/index.html which we encourage you to customize.
+
+In the future we'll improve browser detection by testing for compatible browsers and Flash support in the SocketStream client as a second line of defence.
+
+Note: The serving of HTTP API requests occurs before the browser is checked for compatibility and is hence not affected by these settings.
+
+
 ### Security
 
 So how secure is SocketStream? Well, to be honest - we just don't know. The entire stack, from Node.js right up to the SocketStream client is brand new and no part of it is claiming to be production-ready just yet. So for now we recommend using SocketStream internally, behind a firewall.
@@ -590,12 +609,27 @@ Right now we don't have a definitive answer, but we have a number of innovative 
 ### Tests
 
 There are a handful of tests at the moment, but there will be more once the internal API becomes stable. It is one of the major things we need to get right before announcing SocketStream to the world.
-    
+
 
 ### Known Issues
 
 * New files added to /lib/client files will not be detected until you restart the server and touch one of the /lib/client files. We will fix this
 * Any manipulation of $('body') using jQuery, e.g. $('body').hide(), under Firefox 4 disrupts the flashsocket connection. Until we figure out what's causing this bizarre bug, best avoid calling $('body') in your code.
+
+
+### FAQs
+
+Q: Will SocketStream support Java/Erlang/PHP/Ruby/Python/my favourite language?
+A: No. SocketStream is a stand-alone framework which uses a very carefully curated technology stack. However, rather than re-write your entire app in SocketStream, consider using it as a front-end to a legacy web service which can be easily be invoked from the server.
+
+Q: Can I integrate SocketStream into my existing app?
+A: No. At least not on the same host and port. For 'hybrid' real time apps we recommend using www.pusher.com
+
+Q: Can I host more than one SocketStream website on the same port?
+A: Not at the moment. There are no immediate plans to support 'virtual hosts' at this time.
+
+Q: Can I horizontally scale one big website over many CPU cores and servers?
+A: Not yet, but this is one of the main things we're working on.
 
 
 ### The Road to 0.1.0

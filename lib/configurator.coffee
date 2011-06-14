@@ -47,6 +47,12 @@ setDefaults = ->
         basic:          
           module_name:        false           # replace this with the name of the authentication module. false = basic auth disabled
           realm:              'Secure API'    # realm name that pops up when you try to access a secure area
+    
+    # Incompatible Browser Checking
+    browser_check:
+      enabled:                true            
+      strict:                 false           # when enabled will serve a static page from /public/errors/incompatible when non websocket browsers connect
+      
 
     # Set params which will be passed directly to the client when they connect
     # The client config should match the server as closly as possible
@@ -69,7 +75,6 @@ setDefaults = ->
       enabled:                false           # enables basic rate limiting (off by default for now)
       websockets:
         rps:                  15              # requests per second which can be executed per-client before requests are dropped
-    
     
     # Realtime Models
     rtm:

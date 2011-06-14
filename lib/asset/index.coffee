@@ -20,7 +20,6 @@ watch_dirs = [
 # Load Asset sub-modules
 exports.pack =     require('./pack.coffee').init(@).pack
 exports.compile =  require('./compile.coffee').init(@).compile
-exports.request =  require('./request.coffee').init(@).request
 
 # Setup shared vars
 exports.files =         {js: {}, css: {}}

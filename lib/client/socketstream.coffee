@@ -63,7 +63,7 @@ SS.socket.on 'message', (raw) ->
 SS.socket.on 'disconnect', ->
   attemptReconnection = ->
     SS.socket.connect() unless SS.socket.connecting
-    setTimeout arguments.callee, 100
+    setTimeout arguments.callee, 500 # try twice per second
   attemptReconnection()
  
 # Connect!

@@ -12,12 +12,17 @@ session = require('./session.coffee')
 Request = require('./request.coffee')
 asset   = require('./asset')
 pubsub  = require('./pubsub.coffee')
-static  = new(SS.libs.static.Server)('./public')
 
 # Load optional modules
 limiter = require('./limiter.coffee')   if SS.config.limiter.enabled
-api     = require('./api')              if SS.config.api.enabled
-admin   = require('./admin')            if SS.config.admin.enabled
+
+# Load Default HTTP Middleware Stack (order matters!)
+http_middleware = []
+http_middleware.push('api')             if SS.config.api.enabled
+http_middleware.push('browser_check')   if SS.config.browser_check.enabled
+http_middleware.push('admin')           if SS.config.admin.enabled
+http_middleware.push('compile')         if !SS.config.pack_assets
+http_middleware.push('static')          # Always serve static files last
 
 # Only load Realtime Models if enabled. Disabled by default
 RTM = require('./realtime_models') if SS.config.rtm.enabled
@@ -43,27 +48,10 @@ process =
     
     # Every incoming HTTP request goes though this method, so it must be optimized at all times
     call: (request, response) ->
-
       appendParsedURL(request)
+      request.addListener 'end', ->
+        executeMiddleware(0, request, response)
 
-      # If this is an API request
-      if api and api.isValidRequest(request)
-        api.call(request, response)
-
-      # If this is a Web Admin request
-      else if admin and admin.isValidRequest(request)
-        admin.call(request, response)
-
-      # If we're not packing assets, serve them live (typically in development)
-      else if !SS.config.pack_assets and asset.request.isValidRequest(request)
-        asset.request.call(request, response)
-
-      # By default, try to serve a static file
-      else
-        request.addListener 'end', ->
-          static.serve(request, response)
-          SS.log.serve.staticFile(request)
-          
   # Socket.IO
   socket:
   
@@ -176,7 +164,16 @@ appendParsedURL = (request) ->
     path:        (if actions.length > 0 then [actions.join('/'), extension].join('.') else '')
     isRoot:      (u = url.split('?')[0].split('/'); u.length == 2 and !raw.split('?')[0].match(/\./))
 
-# Load the SSL keys
+# Execute HTTP Middleware recursively
+executeMiddleware = (index, request, response) ->
+  name = http_middleware[index]
+  middleware = require("./middleware/#{name}")
+  if middleware.isValidRequest(request)
+    middleware.call(request, response)
+  else
+    arguments.callee(index + 1, request, response)
+
+# Load the SSL keys. All very experimenal at the moment!
 ssl =
 
   options:

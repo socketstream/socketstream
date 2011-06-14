@@ -1,3 +1,13 @@
+0.0.55 / 2011-06-14
+===================
+
+* Refactored HTTP serving to support 'middleware' and allow custom HTTP handling in future
+* Added 'Strict Mode' which checks browser for native websocket support. See Incompatible Browsers section in README
+* New projects now include a /static directory. This will be used for maintenance pages and other things in the future
+* Changed the way new projects are created. A basic /config/app.json file is now included by default
+* Added FAQ section to README
+
+
 0.0.54 / 2011-06-13
 ===================
 
