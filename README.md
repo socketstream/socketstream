@@ -620,15 +620,22 @@ There are a handful of tests at the moment, but there will be more once the inte
 ### FAQs
 
 Q: Will SocketStream support Java/Erlang/PHP/Ruby/Python/my favourite language?
+
 A: No. SocketStream is a stand-alone framework which uses a very carefully curated technology stack. However, rather than re-write your entire app in SocketStream, consider using it as a front-end to a legacy web service which can be easily be invoked from the server.
 
+
 Q: Can I integrate SocketStream into my existing app?
+
 A: No. At least not on the same host and port. For 'hybrid' real time apps we recommend using www.pusher.com
 
+
 Q: Can I host more than one SocketStream website on the same port?
+
 A: Not at the moment. There are no immediate plans to support 'virtual hosts' at this time.
 
+
 Q: Can I horizontally scale one big website over many CPU cores and servers?
+
 A: Not yet, but this is one of the main things we're working on.
 
 
