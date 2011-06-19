@@ -1,3 +1,12 @@
+0.0.56 / 2011-06-19
+===================
+
+* VIM backup files (ending with ~) are now ignored (thanks kryton)
+* Updated all NPM dependencies (apart from Jade) to latest versions and tested compatibility
+* Updated Socket.IO client to 0.6.3
+* Added favicon.ico :)
+
+
 0.0.55 / 2011-06-14
 ===================
 

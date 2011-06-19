@@ -1,7 +1,7 @@
 ![SocketStream!](https://github.com/socketstream/socketstream/raw/master/new_project/public/images/logo.png)
 
 
-Latest release: 0.0.55   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+Latest release: 0.0.56   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 
 Twitter: socketstream   -   Google Group: http://groups.google.com/group/socketstream
 

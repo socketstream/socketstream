@@ -1,23 +1,23 @@
 {
   "name":         "socketstream",
   "description":  "Build phenomenally fast real-time apps on Node.js",
-  "version":      "0.0.55",
+  "version":      "0.0.56",
   "homepage":     "http://www.socketstream.org",
   "author":       "Owen Barnes <info@socketstream.org>",
   "contributors": [
     "Paul Jensen <paulbjensen@gmail.com>"
   ],
   "dependencies": {
-    "coffee-script":  "= 1.1.0",
-    "socket.io":      "= 0.6.17",
+    "coffee-script":  "= 1.1.1",
+    "socket.io":      "= 0.6.18",
     "redis":          "= 0.6.0",
-    "hiredis":        "= 0.1.10",
+    "hiredis":        "= 0.1.12",
     "node-static":    "= 0.5.6",
     "jade":           "= 0.10.7",
-    "argsparser":     "= 0.0.5",
-    "stylus":         "= 0.12.3",
-    "semver":         "= 1.0.5",
-    "uglify-js":      "= 1.0.1"
+    "stylus":         "= 0.13.3",
+    "argsparser":     "= 0.0.6",
+    "semver":         "= 1.0.7",
+    "uglify-js":      "= 1.0.2"
   },
   "directories":  { "lib": "./lib" },
   "main":         "./lib/socketstream.js",
