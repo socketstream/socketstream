@@ -11,27 +11,28 @@
 # Note: Make sure your application code casts strings into the type of value you're expecting when using the HTTP API
 
 url_lib = require('url')
-Session = require('../../session.coffee').Session
-Request = require('../../request.coffee')
-base64 = require('../../utils/base64.js')
-server = require('../../utils/server.coffee')
-RTM = require('../../realtime_models') if SS.config.rtm.enabled
+Session = require('../session.coffee').Session
+Request = require('../request.coffee')
+base64 = require('../utils/base64.js')
+server = require('../utils/server.coffee')
+RTM = require('../realtime_models') if SS.config.rtm.enabled
 
-exports.isValidRequest = (request) ->
-  request.parsedURL.initialDir == SS.config.api.prefix
+exports.call = (request, response, next) ->
+  
+  if request.ss.parsedURL.initialDir == SS.config.api.prefix
+    url = url_lib.parse(request.url, true)
+    path = url.pathname.split('.')
+    action = path[0]
+    actions = request.ss.parsedURL.actions
 
-exports.call = (request, response) ->
-  url = url_lib.parse(request.url, true)
-  path = url.pathname.split('.')
-  action = path[0]
-  actions = request.parsedURL.actions
-
-  # Browse API if viewing root
-  if actions.length <= 1
-    server.deliver(response, 200, 'text/html', 'Browse public API. Coming soon.')
-  # Or attempt to process request
+    # Browse API if viewing root
+    if actions.length <= 1
+      server.deliver(response, 200, 'text/html', 'Browse public API. Coming soon.')
+    # Or attempt to process request
+    else
+      process(request, response, url, actions)
   else
-    process(request, response, url, actions)
+    next()
 
 
 # PRIVATE
@@ -45,7 +46,7 @@ process = (request, response, url, actions) ->
   
   try
     params = parseParams(url)
-    format = request.parsedURL.extension || 'html'
+    format = request.ss.parsedURL.extension || 'html'
       
     # Check format is supported
     throw new Error('Invalid output format. Supported formats: ' + output_formats.keys().join(', ')) unless output_formats.keys().include(format)

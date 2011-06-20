@@ -5,14 +5,31 @@
 dir = 'static/incompatible_browsers'
 
 fs = require('fs')
-server = require('../../utils/server.coffee')
+server = require('../utils/server.coffee')
 static = new(SS.libs.static.Server)('./' + dir)
 
 # Default message if no custom error file present
 body = "<h1>Incompatible Browser</h1>
 <p>Add a custom error message page to /#{dir}/index.html</p>"
 
-exports.isValidRequest = (request) ->
+exports.call = (request, response, next) ->
+
+  if isValidRequest(request)
+
+    fs.stat "#{SS.root}/#{dir}/index.html", (err) ->
+      if err and err.code == 'ENOENT' # file doesn't exist
+        server.deliver(response, 200, 'text/html', body)
+      else
+        static.serve(request, response)
+        SS.log.serve.staticFile(request)
+  else  
+    next()
+
+
+# PRIVATE METHODS
+
+# Does this browser appear to be incompatible?
+isValidRequest = (request) ->
   ua = request.headers['user-agent']
 
   # If Strict checking for browsers which have native websocket support
@@ -38,13 +55,3 @@ exports.isValidRequest = (request) ->
   # Otherwise don't show this page and let's hope the browser has flash installed!
   else
     false
-  
-exports.call = (request, response) ->
-
-  fs.stat "#{SS.root}/#{dir}/index.html", (err) ->
-    if err and err.code == 'ENOENT' # file doesn't exist
-      server.deliver(response, 200, 'text/html', body)
-    else
-      static.serve(request, response)
-      SS.log.serve.staticFile(request)
-      

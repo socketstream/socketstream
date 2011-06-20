@@ -8,27 +8,21 @@ http = require('http')
 https = require('https')
 
 # Load mandatory modules
-session = require('./session.coffee')
-Request = require('./request.coffee')
-asset   = require('./asset')
-pubsub  = require('./pubsub.coffee')
+session         = require('./session.coffee')
+Request         = require('./request.coffee')
+asset           = require('./asset')
+pubsub          = require('./pubsub.coffee')
+http_middleware = require('./http_middleware')
 
 # Load optional modules
 limiter = require('./limiter.coffee')   if SS.config.limiter.enabled
-
-# Load Default HTTP Middleware Stack (order matters!)
-http_middleware = []
-http_middleware.push('api')             if SS.config.api.enabled
-http_middleware.push('browser_check')   if SS.config.browser_check.enabled
-http_middleware.push('admin')           if SS.config.admin.enabled
-http_middleware.push('compile')         if !SS.config.pack_assets
-http_middleware.push('static')          # Always serve static files last
 
 # Only load Realtime Models if enabled. Disabled by default
 RTM = require('./realtime_models') if SS.config.rtm.enabled
 
 # The main method called when starting the server ('socketstream start')
 exports.start = ->
+  http_middleware.init()
   asset.init()
   server = mainServer()
   socket = SS.libs.io.listen(server, {transports: ['websocket', 'flashsocket']})
@@ -45,13 +39,20 @@ process =
 
   # HTTP
   http:
-    
+
     # Every incoming HTTP request goes though this method, so it must be optimized at all times
     call: (request, response) ->
-      appendParsedURL(request)
+    
+      # Attach a custom SocketStream variable to the request object
+      request.ss =
+        assets: []          # defines the client asset packages to serve
+      
+      # Wait for the request to complete
       request.addListener 'end', ->
-        executeMiddleware(0, request, response)
-
+      
+        # Execute HTTP middleware stack (starting with any custom HTTP handler)
+        http_middleware.execute(request, response)
+          
   # Socket.IO
   socket:
   
@@ -71,7 +72,7 @@ process =
           session_id:       client.session.id
           env:              SS.env                                                  # Makes the SS.env variable available client-side. Can be useful within client code
           config:           SS.config.client                                        # Copies any client configuration settings from the app config files to the client
-          heartbeat:        SS.config.users.online.enabled                          # Let's the client know if User Online tracking is enabled. Change heartbeat timing with SS.config.client.heartbeat_seconds (default = 60)
+          heartbeat:        SS.config.users.online.enabled                          # Let's the client know if User Online tracking is enabled
           api:                                                                       
             server:         SS.internal.api_string.server                           # Transmits a string representation of the Server API
             models:         (if RTM then SS.models.keys() else [])                  # Transmits a list of Realtime Models exposed to the client if RTM is enabled (disabled by default)
@@ -149,29 +150,6 @@ mainServer = ->
     https.createServer(ssl.options, process.http.call)
   else
     http.createServer(process.http.call)
-
-# Parses incoming URL into file extension, initial dir etc and adds this object to request.parsedURL
-appendParsedURL = (request) ->
-  raw = request.url
-  [no_params, params] = raw.split('?')
-  [url, extension] = no_params.split('.')
-  [ignore, initialDir, actions...] = url.split('/')
-  request.parsedURL = 
-    extension:   (if extension and extension != '/' then extension.toLowerCase() else null)
-    initialDir:  (if initialDir then initialDir.toLowerCase() else null)
-    actions:     (actions || null)
-    params:      (params || null)
-    path:        (if actions.length > 0 then [actions.join('/'), extension].join('.') else '')
-    isRoot:      (u = url.split('?')[0].split('/'); u.length == 2 and !raw.split('?')[0].match(/\./))
-
-# Execute HTTP Middleware recursively
-executeMiddleware = (index, request, response) ->
-  name = http_middleware[index]
-  middleware = require("./middleware/#{name}")
-  if middleware.isValidRequest(request)
-    middleware.call(request, response)
-  else
-    arguments.callee(index + 1, request, response)
 
 # Load the SSL keys. All very experimenal at the moment!
 ssl =

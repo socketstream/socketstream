@@ -1,3 +1,11 @@
+0.0.57 / 2011-06-20
+===================
+
+* Refactored HTTP middleware to...
+* Allow support for your own high-speed custom HTTP middleware. See README for details/examples
+* Updated README with pre-launch details
+
+
 0.0.56 / 2011-06-19
 ===================
 

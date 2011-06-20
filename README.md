@@ -1,7 +1,7 @@
 ![SocketStream!](https://github.com/socketstream/socketstream/raw/master/new_project/public/images/logo.png)
 
 
-Latest release: 0.0.56   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+Latest release: 0.0.57   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 
 Twitter: socketstream   -   Google Group: http://groups.google.com/group/socketstream
 
@@ -12,14 +12,14 @@ SocketStream is a new full stack web framework built around the [Single-page App
 
 Project status: Highly experimental but usable. Improving almost every day.
 
-**A request:** I wish to keep SocketStream under-the-radar for now whilst I build a public website for it and, most importantly, figure out a good way to test the code (now the API has settled down somewhat). See 'The Road to 0.1.0' at the end of the page. If you've discovered this project and wish to contribute, that would be awesome! But please don't tweet about it or post it on Hacker News just yet. Thank you.
+**Note** SocketStream will be announced at the Hacker News meetup group in London on Thursday 23rd June. We'd appreciate it if you don't tweet/blog/post about it until after the announcement. Thank you.
 
 
 ### Features
 
 * True bi-directional communication using websockets (or flash sockets)
 * Crazy fast! Starts up instantly. No HTTP handshaking/headers/routing to slow down every request
-* Works on all major browsers thanks to the excellent [Socket.IO](http://socket.io/)
+* Works great with Chrome and Safari. Firefox and IE support (using flashsockets) temperamental but improving thanks to [Socket.IO](http://socket.io/)
 * Write all code in [CoffeeScript](http://jashkenas.github.com/coffee-script/) or JavaScript - your choice
 * Easily share code between the client and server. Ideal for business logic and model validation
 * Automatic HTTP API. All server-side code is also accessible over a high-speed request-based API
@@ -30,6 +30,7 @@ Project status: Highly experimental but usable. Improving almost every day.
 * Interactive console - just type 'socketstream console' and invoke any server-side method from there
 * 'API Trees' offer a simple, consistent way to namespace large code bases across the front and back end
 * Uses [Redis](http://www.redis.io/) for fast session retrieval, pub/sub, list of users online, and any other data your app needs instantly
+* Supports custom HTTP middleware/responders which execute first for maximum flexibility and speed
 * Bundled with jQuery 1.6.1. Easily add additional client libraries such as [Underscore.js](http://documentcloud.github.com/underscore/)
 * Easily create jQuery templates using the [official plugin](http://api.jquery.com/category/plugins/templates/). Works like partials in Rails.
 * Uses [Jade](http://jade-lang.com/) to render static HTML
@@ -536,6 +537,23 @@ As SocketStream can automatically detect when a client is no longer connected (e
 At present requests sent to the server whist offline are queued on the browser and automatically executed once the connection is re-established. In the near future we will allow time-critical requests to be marked as such - essential for stock trading apps.
 
 
+### Using custom HTTP handlers / middleware
+
+Though we have yet to fully explore this idea, right now it's possible to run all incoming HTTP requests through your own middleware. This can either alter the request object or, more usefully, allow you to respond with your own headers and content depending upon the URL, User Agent and other request parameters sent.
+
+This is a very powerful feature, particularly because it's the first thing Node calls when a HTTP request comes in - so you have all the flexibility and speed of a bare-bones Node.js app.
+
+Please see the comments in /config/http.coffee to use this feature. For example, you could place a file called my_middleware.coffee in /lib/server with:
+
+    exports.call = (request, response, next) ->
+
+      # Log the User Agent of each incoming request
+      console.log 'User Agent is:', request.headers['user-agent']
+      
+      # All middleware must end with next() unless response is being served/terminated here
+      next()
+
+
 ### HTTPS / SSL
 
 HTTPS support is currently highly experimental and hence is switched off by default.
@@ -608,7 +626,7 @@ Right now we don't have a definitive answer, but we have a number of innovative 
 
 ### Tests
 
-There are a handful of tests at the moment, but there will be more once the internal API becomes stable. It is one of the major things we need to get right before announcing SocketStream to the world.
+There are a handful of tests at the moment, but there will be more once the internal API becomes stable.
 
 
 ### Known Issues
@@ -621,17 +639,17 @@ There are a handful of tests at the moment, but there will be more once the inte
 
 Q: Will SocketStream support Java/Erlang/PHP/Ruby/Python/my favourite language?
 
-A: No. SocketStream is a stand-alone framework which uses a very carefully curated technology stack. However, rather than re-write your entire app in SocketStream, consider using it as a front-end to a legacy web service which can be easily be invoked from the server.
+A: No. SocketStream is a stand-alone framework which uses a very carefully curated technology stack. However, rather than re-write your entire app in SocketStream, consider using it as a front-end to a legacy web service which can be easily be invoked from your server-side code.
 
 
 Q: Can I integrate SocketStream into my existing app?
 
-A: No. At least not on the same host and port. For 'hybrid' real time apps we recommend using www.pusher.com
+A: No. At least not on the same host and port. For 'hybrid' real time apps we recommend using [Pusher](www.pusher.com)
 
 
 Q: Can I host more than one SocketStream website on the same port?
 
-A: Not at the moment. There are no immediate plans to support 'virtual hosts' at this time.
+A: Not at the moment. We will be looking at ways to support this in the future using reverse proxies.
 
 
 Q: Can I horizontally scale one big website over many CPU cores and servers?
@@ -639,23 +657,9 @@ Q: Can I horizontally scale one big website over many CPU cores and servers?
 A: Not yet, but this is one of the main things we're working on.
 
 
-### The Road to 0.1.0
+Q: How do I test my app?
 
-0.1.0 will be the first public release of SocketStream - the one we will publish to NPM and announce on Hacker News, Reddit, Twitter, etc.
-
-Why are we waiting? Because developers are busy people and we want to make sure everyone who invests time trying out SocketStream has an enjoyable and productive experience. That means we need more documentation, install guides for major platforms, better error handling, example code and easy ways to get support.
-
-Remaining tasks for 0.1.0:
-
-* Make it easier to work with /lib/client files. New files are currently not detected when added - it's quite hard to fix
-* Work out how to integrate custom user models
-* Stabilize API to ensure minimal code changes in the future
-
-In addition, the following needs to be in place:
-
-* SocketStream.org public website with live demos (in progress)
-* At least two example/demo applications available on GitHub
-* Review available testing frameworks and document ways these can be used with SS
+A: For now we recommend choosing one of the many testing frameworks available for Node.js. Let us know if there is anything we can do to help integrate SocketStream with your framework of choice. SocketStream will have an in-built default testing framework in the future but it will be a radical departure from anything that's gone before. Look out for announcements towards the end of 2011.
 
 
 ### Contributors
@@ -674,7 +678,12 @@ If you wish to discuss an idea, or want to chat about anything else, email us at
 
 ### Credits
 
-Thanks to Guillermo Rauch (Socket.IO), TJ Holowaychuk (Stylus, Jade), Jeremy Ashkenas (CoffeeScript), Mihai Bazon (UglifyJS), Isaac Schlueter (NPM), Salvatore Sanfilippo (Redis) and the many others who's amazing work has made SocketStream possible. 
+Thanks to Guillermo Rauch (Socket.IO), TJ Holowaychuk (Stylus, Jade), Jeremy Ashkenas (CoffeeScript), Mihai Bazon (UglifyJS), Isaac Schlueter (NPM), Salvatore Sanfilippo (Redis) and the many others who's amazing work has made SocketStream possible.
+
+
+### Thanks!
+
+SocketStream is kindly sponsored AOL.
 
 
 ### License
