@@ -1,3 +1,10 @@
+0.0.58 / 2011-06-21
+===================
+
+* Updated Jade NPM to latest version. NOTE! Params for HTML tags must now be in "height=21" rather than "height: 21" format
+* Updated /app/views/app.jade with new syntax
+
+
 0.0.57 / 2011-06-20
 ===================
 
