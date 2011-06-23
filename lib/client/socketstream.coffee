@@ -21,9 +21,6 @@ window.SS =
     log:
       level:        0               # no client-side logging by default
       
-# Maintain compatibility with $SS in previous versions. Will be removed before 0.1.0
-window.$SS = window.SS
-
 # Event handling
 SS.events =
 

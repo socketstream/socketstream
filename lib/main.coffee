@@ -90,10 +90,11 @@ exports.start =
   server: ->
     util.log('Starting SocketStream server...')
     load.project()
-    require('./server.coffee').start()
-    protocol = if SS.config.ssl.enabled then SS.log.color('https', 'green') else "http"
+    servers = require('./server.coffee').start()
     SS.users.online.update() if SS.config.users.online.enabled
-    showBanner("Server running on #{protocol}://#{SS.config.hostname}:#{SS.config.port}")
+    text = ["Primary server running on #{formatProtocol(servers.primary.protocol)}://#{servers.primary.config.hostname}:#{servers.primary.config.port}"]
+    text.push "  Secondary server running on #{formatProtocol(servers.secondary.protocol)}://#{servers.secondary.config.hostname}:#{servers.secondary.config.port}" if servers.secondary
+    showBanner(text.join("\n"))
     
   console: ->
     load.project()
@@ -291,6 +292,10 @@ fatal = (message) ->
 # We convert the object tree for sending in the most condensed way possible. The client will re-construct the api into SS.server and SS.shared from this string
 apiToString = (obj) ->
   util.inspect(SS.server, false, 1000).replace(/\[Function\]/g, 'true')
+
+# Make HTTPS stand out
+formatProtocol = (protocol) ->
+  if protocol == 'https' then SS.log.color('https', 'green') else "http"
 
 # Show welcome banner
 showBanner = (additional_text) ->

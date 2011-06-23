@@ -21,3 +21,9 @@ exports.showError = (response, error) ->
   <pre>#{error}</pre>"
   exports.deliver(response, 500, 'text/html', output)
   SS.log.error.exception(error)
+
+# Redirect a standard HTTP request
+exports.redirect = (request, response, url) ->
+  response.statusCode = 302
+  response.setHeader("Location", url)
+  response.end()

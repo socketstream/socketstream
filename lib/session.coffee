@@ -10,12 +10,6 @@ id_length = 32
 key = SS.config.redis.key_prefix
 channel_separator = '¬*~'
 
-# Hooks are an undocumented experiment - Will probably be removed
-try
-  hooks = require(SS.root + '/config/hooks').hooks
-catch e
-  # ignore
-
 # Process an incoming request where we have a persistent client (not the API)
 exports.process = (client, cb) ->
   cookies = getCookies(client)
@@ -56,8 +50,6 @@ class exports.Session extends events
       @newly_created = true
       @save() if @client # only save if this is a persistent (none-API) connection
   
-    @_callHooks()
-  
   # This method is called both by the constructor and each time an incoming websocket call is processed
   # It enables the nested namespaces ('user' and 'group') to access the current session object instead of the last one initialized by the constructor
   # For now this seems to be the best way to allow namespacing without storing separate copies the objects for each Session
@@ -94,13 +86,8 @@ class exports.Session extends events
   _cleanup: ->
     @channels.forEach (channel) => @channel._removeClient(channel)
     
-  # Undocumented: Call hooks defined in /config/hooks.cofee
-  _callHooks: ->
-    if hooks and hooks.onSessionCreate
-      hooks.onSessionCreate(@)
 
   # Authenticated Users
-  
   user:
   
     _init: (@session) ->

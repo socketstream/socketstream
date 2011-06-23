@@ -1,6 +1,8 @@
 # HTTP Router Config
 # ------------------
 
+# Version 1.0
+
 # This file defines how incoming HTTP requests are handled
 # Note: The default configuration will probably change a lot in the future. Be warned!
 

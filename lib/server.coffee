@@ -5,7 +5,6 @@
 fs = require('fs')
 util = require('util')
 http = require('http')
-https = require('https')
 
 # Load mandatory modules
 session         = require('./session.coffee')
@@ -13,46 +12,61 @@ Request         = require('./request.coffee')
 asset           = require('./asset')
 pubsub          = require('./pubsub.coffee')
 http_middleware = require('./http_middleware')
+utils           = require('./utils/server.coffee')
 
 # Load optional modules
-limiter = require('./limiter.coffee')   if SS.config.limiter.enabled
+limiter = require('./limiter.coffee') if SS.config.limiter.enabled
 
 # Only load Realtime Models if enabled. Disabled by default
 RTM = require('./realtime_models') if SS.config.rtm.enabled
 
+# Define servers
+servers = {}
+
 # The main method called when starting the server ('socketstream start')
 exports.start = ->
-  http_middleware.init()
+  
   asset.init()
-  server = mainServer()
-  socket = SS.libs.io.listen(server, {transports: ['websocket', 'flashsocket']})
+  
+  # Start Primary Server (either HTTP or HTTPS)
+  servers.primary = primaryServer()
+  socket = SS.libs.io.listen(servers.primary.server, {transports: ['websocket', 'flashsocket']})
   socket.on('connection', process.socket.connection)
   socket.on('clientMessage', process.socket.call)
   socket.on('clientDisconnect', process.socket.disconnection)
-  server.listen(SS.config.port, SS.config.hostname)
+  servers.primary.server.listen(servers.primary.config.port, servers.primary.config.hostname)
   pubsub.listen(socket)
+  
+  # Start Secondary HTTP Redirect/API server (if running HTTPS)
+  # We will architect this way better in the near future
+  if SS.config.https.enabled and SS.config.https.domain and SS.config.https.redirect_http
+    request_processor = (request, response) -> process.http.request(request, response, 'secondary')
+    servers.secondary =
+      server:     http.createServer(request_processor)
+      middleware: http_middleware.secondary()
+      config:     SS.config.http
+      protocol:   'http'
+    servers.secondary.server.listen(servers.secondary.config.port, servers.secondary.config.hostname)
 
+  servers
 
 # PRIVATE
 
 process =
 
-  # HTTP
+  # HTTP or HTTPS
   http:
 
-    # Every incoming HTTP request goes though this method, so it must be optimized at all times
-    call: (request, response) ->
+    # Primary server deals with incoming HTTP or HTTPS requests
+    request: (request, response, server_name) ->
     
       # Attach a custom SocketStream variable to the request object
-      request.ss =
-        assets: []          # defines the client asset packages to serve
+      request.ss = {}
       
-      # Wait for the request to complete
-      request.addListener 'end', ->
-      
-        # Execute HTTP middleware stack (starting with any custom HTTP handler)
-        http_middleware.execute(request, response)
-          
+      # Wait for the request to complete then execute middleware
+      request.addListener 'end', -> servers[server_name].middleware.execute(request, response)
+
+
   # Socket.IO
   socket:
   
@@ -145,17 +159,24 @@ process =
 # PRIVATE HELPERS
 
 # Load the correct server module depending upon HTTPS
-mainServer = ->
-  if SS.config.ssl.enabled
-    https.createServer(ssl.options, process.http.call)
+primaryServer = ->
+  request_processor = (request, response) -> process.http.request(request, response, 'primary')
+  
+  if SS.config.https.enabled
+    ssl = require('./ssl')
+    https = require('https')
+    out =  
+      server:    https.createServer(ssl.keys.options(), request_processor)
+      config:    SS.config.https
+      protocol:  'https'
   else
-    http.createServer(process.http.call)
-
-# Load the SSL keys. All very experimenal at the moment!
-ssl =
-
-  options:
-    key:  fs.readFileSync(__dirname + "/../ssl/key.pem")   # look for "#{SS.root}/config/ssl/key.pem" in the future
-    cert: fs.readFileSync(__dirname + "/../ssl/cert.pem")
+    out =
+      server:    http.createServer(request_processor)
+      config:    SS.config.http
+      protocol:  'http'
+  
+  # Load middleware stack
+  out.middleware = http_middleware.primary()
+  out
 
 

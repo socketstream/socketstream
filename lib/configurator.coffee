@@ -15,21 +15,30 @@ exports.configure = ->
 # Set sensible defaults so we can be up and running without an app-specific config file
 setDefaults = ->
   SS.config =
-    loaded:             true                  # allows us to check the app's config has been loaded
-    ss_var:             'SS'                  # the main SocketStream global variable server-side
-    port:               3000		              # if you want to run on port 80 or 443 node must be run as root
-    hostname:           '0.0.0.0'             # allows the server to be bound to a particular IP. listens on all by default
-    enable_color:       true                  # use colors when outputting to terminal
-    pack_assets:        true      	          # set this to false when developing to force the serving of all asset requests live
-    throw_errors:       true      	          # this needs to be false in production or the server will quit on any error
+    loaded:                   true            # allows us to check the app's config has been loaded
+    ss_var:                   'SS'            # the main SocketStream global variable server-side
+    enable_color:             true            # use colors when outputting to terminal
+    pack_assets:              true	          # set this to false when developing to force the serving of all asset requests live
+    throw_errors:             true            # this needs to be false in production or the server will quit on any error
+
+    # HTTP
+    http:
+      port:                   3000		        # if you want to run on port 80 or 443 node must be run as root
+      hostname:               '0.0.0.0'       # allows the server to be bound to a particular IP. listens on all by default
+    
+    # HTTPS / SSL / TLS
+    https:
+      enabled:                false           # see readme for full details
+      port:                   443		          # if you want to run on port 80 or 443 node must be run as root
+      hostname:               '0.0.0.0'       # allows the server to be bound to a particular IP. listens on all by default
+      cert_name:              'site'          # allows you to use a different certificate name in different environments
+      domain:                 false           # enter the full host name here as it appears on your SSL cert: (e.g. www.test.com)
+      ensure_domain:          true            # if set, will auto-redirect traffic sent to different hosts to the domain specified above
+      redirect_http:          true            # automatically redirects requests to http:// to https://#{host}  Host must be set
 
     # Logger (only to the terminal for now)
     log:
-      level:            3         	          # 0 = none, 1 = calls only, 2 = calls + params, 3 = full, 4 = everything
-    
-    # SSL (experimental)
-    ssl:
-      enabled:                false           # https support is currently highly experimental. turned off by default
+      level:                  3         	    # 0 = none, 1 = calls only, 2 = calls + params, 3 = full, 4 = everything
 
     # Redis
     redis:
@@ -43,6 +52,7 @@ setDefaults = ->
     api:
       enabled:                true
       prefix:                 'api'           # defines the URL namespace
+      https_only:             false           # only allow API requests over HTTPS
       auth:
         basic:          
           module_name:        false           # replace this with the name of the authentication module. false = basic auth disabled
@@ -51,8 +61,7 @@ setDefaults = ->
     # Incompatible Browser Checking
     browser_check:
       enabled:                true            
-      strict:                 false           # when enabled will serve a static page from /public/errors/incompatible when non websocket browsers connect
-      
+      strict:                 false           # when enabled will serve a static page from /static/incompatible_browsers when non websocket browsers connect
 
     # Set params which will be passed directly to the client when they connect
     # The client config should match the server as closly as possible
@@ -79,12 +88,6 @@ setDefaults = ->
     # Realtime Models
     rtm:
       enabled:                false           # disabled by default as HIGHLY EXPERIMENTAL and subject to change
-    
-    # Web Admin
-    admin:
-      enabled:                false
-      prefix:                 'admin'    
-
 
 # For now we override default config depending upon environment. This will still be overridden by any app config file in
 # /config/environments/SS_ENV.js . We may want to remove this in the future and insist upon seperate app config files, ala Rails
@@ -110,7 +113,7 @@ mergeConfigFile = (name) ->
       try
         merge(app_config)
       catch e
-        throw new Error("App config file #{name} loaded and parsed as JSON but unable to merge. Check syntax carefully.")
+        throw new Error("App config file #{name} loaded and parsed as JSON but unable to merge. Check syntax carefully and ensure config values exist.")
     catch e
       throw new Error("Loaded, but unable to parse app config file #{name}. Ensure it is in valid JSON format with double quotes (not single!) around all strings.")
   catch e

@@ -1,6 +1,8 @@
 # Logger
 # ------
 # Outputs to the console
+# NOTE: Let's be honest. This idea sucks. It seemed like a good idea at the time, but I'm sure we can lot better
+# We just need to do it with a nod to future internationalisation (note the 's' in there ;)
 
 util = require("util")
 
@@ -11,6 +13,9 @@ exports.serve =
   
   compiled: (file, benchmark_result) ->
     output 2, "DEV INFO: Compiled and served #{file} in #{benchmark_result}ms"
+  
+  httpsRedirect: (from, to) ->
+    output 2, "REDIRECT: From #{from} to correct HTTPS host #{to}"
 
 exports.incoming =
     

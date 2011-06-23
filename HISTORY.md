@@ -1,3 +1,13 @@
+0.1.00 / 2011-06-23
+===================
+
+* Final release for SocketStream launch today!
+* Greatly improved SSL support. Now fully documented in README
+* A secondary HTTP server is now run by default in HTTPS mode to auto-redirect incorrect HTTP requests to the domain specified in the cert
+* HTTP API can now be configured to only run in HTTPS using SS.config.api.https_only
+* Changes to configuration file. Done now to prevent major changes here later on
+
+
 0.0.58 / 2011-06-21
 ===================
 

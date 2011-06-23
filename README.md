@@ -1,7 +1,7 @@
 ![SocketStream!](https://github.com/socketstream/socketstream/raw/master/new_project/public/images/logo.png)
 
 
-Latest release: 0.0.58   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+Latest release: 0.1.00   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 
 Twitter: socketstream   -   Google Group: http://groups.google.com/group/socketstream
 
@@ -17,22 +17,23 @@ Project status: Highly experimental but usable. Improving almost every day.
 
 ### Features
 
-* True bi-directional communication using websockets (or flash sockets)
+* True bi-directional communication using websockets (or flashsockets)
 * Crazy fast! Starts up instantly. No HTTP handshaking/headers/routing to slow down every request
 * Works great with Chrome and Safari. Firefox and IE support (using flashsockets) temperamental but improving thanks to [Socket.IO](http://socket.io/)
 * Write all code in [CoffeeScript](http://jashkenas.github.com/coffee-script/) or JavaScript - your choice
 * Easily share code between the client and server. Ideal for business logic and model validation
-* Automatic HTTP API. All server-side code is also accessible over a high-speed request-based API
+* Works great on iPads and iPhones using Mobile Safari (iOS 4.2 and above), even over 3G
+* Automatic HTTP/HTTPS API. All server-side code is also accessible over a high-speed request-based API
 * Effortless, scalable, pub/sub baked right in - including Private Channels. See examples below
 * Integrated asset manager. Automatically packages and [minifies](https://github.com/mishoo/UglifyJS) all client-side assets
-* Experimental out-of-the-box HTTPS support. See section below.
+* Out-of-the-box HTTPS support with auto HTTP redirects. See HTTPS section below
 * In-built User model with modular authentication. Automatically keeps track of users online (see below).
-* Interactive console - just type 'socketstream console' and invoke any server-side method from there
+* Interactive console - just type 'socketstream console' and invoke any server-side or shared method from there
 * 'API Trees' offer a simple, consistent way to namespace large code bases across the front and back end
 * Uses [Redis](http://www.redis.io/) for fast session retrieval, pub/sub, list of users online, and any other data your app needs instantly
 * Supports custom HTTP middleware/responders which execute first for maximum flexibility and speed
-* Bundled with jQuery 1.6.1. Easily add additional client libraries such as [Underscore.js](http://documentcloud.github.com/underscore/)
-* Easily create jQuery templates using the [official plugin](http://api.jquery.com/category/plugins/templates/). Works like partials in Rails.
+* Bundled with jQuery and [jQuery templates](http://api.jquery.com/category/plugins/templates/). Works like partials in Rails.
+* Easily add additional client libraries such as [Underscore.js](http://documentcloud.github.com/underscore/)
 * Uses [Jade](http://jade-lang.com/) to render static HTML
 * Uses [Stylus](http://learnboost.github.com/stylus/) for CSS
 * MIT Licence
@@ -42,14 +43,25 @@ Project status: Highly experimental but usable. Improving almost every day.
 
 SocketStream automatically compresses and minifies all the static HTML, CSS and client-side code your app will ever need and sends this through the first time a user visits your site.
 
-From then on all application data is sent and received as serialized JSON objects over a websocket (or 'flash socket') tunnel, instantly established when the client connects and automatically re-established if broken.
+From then on all application data is sent and received as serialized JSON objects over a websocket (or 'flashsocket') tunnel, instantly established when the client connects and automatically re-established if broken.
 
 All this means no more connection latency, HTTP header overhead, or clunky AJAX calls. Just true bi-directional, asynchronous, 'streaming' communication between client and server.
 
 
 ### What can I create with it?
 
-SocketStream is a perfect fit for all manner of modern applications which require real-time data (chat, stock trading, location monitoring, analytics, etc). However, it would make a poor choice for a blog or other content-rich site which requires unique URLs for search engine optimization.
+SocketStream is a perfect fit for all manner of modern applications which require real-time data (chat, stock trading, location monitoring, analytics, etc). However, right now it would make a poor choice for a blog or other content-rich site which requires unique URLs for search engine optimization.
+
+
+### Example Apps
+
+These apps are all in their infancy at the moment, but looking at the code is a great way to start learning SocketStream:
+
+[SocketChat](https://github.com/addyosmani/socketchat) - simple group chat
+
+[Dashboard](https://github.com/paulbjensen/socketstream_dashboard_example) - real-time dashboard with configurable widgets
+
+[SocketRacer](https://github.com/alz/socketracer) - multi-player racing game
 
 
 ### Quick Example
@@ -79,7 +91,7 @@ And you will see the following output:
     
 The eagle-eyed among you will notice SS.client.app.square(25) actually returned 'undefined'. That's fine. We're only interested in the asynchronous response sent from the server once it has processed your request. 
 
-You can also call this server-side method over HTTP with the following URL:
+You can also call this server-side method using the built-in HTTP API with the following URL:
 
     /api/app/square?25                        (Hint: use .json to output to a file)
     
@@ -87,7 +99,7 @@ Or even directly from the server-side console (type 'socketstream console') OR t
 
     SS.server.app.square(25, function(x){ console.log(x) })
     
-Note the 'console.log' callback is automatically inserted if you're calling SS.server methods from the browser.
+Note: The 'console.log' callback is automatically inserted if you're calling SS.server methods from the browser.
 
 You will notice by now that the 'SS' variable is similar to the dollar sign $ in jQuery - it's the main way into the SocketStream API. We do our best to keep the API between client and server identical wherever possible.
 
@@ -187,13 +199,13 @@ Want to know how to broadcast a message to all users, or implement private chann
 
 Ready to give it a whirl? SocketStream is highly experimental at the moment, but we're using it in new projects and improving it every day.
 
-For now clone this project to a directory and link it as a local NPM package with:
+SocketStream is now published as an NPM package. This can easily be installed with:
 
-    sudo npm link
+    sudo npm install -g socketstream
 
 To generate a new empty SocketStream project, simply type:
 
-    socketstream new <name of your project>
+    socketstream new <name_of_your_project>
 
 The directories generated will be very familiar to Rails users. Here's a brief overview:
 
@@ -221,19 +233,20 @@ The directories generated will be very familiar to Rails users. Here's a brief o
 * See 'Sharing Code' section below
 
 #### /app/css
-* /app/css/app.stly must exist. This should contain your stylesheet code in [Stylus](http://learnboost.github.com/stylus/) format (similar to SASS)
-* Additional Stylus files can be imported into app.stly using @import 'name_of_file'. Feel free to nest files if you wish.
-* If you wish to use CSS libraries within your project (e.g. reset.css or jQuery UI) put these in /lib/css instead
+* /app/css/app.styl must exist. This should contain your stylesheet code in [Stylus](http://learnboost.github.com/stylus/) format (similar to SASS)
+* Additional Stylus files can be imported into app.styl using @import 'name_of_file'. Feel free to nest files if you wish.
+* If you wish to use CSS libraries within your project (e.g. reset.css or jQuery UI) put these in /lib/css instead, or feel free to link to hosted CDN files in /app/views/app/jade
 * Stylus files are automatically compiled and served on-the-fly in development mode and pre-compiled/compressed/cached in staging and production
 
 #### /app/views
 * /app/views/app.jade must exist. This should contain all the static HTML your app needs in [Jade](http://jade-lang.com/) format (similar to HAML)
 * The HTML HEAD tag must contain '!= SocketStream'. This helper ensures all the correct libraries are loaded depending upon the environment (declared by SS_ENV)
-* Easily nest additional html as jQuery templates (similar to Rails partials). E.g /app/views/people/info.jade is accessible as $("#people-info").tmpl(myData). Make sure you install the jQuery Template library first
+* Easily nest additional html as jQuery templates (similar to Rails partials). E.g /app/views/people/info.jade is accessible as $("#people-info").tmpl(myData).
 * Jade views and templates are automatically compiled and served on-the-fly in development and pre-compiled/compressed/cached in staging and production
 
 #### /lib
 * Changes to files within /lib/client or /lib/css automatically triggers re-compilation/packing/minification of client assets
+* New files added to these directories are not currently recognised (hence a server restart is needed). We will fix this soon
 * Easily control the order your client libraries are loaded by prefixing them with a number (e.g. 1.jquery.js, 2.jquery-ui.js)
 * Client JS files are automatically minified by [UglifyJS](https://github.com/mishoo/UglifyJS) unless the filename contains '.min'
 * Any files within /lib/server can be required automatically by Node. Ideal for custom authentication modules
@@ -241,6 +254,9 @@ The directories generated will be very familiar to Rails users. Here's a brief o
 #### /public
 * Store your static files here (e.g. /public/images, robots.txt, etc)
 * The /index.html file and /public/assets folder are managed by SocketStream and should not be touched
+
+#### /static
+* This directory contains warnings and notifications as static files which we encourage you to customize
 
 #### /vendor
 * Put any vendored libraries in here using the format /vendor/mycode/lib/mycode.js
@@ -272,7 +288,7 @@ We will publish a full list of configurable params in the near future, but for n
 
 Throughout this README you'll see repeated references to config variables which look something like this:
 
-    SS.config.limiter.enabled
+    SS.config.limiter.enabled = true
 
 In this case, you could change the value of the variable by adding the following JSON in your config file:
 
@@ -428,7 +444,7 @@ To use this custom authentication module within your app, you'll need to call @s
         @session.user.logout(cb)                                         # disconnects pub/sub and returns a new Session object
 
 
-This modular approach allows you to offer your users multiple ways to authenticate. It also means you can pass the name of a NPM module for common authentication needs like Facebook Connect.
+This modular approach allows you to offer your users multiple ways to authenticate. In the future it also means you will be able to pass the name of a NPM module for common authentication services like Facebook Connect.
 
 __Important__
 
@@ -489,14 +505,14 @@ Note, however, that messages are never stored or logged. This means if a client/
 
 ### HTTP API
 
-The HTTP API allows all server-side actions to be accessed over a traditional HTTP request-based interface.
+The HTTP API allows all server-side actions to be accessed over a traditional HTTP or HTTPS request-based interface.
 
 It is enabled by default and can be configured with the following config variables:
 
     SS.config.api.enabled            Boolean       default: true         # Enables/disables the HTTP API
     SS.config.api.prefix             String        default: 'api'        # Sets the URL prefix (e.g. http://mysite.com/api
 
-The HTTP API also supports Basic Auth (which will run over HTTPS if enabled), allowing you to access methods which use @session.user_id
+The HTTP API also supports Basic Auth, allowing you to access methods which use @session.user_id. If you wish to use this option, we recommend setting SS.config.api.https_only to true to ensure passwords are never transmitted in clear text.
 
 By placing 'exports.authenticate = true' in the file (see above) the server will know to prompt for a username and password before allowing access any of the actions within that file. However, the API will need to know which module to authenticate against. Set the SS.config.api.auth.basic.module_name variable by putting the following JSON in your config file:
     
@@ -554,31 +570,6 @@ Please see the comments in /config/http.coffee to use this feature. For example,
       next()
 
 
-### HTTPS / SSL
-
-HTTPS support is currently highly experimental and hence is switched off by default.
-
-Our eventual goal is to make SocketStream run in HTTPS mode by default, using self-signed certificates (included within SocketStream) if commercial ones are not provided.
-
-To turn on HTTPS make sure you have the openssl library headers on your system before you ./configure the Node source code.
-
-On Ubuntu you can install them with:
-
-    sudo apt-get install libssl-dev openssl
-
-Hint: You may need to install/run pkg-config after doing this.
-
-Once Node has been compiled with TLS/HTTPS support, turn it on by creating a /config/environments/development.json file and putting this inside:
-
-    {
-      "ssl": {"enabled": true}
-    }
-    
-Note: We have found Safari will not support secure websockets without a valid (i.e. not self-signed) certificate. If you wish to experiment with HTTPS whilst developing we recommend using Chrome at the moment.
-
-We will continue enhancing the HTTPS experience over future releases until it's stable.
-
-
 ### Incompatible Browsers
 
 By default SocketStream will attempt to serve real time content to all browsers - either using native websockets (if available) or by falling back to 'flashsockets'.
@@ -598,7 +589,7 @@ Note: The serving of HTTP API requests occurs before the browser is checked for 
 
 So how secure is SocketStream? Well, to be honest - we just don't know. The entire stack, from Node.js right up to the SocketStream client is brand new and no part of it is claiming to be production-ready just yet. So for now we recommend using SocketStream internally, behind a firewall.
 
-Of course, if you're feeling adventurous, you're more than welcome to experiment with hosting public SocketStream websites; like we do with www.socketstream.org. Just make sure there is no sensitive data on the server and you can easily restore everything should it become compromised.
+Of course, if you're feeling adventurous, you're more than welcome to experiment with hosting public SocketStream websites; like we (will ;) do with www.socketstream.org. Just make sure there is no sensitive data on the server and you can easily restore everything should it become compromised.
 
 If you are especially gifted at spotting vulnerabilities, or come across a potential security hole while looking through the source code, please let us know. We'd really appreciate it. It will bring us closer to the day when we're happy to recommend SocketStream for public websites.
 
@@ -617,16 +608,66 @@ SocketStream can provide basic protection against DDOS attacks by identifying cl
 When this occurs you'll be notified of the offending client in the console and all subsequent requests from that client will be silently dropped. This feature is switched off for now whilst we experiment with it in the real world, but can be optionally enabled with SS.config.limiter.enabled = true.
 
 
+### HTTPS / TLS (SSL)
+
+If you've read the Security section above and decided to deploy a SocketStream app on the edge of the Internet (rather than inside a corporate VPN) HTTPS is not a nice-to-have feature, it's essential.
+
+The reason is two-fold:
+
+1. HTTP proxies, in particular those used by mobile telcos, mangle the headers of each outgoing HTTP request. This often prevent websockets from initializing correctly. HTTPS/TLS not only encrypts your content, but also the HTTP headers - allowing websockets to work as expected, even in Mobile Safari (iPad and iPhone) over a 3G connection.
+
+2. Do you remember [FireSheep](http://en.wikipedia.org/wiki/Firesheep)? Let's stop this problem once and for all by making HTTPS the default when deploying SocketStream apps on the Internet.
+
+The good news is SocketStream makes HTTPS easy. You just need to make sure you've ./configure'ed and compiled Node.js with OpenSSL support. If you don't have the OpenSSL library headers already you can install them on Ubuntu with:
+
+    sudo apt-get install libssl-dev openssl  (Hint: You may need to install/run pkg-config after doing this)
+
+Once Node supports HTTPS/TLS, enable it in SocketStream with SS.config.https.enabled = true in your staging or production environment. By default SocketStream will want to launch the HTTPS server on port 443, so you'll need to run it with 'sudo'.
+
+SocketStream comes with a set of self-signed SSL certificates which are loaded by default if commercial certificates cannot be found. This can be useful for testing/debugging your app; however, you may run into problems with certain browsers which don't support self-signed certificates + websockets together.
+
+
+**Deploying**
+
+When you're ready to go live you'll need to get a proper commercially-signed SSL certificate. We like the SSL certs from [www.rapidssl.com](www.rapidssl.com) because they support the Mobile version of Safari (iPad and iPhone) which some other popular providers do not.
+
+To obtain a commercial SSL certificate run the following in your project's root directory:
+
+    cd config/ssl_certs
+
+    openssl genrsa -out site.key.pem 2048
+    
+    openssl req -new -key site.key.pem -out site.request.csr
+    
+Note: Pay particular attention when entering the Common Name. This should be the full domain (including the www.) of your website.
+    
+Send the contents of the site.request.csr file to your certificate provider. In exchange you'll receive a certificate which should be installed as /config/ssl_certs/site.cert.pem  You should also receive an 'Intermediate Certificate' which ensures the certificate is recognised by all browsers. Place this in /config/ssl_certs/site.ca.pem
+
+Once all files are present SocketStream will use this certificate instead of the self-signed test certificates and indicate this in the console upon starting the server.
+
+
+**Redirecting stray requests**
+
+Once HTTPS is enabled it's very important your visitors go to the domain listed as the 'Common Name' in the certificate - typically the 'www.' version of your website. By setting SS.config.https.domain to the FQDN of your website (e.g. www.yourdomain.com), SocketStream will automatically redirect any requests sent to https://yourdomain.com to https://www.yourdomain.com so your visitors never get bugged with nasty security warnings.
+
+What's more, by default, we also launch a secondary HTTP server on Port 80 to re-direct any non-API traffic sent to http:// to https://. Both options can be turned off if desired (inspect SS.config.https to see variables).
+
+
+**Using multiple certificates**
+
+Finally, you may install multiple SSL certificates in /config/ssl_certs and select the ones you would like SocketStream to use with SS.config.https.cert_name. By default this is set to 'site', hence site.key.pem, site.cert.pem.
+
+
 ### Scaling Up
 
-One instance of SocketStream should be able to comfortably support a few thousand simultaneously connected clients, depending upon the back-end work that needs to be done to service them. But what happens when your app goes viral and one server instance is no longer enough?
+One instance of SocketStream should be able to comfortably support a few thousand simultaneously connected clients, depending upon the back-end work that needs to be done to service them and whether or not the server is running HTTPS. But what happens when your app goes viral and one server instance is no longer enough?
 
 Right now we don't have a definitive answer, but we have a number of innovative ideas around horizontal scaling and utilising multiple CPU cores. We have already begun experimenting with these and will implement and document the best solutions in the coming months. If you are interested in working on this problem, be sure to get in touch so we can share some of our latest thinking.
 
 
 ### Tests
 
-There are a handful of tests at the moment, but there will be more once the internal API becomes stable.
+Yes, we know. At the moment there are no tests. This is bad. We are currently evaluating testing frameworks in the hope of finding one we truly like. After all, we're likely to be stuck with it for a good many years, so we need to choose carefully. We will then begin writing unit and integration tests for parts of SocketStream which are unlikely to change in the near future. Right now, any help and contributions in this area would be very much appreciated.
 
 
 ### Known Issues
@@ -660,6 +701,26 @@ A: Not yet, but this is one of the main things we're working on.
 Q: How do I test my app?
 
 A: For now we recommend choosing one of the many testing frameworks available for Node.js. Let us know if there is anything we can do to help integrate SocketStream with your framework of choice. SocketStream will have an in-built default testing framework in the future but it will be a radical departure from anything that's gone before. Look out for announcements towards the end of 2011.
+
+
+Q: Can I deploy SocketStream apps to Heroku?
+
+A: Not at the moment as Heroku cannot correctly route websockets. We are sure other Node.js hosting services will launch in the future with SocketStream/websocket-based apps in mind. We'll mention them here when they do.
+
+
+Q: How do I make models?
+
+A: There is no ability to create server-side models at the moment. This won't stop you from making many types of apps such as real-time chat, but may prove annoying if your app involves lots of CRUD. The good news is we have a great solution called Real Time Models. We're still testing this internally and refining the idea, but we'll release the parts we're happy with in the near future.
+
+
+Q: Will the API / directory structure / config file format change in the future?
+
+A: Yes. SocketStream is not just a new web framework, it's at the forefront of an entirely new way to develop web applications, so expect a lot of rapid change over the next 12 months as we explore new ideas. Things should settle down a little after 1.0.0 is released. Until then we will do everything we can to keep developers involved and up-to-date with any major changes. We will also provide automatic upgrade scripts where possible. The best thing to do is keep checking the HISTORY file and be sure to quote the SocketStream version number next to any examples you post online.
+
+
+Q: Will SocketStream have a public website?
+
+A: Sure! We're working on www.socketstream.org right now :)
 
 
 ### Contributors
