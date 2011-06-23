@@ -744,7 +744,7 @@ Thanks to Guillermo Rauch (Socket.IO), TJ Holowaychuk (Stylus, Jade), Jeremy Ash
 
 ### Thanks!
 
-SocketStream is kindly sponsored AOL.
+SocketStream is kindly sponsored by AOL.
 
 
 ### License
