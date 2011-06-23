@@ -201,7 +201,7 @@ Ready to give it a whirl? SocketStream is highly experimental at the moment, but
 
 SocketStream is now published as an NPM package. This can easily be installed with:
 
-    sudo npm install -g socketstream
+    sudo npm install socketstream -g
 
 To generate a new empty SocketStream project, simply type:
 
@@ -744,7 +744,7 @@ Thanks to Guillermo Rauch (Socket.IO), TJ Holowaychuk (Stylus, Jade), Jeremy Ash
 
 ### Thanks!
 
-SocketStream is kindly sponsored AOL.
+SocketStream is kindly sponsored by AOL.
 
 
 ### License

@@ -38,7 +38,7 @@ SocketStream runs on all UNIX based platforms, including OS X and Linux.
   
     # get SocketStream
     
-    sudo npm install -g socketstream
+    sudo npm install socketstream -g
     
     # create a Socketstream app as a test
     
@@ -78,7 +78,7 @@ Here is an example that shows how to install SocketStream and it's dependencies 
     curl http://npmjs.org/install.sh | sudo sh
     
     # get SocketStream
-    sudo npm install -g socketstream
+    sudo npm install socketstream -g
     
     # create a new socketstream project called 'test'
     cd ~
