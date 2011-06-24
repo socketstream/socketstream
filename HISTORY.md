@@ -1,3 +1,8 @@
+0.1.01 / 2011-06-24
+===================
+
+* Fixed bug in the browser check middleware (was not able to handle headless browsers)
+
 0.1.00 / 2011-06-23
 ===================
 

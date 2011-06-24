@@ -35,6 +35,9 @@ isValidRequest = (request) ->
   # If Strict checking for browsers which have native websocket support
   if SS.config.browser_check.strict
   
+    # Capture headless browsers (e.g. spiders) 
+    return true unless ua?
+  
     # Allow Chrome version 4 and above
     if ua.match(/Chrom(e|ium)/)
       re = new RegExp("Chrom(e|ium)/([0-9]{1,})")
