@@ -12,6 +12,8 @@ SocketStream is a new full stack web framework built around the [Single-page App
 
 Project status: Highly experimental but usable. Improving almost every day.
 
+Follow @socketstream for the latest developments and thinking. Website coming soon.
+
 
 ### Features
 
