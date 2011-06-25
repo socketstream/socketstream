@@ -53,6 +53,11 @@ All this means no more connection latency, HTTP header overhead, or clunky AJAX 
 SocketStream is a perfect fit for all manner of modern applications which require real-time data (chat, stock trading, location monitoring, analytics, etc). However, right now it would make a poor choice for a blog or other content-rich site which requires unique URLs for search engine optimization.
 
 
+### Tutorials
+
+[Building Real-time CoffeeScript Web Applications With SocketStream](http://addyosmani.com/blog/building-real-time-coffeescript-web-applications-with-socketstream/) by [Addy Osmani](http://addyosmani.com)
+
+
 ### Example Apps
 
 These apps are all in their infancy at the moment, but looking at the code is a great way to start learning SocketStream:
