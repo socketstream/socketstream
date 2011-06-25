@@ -683,7 +683,7 @@ A: No. SocketStream is a stand-alone framework which uses a very carefully curat
 
 Q: Can I integrate SocketStream into my existing app?
 
-A: No. At least not on the same host and port. For 'hybrid' real time apps we recommend using [Pusher](www.pusher.com)
+A: No. At least not on the same host and port. For 'hybrid' real time apps we recommend using [Pusher](http://www.pusher.com)
 
 
 Q: Can I host more than one SocketStream website on the same port?
