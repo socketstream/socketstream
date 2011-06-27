@@ -728,6 +728,11 @@ Q: Will SocketStream have a public website?
 A: Sure! We're working on www.socketstream.org right now :)
 
 
+Q: Will websockets work in Opera?
+
+A: As of this writing websockets is supported but turned off by default in Opera. In order for Opera 11 to run websockets apps you need to turn it on in the settings. Do "opera:config#Enable%20WebSockets" in the address field and hit enter. Check "Enable websockets" Save and you are good to go.
+
+
 ### Contributors
 
 * Owen Barnes (socketstream)
