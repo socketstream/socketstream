@@ -60,7 +60,7 @@ exports.compile =
       file_ary = path.split('.')[0].split('/')
       input = namespaceClientFile(input, file_ary, 'coffee')
       js = SS.libs.coffee.compile(input)
-      cb {output: js, content_type: 'text/javascript'}
+      cb {output: js, content_type: 'text/javascript; charset=utf-8'}
     catch err
       e = new Error(err)
       e.name = "Unable to compile CoffeeScript file #{path} to JS"
@@ -70,7 +70,7 @@ exports.compile =
     js = fs.readFileSync "#{SS.root}/#{path}", 'utf8'
     file_ary = path.split('.')[0].split('/')
     js = namespaceClientFile(js, file_ary, 'js')
-    cb {output: js, content_type: 'text/javascript'}
+    cb {output: js, content_type: 'text/javascript; charset=utf-8'}
 
   styl: (input_file_name, cb) ->
     dir = "app/css"
