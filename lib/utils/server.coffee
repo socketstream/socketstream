@@ -2,7 +2,7 @@
 
 # Deliver output to screen
 exports.deliver = (response, code, type, body) ->
-  response.writeHead(code, {'Content-type': type, 'Content-Length': body.length})
+  response.writeHead(code, {'Content-type': type, 'Content-Length': Buffer.byteLength(body)})
   response.end(body)
 
 # Show and error on the screen. TODO: Log to exception handling system
