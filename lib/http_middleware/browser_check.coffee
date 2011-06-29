@@ -37,7 +37,7 @@ isValidRequest = (request) ->
   
     # Capture headless browsers (e.g. spiders) 
     return true unless ua?
-  
+    
     # Allow Chrome version 4 and above
     if ua.match(/Chrom(e|ium)/)
       re = new RegExp("Chrom(e|ium)/([0-9]{1,})")
@@ -51,6 +51,11 @@ isValidRequest = (request) ->
       if re.exec(ua) != null
         version = parseFloat( RegExp.$1 )
         return false if version >= 5
+    
+    # Mac OS X Dashboard Web Clip  
+    return false if ua.match(/WebClip/)
+    # TODO - find out what version of AppleWebKit (~ 533) implemented websockets, 
+    # will allow for greater refactoring of code above.    
     
     # Else show the Browser Incompatible page
     true
