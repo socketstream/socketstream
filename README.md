@@ -733,10 +733,15 @@ Q: Will websockets work in Opera?
 A: As of this writing websockets is supported but turned off by default in Opera. In order for Opera 11 to run websockets apps you need to turn it on in the settings. Do "opera:config#Enable%20WebSockets" in the address field and hit enter. Check "Enable websockets" Save and you are good to go.
 
 
-### Contributors
+### Core Team
 
-* Owen Barnes (socketstream)
+* Owen Barnes (socketstream & owenb)
 * Paul Jensen (paulbjensen)
+* Alan Milford (alz)
+* Addy Osmani (addyosmani)
+
+
+### Contributing
 
 We welcome contributions from forward-thinking hackers keen to redefine what's possible on the web. Big, bold ideas, unconstrained by frameworks and concepts from the past will always be welcome.
 
