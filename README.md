@@ -3,7 +3,7 @@
 
 Latest release: 0.1.2   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 
-Twitter: [http://twitter.com/#!/socketstream](@socketstream)   -   Google Group: http://groups.google.com/group/socketstream
+Twitter: [@socketstream](http://twitter.com/#!/socketstream)   -   Google Group: http://groups.google.com/group/socketstream
 
 
 ### Introduction
@@ -12,7 +12,7 @@ SocketStream is a new full stack web framework built around the [Single-page App
 
 Project status: Highly experimental but usable. Improving almost every day.
 
-Follow [http://twitter.com/#!/socketstream](@socketstream) for the latest developments and thinking. Website coming soon.
+Follow [@socketstream](http://twitter.com/#!/socketstream) for the latest developments and thinking. Website coming soon.
 
 
 ### Features
