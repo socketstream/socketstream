@@ -1,9 +1,9 @@
 ![SocketStream!](https://github.com/socketstream/socketstream/raw/master/new_project/public/images/logo.png)
 
 
-Latest release: 0.1.01   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+Latest release: 0.1.2   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 
-Twitter: socketstream   -   Google Group: http://groups.google.com/group/socketstream
+Twitter: [http://twitter.com/#!/socketstream](@socketstream)   -   Google Group: http://groups.google.com/group/socketstream
 
 
 ### Introduction
@@ -12,7 +12,7 @@ SocketStream is a new full stack web framework built around the [Single-page App
 
 Project status: Highly experimental but usable. Improving almost every day.
 
-Follow @socketstream for the latest developments and thinking. Website coming soon.
+Follow [http://twitter.com/#!/socketstream](@socketstream) for the latest developments and thinking. Website coming soon.
 
 
 ### Features
@@ -407,6 +407,11 @@ All Shared code is pre-loaded and added to the SS.shared API tree which may be i
 **Warning** All code within /app/shared will be compressed and transmitted to the client upon initial connection. So make sure you don't include any proprietary secret sauce or use any database/filesystem calls.
 
 
+### Helpers
+
+As of 1.0.2 SocketStream comes with a number of suggested JavaScript prototype helper methods, created automatically when you make a new project. The concept is very similar to ActiveSupport in Rails; however in SocketStream client-side helpers are entirely optional. Don't want them? Just delete /lib/client/3.helpers.js and they won't come back. In the near future we will have the same set of helpers in the back-end so you can feel free to use them in shared/server code.
+
+
 ### Sessions
 
 SocketStream creates a new session when a browser connects to the server for the first time, storing a session cookie on the client and the details in Redis. When the same visitor returns (or presses refresh in the browser), the session is instantly retrieved.
@@ -672,7 +677,7 @@ Right now we don't have a definitive answer, but we have a number of innovative 
 
 ### Tests
 
-Yes, we know. At the moment there are no tests. This is bad. We are currently evaluating testing frameworks in the hope of finding one we truly like. After all, we're likely to be stuck with it for a good many years, so we need to choose carefully. We will then begin writing unit and integration tests for parts of SocketStream which are unlikely to change in the near future. Right now, any help and contributions in this area would be very much appreciated.
+Yes, we know. At the moment there are very few tests. This is bad. We are currently evaluating testing frameworks in the hope of finding one we truly like. After all, we're likely to be stuck with it for a good many years, so we need to choose carefully. We will then begin writing unit and integration tests for parts of SocketStream which are unlikely to change in the near future. Right now, any help and contributions in this area would be very much appreciated.
 
 
 ### Known Issues
