@@ -5,7 +5,7 @@
 // Be very careful about introducing new helpers as they may break external third-party client-side libraries.
 
 /**
-	Removes any duplicate entries from the current array
+	Removes any duplicate entries from the current string
 **/
 String.prototype.unique = function(b){
 	 var a = "", i, l = this.length,q="";
@@ -18,7 +18,7 @@ String.prototype.unique = function(b){
 };
 
 /**
-	Removes any duplicate entries from the current string
+	Removes any duplicate entries from the current array
 **/
 Array.prototype.unique = function( b ) {
 	 var a = [], i, l = this.length;
