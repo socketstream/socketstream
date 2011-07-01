@@ -238,3 +238,20 @@ setupAPI = (root, ary) ->
 sendHeartbeat = ->
   send({type: 'heartbeat'}) if SS.socket.connected
   setTimeout arguments.callee, (SS.config.heartbeat_interval * 1000)
+  
+getCookie = (c_name) ->
+  if document.cookie.length > 0
+    c_start = document.cookie.indexOf(c_name + "=")
+    if c_start != -1
+      c_start = c_start + c_name.length + 1
+      c_end = document.cookie.indexOf(";",c_start)
+      c_end = document.cookie.length if c_end == -1
+      return unescape(document.cookie.substring(c_start,c_end))
+  ""
+
+setCookie = (c_name, value, expiredays) ->
+  exdate = new Date()
+  exdate.setDate(exdate.getDate() + expiredays)
+  document.cookie = "#{c_name}=#{escape(value)}" + (if expiredays == null then "" else ";expires=" + exdate.toUTCString())
+
+  
