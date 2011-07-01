@@ -1,7 +1,20 @@
-0.1.01 / 2011-06-24
-===================
+0.1.2 / 2011-06-30
+==================
+
+* Added a new client-side helper file (think ActiveSupport in Rails). Checkout the README for full details (addyosmani, paulbjensen)
+
+Bug fixes:
+
+* Multi-byte UTF8 characters now supported by asset packer (elisee)
+* We now ensure /public/assets exists on startup (pusewicz)
+* OS X Dashboard 'WebClip' user agent now recognised as friendly by the browser_check middleware (paulbjensen)
+
+
+0.1.1 / 2011-06-24
+==================
 
 * Fixed bug in the browser check middleware (was not able to handle headless browsers)
+
 
 0.1.00 / 2011-06-23
 ===================

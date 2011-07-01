@@ -17,6 +17,8 @@ watch_dirs = [
   ["#{__dirname}/../client", 'js', 'system'],
 ]
 
+default_directory_mode = 0755
+
 # Load Asset sub-modules
 exports.pack =     require('./pack.coffee').init(@).pack
 exports.compile =  require('./compile.coffee').init(@).compile
@@ -62,6 +64,7 @@ ensureAssetsExist = ->
   unless exports.files.js.lib? and exports.files.css.lib?
     util.log "Generating essential asset files to get you started..."
     try
+      ensurePublicPathExists()
       exports.pack.libs()
       SS.internal.state.save()
       SS.internal.state.last_known = SS.internal.state.current()
@@ -88,4 +91,9 @@ findAssets = (cb) ->
     f = exports.files[ext]
     f[type] = file
   cb()
-  
+
+ensurePublicPathExists = ->
+  try
+    fs.mkdirSync(exports.public_path, default_directory_mode)
+  catch e
+    throw(e) unless e.code == 'EEXIST'
