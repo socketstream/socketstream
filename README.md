@@ -14,7 +14,6 @@ Project status: Highly experimental but usable. Improving almost every day.
 
 Follow [@socketstream](http://twitter.com/#!/socketstream) for the latest developments and thinking. Website coming soon.
 
-
 ### Features
 
 * True bi-directional communication using websockets (or flashsockets)
@@ -409,7 +408,7 @@ All Shared code is pre-loaded and added to the SS.shared API tree which may be i
 
 ### Helpers
 
-As of 1.0.2 SocketStream comes with a number of suggested JavaScript prototype helper methods, created automatically when you make a new project. The concept is very similar to ActiveSupport in Rails; however in SocketStream client-side helpers are entirely optional. Don't want them? Just delete /lib/client/3.helpers.js and they won't come back. In the near future we will have the same set of helpers in the back-end so you can feel free to use them in shared/server code.
+SocketStream comes with a number of suggested JavaScript prototype helper methods, created automatically when you make a new project. The concept is very similar to ActiveSupport in Rails; however in SocketStream client-side helpers are entirely optional. Don't want them? Just delete /lib/client/3.helpers.js and they won't come back. In the near future we will have the same set of helpers in the back-end so you can feel free to use them in shared/server code.
 
 
 ### Sessions
@@ -736,7 +735,6 @@ A: Sure! We're working on www.socketstream.org right now :)
 Q: Will websockets work in Opera?
 
 A: As of this writing websockets is supported but turned off by default in Opera. In order for Opera 11 to run websockets apps you need to turn it on in the settings. Do "opera:config#Enable%20WebSockets" in the address field and hit enter. Check "Enable websockets" Save and you are good to go.
-
 
 ### Core Team
 
