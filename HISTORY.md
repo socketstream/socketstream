@@ -1,6 +1,6 @@
 0.1.2 / 2011-06-30
 ==================
-
+ 
 * Added a new client-side helper file (think ActiveSupport in Rails). Checkout the README for full details (addyosmani, paulbjensen)
 
 Bug fixes:
