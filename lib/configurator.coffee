@@ -8,8 +8,9 @@ util = require('util')
 exports.configure = ->
   setDefaults()
   setEnvironmentDefaults()
-  mergeConfigFile("/config/app.json")
-  mergeConfigFile("/config/environments/#{SS.env}.json")
+  mergeConfigFiles()
+  # mergeConfigFile("/config/app.json")
+  # mergeConfigFile("/config/environments/#{SS.env}.json")
 
 
 # Set sensible defaults so we can be up and running without an app-specific config file
@@ -104,8 +105,31 @@ setEnvironmentDefaults = ->
           level: 0
   merge(override)
 
-# Merges custom app config file with SocketStream defaults if the file exists
+# This will search for the application config file, and 
+# merge it if it exists, or raise an error if it does not.
+# It will also search for an environment-specific file, and merge if it exists,
+# but it will not raise an error if it does not, as it is optional
+mergeConfigFiles = ->
+
+  # try and see what files exist by scanning for them
+  
+  config_dir_files = fs.readdirSync "#{SS.root}/config/" 
+  for file in config_dir_files
+    path = "/config"
+    mergeConfigFile("#{path}/#{file}") if file.match(/app./)?
+  if config_dir_files.indexOf("environments") isnt -1
+    path = "/config/environments"
+    for file in fs.readdirSync "#{SS.root}#{path}"
+      mergeConfigFile("#{path}/#{file}") if file.match(SS.env)?
+
 mergeConfigFile = (name) ->
+  mergeJsonFile(name) if name.match(/.json/)?
+  mergeFile(name) if name.match(/.js$/)? or name.match(/.coffee$/)
+
+merge = (new_config) ->
+  SS.config.extend(new_config)
+
+mergeJsonFile = (name) ->
   try
     config_file_body = fs.readFileSync(SS.root + name, 'utf-8')
     try
@@ -121,5 +145,5 @@ mergeConfigFile = (name) ->
       SS.log.error.exception(e)
       throw new Error('App config error')
 
-merge = (new_config) ->
-  SS.config.extend(new_config)
+mergeFile = (name) ->
+  merge(require("#{SS.root}#{name}"))
