@@ -678,6 +678,13 @@ Right now we don't have a definitive answer, but we have a number of innovative 
 
 Yes, we know. At the moment there are very few tests. This is bad. We are currently evaluating testing frameworks in the hope of finding one we truly like. After all, we're likely to be stuck with it for a good many years, so we need to choose carefully. We will then begin writing unit and integration tests for parts of SocketStream which are unlikely to change in the near future. Right now, any help and contributions in this area would be very much appreciated.
 
+--- Update ---
+
+We're currently writing unit tests for the socketstream library, one file at a time, and using Jasmine. To run these tests:
+
+    npm install jasbin
+    cd socketstream
+    jasbin
 
 ### Known Issues
 
