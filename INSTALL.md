@@ -9,11 +9,16 @@ SocketStream runs on all UNIX based platforms, including OS X and Linux.
     
     http://itunes.apple.com/gb/app/xcode/id422352214?mt=12
     
+    # you will need wget, if you don't already have it. the easiest way is to get it through homebrew
+    
+    ruby -e "$(curl -fsSL https://raw.github.com/gist/323731)"
+    brew install wget
+    
     # get Redis
     
     wget http://redis.googlecode.com/files/redis-2.2.10.tar.gz  # visit http://redis.io for the latest stable version
     tar -xvzf redis-2.2.10.tar.gz
-    cd redis-2.2.4
+    cd redis-2.2.10
     make
     make test # this is optional, but they recommend it
     sudo make install
