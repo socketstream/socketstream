@@ -11,13 +11,19 @@ SocketStream runs on all UNIX based platforms, including OS X and Linux.
     
     # get Redis
     
-    wget http://redis.googlecode.com/files/redis-2.2.10.tar.gz  # visit http://redis.io for the latest stable version
-    tar -xvzf redis-2.2.10.tar.gz
-    cd redis-2.2.4
+    download the latest version from http://redis.io
+    
+    tar -xvzf redis-2.2.X.tar.gz
+    cd redis-2.2.X
     make
     make test # this is optional, but they recommend it
     sudo make install
-    env redis-server > /tmp/redis.log 2>&1 & # make redis run in the background
+    
+    to run in the foreground (and see incoming connections):
+      redis-server
+  
+    to run in the background:
+      env redis-server > /tmp/redis.log 2>&1 &
     
     # get Node.js
     
