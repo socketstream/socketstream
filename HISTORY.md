@@ -1,3 +1,10 @@
+0.1.3 / 2011-07-05
+==================
+
+* Configuration files are now in CoffeeScript by default, though JS is also supported (paulbjensen)
+* JSON-based configuration files are still supported for backwards compatibility, but will be removed in a future release
+
+
 0.1.2 / 2011-06-30
 ==================
  

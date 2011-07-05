@@ -1,7 +1,7 @@
 {
   "name":         "socketstream",
   "description":  "A phenomenally fast real-time web framework for Node.js",
-  "version":      "0.1.2",
+  "version":      "0.1.3",
   "homepage":     "http://www.socketstream.org",
   "author":       "Owen Barnes <owen@socketstream.org>",
   "contributors": [
@@ -19,7 +19,8 @@
     "stylus":         "= 0.13.3",
     "argsparser":     "= 0.0.6",
     "semver":         "= 1.0.7",
-    "uglify-js":      "= 1.0.2"
+    "uglify-js":      "= 1.0.2",
+    "jasmine-node":   "= 1.0.6"
   },
   "directories":  { "lib": "./lib" },
   "main":         "./lib/socketstream.js",

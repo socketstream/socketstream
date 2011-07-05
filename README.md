@@ -1,7 +1,7 @@
 ![SocketStream!](https://github.com/socketstream/socketstream/raw/master/new_project/public/images/logo.png)
 
 
-Latest release: 0.1.2   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+Latest release: 0.1.3   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 
 Twitter: [@socketstream](http://twitter.com/#!/socketstream)   -   Google Group: http://groups.google.com/group/socketstream
 
@@ -299,24 +299,26 @@ SocketStream runs in __development__ mode by default, outputting all incoming an
 
 Two other 'preset' environments are available: __staging__ and __production__. Both will load SocketStream with sensible defaults for their intended use.
 
-Preset variables can be overwritten and augmented by two optional files if required: an application-wide config file placed in /config/app.json, and an environment-specific file placed in /config/environments/<SS_ENV>.json (e.g. /config/environments/development.json) which will override any values in app.json.
+Preset variables can be overwritten and augmented by two optional files if required: an application-wide config file placed in /config/app.coffee, and an environment-specific file placed in /config/environments/<SS_ENV>.coffee (e.g. /config/environments/development.coffee) which will override any values in app.coffee.
 
 Use the SS_ENV environment variable to start SocketStream in a different environment. E.g:
 
     SS_ENV=staging socketstream start
     
-All default modes are fully configurable using an optional JSON file placed within /config/environments. An unlimited number of new environments may also be added. You can easily tell which environment in running by typing SS.env in the server or client.
+An unlimited number of new environments may also be added. You can easily tell which environment in running by typing SS.env in the server or client.
 
-We will publish a full list of configurable params in the near future, but for now these can be viewed (and hence overridden in the config file), by typing SS.config in the SocketStream console.
+Our forthcoming website will detail the full list of configurable params, but for now these can be viewed (and hence overridden in the config file), by typing SS.config in the SocketStream console.
 
 Throughout this README you'll see repeated references to config variables which look something like this:
 
     SS.config.limiter.enabled = true
 
-In this case, you could change the value of the variable by adding the following JSON in your config file:
+In this case, you could change the value of the variable by adding the following to your config file:
 
-``` javascript
-{"limiter": {"enabled": true}}
+``` coffee-script
+exports.config =
+  limiter: 
+    enabled: true
 ```
 
 ### Logging
@@ -362,14 +364,15 @@ M.open (err, client) -> console.error(err) if err?
 ```
 This would allow you to access mongoDB from the M global variable.
 
-As this file is loaded after the environment config is processed, you can put your db connection params in /config/environments/development.json
+As this file is loaded after the environment config is processed, you can put your db connection params in /config/environments/development.coffee
 
 ``` coffee-script
-{
-  "db": {
-    "mongo": {"database": "my_database_name", "host": "localhost", "port": 27017},
-  }
-}
+exports.config =
+  db:
+    mongo:
+      database:     "my_database_name"
+      host:         "localhost"
+      port:         27017
 ```
 
 Then access them inside /config/db.coffee as so:
@@ -566,18 +569,20 @@ It is enabled by default and can be configured with the following config variabl
 
 ``` coffee-script
 SS.config.api.enabled            Boolean       default: true         # Enables/disables the HTTP API
-SS.config.api.prefix             String        default: 'api'        # Sets the URL prefix (e.g. http://mysite.com/api
+SS.config.api.prefix             String        default: 'api'        # Sets the URL prefix e.g. http://mysite.com/api
 ```
 
 The HTTP API also supports Basic Auth, allowing you to access methods which use @session.user_id. If you wish to use this option, we recommend setting SS.config.api.https_only to true to ensure passwords are never transmitted in clear text.
 
-By placing 'exports.authenticate = true' in the file (see above) the server will know to prompt for a username and password before allowing access any of the actions within that file. However, the API will need to know which module to authenticate against. Set the SS.config.api.auth.basic.module_name variable by putting the following JSON in your config file:
-    
-``` coffee-script
-{
-  "api": { "auth": { "basic": { "module_name": "custom_auth"} } }
-}
+``` coffee-script    
+exports.config = 
+  api: 
+    auth: 
+      basic: 
+        module_name: "custom_auth"
 ```
+
+By placing 'exports.authenticate = true' in the file (see above) the server will know to prompt for a username and password before allowing access any of the actions within that file. However, the API will need to know which module to authenticate against. Set the SS.config.api.auth.basic.module_name variable by putting the following coffee in your config file:
 
 Note: Basic Auth will pass the 'username' and 'password' params to your exports.authenticate function.
 
@@ -737,11 +742,11 @@ Yes, we know. At the moment there are very few tests. This is bad. We are curren
 
 --- Update ---
 
-We're currently writing unit tests for the socketstream library, one file at a time, and using Jasmine. To run these tests:
+We're experimenting with unit testing in Jasmine. When these are complete you may run them with:
 
-    npm install jasbin
     cd socketstream
-    jasbin
+    cake spec
+
 
 ### Known Issues
 
