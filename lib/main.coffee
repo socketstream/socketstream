@@ -40,8 +40,8 @@ exports.init = (load_project = false) ->
   env = process.env.SS_ENV || 'development'
   SS.env = env.toString().toLowerCase()
 
-  # Load basic Array, String, JS extensions needed throughout SocketStream
-  require('./extensions')
+  # Load basic Array, String, JS extensions/helpers needed throughout SocketStream
+  require('./helpers.js')
   
   load.project() if load_project
 

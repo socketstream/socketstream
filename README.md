@@ -1,7 +1,7 @@
 ![SocketStream!](https://github.com/socketstream/socketstream/raw/master/new_project/public/images/logo.png)
 
 
-Latest release: 0.1.3   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+Latest release: 0.1.4   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 
 Twitter: [@socketstream](http://twitter.com/#!/socketstream)   -   Google Group: http://groups.google.com/group/socketstream
 
@@ -33,7 +33,7 @@ Follow [@socketstream](http://twitter.com/#!/socketstream) for the latest develo
 * Supports custom HTTP middleware/responders which execute first for maximum flexibility and speed
 * Bundled with jQuery and [jQuery templates](http://api.jquery.com/category/plugins/templates/). Works like partials in Rails.
 * Easily add additional client libraries such as [Underscore.js](http://documentcloud.github.com/underscore/)
-* Uses [Jade](http://jade-lang.com/) to render static HTML
+* Initial layout HTML can be written in [Jade](http://jade-lang.com/) or plain HTML
 * Uses [Stylus](http://learnboost.github.com/stylus/) for CSS
 * MIT Licence
 
@@ -262,10 +262,11 @@ The directories generated will be very familiar to Rails users. Here's a brief o
 * Stylus files are automatically compiled and served on-the-fly in development mode and pre-compiled/compressed/cached in staging and production
 
 #### /app/views
-* /app/views/app.jade must exist. This should contain all the static HTML your app needs in [Jade](http://jade-lang.com/) format (similar to HAML)
-* The HTML HEAD tag must contain '!= SocketStream'. This helper ensures all the correct libraries are loaded depending upon the environment (declared by SS_ENV)
-* Easily nest additional html as jQuery templates (similar to Rails partials). E.g /app/views/people/info.jade is accessible as $("#people-info").tmpl(myData).
-* Jade views and templates are automatically compiled and served on-the-fly in development and pre-compiled/compressed/cached in staging and production
+* Either /app/views/app.jade or /app/views/app.html must exist. This should contain all the static layout HTML your app will ever need.
+* Use [Jade](http://jade-lang.com/) format (similar to HAML) if you wish (recommended to ensure valid HTML syntax)
+* The HTML HEAD tag must contain '!= SocketStream' in Jade, or '<SocketStream>' in plain HTML. This helper ensures all the correct libraries are loaded depending upon the environment (declared by SS_ENV)
+* Easily nest additional HTML as jQuery templates (similar to Rails partials) in either Jade or plain HTML. E.g /app/views/people/customers/info.jade is accessible as $("#people-customers-info").tmpl(myData).
+* Views and templates are automatically compiled and served on-the-fly in development and pre-compiled/compressed/cached in staging and production
 
 #### /lib
 * Changes to files within /lib/client or /lib/css automatically triggers re-compilation/packing/minification of client assets
@@ -443,7 +444,11 @@ All Shared code is pre-loaded and added to the SS.shared API tree which may be i
 
 ### Helpers
 
-SocketStream comes with a number of suggested JavaScript prototype helper methods, created automatically when you make a new project. The concept is very similar to ActiveSupport in Rails; however in SocketStream client-side helpers are entirely optional. Don't want them? Just delete /lib/client/3.helpers.js and they won't come back. In the near future we will have the same set of helpers in the back-end so you can feel free to use them in shared/server code.
+SocketStream comes with a number of JavaScript prototype helper methods, created automatically when you make a new project. The concept is very similar to ActiveSupport in Rails.
+
+The default helpers we ship with are also used server-side throughout SocketStream. Hence you can use them in client, shared and server code and expect the same result, no matter where the code executes.
+
+Take a look at /lib/client/3.helpers.js to see the available helpers. If for some reason these conflict with a third-party library, or you simply don't want to use them, just delete this file and it won't come back.
 
 
 ### Sessions

@@ -1,3 +1,13 @@
+0.1.4 / 2011-07-06
+==================
+
+* Nested folders are now fully supported in /app/views (for jQuery templates)
+* Views and templates can now be in plain old-fashioned HTML - just use the .html extension instead of .jade
+* Improved client-side helpers. Added bind method as per issue 26 (addyosmani)
+* All client-side helpers now have server-side equivalents, allowing you to use them anywhere
+* extensions.js now renamed to helpers.js internally for consistency
+
+
 0.1.3 / 2011-07-05
 ==================
 
