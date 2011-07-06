@@ -545,9 +545,9 @@ SS.publish.channel(['disney', 'kids'], 'newMessage', {from: 'mickymouse', messag
 Users can subscribe to an unlimited number of channels using the following commands (which must be run inside your /app/server code). E.g:
 
 ``` coffee-script
-    @session.channel.subscribe('disney', cb)    # note: multiple channel names can be passed as an array 
+    @session.channel.subscribe('disney')        # note: multiple channel names can be passed as an array 
     
-    @session.channel.unsubscribe('kids', cb)    # note: multiple channel names can be passed as an array 
+    @session.channel.unsubscribe('kids')        # note: multiple channel names can be passed as an array 
     
     @session.channel.list()                     # shows which channels the client is currently subscribed to
 ```
