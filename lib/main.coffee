@@ -41,7 +41,7 @@ exports.init = (load_project = false) ->
   SS.env = env.toString().toLowerCase()
 
   # Load basic Array, String, JS extensions needed throughout SocketStream
-  require('./extensions')
+  require('./extensions.js')
   
   load.project() if load_project
 
