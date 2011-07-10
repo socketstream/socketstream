@@ -159,6 +159,8 @@ load =
     
     # Save current state
     SS.internal.state.save()
+
+    reload.client() if SS.config.developer.client.reload? and SS.config.developer.client.reload is true
   
   # Turns directories into an object tree
   fileTrees: ->
@@ -307,3 +309,20 @@ showBanner = (additional_text) ->
   util.puts "  #{additional_text}"
   util.puts "----------------------------------------------------------------"
   util.puts "\n"
+
+reload =
+  # TODO - handle files nested in folders, hence traverse the folders.
+  # TODO - change from client-side event broadcast to a SocketStream internal method.
+  # TODO - change location of client-side handler.
+  client: ->
+    for path in ['client', 'css', 'views']
+      reload.watchFilesInDirectoryForChanges("#{SS.root}/app/#{path}")
+  
+  watchFilesInDirectoryForChanges: (dirPath) ->
+    fs.readdir dirPath, (err, files) ->  
+      reload.watchFileForChanges("#{dirPath}/#{file}") for file in files
+
+  watchFileForChanges: (filePath) ->
+    fs.watchFile filePath, (curr, prev) ->
+      SS.publish.broadcast("reload",{change: true}) if curr.mtime > prev.mtime        
+ 

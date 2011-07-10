@@ -27,4 +27,7 @@ exports.config =
   browser_check:
     enabled:      false
     strict:       true
-
+  
+  developer:
+    client:
+      reload: (SS.env is 'development')
