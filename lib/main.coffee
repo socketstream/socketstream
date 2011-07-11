@@ -159,6 +159,8 @@ load =
     
     # Save current state
     SS.internal.state.save()
+
+    reload.client() if SS.config.developer.client.reload? and SS.config.developer.client.reload is true
   
   # Turns directories into an object tree
   fileTrees: ->
@@ -307,3 +309,26 @@ showBanner = (additional_text) ->
   util.puts "  #{additional_text}"
   util.puts "----------------------------------------------------------------"
   util.puts "\n"
+
+reload =
+  client: ->
+    for path in ['client', 'css', 'views']
+      reload.watchFilesInDirectoryForChanges("#{SS.root}/app/#{path}")
+  
+  watchFilesInDirectoryForChanges: (dirPath) ->
+    fs.readdir dirPath, (err, files) ->  
+      for file in files
+        # We want to check if the file is a folder, and if it is, 
+        # call this function with that file.
+        fs.stat "#{dirPath}/#{file}", (err,stats) ->
+          if stats.isDirectory()
+            reload.watchFilesInDirectoryForChanges("#{dirPath}/#{file}")
+          else
+            reload.watchFileForChanges("#{dirPath}/#{file}") 
+
+  watchFileForChanges: (filePath) ->
+    fs.watchFile filePath, (curr, prev) ->
+      # TODO change from client-side event broadcast to a SocketStream internal method.
+      # Also look in /lib/client/socketstream.coffee line 66
+      SS.publish.broadcast("reload",{}) if curr.mtime > prev.mtime        
+ 
