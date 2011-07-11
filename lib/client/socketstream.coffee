@@ -62,6 +62,11 @@ SS.socket.on 'disconnect', ->
     SS.socket.connect() unless SS.socket.connecting
     setTimeout arguments.callee, 500 # try twice per second
   attemptReconnection()
+
+# Handle reloading of the client - 
+# TODO check that this is the right place for the code
+# TODO change from client-side event broadcast to a SocketStream internal method.
+SS.events.on 'reload', (data) -> window.location.reload()
  
 # Connect!
 SS.socket.connect()

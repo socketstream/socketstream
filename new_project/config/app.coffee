@@ -28,6 +28,9 @@ exports.config =
     enabled:      false
     strict:       true
   
+  # (experimental) - API for handling a new feature (client-side reload)
+  #   a change in any of the client-side files triggers a reload on the 
+  #   web browser. Change 'reload' to true to enable this feature. 
   developer:
     client:
-      reload: (SS.env is 'development')
+      reload: false

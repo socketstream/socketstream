@@ -311,8 +311,6 @@ showBanner = (additional_text) ->
   util.puts "\n"
 
 reload =
-  # TODO - change from client-side event broadcast to a SocketStream internal method.
-  # TODO - change location of client-side handler.
   client: ->
     for path in ['client', 'css', 'views']
       reload.watchFilesInDirectoryForChanges("#{SS.root}/app/#{path}")
@@ -330,5 +328,7 @@ reload =
 
   watchFileForChanges: (filePath) ->
     fs.watchFile filePath, (curr, prev) ->
-      SS.publish.broadcast("reload",{change: true}) if curr.mtime > prev.mtime        
+      # TODO change from client-side event broadcast to a SocketStream internal method.
+      # Also look in /lib/client/socketstream.coffee line 66
+      SS.publish.broadcast("reload",{}) if curr.mtime > prev.mtime        
  
