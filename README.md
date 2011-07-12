@@ -1,7 +1,7 @@
 ![SocketStream!](https://github.com/socketstream/socketstream/raw/master/new_project/public/images/logo.png)
 
 
-Latest release: 0.1.2   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+Latest release: 0.1.5   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 
 Twitter: [@socketstream](http://twitter.com/#!/socketstream)   -   Google Group: http://groups.google.com/group/socketstream
 
@@ -33,7 +33,7 @@ Follow [@socketstream](http://twitter.com/#!/socketstream) for the latest develo
 * Supports custom HTTP middleware/responders which execute first for maximum flexibility and speed
 * Bundled with jQuery and [jQuery templates](http://api.jquery.com/category/plugins/templates/). Works like partials in Rails.
 * Easily add additional client libraries such as [Underscore.js](http://documentcloud.github.com/underscore/)
-* Uses [Jade](http://jade-lang.com/) to render static HTML
+* Initial layout HTML can be written in [Jade](http://jade-lang.com/) or plain HTML
 * Uses [Stylus](http://learnboost.github.com/stylus/) for CSS
 * MIT Licence
 
@@ -104,9 +104,7 @@ The eagle-eyed among you will notice SS.client.app.square(25) actually returned 
 
 You can also call this server-side method using the built-in HTTP API with the following URL:
 
-``` coffee-script
-/api/app/square?25                        # Hint: use .json to output to a file
-```
+    /api/app/square?25                        # Hint: use .json to output to a file
     
 Or even directly from the server-side console (type 'socketstream console') OR the browser's console OR another server-side file:
 
@@ -249,7 +247,7 @@ The directories generated will be very familiar to Rails users. Here's a brief o
 * All publicly available methods should be listed under 'exports.actions'. Private methods must be placed outside this scope and begin 'methodname = (params) ->'
 * Server files can be nested. E.g. SS.server.users.online.yesterday() would call the 'yesterday' method in /app/server/users/online.coffee
 * You may also nest objects within objects to provide namespacing within the same file
-* @session gives you direct access to the User's session
+* @getSession gives you direct access to the User's session
 * @user gives you direct access to your custom User instance. More on this coming soon
 
 #### /app/shared
@@ -262,10 +260,11 @@ The directories generated will be very familiar to Rails users. Here's a brief o
 * Stylus files are automatically compiled and served on-the-fly in development mode and pre-compiled/compressed/cached in staging and production
 
 #### /app/views
-* /app/views/app.jade must exist. This should contain all the static HTML your app needs in [Jade](http://jade-lang.com/) format (similar to HAML)
-* The HTML HEAD tag must contain '!= SocketStream'. This helper ensures all the correct libraries are loaded depending upon the environment (declared by SS_ENV)
-* Easily nest additional html as jQuery templates (similar to Rails partials). E.g /app/views/people/info.jade is accessible as $("#people-info").tmpl(myData).
-* Jade views and templates are automatically compiled and served on-the-fly in development and pre-compiled/compressed/cached in staging and production
+* Either /app/views/app.jade or /app/views/app.html must exist. This should contain all the static layout HTML your app will ever need.
+* Use [Jade](http://jade-lang.com/) format (similar to HAML) if you wish (recommended to ensure valid HTML syntax)
+* The HTML HEAD tag must contain '!= SocketStream' in Jade, or '<SocketStream>' in plain HTML. This helper ensures all the correct libraries are loaded depending upon the environment (declared by SS_ENV)
+* Easily nest additional HTML as jQuery templates (similar to Rails partials) in either Jade or plain HTML. E.g /app/views/people/customers/info.jade is accessible as $("#people-customers-info").tmpl(myData).
+* Views and templates are automatically compiled and served on-the-fly in development and pre-compiled/compressed/cached in staging and production
 
 #### /lib
 * Changes to files within /lib/client or /lib/css automatically triggers re-compilation/packing/minification of client assets
@@ -299,24 +298,26 @@ SocketStream runs in __development__ mode by default, outputting all incoming an
 
 Two other 'preset' environments are available: __staging__ and __production__. Both will load SocketStream with sensible defaults for their intended use.
 
-Preset variables can be overwritten and augmented by two optional files if required: an application-wide config file placed in /config/app.json, and an environment-specific file placed in /config/environments/<SS_ENV>.json (e.g. /config/environments/development.json) which will override any values in app.json.
+Preset variables can be overwritten and augmented by two optional files if required: an application-wide config file placed in /config/app.coffee, and an environment-specific file placed in /config/environments/<SS_ENV>.coffee (e.g. /config/environments/development.coffee) which will override any values in app.coffee.
 
 Use the SS_ENV environment variable to start SocketStream in a different environment. E.g:
 
     SS_ENV=staging socketstream start
     
-All default modes are fully configurable using an optional JSON file placed within /config/environments. An unlimited number of new environments may also be added. You can easily tell which environment in running by typing SS.env in the server or client.
+An unlimited number of new environments may also be added. You can easily tell which environment in running by typing SS.env in the server or client.
 
-We will publish a full list of configurable params in the near future, but for now these can be viewed (and hence overridden in the config file), by typing SS.config in the SocketStream console.
+Our forthcoming website will detail the full list of configurable params, but for now these can be viewed (and hence overridden in the config file), by typing SS.config in the SocketStream console.
 
 Throughout this README you'll see repeated references to config variables which look something like this:
 
     SS.config.limiter.enabled = true
 
-In this case, you could change the value of the variable by adding the following JSON in your config file:
+In this case, you could change the value of the variable by adding the following to your config file:
 
-``` javascript
-{"limiter": {"enabled": true}}
+``` coffee-script
+exports.config =
+  limiter: 
+    enabled: true
 ```
 
 ### Logging
@@ -362,14 +363,15 @@ M.open (err, client) -> console.error(err) if err?
 ```
 This would allow you to access mongoDB from the M global variable.
 
-As this file is loaded after the environment config is processed, you can put your db connection params in /config/environments/development.json
+As this file is loaded after the environment config is processed, you can put your db connection params in /config/environments/development.coffee
 
 ``` coffee-script
-{
-  "db": {
-    "mongo": {"database": "my_database_name", "host": "localhost", "port": 27017},
-  }
-}
+exports.config =
+  db:
+    mongo:
+      database:     "my_database_name"
+      host:         "localhost"
+      port:         27017
 ```
 
 Then access them inside /config/db.coffee as so:
@@ -440,20 +442,25 @@ All Shared code is pre-loaded and added to the SS.shared API tree which may be i
 
 ### Helpers
 
-SocketStream comes with a number of suggested JavaScript prototype helper methods, created automatically when you make a new project. The concept is very similar to ActiveSupport in Rails; however in SocketStream client-side helpers are entirely optional. Don't want them? Just delete /lib/client/3.helpers.js and they won't come back. In the near future we will have the same set of helpers in the back-end so you can feel free to use them in shared/server code.
+SocketStream comes with a number of JavaScript prototype helper methods, created automatically when you make a new project. The concept is very similar to ActiveSupport in Rails.
+
+The default helpers we ship with are also used server-side throughout SocketStream. Hence you can use them in client, shared and server code and expect the same result, no matter where the code executes.
+
+Take a look at /lib/client/3.helpers.js to see the available helpers. If for some reason these conflict with a third-party library, or you simply don't want to use them, just delete this file and it won't come back.
 
 
 ### Sessions
 
 SocketStream creates a new session when a browser connects to the server for the first time, storing a session cookie on the client and the details in Redis. When the same visitor returns (or presses refresh in the browser), the session is instantly retrieved.
 
-The current session object is 'injected' into exports.actions within the server-side code and hence can be accessed using the @session variable. E.g.
+The current session object can be retrieved with the @getSession function within your server-side code. E.g.
 
 ``` coffee-script
 exports.actions =
 
   getInfo: (cb) ->
-    cb("This session was created at #{@session.created_at}")
+    @getSession (session) ->
+      cb("This session was created at #{session.created_at}")
 ```
 
 ### Users and Modular Authentication
@@ -475,21 +482,23 @@ exports.authenticate = (params, cb) ->
 
 * The second argument is the callback. This must return an object with a 'status' attribute (boolean) and a 'user_id' attribute (number or string) if successful. Additional info, such as number of tries remaining etc, can optionally be passed back within the object and pushed upstream to the client if desired.
 
-To use this custom authentication module within your app, you'll need to call @session.authenticate in your /app/server code, passing the name of the module you've just created as the first argument:
+To use this custom authentication module within your app, you'll need to call @getSession then session.authenticate in your /app/server code, passing the name of the module you've just created as the first argument:
 
 ``` coffee-script
 exports.actions =
 
   authenticate: (params, cb) ->
-    @session.authenticate 'custom_auth', params, (response) =>
-      @session.setUserId(response.user_id) if response.success       # sets @session.user.id and initiates pub/sub
-      cb(response)                                                   # sends additional info back to the client
+    @getSession (session) ->
+      session.authenticate 'custom_auth', params, (response) =>
+        session.setUserId(response.user_id) if response.success       # sets session.user.id and initiates pub/sub
+        cb(response)                                                  # sends additional info back to the client
 
   logout: (cb) ->
-    @session.user.logout(cb)                                         # disconnects pub/sub and returns a new Session object
+    @getSession (session) ->
+      session.user.logout(cb)                                         # disconnects pub/sub and returns a new Session object
 ```
 
-This modular approach allows you to offer your users multiple ways to authenticate. In the future it also means you will be able to pass the name of a NPM module for common authentication services like Facebook Connect.
+This modular approach allows you to offer your users multiple ways to authenticate. In the future we will also be supporting common authentication services like Facebook Connect.
 
 __Important__
 
@@ -501,7 +510,7 @@ exports.authenticate = true
 
 This will check or prompt for a logged in user before any of the methods within that file are executed.
 
-Once a user has been authenticated, their User ID is accessible by calling @session.user_id anywhere in your /app/server code.
+Once a user has been authenticated, their User ID is accessible by getting the session (with @getSession) then calling session.user_id anywhere in your /app/server code.
 
 
 ### Tracking Users Online
@@ -542,11 +551,13 @@ SS.publish.channel(['disney', 'kids'], 'newMessage', {from: 'mickymouse', messag
 Users can subscribe to an unlimited number of channels using the following commands (which must be run inside your /app/server code). E.g:
 
 ``` coffee-script
-    @session.channel.subscribe('disney', cb)    # note: multiple channel names can be passed as an array 
+    @getSession (session) ->
+      
+      session.channel.subscribe('disney')        # note: multiple channel names can be passed as an array 
     
-    @session.channel.unsubscribe('kids', cb)    # note: multiple channel names can be passed as an array 
+      session.channel.unsubscribe('kids')        # note: multiple channel names can be passed as an array 
     
-    @session.channel.list()                     # shows which channels the client is currently subscribed to
+      session.channel.list()                     # shows which channels the client is currently subscribed to
 ```
 
 If the channel name you specify does not exist it will be automatically created. Channel names can be any valid JavaScript object key. If the client gets disconnected and re-connects to another server instance they will automatically be re-subscribed to the same channels, providing they retain the same session ID. Be sure to catch for any errors when using these commands.
@@ -566,18 +577,20 @@ It is enabled by default and can be configured with the following config variabl
 
 ``` coffee-script
 SS.config.api.enabled            Boolean       default: true         # Enables/disables the HTTP API
-SS.config.api.prefix             String        default: 'api'        # Sets the URL prefix (e.g. http://mysite.com/api
+SS.config.api.prefix             String        default: 'api'        # Sets the URL prefix e.g. http://mysite.com/api
 ```
 
-The HTTP API also supports Basic Auth, allowing you to access methods which use @session.user_id. If you wish to use this option, we recommend setting SS.config.api.https_only to true to ensure passwords are never transmitted in clear text.
+The HTTP API also supports Basic Auth, allowing you to access methods which use session.user_id. If you wish to use this option, we recommend setting SS.config.api.https_only to true to ensure passwords are never transmitted in clear text.
 
-By placing 'exports.authenticate = true' in the file (see above) the server will know to prompt for a username and password before allowing access any of the actions within that file. However, the API will need to know which module to authenticate against. Set the SS.config.api.auth.basic.module_name variable by putting the following JSON in your config file:
-    
-``` coffee-script
-{
-  "api": { "auth": { "basic": { "module_name": "custom_auth"} } }
-}
+``` coffee-script    
+exports.config = 
+  api: 
+    auth: 
+      basic: 
+        module_name: "custom_auth"
 ```
+
+By placing 'exports.authenticate = true' in the file (see above) the server will know to prompt for a username and password before allowing access any of the actions within that file. However, the API will need to know which module to authenticate against. Set the SS.config.api.auth.basic.module_name variable by putting the following coffee in your config file:
 
 Note: Basic Auth will pass the 'username' and 'password' params to your exports.authenticate function.
 
@@ -606,9 +619,10 @@ As SocketStream can automatically detect when a client is no longer connected (e
 exports.actions =
 
   init: (cb) ->
-    @session.on 'disconnect', (session) ->
-      console.log "User ID #{session.user_id} has just logged out!"
-      session.user.logout()
+    @getSession (session) ->
+      session.on 'disconnect', (disconnected_session) ->
+        console.log "User ID #{disconnected_session.user_id} has just logged out!"
+        disconnected_session.user.logout()
 ```
 
 **Note**
@@ -737,11 +751,11 @@ Yes, we know. At the moment there are very few tests. This is bad. We are curren
 
 --- Update ---
 
-We're currently writing unit tests for the socketstream library, one file at a time, and using Jasmine. To run these tests:
+We're experimenting with unit testing in Jasmine. When these are complete you may run them with:
 
-    npm install jasbin
     cd socketstream
-    jasbin
+    cake spec
+
 
 ### Known Issues
 

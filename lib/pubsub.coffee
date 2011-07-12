@@ -72,16 +72,14 @@ dispatch =
     message.channels.map (channel) ->
       if clients = SS.internal.channels[channel]
         clients.forEach (client) ->
-          client.remote message
+          client.remote(message) if client.connected
 
   # Send a message to a particular user
-  user: (message, socket, options) ->
-    client = SS.users.connected[options]
-    return if client and client.connected
-      SS.log.incoming.event("User #{message.user_id}", message)
-      client.remote message
-    else
-      null # if client is no longer online, drop message
+  user: (message, socket, uid) ->
+    SS.log.incoming.event("User #{uid}", message)
+    clients = SS.users.connected.getAll(uid)
+    clients.forEach (client) ->
+      client.remote(message) if client.connected
 
 
 # Appends the message type. TODO: Perform sanity check before blindling forwarding on

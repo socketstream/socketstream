@@ -36,10 +36,17 @@ SS.events =
     else
       console.error "Error: Received incoming '#{name}' event but no event handlers registered"
 
+# Annoyingly the port number can not be obtained from document.location.port for 80 and 443
+getPort = ->
+  if document.location.port.length == 0
+    if document.location.protocol == 'https:' then 443 else 80
+  else
+    document.location.port  
+
 # Setup the websocket connection
 SS.socket = new io.Socket(document.location.hostname, {
+  port: getPort()
   rememberTransport: false,
-  port: document.location.port,
   secure: (document.location.protocol == 'https:'),
   transports: ['websocket', 'flashsocket'],
   tryTransportsOnConnectTimeout: false
@@ -254,4 +261,3 @@ setCookie = (c_name, value, expiredays) ->
   exdate.setDate(exdate.getDate() + expiredays)
   document.cookie = "#{c_name}=#{escape(value)}" + (if expiredays == null then "" else ";expires=" + exdate.toUTCString())
 
-  

@@ -2,6 +2,7 @@
 # --------------------------------
 # Compiles and serves assets live in development mode (or whenever SS.config.pack_assets != true)
 
+path = require('path')
 util = require('util')
 server = require('../utils/server.coffee')
 assets = require('../asset')
@@ -33,7 +34,7 @@ isValidRequest = (request) ->
 # Parse incoming URL depending on file extension`
 urlToFile = (url) ->
   if url.isRoot
-    {name: 'app.jade', extension: 'jade'}
+    rootHTML()
   else if isValidScript(url)
     {name: "app/#{url.initialDir}/#{url.path}", extension: url.extension}
   else
@@ -42,3 +43,11 @@ urlToFile = (url) ->
 # Excludes lib_*.js asset files
 isValidScript = (url) ->
   ['coffee', 'js'].include(url.extension) and assets.client_dirs.include(url.initialDir)
+
+# Decide which file to serve as the root
+rootHTML = ->
+  jadeExists = path.existsSync "#{SS.root}/app/views/app.jade"
+  if jadeExists
+    {name: 'app.jade', extension: 'jade'}
+  else
+    {name: 'app.html', extension: 'html'}

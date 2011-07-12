@@ -1,3 +1,29 @@
+0.1.5 / 2011-07-12
+==================
+
+* API CHANGE: @session is now @getSession and takes a callback (for compatibility with forthcoming 0.2.0)
+* @session will continue to work in 0.1.x releases but please update your code
+* Fixed annoying bug preventing flashsockets working on port 80 or 443. Doh!
+* Messages sent using SS.publish.user() now go to ALL connected clients with that user_id, not the last one to login
+
+
+0.1.4 / 2011-07-06
+==================
+
+* Nested folders are now fully supported in /app/views (for jQuery templates)
+* Views and templates can now be in plain old-fashioned HTML - just use the .html extension instead of .jade
+* Improved client-side helpers. Added bind method as per issue 26 (addyosmani)
+* All client-side helpers now have server-side equivalents, allowing you to use them anywhere
+* extensions.js now renamed to helpers.js internally for consistency
+
+
+0.1.3 / 2011-07-05
+==================
+
+* Configuration files are now in CoffeeScript by default, though JS is also supported (paulbjensen)
+* JSON-based configuration files are still supported for backwards compatibility, but will be removed in a future release
+
+
 0.1.2 / 2011-06-30
 ==================
  

@@ -9,9 +9,6 @@ exports.configure = ->
   setDefaults()
   setEnvironmentDefaults()
   mergeConfigFiles()
-  # mergeConfigFile("/config/app.json")
-  # mergeConfigFile("/config/environments/#{SS.env}.json")
-
 
 # Set sensible defaults so we can be up and running without an app-specific config file
 setDefaults = ->
@@ -91,7 +88,7 @@ setDefaults = ->
       enabled:                false           # disabled by default as HIGHLY EXPERIMENTAL and subject to change
 
 # For now we override default config depending upon environment. This will still be overridden by any app config file in
-# /config/environments/SS_ENV.js . We may want to remove this in the future and insist upon seperate app config files, ala Rails
+# /config/environments/<SS_ENV>.coffee . We may want to remove this in the future and insist upon seperate app config files, ala Rails
 setEnvironmentDefaults = ->
   override = switch SS.env
     when 'development'
@@ -105,45 +102,39 @@ setEnvironmentDefaults = ->
           level: 0
   merge(override)
 
-# This will search for the application config file, and 
-# merge it if it exists, or raise an error if it does not.
-# It will also search for an environment-specific file, and merge if it exists,
-# but it will not raise an error if it does not, as it is optional
+# This will search for the application config file, and merge it if it exists, or raise an error if it does not.
+# It will also search for an optional environment-specific file and merge if it exists
 mergeConfigFiles = ->
-
-  # try and see what files exist by scanning for them
-  
   config_dir_files = fs.readdirSync "#{SS.root}/config/" 
   for file in config_dir_files
     path = "/config"
-    mergeConfigFile("#{path}/#{file}") if file.match(/app./)?
+    mergeConfigFile("#{path}/#{file}") if file.match(/^app\.(js|coffee)/)?
   if config_dir_files.indexOf("environments") isnt -1
     path = "/config/environments"
     for file in fs.readdirSync "#{SS.root}#{path}"
       mergeConfigFile("#{path}/#{file}") if file.match(SS.env)?
 
 mergeConfigFile = (name) ->
-  mergeJsonFile(name) if name.match(/.json/)?
-  mergeFile(name) if name.match(/.js$/)? or name.match(/.coffee$/)
+  mergeJsonFile(name) if name.match(/.json$/)?
+  merge(require("#{SS.root}#{name}").config) if name.match(/.(js|coffee)$/)?
 
 merge = (new_config) ->
-  SS.config.extend(new_config)
+  try 
+    SS.config.extend(new_config)
+  catch e
+    SS.log.error.exception(e)
+    throw new Error("App config file #{name} loaded and parsed but unable to merge. Check syntax carefully and ensure config values exist.")
 
 mergeJsonFile = (name) ->
+  util.log SS.log.color("WARNING: JSON-based config files have been deprecated in 0.1.3 and will be removed in a future release. Please convert #{name} to CoffeeScript or JavaScript (generate a new project to see an example).", 'red')
   try
     config_file_body = fs.readFileSync(SS.root + name, 'utf-8')
     try
       app_config = JSON.parse(config_file_body)
-      try
-        merge(app_config)
-      catch e
-        throw new Error("App config file #{name} loaded and parsed as JSON but unable to merge. Check syntax carefully and ensure config values exist.")
+      merge(app_config)
     catch e
       throw new Error("Loaded, but unable to parse app config file #{name}. Ensure it is in valid JSON format with double quotes (not single!) around all strings.")
   catch e
-    unless e.code == 'EBADF' # Do no warn if config file is not present - that's ok
+    unless e.code == 'EBADF' # Do not warn if config file is not present - that's ok
       SS.log.error.exception(e)
       throw new Error('App config error')
-
-mergeFile = (name) ->
-  merge(require("#{SS.root}#{name}"))

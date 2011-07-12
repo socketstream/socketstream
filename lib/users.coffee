@@ -7,8 +7,24 @@ util = require('util')
 
 key = SS.config.redis.key_prefix
 
+
 # Users Connected (to this server instance)
-exports.connected = []
+_connected = {}
+exports.connected =
+
+  add: (uid, socket) ->
+    if _connected[uid]
+      _connected[uid].push(socket) unless _connected[uid].contains(socket)
+    else
+      _connected[uid] = [socket]
+
+  remove: (uid) ->
+    delete _connected[uid]
+    
+  getAll: (uid) ->
+    a = _connected[uid]
+    if a and a.any() then a else []
+
 
 # Users Online
 exports.online =
