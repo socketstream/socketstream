@@ -26,7 +26,8 @@ exports.process = (action_array, params, session, cb) ->
   throw new Error("Unable to find the '#{action}' action in #{prefix}/#{actions.join('/')}. Action names are case sensitive") unless method
   
   # Inject 'helper functions'
-  obj.session = session
+  obj.getSession = (scb) -> scb(session)  # The correct way to get the current session (in preparation for 0.2.0 where sessions are only loaded when required)
+  obj.session = session                   # The old way to access the current session. Will be removed in 0.2.0
   obj.user = session.user
 
   # Build up args to pass to server action

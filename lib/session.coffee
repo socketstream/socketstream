@@ -79,7 +79,7 @@ class exports.Session extends events
     if @client
       SS.redis.main.hset @key(), 'user_id', @user_id
       SS.redis.pubsub.subscribe @user.key()
-      SS.users.connected[@user_id] = @client
+      SS.users.connected.add(@user_id, @client)
       SS.users.online.add(@user_id) if SS.config.users.online.enabled
 
   # Called when browser window is closed down
@@ -101,7 +101,7 @@ class exports.Session extends events
     logout: (cb = ->) ->
       if @session.client
         SS.redis.pubsub.unsubscribe @key()
-        delete SS.users.connected[@session.user_id]
+        SS.users.connected.remove(@session.user_id)
         SS.users.online.remove(@session.user_id) if SS.config.users.online.enabled
       @session.user_id = null # clear user_id. note we are not erasing this in redis as it can be advantageous to keep this for retrospective analytics
       cb({})

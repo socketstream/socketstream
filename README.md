@@ -1,7 +1,7 @@
 ![SocketStream!](https://github.com/socketstream/socketstream/raw/master/new_project/public/images/logo.png)
 
 
-Latest release: 0.1.4   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+Latest release: 0.1.5   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 
 Twitter: [@socketstream](http://twitter.com/#!/socketstream)   -   Google Group: http://groups.google.com/group/socketstream
 
@@ -104,9 +104,7 @@ The eagle-eyed among you will notice SS.client.app.square(25) actually returned 
 
 You can also call this server-side method using the built-in HTTP API with the following URL:
 
-``` coffee-script
-/api/app/square?25                        # Hint: use .json to output to a file
-```
+    /api/app/square?25                        # Hint: use .json to output to a file
     
 Or even directly from the server-side console (type 'socketstream console') OR the browser's console OR another server-side file:
 
@@ -249,7 +247,7 @@ The directories generated will be very familiar to Rails users. Here's a brief o
 * All publicly available methods should be listed under 'exports.actions'. Private methods must be placed outside this scope and begin 'methodname = (params) ->'
 * Server files can be nested. E.g. SS.server.users.online.yesterday() would call the 'yesterday' method in /app/server/users/online.coffee
 * You may also nest objects within objects to provide namespacing within the same file
-* @session gives you direct access to the User's session
+* @getSession gives you direct access to the User's session
 * @user gives you direct access to your custom User instance. More on this coming soon
 
 #### /app/shared
@@ -455,13 +453,14 @@ Take a look at /lib/client/3.helpers.js to see the available helpers. If for som
 
 SocketStream creates a new session when a browser connects to the server for the first time, storing a session cookie on the client and the details in Redis. When the same visitor returns (or presses refresh in the browser), the session is instantly retrieved.
 
-The current session object is 'injected' into exports.actions within the server-side code and hence can be accessed using the @session variable. E.g.
+The current session object can be retrieved with the @getSession function within your server-side code. E.g.
 
 ``` coffee-script
 exports.actions =
 
   getInfo: (cb) ->
-    cb("This session was created at #{@session.created_at}")
+    @getSession (session) ->
+      cb("This session was created at #{session.created_at}")
 ```
 
 ### Users and Modular Authentication
@@ -483,21 +482,23 @@ exports.authenticate = (params, cb) ->
 
 * The second argument is the callback. This must return an object with a 'status' attribute (boolean) and a 'user_id' attribute (number or string) if successful. Additional info, such as number of tries remaining etc, can optionally be passed back within the object and pushed upstream to the client if desired.
 
-To use this custom authentication module within your app, you'll need to call @session.authenticate in your /app/server code, passing the name of the module you've just created as the first argument:
+To use this custom authentication module within your app, you'll need to call @getSession then session.authenticate in your /app/server code, passing the name of the module you've just created as the first argument:
 
 ``` coffee-script
 exports.actions =
 
   authenticate: (params, cb) ->
-    @session.authenticate 'custom_auth', params, (response) =>
-      @session.setUserId(response.user_id) if response.success       # sets @session.user.id and initiates pub/sub
-      cb(response)                                                   # sends additional info back to the client
+    @getSession (session) ->
+      session.authenticate 'custom_auth', params, (response) =>
+        session.setUserId(response.user_id) if response.success       # sets session.user.id and initiates pub/sub
+        cb(response)                                                  # sends additional info back to the client
 
   logout: (cb) ->
-    @session.user.logout(cb)                                         # disconnects pub/sub and returns a new Session object
+    @getSession (session) ->
+      session.user.logout(cb)                                         # disconnects pub/sub and returns a new Session object
 ```
 
-This modular approach allows you to offer your users multiple ways to authenticate. In the future it also means you will be able to pass the name of a NPM module for common authentication services like Facebook Connect.
+This modular approach allows you to offer your users multiple ways to authenticate. In the future we will also be supporting common authentication services like Facebook Connect.
 
 __Important__
 
@@ -509,7 +510,7 @@ exports.authenticate = true
 
 This will check or prompt for a logged in user before any of the methods within that file are executed.
 
-Once a user has been authenticated, their User ID is accessible by calling @session.user_id anywhere in your /app/server code.
+Once a user has been authenticated, their User ID is accessible by getting the session (with @getSession) then calling session.user_id anywhere in your /app/server code.
 
 
 ### Tracking Users Online
@@ -550,11 +551,13 @@ SS.publish.channel(['disney', 'kids'], 'newMessage', {from: 'mickymouse', messag
 Users can subscribe to an unlimited number of channels using the following commands (which must be run inside your /app/server code). E.g:
 
 ``` coffee-script
-    @session.channel.subscribe('disney')        # note: multiple channel names can be passed as an array 
+    @getSession (session) ->
+      
+      session.channel.subscribe('disney')        # note: multiple channel names can be passed as an array 
     
-    @session.channel.unsubscribe('kids')        # note: multiple channel names can be passed as an array 
+      session.channel.unsubscribe('kids')        # note: multiple channel names can be passed as an array 
     
-    @session.channel.list()                     # shows which channels the client is currently subscribed to
+      session.channel.list()                     # shows which channels the client is currently subscribed to
 ```
 
 If the channel name you specify does not exist it will be automatically created. Channel names can be any valid JavaScript object key. If the client gets disconnected and re-connects to another server instance they will automatically be re-subscribed to the same channels, providing they retain the same session ID. Be sure to catch for any errors when using these commands.
@@ -577,7 +580,7 @@ SS.config.api.enabled            Boolean       default: true         # Enables/d
 SS.config.api.prefix             String        default: 'api'        # Sets the URL prefix e.g. http://mysite.com/api
 ```
 
-The HTTP API also supports Basic Auth, allowing you to access methods which use @session.user_id. If you wish to use this option, we recommend setting SS.config.api.https_only to true to ensure passwords are never transmitted in clear text.
+The HTTP API also supports Basic Auth, allowing you to access methods which use session.user_id. If you wish to use this option, we recommend setting SS.config.api.https_only to true to ensure passwords are never transmitted in clear text.
 
 ``` coffee-script    
 exports.config = 
@@ -616,9 +619,10 @@ As SocketStream can automatically detect when a client is no longer connected (e
 exports.actions =
 
   init: (cb) ->
-    @session.on 'disconnect', (session) ->
-      console.log "User ID #{session.user_id} has just logged out!"
-      session.user.logout()
+    @getSession (session) ->
+      session.on 'disconnect', (disconnected_session) ->
+        console.log "User ID #{disconnected_session.user_id} has just logged out!"
+        disconnected_session.user.logout()
 ```
 
 **Note**
