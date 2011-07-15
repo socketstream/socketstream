@@ -17,6 +17,9 @@ exports.init = ->
 
   # Parse package.json so we don't have to repeat ourselves
   @package_json = loadPackageJSON()
+
+  # Servers (primary and secondary loaded here)
+  @servers = {}
   
   # Load last known state project was in, if it exists. We record this so we know when force a rebuild of client libraries on startup
   @state = state.init()

@@ -20,35 +20,32 @@ limiter = require('./limiter.coffee') if SS.config.limiter.enabled
 # Only load Realtime Models if enabled. Disabled by default
 RTM = require('./realtime_models') if SS.config.rtm.enabled
 
-# Define servers
-servers = {}
-
 # The main method called when starting the server ('socketstream start')
 exports.start = ->
   
   asset.init()
   
   # Start Primary Server (either HTTP or HTTPS)
-  servers.primary = primaryServer()
-  socket = SS.libs.io.listen(servers.primary.server, {transports: ['websocket', 'flashsocket']})
+  primary = SS.internal.servers.primary = primaryServer()
+  socket = SS.libs.io.listen(primary.server, {transports: ['websocket', 'flashsocket']})
   socket.on('connection', process.socket.connection)
   socket.on('clientMessage', process.socket.call)
   socket.on('clientDisconnect', process.socket.disconnection)
-  servers.primary.server.listen(servers.primary.config.port, servers.primary.config.hostname)
+  primary.server.listen(primary.config.port, primary.config.hostname)
   pubsub.listen(socket)
   
   # Start Secondary HTTP Redirect/API server (if running HTTPS)
   # We will architect this way better in the near future
   if SS.config.https.enabled and SS.config.https.domain and SS.config.https.redirect_http
     request_processor = (request, response) -> process.http.request(request, response, 'secondary')
-    servers.secondary =
+    secondary = SS.internal.servers.secondary =
       server:     http.createServer(request_processor)
       middleware: http_middleware.secondary()
       config:     SS.config.http
       protocol:   'http'
-    servers.secondary.server.listen(servers.secondary.config.port, servers.secondary.config.hostname)
+    secondary.server.listen(secondary.config.port, secondary.config.hostname)
 
-  servers
+  SS.internal.servers
 
 # PRIVATE
 
@@ -64,7 +61,7 @@ process =
       request.ss = {}
       
       # Wait for the request to complete then execute middleware
-      request.addListener 'end', -> servers[server_name].middleware.execute(request, response)
+      request.addListener 'end', -> SS.internal.servers[server_name].middleware.execute(request, response)
 
 
   # Socket.IO

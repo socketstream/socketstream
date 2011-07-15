@@ -5,9 +5,14 @@ html(lang="en")
     title Welcome
   body
     #content
-      img(src='/images/logo.png', alt='SocketStream Logo', width=167, height=159)
+      a(href='https://github.com/socketstream/socketstream')
+        img(src='/images/logo.png', alt='SocketStream Logo', width=167, height=159)
       h1 Welcome to your new real time app!
       p#message Attempting to connect to the server over websockets or flashsockets...
-      |Until we make this the beautiful, helpful starter page it should be, please check out the docs on
-      a(href='https://github.com/socketstream/socketstream') github
-
+      
+      // QUICK CHAT DEMO
+      form#demo(onsubmit='return false')
+        h3 Quick Chat Demo
+        h5 Open this page in multiple tabs or browsers and type a message below
+        #chatlog
+        input(id='myMessage', type='text', autocomplete='off')

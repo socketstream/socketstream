@@ -1,3 +1,13 @@
+0.1.6 / 2011-07-15
+==================
+
+* New 'Quick Chat' demo when you create a new project. Shows how to bind to events, pass params and broadcast messages
+* The 'servers' object is now exposed as SS.internal.servers to allow you to use Connect routing and more in /config/http.coffee
+* Uses Jade 0.13.0 which now supports mixins and includes (currently untested)
+* Updated other npm dependencies to latest versions
+* Note: Development on the 0.1.x branch will slow now as all effort is going into 0.2.x
+
+
 0.1.5 / 2011-07-12
 ==================
 
