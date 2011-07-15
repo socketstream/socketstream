@@ -271,7 +271,7 @@ The directories generated will be very familiar to Rails users. Here's a brief o
 * New files added to these directories are not currently recognised (hence a server restart is needed). We will fix this soon
 * Easily control the order your client libraries are loaded by prefixing them with a number (e.g. 1.jquery.js, 2.jquery-ui.js)
 * Client JS files are automatically minified by [UglifyJS](https://github.com/mishoo/UglifyJS) unless the filename contains '.min'
-* Any files within /lib/server can be required automatically by Node. Ideal for custom authentication modules
+* Any files within /lib/server can be required by Node without having to give the full path. Ideal for custom authentication modules or sharing common code between two server-side files without exposing it to the client
 
 #### /public
 * Store your static files here (e.g. /public/images, robots.txt, etc)
