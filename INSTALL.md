@@ -5,11 +5,11 @@ SocketStream runs on all UNIX based platforms, including OS X and Linux.
 
 ### Mac OS X installation (tested on Snow Leopard 10.6.7)
 
-    # get XCode, required for compiling software
+    # install XCode, required for compiling software
     
     http://itunes.apple.com/gb/app/xcode/id422352214?mt=12
     
-    # get Redis
+    # install Redis
     
     download the latest version from http://redis.io
     
@@ -25,24 +25,24 @@ SocketStream runs on all UNIX based platforms, including OS X and Linux.
     to run in the background:
       env redis-server > /tmp/redis.log 2>&1 &
     
-    # get Node.js
+    # install Node.js
     
-    git clone --depth 1 https://github.com/joyent/node.git
-    cd node
-    git checkout origin/v0.4
-    export JOBS=2 # optional, sets number of parallel commands.
-    mkdir ~/local
-    ./configure --prefix=$HOME/local/node
+    Download latest stable (0.4.x) version from http://nodejs.org/#download
+    Note this version of SocketStream does not currently work with Node 0.5.x
+
+    E.g. for Node 0.4.9
+
+    tar zxvf node-v0.4.9.tar.gz
+    cd node-v0.4.9
+    ./configure
     make # this will take a couple of minutes
-    make install
-    echo 'export PATH=$HOME/local/node/bin:$PATH' >> ~/.profile
-    source ~/.profile
-  
-    # get npm
+    sudo make install
     
-    curl http://npmjs.org/install.sh | sh
+    # install npm
+    
+    curl http://npmjs.org/install.sh | sudo sh
   
-    # get SocketStream
+    # install SocketStream
     
     sudo npm install socketstream -g
     
@@ -57,7 +57,7 @@ SocketStream runs on all UNIX based platforms, including OS X and Linux.
 
 Here is an example that shows how to install SocketStream and it's dependencies on Ubuntu Server, including building Redis and Node.js from source:
 
-    # get prerequisites
+    # install prerequisites
     sudo apt-get install build-essential automake git-core curl libssl-dev -y
     
     # install and run redis
@@ -69,21 +69,23 @@ Here is an example that shows how to install SocketStream and it's dependencies 
     sudo make install
     env redis-server > /tmp/redis.log 2>&1 &
     
-    # install node.js
-    cd ~
-    git clone https://github.com/joyent/node.git
-    cd node
-    export JOBS=2
-    mkdir -p ~/local/node
-    ./configure --prefix=$HOME/local/node
-    make
-    make install
-    export PATH=$HOME/local/node/bin:$PATH
+    # install Node.js
     
+    Download latest stable (0.4.x) version from http://nodejs.org/#download
+    Note this version of SocketStream does not currently work with Node 0.5.x
+
+    E.g. for Node 0.4.9
+
+    tar zxvf node-v0.4.9.tar.gz
+    cd node-v0.4.9
+    ./configure
+    make # this will take a couple of minutes
+    sudo make install
+
     # install npm
     curl http://npmjs.org/install.sh | sudo sh
     
-    # get SocketStream
+    # install SocketStream
     sudo npm install socketstream -g
     
     # create a new socketstream project called 'test'

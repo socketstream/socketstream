@@ -209,7 +209,7 @@ Want to know how to broadcast a message to all users, or implement private chann
 
 ### Requirements
 
-[Node 0.4](http://nodejs.org/#download) or above
+[Node 0.4](http://nodejs.org/#download) or above (NOTE do not use with 0.5.x for the moment!)
 
 [NPM](http://npmjs.org/) (Node Package Manager)
 
