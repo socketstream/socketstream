@@ -5,7 +5,7 @@ Latest release: 0.1.7   ([view changelog](https://github.com/socketstream/socket
 
 Twitter: [@socketstream](http://twitter.com/#!/socketstream)  
 Google Group: http://groups.google.com/group/socketstream  
-IRC channel: #socketstream
+IRC channel: [#socketstream](http://webchat.freenode.net/?channels=socketstream) on freenode
 
 
 ### Introduction
