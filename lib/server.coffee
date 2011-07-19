@@ -59,10 +59,25 @@ process =
     
       # Attach a custom SocketStream variable to the request object
       request.ss = {}
-      
+
+      # BEGIN POST MESSAGE PATCH
+      if request.method.toLowerCase() == 'post'
+        incoming_data = ''
+        request.on('data', (chunk) ->
+          incoming_data += chunk.toString()
+        )
+        request.on 'end', ->
+          request.ss.raw_body = ''
+          request.ss.body = {}
+          try
+            request.ss.raw_body = unescape( incoming_data ) # Save the RAW Body Message just in case
+            request.ss.body = parse_nested_query( incoming_data )
+          catch e
+            throw ['rest_unable_to_parse_params', 'Unable to parse incoming params']
+      # END POST MESSAGE PATCH
+
       # Wait for the request to complete then execute middleware
       request.addListener 'end', -> SS.internal.servers[server_name].middleware.execute(request, response)
-
 
   # Socket.IO
   socket:
@@ -177,3 +192,54 @@ primaryServer = ->
   out
 
 
+# POST parameter parsing ported from Rack's Util module
+# https://raw.github.com/rack/rack/master/lib/rack/utils.rb
+DEFAULT_SEP = /[&;] */
+parse_nested_query = (qs, d) ->
+  params = {}
+
+  (qs || '').split( if d? then new RegExp("["+d+"] *") else DEFAULT_SEP ).forEach (p) ->
+    [k, v] = p.split('=').map (s) ->
+      unescape(s)
+
+    normalize_params( params, k, v )
+
+  return params
+
+normalize_params = (params, name, v) ->
+  matches = name.match( /^[\[\]]*([^\[\]]+)\]*/ )
+
+  return unless matches?
+
+  k_sub = matches[0]
+  after = name.substring( name.indexOf(k_sub) + k_sub.length )
+  k = matches[1]
+
+  if after == ""
+    params[k] = v
+  else if after == "[]"
+    params[k] ||= []
+    if params[k] instanceof Array
+      params[k].push( v )
+    else
+      throw "expected Array (got "+(typeof params[k])+") for param `"+k+"'"
+  else
+    child_key = after.match(/^\[\]\[([^\[\]]+)\]$/) or after.match(/^\[\](.+)$/)
+    if child_key
+      child_key = child_key[0]
+      params[k] ||= []
+      if params[k] instanceof Array
+        if params[k].last instanceof Object and !(params[k].last instanceof Array) and !params[k].last.key?(child_key)
+          normalize_params(params[k].last, child_key, v)
+        else
+          params[k].push( normalize_params({}, child_key, v) )
+      else
+        throw "expected Array (got "+(typeof params[k])+") for param `"+k+"'" unless params[k] instanceof Array
+    else
+      params[k] or= {}
+      if params[k] instanceof Object and !(params[k] instanceof Array)
+        params[k] = normalize_params(params[k], after, v)
+      else
+        throw "expected Object (got "+(typeof params[k])+") for param '"+k+"'"
+
+  return params
