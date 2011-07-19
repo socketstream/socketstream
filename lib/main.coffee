@@ -224,7 +224,7 @@ load =
 
   # Load external libs used throughout SocketStream and attach them to SS.libs
   # We load the exact version specified in package.json to be sure everything works well together
-  # Hopefully in the future this will be possible automatically
+  # NOTE: Now NPM loads the correct version automatically, all this code has been removed in 0.2.0
   externalLibs: ->
     [
       ['coffee',    'coffee-script']

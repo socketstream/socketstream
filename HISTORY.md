@@ -1,3 +1,11 @@
+0.1.7 / 2011-07-19
+==================
+
+* Updated Stylus lib to allow compatibility with Node 0.5.1 (we still recommend the stable 0.4.x branch for now)
+* Removed hiredis dependency to make it easier to use with the Cloud9 IDE. We recommend you install hiredis when possible
+* Note: The first alpha release of SocketStream 0.2.0 should be ready within 2 weeks
+
+
 0.1.6 / 2011-07-15
 ==================
 

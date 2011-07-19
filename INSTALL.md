@@ -28,7 +28,7 @@ SocketStream runs on all UNIX based platforms, including OS X and Linux.
     # install Node.js
     
     Download latest stable (0.4.x) version from http://nodejs.org/#download
-    Note this version of SocketStream does not currently work with Node 0.5.x
+    Note: This version of SocketStream should work fine with Node 0.5.1 but we recommend the stable branch
 
     E.g. for Node 0.4.9
 
@@ -72,7 +72,7 @@ Here is an example that shows how to install SocketStream and it's dependencies 
     # install Node.js
     
     Download latest stable (0.4.x) version from http://nodejs.org/#download
-    Note this version of SocketStream does not currently work with Node 0.5.x
+    Note: This version of SocketStream should work fine with Node 0.5.1 but we recommend the stable branch
 
     E.g. for Node 0.4.9
 

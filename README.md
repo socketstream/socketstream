@@ -1,7 +1,7 @@
 ![SocketStream!](https://github.com/socketstream/socketstream/raw/master/new_project/public/images/logo.png)
 
 
-Latest release: 0.1.6   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+Latest release: 0.1.7   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 
 Twitter: [@socketstream](http://twitter.com/#!/socketstream)   -   Google Group: http://groups.google.com/group/socketstream
 
@@ -209,9 +209,9 @@ Want to know how to broadcast a message to all users, or implement private chann
 
 ### Requirements
 
-[Node 0.4](http://nodejs.org/#download) or above (NOTE do not use with 0.5.x for the moment!)
+[Node 0.4](http://nodejs.org/#download) or above (should work fine with 0.5.1 but we recommend 0.4.x)
 
-[NPM](http://npmjs.org/) (Node Package Manager)
+[NPM 1.0](http://npmjs.org/) (Node Package Manager) or above
 
 [Redis 2.2](http://redis.io/) or above
 
@@ -742,19 +742,12 @@ Finally, you may install multiple SSL certificates in /config/ssl_certs and sele
 
 One instance of SocketStream should be able to comfortably support a few thousand simultaneously connected clients, depending upon the back-end work that needs to be done to service them and whether or not the server is running HTTPS. But what happens when your app goes viral and one server instance is no longer enough?
 
-Right now we don't have a definitive answer, but we have a number of innovative ideas around horizontal scaling and utilising multiple CPU cores. We have already begun experimenting with these and will implement and document the best solutions in the coming months. If you are interested in working on this problem, be sure to get in touch so we can share some of our latest thinking.
+Version 0.2.0 is currently in the works to address this issue. Look out for an initial alpha release in a few weeks time. For the most part 0.2.0 maintains developer API compatibility with 0.1.x so your existing apps will not break.
 
 
 ### Tests
 
 Yes, we know. At the moment there are very few tests. This is bad. We are currently evaluating testing frameworks in the hope of finding one we truly like. After all, we're likely to be stuck with it for a good many years, so we need to choose carefully. We will then begin writing unit and integration tests for parts of SocketStream which are unlikely to change in the near future. Right now, any help and contributions in this area would be very much appreciated.
-
---- Update ---
-
-We're experimenting with unit testing in Jasmine. When these are complete you may run them with:
-
-    cd socketstream
-    cake spec
 
 
 ### Known Issues
@@ -782,7 +775,7 @@ A: Not at the moment. We will be looking at ways to support this in the future u
 
 Q: Can I horizontally scale one big website over many CPU cores and servers?
 
-A: Not yet, but this is one of the main things we're working on.
+A: Not yet, but this is coming shortly in v 0.2.0.
 
 
 Q: How do I test my app?
@@ -813,6 +806,7 @@ A: Sure! We're working on www.socketstream.org right now :)
 Q: Will websockets work in Opera?
 
 A: As of this writing websockets is supported but turned off by default in Opera. In order for Opera 11 to run websockets apps you need to turn it on in the settings. Do "opera:config#Enable%20WebSockets" in the address field and hit enter. Check "Enable websockets" Save and you are good to go.
+
 
 ### Core Team
 
