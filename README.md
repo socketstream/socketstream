@@ -3,8 +3,8 @@
 
 Latest release: 0.1.7   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 
-Twitter: [@socketstream](http://twitter.com/#!/socketstream)
-Google Group: http://groups.google.com/group/socketstream
+Twitter: [@socketstream](http://twitter.com/#!/socketstream)  
+Google Group: http://groups.google.com/group/socketstream  
 IRC channel: #socketstream
 
 
