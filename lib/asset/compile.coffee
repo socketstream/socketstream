@@ -24,7 +24,7 @@ exports.compile =
     SS.libs.jade.renderFile input, locals, (err, html) ->
       if err
         e = new Error(err)
-        e.name = "Unable to compile Jade file #{file} to HTML"
+        e.name = "Unable to compile Jade file #{input} to HTML"
         throw e if SS.config.throw_errors
       cb {output: html, content_type: 'text/html'}
   
