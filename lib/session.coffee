@@ -103,6 +103,7 @@ class exports.Session extends events
         SS.redis.pubsub.unsubscribe @key()
         SS.users.connected.remove(@session.user_id)
         SS.users.online.remove(@session.user_id) if SS.config.users.online.enabled
+        SS.redis.main.hdel @session.key(), 'user_id'
       @session.user_id = null # clear user_id. note we are not erasing this in redis as it can be advantageous to keep this for retrospective analytics
       cb({})
 

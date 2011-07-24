@@ -1,3 +1,11 @@
+0.1.8 / 2011-07-24
+==================
+
+* Few minor bug fixes:
+* session.user.logout() now persists correctly
+* Jade compilation errors now caught correctly (aler)
+
+
 0.1.7 / 2011-07-19
 ==================
 
