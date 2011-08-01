@@ -12,7 +12,9 @@ IRC channel: [#socketstream](http://webchat.freenode.net/?channels=socketstream)
 
 SocketStream is a new full stack web framework built around the [Single-page Application](http://en.wikipedia.org/wiki/Single-page_application) paradigm. It embraces websockets, in-memory datastores (Redis), and client-side rendering to provide an ultra-responsive experience that will amaze your users.
 
-Project status: Highly experimental but usable. Improving almost every day.
+Project status: Highly experimental but usable. The 0.1 branch is now stable enough for low-risk internal applications. External apps deployed directly on the internet should be done so with extreme care (read the Deploying and Security sections below).
+
+Development on SocketStream 0.2 is now well underway. It includes a brand new scalable back-end architecture, plus many new features and refinements to existing ideas. So far there are only minimal changes to the 0.1 developer API outlined in this document. A preview of 0.2 will be available on github within a week or so, though 0.1.8 is likely to remain the recommend stable release for some time.
 
 Follow [@socketstream](http://twitter.com/#!/socketstream) for the latest developments and thinking. Website coming soon.
 
