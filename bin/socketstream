@@ -3,8 +3,7 @@
 // This is the main entry point into SocketStream
 // The other is socketstream.js which is called when you require('socketstream')
 
-var argParser     = require('argsparser');  
-var args          = argParser.parse().node;
+args = require('argsparser').parse()
 
 require('coffee-script');
 

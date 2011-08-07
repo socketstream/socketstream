@@ -3,33 +3,38 @@
 # Functions and properties which are used internally throughout SocketStream
 
 fs = require('fs')
+semver = require('semver')
 
+# TODO: Refactor this now we have front end / back end separation
 exports.init = ->
+
+  ### COMMON ###
+
+  # Parse package.json so we don't have to repeat ourselves
+  @package_json = loadPackageJSON()
+
+  # Load last known state project was in, if it exists. We record this so we know when force a rebuild of client libraries on startup
+  @state = state.init()
 
   # Save a timestamp for benchmarking later
   @up_since = new Date
+
+  ### FRONT END ###
+
+  # Store any running HTTP(S) servers here
+  @servers = {}
+
+  ### BACK END ###
   
   # Counters
   @counters = {files_loaded: { models: 0, server: 0, shared: 0}}
   
   # Server files requiring authentication
   @authenticate = {}
-
-  # Parse package.json so we don't have to repeat ourselves
-  @package_json = loadPackageJSON()
-
-  # Servers (primary and secondary loaded here)
-  @servers = {}
   
-  # Load last known state project was in, if it exists. We record this so we know when force a rebuild of client libraries on startup
-  @state = state.init()
-  
-  # API String
+  # Store the API string we send to the clients here
   @api_string = {}
-  
-  # Private Channels for Pub/Sub
-  @channels = {}
-  
+
   @
 
 # System uptime in ms (is this in Node anywhere?)
@@ -62,7 +67,7 @@ state =
 
   clientVersionUpgraded: ->
     try
-      SS.libs.semver.gt @current().version.client, @last_known.version.client
+      semver.gt @current().version.client, @last_known.version.client
     catch e
       false
   

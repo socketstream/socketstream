@@ -60,12 +60,14 @@ setDefaults = ->
     browser_check:
       enabled:                true            
       strict:                 false           # when enabled will serve a static page from /static/incompatible_browsers when non websocket browsers connect
+      view_name:              'incompatible'  # the name of the jade or html view which will be displayed in /app/views
 
     # Set params which will be passed directly to the client when they connect
     # The client config should match the server as closly as possible
     client:
       remote_prefix:          null            # automatically prefixes all remote calls. e.g. if your server api begins 'v1' remote('app.square') will become remote('v1.app.square')
       heartbeat_interval:     30              # interval in seconds between heartbeats sent to the server to confirm user is online. a lower value increases server and bandwith use. ignored if SS.config.users.online.enabled is false
+      auto_reload:            false           # automatically reload the browser window/tab if an underlying file changes (experimental)
       log:
         level:                2       	      # 0 = none, 1 = calls only, 2 = calls + params, 3 = full
     
@@ -86,6 +88,18 @@ setDefaults = ->
     # Realtime Models
     rtm:
       enabled:                false           # disabled by default as HIGHLY EXPERIMENTAL and subject to change
+
+    # ZeroMQ Cluster
+    cluster:
+      serialization:          'json'          # left this is to allow others to experiment but so far found JSON to be no slower than msgpack
+      sockets:                                # Note: IPC sockets are the default for raw speed on a single machine. Once your app is ready to spread it's wings over multiple servers, TCP sockets must be specified. See docs for full details
+        fe_main:              "ipc://tmp/zmq.fe_main.ipc"
+        fe_pub:               "ipc://tmp/zmq.fe_pubsub.ipc"
+        be_main:              "ipc://tmp/zmq.be_main.ipc"
+    
+    # Plug Sockets
+    plugs:                    {}
+      
 
 # For now we override default config depending upon environment. This will still be overridden by any app config file in
 # /config/environments/<SS_ENV>.coffee . We may want to remove this in the future and insist upon seperate app config files, ala Rails
@@ -115,7 +129,6 @@ mergeConfigFiles = ->
       mergeConfigFile("#{path}/#{file}") if file.match(SS.env)?
 
 mergeConfigFile = (name) ->
-  mergeJsonFile(name) if name.match(/.json$/)?
   merge(require("#{SS.root}#{name}").config) if name.match(/.(js|coffee)$/)?
 
 merge = (new_config) ->
@@ -124,17 +137,3 @@ merge = (new_config) ->
   catch e
     SS.log.error.exception(e)
     throw new Error("App config file #{name} loaded and parsed but unable to merge. Check syntax carefully and ensure config values exist.")
-
-mergeJsonFile = (name) ->
-  util.log SS.log.color("WARNING: JSON-based config files have been deprecated in 0.1.3 and will be removed in a future release. Please convert #{name} to CoffeeScript or JavaScript (generate a new project to see an example).", 'red')
-  try
-    config_file_body = fs.readFileSync(SS.root + name, 'utf-8')
-    try
-      app_config = JSON.parse(config_file_body)
-      merge(app_config)
-    catch e
-      throw new Error("Loaded, but unable to parse app config file #{name}. Ensure it is in valid JSON format with double quotes (not single!) around all strings.")
-  catch e
-    unless e.code == 'EBADF' # Do not warn if config file is not present - that's ok
-      SS.log.error.exception(e)
-      throw new Error('App config error')

@@ -19,15 +19,15 @@ exports.serve =
 
 exports.incoming =
     
-  socketio: (msg, client) ->
+  server: (msg) ->
     if !(msg.options && msg.options.silent)
-      output 2, "#{client.sessionId} #{exports.color('->', 'cyan')} #{msg.method}#{parseParams(msg.params)}"
+      output 2, "#{msg.id} #{exports.color('->', 'cyan')} #{msg.method}#{parseParams(msg.params)}"
       
   event: (type, message) ->
-    output 2, "#{type} #{exports.color('=>', 'cyan')} #{message.event}#{parseParams(message.params)}"
+    output 2, ((obj = JSON.parse(message)) && "#{type} #{exports.color('=>', 'cyan')} #{obj.event}#{parseParams(obj.params)}")
 
-  rtm: (data, client) ->
-    output 2, "#{client.sessionId} #{exports.color('~>', 'cyan')} #{data.rtm}.#{data.action}#{parseParams(data.params)}"
+  rtm: (data, socket) ->
+    output 2, "#{socket.id} #{exports.color('~>', 'cyan')} #{data.rtm}.#{data.action}#{parseParams(data.params)}"
 
   api: (actions, params, format) ->
     output 2, "API (#{format}) #{exports.color('->', 'cyan')} #{actions.join('.')} #{parseParams(params)}"
@@ -35,18 +35,24 @@ exports.incoming =
   rest: (actions, params, format, http_method) ->
     output 2, "REST #{http_method} (#{format}) #{exports.color('->', 'cyan')} #{actions.join('.')} #{parseParams(params)}"
     
-  rpsExceeded: (client) ->
-    output 2, "ALERT: Subsequent requests from Client ID: #{client.sessionId}, Session ID: #{client.session.id}, IP: #{client.connection.remoteAddress} will be dropped as requests-per-second over #{SS.config.limiter.websockets.rps}"
+  rpsExceeded: (socket) ->
+    output 2, "ALERT: Subsequent requests from Client ID: #{socket.id}, Session ID: #{client.session.id}, IP: #{client.connection.remoteAddress} will be dropped as requests-per-second over #{SS.config.limiter.websockets.rps}"
 
   rawMessage: (data, client) ->
     output 5, "DEBUG: Raw message from #{client.sessionId} - #{data}"
 
 exports.outgoing =
 
-  socketio: (msg, client) ->
-    if !(msg.options && msg.options.silent)
-      output 2, "#{client.sessionId} #{exports.color('<-', 'green')} #{msg.method}"
+  client: (obj, type) ->
+    output 2, "#{obj.id || 'CMD'} #{exports.color('<-', 'green')} client:#{type}"
+
+  server: (obj) ->
+    if !(obj.options && obj.options.silent)
+      output 2, "#{obj.id} #{exports.color('<-', 'green')} #{obj.method}"
   
+  rtm: (obj) ->
+    output 2, "#{obj.id} #{exports.color('<~', 'green')} #{obj.rtm}.#{obj.action}#{parseParams(obj.params)}"
+
   event: (type, event, params) ->
     output 2, "#{type} #{exports.color('<=', 'green')} #{event}#{parseParams(params)}"
       
@@ -92,7 +98,7 @@ exports.color = (msg, color) ->
 
 # Private Helpers
 output = (level, msg) ->
-  util.log(msg) if validLevel(level)
+  util.log("PID #{process.pid} - #{msg}") if validLevel(level)
 
 validLevel = (level) ->
   return true unless SS.config.log # config may not be loaded yet

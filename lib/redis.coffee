@@ -2,6 +2,8 @@
 # -----
 # Setup Redis main (data) and pub/sub connections based upon the config params in SS.config
 
+redis = require('redis')
+
 exports.connect = ->
   main:   main()
   pubsub: pubsub()
@@ -10,13 +12,15 @@ exports.connect = ->
 main = ->
   config = SS.config.redis
   global.R = open(config)
+  R.auth(SS.config.redis.password) if SS.config.redis.password
   R.select(config.db_index)
   R
 
-# Redis requires a seperate connection for PubSub data
+# Redis requires a separate connection for PubSub data
 pubsub = ->
   config = SS.config.redis_pubsub || SS.config.redis
   conn = open(config)
+  conn.auth(config.password) if config.password
   conn.select(config.db_index)
   conn
 
@@ -24,7 +28,7 @@ pubsub = ->
 open = (config) ->
   try
     if valid(config)
-      SS.libs.redis.createClient(config.port, config.host, config.options)
+      redis.createClient(config.port, config.host, config.options)
   catch e
     SS.log.error.exception(e)
     throw 'Unable to continue loading SocketStream'

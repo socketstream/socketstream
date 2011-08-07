@@ -1,46 +1,64 @@
 ![SocketStream!](https://github.com/socketstream/socketstream/raw/master/new_project/public/images/logo.png)
 
 
-Latest release: 0.1.8   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+Latest release: 0.2 preview   ([view changelog](https://github.com/socketstream/socketstream/blob/0.2/doc/annoucements/0.2.md))
 
 Twitter: [@socketstream](http://twitter.com/#!/socketstream)  
 Google Group: http://groups.google.com/group/socketstream  
 IRC channel: [#socketstream](http://webchat.freenode.net/?channels=socketstream) on freenode
 
 
+### Version 0.2 Branch
+
+Note: You're looking at the highly-experimental and currently unstable 0.2 branch. It is truly a work in progress. By all means test your existing apps on 0.2 but we recommend using the latest 0.1 release for development until this branch becomes stable and pushed to NPM.
+
+IMPORTANT: You will need to install ZeroMQ 2.1 from http://www.zeromq.org/intro:get-the-software __before__ installing SocketStream 0.2.
+
+Install the 0.2 preview by cloning the 0.2 branch from github and running 'sudo npm install -g' inside the directory.  
+At present SocketStream 0.2 __only works with Node 0.4__ but this will be resolved before 0.2.0 is released.
+
+[Read Full 0.2 Announcement](https://github.com/socketstream/socketstream/blob/0.2/doc/annoucements/0.2.md)
+
+
 ### Introduction
 
-SocketStream is a new full stack web framework built around the [Single-page Application](http://en.wikipedia.org/wiki/Single-page_application) paradigm. It embraces websockets, in-memory datastores (Redis), and client-side rendering to provide an ultra-responsive experience that will amaze your users.
-
-Project status: Highly experimental but usable. The 0.1 branch is now stable enough for low-risk internal applications. External apps deployed directly on the internet should be done so with extreme care (read the Deploying and Security sections below).
-
-Development on SocketStream 0.2 is now well underway. It includes a brand new scalable back-end architecture, plus many new features and refinements to existing ideas. So far there are only minimal changes to the 0.1 developer API outlined in this document. A preview of 0.2 will be available on github within a week or so, though 0.1.8 is likely to remain the recommend stable release for some time.
+SocketStream is a new full stack web framework and distributed hosting platform built around the [Single-page Application](http://en.wikipedia.org/wiki/Single-page_application) paradigm. It embraces websockets, in-memory datastores (Redis), and client-side rendering to provide an ultra-responsive real time experience that will amaze your users.
 
 Follow [@socketstream](http://twitter.com/#!/socketstream) for the latest developments and thinking. Website coming soon.
 
 
 ### Features
 
-* True bi-directional communication using websockets (or flashsockets)
-* Crazy fast! Starts up instantly. No HTTP handshaking/headers/routing to slow down every request
-* Works great with Chrome and Safari. Firefox and IE support (using flashsockets) temperamental but improving thanks to [Socket.IO](http://socket.io/)
+#### Developer
+
+* True bi-directional communication using websockets (or Socket.IO fallbacks)
+* Works great with Chrome and Safari. Firefox and IE support temperamental but improving thanks to [Socket.IO 0.7](http://socket.io/)
 * Write all code in [CoffeeScript](http://jashkenas.github.com/coffee-script/) or JavaScript - your choice
-* Easily share code between the client and server. Ideal for business logic and model validation
-* Works great on iPads and iPhones using Mobile Safari (iOS 4.2 and above), even over 3G
-* Automatic HTTP/HTTPS API. All server-side code is also accessible over a high-speed request-based API
+* Share code between the client and server. Ideal for business logic and model validation
+* HTTP/HTTPS API - all server-side code is automatically accessible over a high-speed request-based API
+* Plug Sockets - high-speed connections to any external server or legacy app using ZeroMQ. Over 20 languages supported
 * Effortless, scalable, pub/sub baked right in - including Private Channels. See examples below
-* Integrated asset manager. Automatically packages and [minifies](https://github.com/mishoo/UglifyJS) all client-side assets
-* Out-of-the-box HTTPS support with auto HTTP redirects. See HTTPS section below
-* In-built User model with modular authentication. Automatically keeps track of users online (see below).
-* Interactive console - just type 'socketstream console' and invoke any server-side or shared method from there
-* 'API Trees' offer a simple, consistent way to namespace large code bases across the front and back end
-* Uses [Redis](http://www.redis.io/) for fast session retrieval, pub/sub, list of users online, and any other data your app needs instantly
-* Supports custom HTTP middleware/responders which execute first for maximum flexibility and speed
-* Bundled with jQuery and [jQuery templates](http://api.jquery.com/category/plugins/templates/). Works like partials in Rails.
+* Integrated asset manager - automatically packages and [minifies](https://github.com/mishoo/UglifyJS) all client-side assets
+* In-built User model - with modular authentication. Automatically keeps track of users online (see below)
+* Interactive Console - just type 'socketstream console' and invoke any server-side or shared method from there
+* API Trees - offer a simple, consistent way to namespace large code bases across the front and back end
+* Uses [Connect](http://senchalabs.github.com/connect/) - hook in 3rd-party middleware or write your own. Custom code executes first for maximum flexibility and speed
+* Works great on iPads and iPhones using Mobile Safari (iOS 4.2 and above), even over 3G
+* Server-side Events - run custom code server-side when clients initialize or disconnect
+* Bundled with jQuery - though not dependent on it. Will work great with Zepto and other libraries
+* Bundled with [jQuery templates](http://api.jquery.com/category/plugins/templates/) - works like partials in Rails.
 * Easily add additional client libraries such as [Underscore.js](http://documentcloud.github.com/underscore/)
 * Initial layout HTML can be written in [Jade](http://jade-lang.com/) or plain HTML
-* Uses [Stylus](http://learnboost.github.com/stylus/) for CSS
-* MIT Licence
+* Uses [Stylus](http://learnboost.github.com/stylus/) for CSS (works great with plain CSS too)
+* MIT License
+
+#### Deployment
+
+* Distributed frontend and backend processes allowing load to be spread over multiple CPU cores / boxes using ZeroMQ
+* Near linear scalability when spreading CPU-intensive tasks over multiple backend servers (run 'socketstream benchmark' to experiment)
+* A separate 'socketstream router' process which can optionally act as firewall, protecting your backend servers, Redis and databases servers
+* Out-of-the-box HTTPS support with auto HTTP redirects. See HTTPS section below
+* Uses [Redis](http://www.redis.io/) for fast session retrieval, pub/sub, list of users online, and any other data your app needs instantly
 
 
 ### How does it work?
@@ -214,7 +232,7 @@ Want to know how to broadcast a message to all users, or implement private chann
 
 ### Requirements
 
-[Node 0.4](http://nodejs.org/#download) or above (should work fine with 0.5.1 but we recommend 0.4.x)
+[Node 0.4](http://nodejs.org/#download) or above
 
 [NPM 1.0](http://npmjs.org/) (Node Package Manager) or above
 
@@ -276,18 +294,10 @@ The directories generated will be very familiar to Rails users. Here's a brief o
 * New files added to these directories are not currently recognised (hence a server restart is needed). We will fix this soon
 * Easily control the order your client libraries are loaded by prefixing them with a number (e.g. 1.jquery.js, 2.jquery-ui.js)
 * Client JS files are automatically minified by [UglifyJS](https://github.com/mishoo/UglifyJS) unless the filename contains '.min'
-* Any files within /lib/server can be required by Node without having to give the full path. Ideal for custom authentication modules or sharing common code between two server-side files without exposing it to the client
 
 #### /public
 * Store your static files here (e.g. /public/images, robots.txt, etc)
 * The /index.html file and /public/assets folder are managed by SocketStream and should not be touched
-
-#### /static
-* This directory contains warnings and notifications as static files which we encourage you to customize
-
-#### /vendor
-* Put any vendored libraries in here using the format /vendor/mycode/lib/mycode.js
-* This directory is optional
 
 
 Before starting up your new app, make sure you have Redis 2.2+ running on your localhost, then type:
@@ -472,7 +482,7 @@ exports.actions =
 
 As almost all web applications have users which need to sign in and out, we have built the concept of a 'current user' into the core of SocketStream. This not only makes life easier for developers, but is vital to the correct functioning of the pub/sub system, authenticating API requests, and tracking which users are currently online (see section below).
 
-Authentication is completely modular and trivial for developers to implement. Here's an example of a custom authentication module we've placed in /lib/server/custom_auth.coffee
+Authentication is completely modular and trivial for developers to implement. Here's an example of a custom authentication module we've placed in /node_modules/custom_auth/index.coffee
 
 ``` coffee-script
 exports.authenticate = (params, cb) ->
@@ -560,7 +570,9 @@ Users can subscribe to an unlimited number of channels using the following comma
       
       session.channel.subscribe('disney')        # note: multiple channel names can be passed as an array 
     
-      session.channel.unsubscribe('kids')        # note: multiple channel names can be passed as an array 
+      session.channel.unsubscribe('kids')        # note: multiple channel names can be passed as an array
+
+      session.channel.unsubscribeAll()           # unsubscribes you from every channel (useful if you've logged out)
     
       session.channel.list()                     # shows which channels the client is currently subscribed to
 ```
@@ -616,42 +628,32 @@ SS.socket.on('connect', -> alert('Connection Up'))
 
 These events can be used client side to toggle an online/offline icon within the app, or better still, to dim the screen and show a 'Attempting to reconnect...' message to users.
 
-**Server Side**
-
-As SocketStream can automatically detect when a client is no longer connected (e.g. they have closed down the browser tab), you may wish to run a server-side function to automatically logout the user, cleanup the database, or broadcast a message. In this case we recommend binding the following event handler to a server method which is invoked once when a user first hits you app, typically SS.server.app.init():
-
-``` coffee-script
-exports.actions =
-
-  init: (cb) ->
-    @getSession (session) ->
-      session.on 'disconnect', (disconnected_session) ->
-        console.log "User ID #{disconnected_session.user_id} has just logged out!"
-        disconnected_session.user.logout()
-```
-
-**Note**
-
-At present requests sent to the server whist offline are queued on the browser and automatically executed once the connection is re-established. In the near future we will allow time-critical requests to be marked as such - essential for stock trading apps.
+You may also want to run custom code on the server when a client connects or disconnects. If so, check out the new Server-side Events feature in 0.2 at /doc/guide/server-side_events.md
 
 
 ### Using custom HTTP handlers / middleware
 
-Though we have yet to fully explore this idea, right now it's possible to run all incoming HTTP requests through your own middleware. This can either alter the request object or, more usefully, allow you to respond with your own headers and content depending upon the URL, User Agent and other request parameters sent.
+SocketStream uses Connect both internally, any to allow you to hook into any 3rd-party middleware - or easily write your own!
+
+Middleware can either alter the request object or, more usefully, allow you to respond with your own headers and content depending upon the URL, User Agent and other request parameters sent.
 
 This is a very powerful feature, particularly because it's the first thing Node calls when a HTTP request comes in - so you have all the flexibility and speed of a bare-bones Node.js app.
 
-Please see the comments in /config/http.coffee to use this feature. For example, you could place a file called my_middleware.coffee in /lib/server with:
+Please see the comments in /config/http.coffee to make use of custom/3rd-party Connect middleware.
+
+
+### Configuring Socket.IO
+
+If you wish to configure Socket.IO 0.7 directly you may include an optional configure() function within /app/config.coffee
+
+For example, to make logging more verbose:
 
 ``` coffee-script
-exports.call = (request, response, next) ->
-
-  # Log the User Agent of each incoming request
-  console.log 'User Agent is:', request.headers['user-agent']
-  
-  # All middleware must end with next() unless response is being served/terminated here
-  next()
+  socketio:
+    configure: (io) ->
+      io.set 'log level', 5
 ```
+
 
 ### Incompatible Browsers
 
@@ -663,9 +665,9 @@ As flashsockets are not ideal (more overhead, initial connection latency) you ma
 SS.config.browser_check.strict = true
 ```
     
-Once set, only browsers with native websocket support (currently Chrome 4 and above and Safari 5 and above) will be allowed to connect to your app. All others will be shown a static page at /static/incompatible_browsers/index.html which we encourage you to customize.
+Once set, only browsers with native websocket support (currently Chrome 4 and above and Safari 5 and above) will be allowed to connect to your app. All others will be shown /app/views/incompatible.jade (or .html) if present. The name of this view can be customized with SS.config.browser_check.view_name.
 
-In the future we'll improve browser detection by testing for compatible browsers and Flash support in the SocketStream client as a second line of defence.
+In the future we'll improve browser detection by testing for compatible browsers and Flash support in the SocketStream client as a second line of defense.
 
 Note: The serving of HTTP API requests occurs before the browser is checked for compatibility and is hence not affected by these settings.
 
@@ -743,16 +745,9 @@ What's more, by default, we also launch a secondary HTTP server on Port 80 to re
 Finally, you may install multiple SSL certificates in /config/ssl_certs and select the ones you would like SocketStream to use with SS.config.https.cert_name. By default this is set to 'site', hence site.key.pem, site.cert.pem.
 
 
-### Scaling Up
-
-One instance of SocketStream should be able to comfortably support a few thousand simultaneously connected clients, depending upon the back-end work that needs to be done to service them and whether or not the server is running HTTPS. But what happens when your app goes viral and one server instance is no longer enough?
-
-Version 0.2.0 is currently in the works to address this issue. Look out for an initial alpha release in a few weeks time. For the most part 0.2.0 maintains developer API compatibility with 0.1.x so your existing apps will not break.
-
-
 ### Tests
 
-Yes, we know. At the moment there are very few tests. This is bad. We are currently evaluating testing frameworks in the hope of finding one we truly like. After all, we're likely to be stuck with it for a good many years, so we need to choose carefully. We will then begin writing unit and integration tests for parts of SocketStream which are unlikely to change in the near future. Right now, any help and contributions in this area would be very much appreciated.
+We have begun to write tests for parts of SocketStream which are unlikely to change in the near future. Currently these live in a separate project any only cover a small number of features - but it's a start. We've chosen Jasmine so far but still need to decide how to organize the files and where to run the specs (as websocket tests are far easier to run in the browser). Once we figure this all out we'll make the tests available on Github.
 
 
 ### Known Issues
@@ -765,10 +760,10 @@ Yes, we know. At the moment there are very few tests. This is bad. We are curren
 
 Q: Will SocketStream support Java/Erlang/PHP/Ruby/Python/my favourite language?
 
-A: No. SocketStream is a stand-alone framework which uses a very carefully curated technology stack. However, rather than re-write your entire app in SocketStream, consider using it as a front-end to a legacy web service which can be easily be invoked from your server-side code.
+A: Not directly. SocketStream is a stand-alone framework which uses a very carefully curated technology stack. However, rather than re-write your entire app in SocketStream, consider using it as a front-end to a legacy application which you can connect to over a web service or Plug Socket.
 
 
-Q: Can I integrate SocketStream into my existing app?
+Q: Can I integrate SocketStream into my existing web app?
 
 A: No. At least not on the same host and port. For 'hybrid' real time apps we recommend using [Pusher](http://www.pusher.com)
 
@@ -776,11 +771,6 @@ A: No. At least not on the same host and port. For 'hybrid' real time apps we re
 Q: Can I host more than one SocketStream website on the same port?
 
 A: Not at the moment. We will be looking at ways to support this in the future using reverse proxies.
-
-
-Q: Can I horizontally scale one big website over many CPU cores and servers?
-
-A: Not yet, but this is coming shortly in v 0.2.0.
 
 
 Q: How do I test my app?
@@ -795,7 +785,12 @@ A: Not at the moment as Heroku cannot correctly route websockets. We are sure ot
 
 Q: How do I make models?
 
-A: There is no ability to create server-side models at the moment. This won't stop you from making many types of apps such as real-time chat, but may prove annoying if your app involves lots of CRUD. The good news is we have a great solution called Real Time Models. We're still testing this internally and refining the idea, but we'll release the parts we're happy with in the near future.
+A: There is no ability to create server-side models at the moment. This won't stop you from making many types of apps such as real-time chat, but may prove annoying if your app involves lots of CRUD. The good news is we have a great solution called Real Time Models which will be available in version 0.3.
+
+
+Q: Does SocketStream work with Backbone.js
+
+A: Not yet, but it's coming in version 0.3. There are already community efforts underway to make it work right now. Please take a look at our Google Group for the latest developments.
 
 
 Q: Will the API / directory structure / config file format change in the future?
@@ -828,6 +823,8 @@ We welcome contributions from forward-thinking hackers keen to redefine what's p
 The best developers take 10 lines of code and come up with a completely new design that needs 3. If you're one of these rare breed of people we'd love to have you onboard as a potential member of our core team. Test writers and creators of beautiful documentation will receive our maximum appreciation and support as they seek to keep up with a rapidly moving target.
 
 Before you add a major new feature to SocketStream and submit a pull request, bear in mind our goal is to ensure the core stays lean, robust, and breathtakingly fast. Additional non-core functionality should be provided by NPM modules. We'll make this possible/easier as time goes on.
+
+Tip: When developing on the SocketStream JS client (/lib/frontend/client/socketstream.coffee) be sure to have the server running at the same time as this will re-compile/minify everything for you.
 
 If you wish to discuss an idea, or want to chat about anything else, email us at info@socketstream.org
 
