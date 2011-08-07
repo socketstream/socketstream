@@ -14,7 +14,7 @@ SocketStream is a new full stack web framework built around the [Single-page App
 
 Project status: Highly experimental but usable. The 0.1 branch is now stable enough for low-risk internal applications. External apps deployed directly on the internet should be done so with extreme care (read the Deploying and Security sections below).
 
-Development on SocketStream 0.2 is now well underway. It includes a brand new scalable back-end architecture, plus many new features and refinements to existing ideas. So far there are only minimal changes to the 0.1 developer API outlined in this document. A preview of 0.2 will be available on github within a week or so, though 0.1.8 is likely to remain the recommend stable release for some time.
+A preview of 0.2 is now available on Github (in the 0.2 branch). [See full 0.2 announcement and changelog](https://github.com/socketstream/socketstream/blob/0.2/doc/annoucements/0.2.md). 0.1.8 will remain the recommend release for the next few weeks until 0.2.0 is stable and pushed to NPM.
 
 Follow [@socketstream](http://twitter.com/#!/socketstream) for the latest developments and thinking. Website coming soon.
 
