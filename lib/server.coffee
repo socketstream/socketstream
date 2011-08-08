@@ -63,6 +63,10 @@ process =
       # Wait for the request to complete then execute middleware
       request.addListener 'end', -> SS.internal.servers[server_name].middleware.execute(request, response)
 
+      # Aggregate request data, forming the request http body
+      request.body = ''
+      request.addListener 'data', (body) -> 
+            request.body += body
 
   # Socket.IO
   socket:
