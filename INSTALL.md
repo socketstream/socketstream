@@ -36,6 +36,7 @@ SocketStream runs on all UNIX based platforms, including OS X and Linux.
     ./configure
     make
     sudo make install
+    sudo ldconfig
     
     # install Node.js
     
