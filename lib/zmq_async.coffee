@@ -28,30 +28,29 @@ class exports.Socket
   
       # All messages in MUST include an ID field containing the same number contained in the request
       if obj.id
-        cb = @stack[obj.id]
-        cb[0](obj, cb[1])
+        [cb, store] = @stack[obj.id]
+        cb(obj, store)
         delete @stack[obj.id]
       else
         throw new Error("Invalid ZeroMQ async response. An 'id' field must be provided")
 
-  # First argument must be an object - e.g. {method: 'sum', params: [4,1,5]}
-  # Second argument is optional. Use it as a place to store associated data with the request (e.g. session_id)
-  # Final argument must be the callback
+  # First argument must be the message object - e.g. {method: 'sum', params: [4,1,5]}
+  # Second argument is optional. It can be an object or array. Use it as a place to store associated data with the request that won't be sent over the wired (e.g. the socket we need to emit the response to)
+  # Final argument must be the callback which is also optional (sometimes we just want to send a command and not care about a response)
   send: () ->
 
-    # TODO: Refactor this
-    args = Array.prototype.slice.call(arguments)
-    obj =  args[0]
-    meta = if args.length == 3 then args[1] else []
-    cb =   if args.length == 3 then args[2] else args[1]
+    # Ugly but fast. Improvements welcome. Remember store and cb are both optional
+    args = arguments
+    obj =   args[0]
+    store = if args.length == 3 then args[1] else undefined
+    cb =    if args.length == 3 then args[2] else args[1]
 
     throw new Error('Message to ZeroMQ async wrapper must be an object') unless typeof(obj) == 'object'
     
     # Callbacks are optional. Sometimes you just want to send a command and not care about a response
     if cb 
-      @request_num++
-      obj.id = @request_num
-      @stack[obj.id] = [cb, meta]
+      obj.id = ++@request_num
+      @stack[obj.id] = [cb, store]
 
     console.log('ZeroMQ socket about to serialize:', obj) if @debug
 

@@ -9,8 +9,6 @@ Still to do before 0.2.0 is released.
 * Tidy up way channel and user subscriptions are persisted between sessions (and cleanup things when clients depart)
 * Fix Basic Auth on HTTP API (or ideally re-implement using Connect Auth)
 * Continue to refactor Session to load the bare minimum needed per-request
-* Cleanup the way we switch request id when pushing websocket calls through to the back end
-* Improve the way we store meta data in a zmq_async request
 * Write more tests for sending to multiple channels and users at once
 * Make new server-side events: 'channel:subscribe', 'channel:unsubscribe' work correctly
 * Can we bring back the "loaded 0 server files..." message even though these files are now loaded in another process?

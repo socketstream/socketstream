@@ -73,9 +73,14 @@ send = (socket, type, obj = {}) ->
   # If we expect a response
   if obj.id
 
+    # Send via ZeroMQ, store the socket and original request ID
     zmqs.send obj, [socket, obj.id], (result, store) ->
-      result.id = store[1]
-      store[0].emit obj.type, JSON.stringify(result)
+      
+      # Replace the ZeroMQ request ID with the original callback ID (from the browser)
+      [socket, result.id] = store
+      
+      # Send the message via the socket which requested it
+      socket.emit obj.type, JSON.stringify(result)
   
   # If not, just send the command
   else
