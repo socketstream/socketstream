@@ -72,11 +72,11 @@ parseParams = (url) ->
   try
     if url.search
       if url.search.match('=')        # Test to see if we're trying to pass an object
-        url.query
+        [url.query]
       else
-        url.search.split('?')[1]      # Or just a string/number
+        [url.search.split('?')[1]]      # Or just a string/number
     else
-      undefined
+      null
   catch e
     throw new Error('Unable to parse params. Check syntax.')
 

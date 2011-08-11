@@ -27,6 +27,9 @@ plugs.init()
 # Load any database connections
 load.dbConfigFile()
 
+# Load Event Emitter and custom server-side events
+load.serverSideEvents()
+
 # Load file 'trees' for each app folder
 trees = load.fileTrees()
 
@@ -44,9 +47,6 @@ SS.redis = require('../redis.coffee').connect()
 
 # Load publish API
 SS.publish = require('./publish.coffee')
-
-# Load Event Emitter and custom server-side events
-load.serverSideEvents()
 
 # Listen for incoming requests and dispatch them to a responder
 SS.frontend.socket.on 'message', (envelope, orig_env, request) ->

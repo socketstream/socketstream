@@ -133,7 +133,8 @@ class exports.Session extends EventEmitter
         unless @session.channels.include(name) # clients can only join a channel once
           @session.channels.push(name)
           SS.publish._system {command: 'channel_subscribe', name: name, session_id: @session.id}
-          SS.log.pubsub.channels.subscribe(@session.user_id, name)         
+          SS.log.pubsub.channels.subscribe @session.user_id, name
+          SS.events.emit 'channel:subscribe', @session, name
       @_save() unless resubscribe
       true
 
@@ -144,6 +145,7 @@ class exports.Session extends EventEmitter
           @session.channels = @session.channels.delete(name)
           SS.publish._system {command: 'channel_unsubscribe', name: name, session_id: @session.id}
           SS.log.pubsub.channels.unsubscribe(@session.user_id, name)
+          SS.events.emit 'channel:unsubscribe', @session, name
           true
         else
           false

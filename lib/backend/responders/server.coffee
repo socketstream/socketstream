@@ -51,14 +51,13 @@ process = (obj, cb) ->
     (new Session(obj.session_id))._findOrCreate scb
 
   # Build up args to pass to server action
-  args = []
-  args.push(obj.params) if obj.params
+  args = obj.params || []
   args.push(cb)
-  
+
   # Check we have have the correct number of params
-  throw error('MISSING_CALLBACK',    "The #{action} action is missing the callback argument")        if method.length == 0
-  throw error('MISSING_PARAMS',      "The #{action} action expects params but none were sent")       if method.length > args.length
-  throw error('PARAMS_NOT_REQUIRED', "The #{action} action was sent params but can't receive them")  if method.length < args.length
+  throw error('MISSING_CALLBACK',   "The #{action} action is unable to take a callback as the last argument") if method.length == 0
+  throw error('MISSING_ARGS',       "The #{action} action expects #{(method.length - 1).pluralize('argument')} (plus a callback) but #{if (a = args.length - 1) > 0 then 'only ' + a else 'none'} #{if args.length == 2 then 'was' else 'were'} sent") if method.length > args.length
+  throw error('TOO_MANY_ARGS',      "The #{action} action was sent #{(args.length - 1).pluralize('argument')} (plus a callback) but can only receive #{method.length - 1}") if method.length < args.length
 
   # If the server_module requires authentication do it here
   if SS.internal.authenticate[actions.join('.')]

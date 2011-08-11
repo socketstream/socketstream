@@ -39,8 +39,8 @@ class exports.Socket
   # Final argument must be the callback
   send: () ->
 
-    # TODO: Refactor this. Shame you can't do arguments.pop()
-    args = arguments
+    # TODO: Refactor this
+    args = Array.prototype.slice.call(arguments)
     obj =  args[0]
     meta = if args.length == 3 then args[1] else []
     cb =   if args.length == 3 then args[2] else args[1]

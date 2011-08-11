@@ -53,24 +53,26 @@ default_cb = (server_response) ->
 
 # Sends a command to /app/server code
 SS.internal.remote = ->
-  args = arguments
-  
-  # Assemble message
-  msg = {}
-  msg.method  = args[0]
-  msg.method  = "#{SS.config.remote_prefix}.#{msg.method}" if SS.config.remote_prefix
-  msg.params  = args[1]
-  msg.options = if args.length >= 4 then args[2] else null
-  
+  args = Array.prototype.slice.call(arguments)
+
   # Test to see if the last argument passed is a callback function. It should be, however if we're just testing
   # out a function from the browser's console, use the default callback which simply console.log's the response
   last_arg = args[args.length - 1]
-  cb = if typeof(last_arg) == 'function' then last_arg else default_cb
-  cb.options = msg.options
+
+  # Send supplied callback or use the default ('console.log')
+  args.push(default_cb) unless typeof(last_arg) == 'function'
   
-  # Log if in Developer mode, then send
+  # Assemble message
+  msg = {}
+  msg.method = args[0]
+  msg.method = "#{SS.config.remote_prefix}.#{msg.method}" if SS.config.remote_prefix 
+  msg.params = if args.length > 1 then args.slice(1, (args.length - 1)) else null
+
+  # Log if in developer mode
   console.log('<- ' + msg.method) if (validLevel(4) && !(msg.options && msg.options.silent))
-  send('server', msg, cb)
+
+  # Send request to front end servers
+  send 'server', msg, args.pop()
 
 
 # Realtime Models - Highly experimental. Disabled by default on the server
