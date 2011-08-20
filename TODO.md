@@ -3,10 +3,7 @@ TODO
 
 Still to do before 0.2.0 is released.
 
-* -- All below are Session related --
-* Do we get new channel:subscribe server side events when session is reestablished?
 * Make new server-side events: 'channel:subscribe', 'channel:unsubscribe' work correctly
-
 * Write more tests for errors which can be displayed in the browser's console over websockets
 * Fix Basic Auth on HTTP API (or ideally re-implement using Connect/Every Auth)
 * Can we bring back the "loaded 0 server files..." message even though these files are now loaded in another process?
