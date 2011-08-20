@@ -17,9 +17,6 @@ exports.bannerText = (standalone) ->
 tree = file_utils.readDirSync(SS.root + '/app/client')
 check.forNameConflicts([tree])
 
-# Init place holders for connected clients
-SS.connected = require('./connected.coffee')
-
 # Load Server
 exports.server = require('./server.coffee')
 

@@ -14,12 +14,11 @@ plugs = require('./plug_sockets.coffee')
 zmqs = require('../zmq_async.coffee')
 serializer = zmqs.formats[SS.config.cluster.serialization]
 
-# Load default message responders
-require('./responders')
-
 # Create ZMQ sockets
 SS.frontend.socket = zeromq.createSocket('xrep')
-SS.frontend.socket.connect SS.config.cluster.sockets.be_main
+
+# Listen for messages (unless we're running this from the console)
+SS.frontend.socket.connect(SS.config.cluster.sockets.be_main) unless SS.internal.mode is 'console'
 
 # Connect any Plug Sockets
 plugs.init()
@@ -48,18 +47,23 @@ SS.redis = require('../redis.coffee').connect()
 # Load publish API
 SS.publish = require('./publish.coffee')
 
+# Load default message responders
+require('./responders')
+
 # Listen for incoming requests and dispatch them to a responder
 SS.frontend.socket.on 'message', (envelope, orig_env, request) ->
   try
     # Attempt to unpack raw binary message
     obj = serializer.unpack(request)
+
+    # Silently drop any messages confirming to another RPC version (allows staggered upgrades)
+    return false unless obj.version == SS.internal.rpc_version
     
     # First argument is the event name which a responder must listen for
-    args = [obj.type, obj]
+    args = [obj.responder, obj]
     
     # If the request has an 'id' field it expects a callback (most system commands such as heartbeats do not)
-    if obj.id
-      args.push ((response) -> SS.frontend.socket.send envelope, orig_env, serializer.pack(response))
+    obj.id? && args.push ((response) -> SS.frontend.socket.send envelope, orig_env, serializer.pack(response))
     
     # Emit the request to one or more responders
     SS.backend.responders.emit.apply SS.backend.responders, args

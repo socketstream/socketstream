@@ -16,6 +16,7 @@ base64 = require('../../utils/base64.js')
 server = require('../utils.coffee')
 
 zmqs = new (require('../../zmq_async.coffee').Socket)
+zmqs.internal = true
 
 
 # Connect middleware handler
@@ -51,13 +52,17 @@ process = (request, response, url, actions) ->
     # Check format is supported
     throw 'Invalid output format. Supported formats: ' + formatters.keys().join(', ') unless formatters.keys().include(format)
     
-    # Generate request for back end and send
-    obj = {type: 'server', method: actions.join('.'), params: params}
+    post_data = ''
+    request.on 'data', (chunk) -> post_data += chunk.toString()
+    request.on 'end', ->
 
-    # Execute the request and deliver the response once it returns
-    zmqs.send obj, [response, format], (result, store) ->
-      [response, format] = store
-      reply(result, response, format)
+      # Generate request for back end and send
+      obj = {responder: 'server', method: actions.join('.'), params: params, origin: 'api'}
+      obj.post = post_data if post_data.length > 0
+
+      # Execute the request and deliver the response once it returns
+      zmqs.send obj, (result) ->
+        reply(result, response, format)
     
   catch e
     server.showError(response, e)

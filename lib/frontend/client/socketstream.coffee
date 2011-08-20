@@ -72,7 +72,12 @@ SS.internal.remote = ->
   console.log('<- ' + msg.method) if (validLevel(4) && !(msg.options && msg.options.silent))
 
   # Send request to front end servers
-  send 'server', msg, args.pop()
+  cb = args.pop()
+  SS.socket.emit 'server', msg, (data) ->
+    return backendError(data.error) if data.error
+    #silent = (cb.msg.options and cb.msg.options.silent)
+    log(2, '-> ' + msg.method, data.result) #unless silent
+    cb(data.result)
 
 
 # Realtime Models - Highly experimental. Disabled by default on the server
@@ -95,7 +100,7 @@ class RTM
 
   _send: (action, params, cb) ->
     log 2, "<~ #{@name}.#{action}"
-    send('rtm', {rtm: @name, action: action, params: params}, cb)
+    SS.socket.emit 'rtm', {rtm: @name, action: action, params: params}, cb
 
 
 ### SYSTEM RESPONDERS ###
@@ -105,10 +110,10 @@ SS.socket.on 'getSessionID', (data, cb) ->
   cb getCookie('session_id')
 
 # System Init
-SS.socket.on 'client:init', (msg) ->
+SS.socket.on 'init', (msg) ->
 
-  data = JSON.parse(msg).data
-  
+  data = JSON.parse(msg)
+
   # Set the SS.env variable. Useful for client-side scripts which need to behave differently depending upon environment loaded
   SS.env = data.env                              
   
@@ -137,25 +142,13 @@ SS.socket.on 'client:init', (msg) ->
   start()
 
 # Reload the browser window (normally when the underlying code changes in Dev mode)
-SS.socket.on 'client:reload', ->
+SS.socket.on 'reload', ->
   if SS.config.auto_reload
     console.log 'Reloading as files have changed...'
     window.location.reload()
 
 
 ### MAIN RESPONDERS ####
-
-# Respond to messages send to SS.server
-SS.socket.on 'server', (msg) ->
-  data = JSON.parse(msg)
-  return backendError(data.error) if data.error
-  if cb = SS.internal.cb_stack[data.id]
-    silent = (cb.msg.options and cb.msg.options.silent)
-    log(2, '-> ' + cb.msg.method, data.result) unless silent
-    cb.funkt(data.result)
-    delete SS.internal.cb_stack[data.id]
-  else
-    # callback not found. prob called twiced and already removed
 
 # Respond to incoming events
 SS.socket.on 'event', (msg) ->
@@ -184,21 +177,6 @@ start = ->
     else
       init()
     SS.started = new Date
-
-send = (type, msg, cb = null) ->
-  try
-    if SS.socket.ready
-      
-      # Callbacks are optional
-      if cb
-        id = Math.random().toString().split('.')[1]
-        SS.internal.cb_stack[id] = {funkt: cb, msg: msg}
-        msg.id = id
-      
-      SS.socket.emit type, msg
-    else
-      console.log 'not ready'
-  undefined # always return this. it's the result of the callbacks we're interested in
 
 # Displays any application errors in the browser's console
 backendError = (error) ->

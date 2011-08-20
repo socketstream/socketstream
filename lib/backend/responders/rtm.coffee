@@ -38,4 +38,4 @@ convertStringsToRegExps = (params) ->
 SS.backend.responders.on 'rtm', (obj, cb) ->
   process obj, (err, data) ->
     SS.log.outgoing.rtm(obj)
-    cb {type: 'rtm', id: obj.id, data: data}
+    cb {id: obj.id, result: data}

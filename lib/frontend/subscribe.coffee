@@ -11,7 +11,6 @@ sub.subscribe('events')
 sub.on 'message', (msg_type, event_type, message) ->
   dispatch[event_type.toString()](message.toString())
 
-
 # Private
 
 # Dispatch incoming events via websockets
@@ -30,47 +29,21 @@ dispatch =
   users: (message, uid) ->
     dispatchMultiple 'Users', message
 
-  # Receive an internal system message
-  system: (message) ->
-    try
-      obj = JSON.parse(message)
-      if obj.session_id and (socket = SS.connected.sessions[obj.session_id])      
-        system_commands[obj.command](socket, obj)
-    catch e
-      SS.log.error.message 'Invalid system message received'
-      console.log e
-
 
 # Used to dispatch messages to multiple channels or users
 dispatchMultiple = (name, message) ->
   obj = JSON.parse(message)
   throw new Error('No #{name.toLowerCase()} specified in incoming event message') unless obj.destinations and obj.destinations.length > 0
   SS.log.incoming.event("#{name} [#{obj.destinations.join(', ')}]", message)
-  already_messaged = []
+  sockets_to_message = []
   obj.destinations.map (destination) ->
-    collection = SS.connected[name.toLowerCase()]
-    if sockets = collection.getAll(destination)
-      sockets.forEach (socket) ->
-        return if socket.disconnected && collection.remove(destination, socket)
-        socket.emit('event', message) && already_messaged.push(socket) unless already_messaged.include(socket)
 
+    # Traversing the Socket.IO object tree is temporary. Want to rearchitect this in the future to improve
+    # performance when thousands of clients are simultaneously connected, without changing the developer API
+    for socket_id, socket of SS.io.sockets.sockets
+      try
+        if (name == 'Channels' && socket.ss.session.channels.include(destination)) or (name == 'Users' && socket.ss.session.user_id == destination)
+          sockets_to_message.push(socket) unless socket.disconnected or sockets_to_message.include(socket)
 
-# Execute system commands on this front end server
-# These are basically used to keep websockets in sync with the users and channels
-# they are related to so we know which sockets to messages when events come in
-system_commands =
-
-  user_authenticated: (socket, obj) ->
-    SS.connected.users.add(obj.user_id, socket)     if obj.user_id
-
-  user_logout: (socket, obj) ->
-    SS.connected.users.remove(obj.user_id, socket)  if obj.user_id
-
-  channel_subscribe: (socket, obj) ->
-    SS.connected.channels.add(obj.name, socket)     if obj.name
-
-  channel_unsubscribe: (socket, obj) ->
-    SS.connected.channels.remove(obj.name, socket)  if obj.name
-
-
-
+    # Deliver message to each socket
+    sockets_to_message.forEach (socket) -> socket.emit('event', message)

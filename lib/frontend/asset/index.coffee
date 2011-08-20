@@ -49,7 +49,9 @@ exports.monitor = ->
 watch = ->
   @timestamp = Date.now()
   watch_dirs.map (asset) ->
-    watchForChangesInDir(asset[0], -> exports.pack[asset[1]][asset[2]]())
+    watchForChangesInDir asset[0], ->
+      exports.pack[asset[1]][asset[2]]()
+      SS.io.sockets.emit('reload')
 
 watchForChangesInDir = (dir, cb) ->
   fs.readdirSync(dir).map (file) ->
@@ -58,7 +60,6 @@ watchForChangesInDir = (dir, cb) ->
     fs.watchFile path, (curr, prev) ->
       if !curr or (Number(curr.mtime) > Number(prev.mtime))
         util.log("Change detected in #{path}. Recompiling client files...")
-        SS.io.sockets.emit('client:reload')
         cb()
 
 ensureAssetsExist = ->

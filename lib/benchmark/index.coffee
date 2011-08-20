@@ -7,12 +7,14 @@ log = require('../logger.coffee')
 stack = require('./benchmarks.coffee').benchmarks
 
 zmqs = new (require('../zmq_async.coffee').Socket)
+zmqs.internal = true
+
 serialization = SS.config.cluster.serialization
 
 exports.bannerText = ->
   [
     "Benchmark Suite"
-    "Using #{serialization.toUpperCase()} serialization"
+    "RPC protocol using #{serialization.toUpperCase()} serialization"
   ]
 
 exports.run = ->
@@ -61,9 +63,9 @@ run = (details, next) ->
   printer = setInterval(printResults, 1000)
   
   while sent < details.requests
-    obj = {type: details.command}
+    obj = {responder: details.command}
     sent++
-    zmqs.send obj, null, (result) ->
+    zmqs.send obj, (result) ->
       recv++
       if recv == details.requests
         end = Number(new Date())

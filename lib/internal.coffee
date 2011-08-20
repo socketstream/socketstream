@@ -10,6 +10,9 @@ exports.init = ->
 
   ### COMMON ###
 
+  # Mode we're running in - e.g. 'integrated', 'console', 'backend'
+  @mode = null
+
   # Parse package.json so we don't have to repeat ourselves
   @package_json = loadPackageJSON()
 
@@ -19,10 +22,18 @@ exports.init = ->
   # Save a timestamp for benchmarking later
   @up_since = new Date
 
+  # RPC version
+  @rpc_version = 1
+
+
   ### FRONT END ###
+
+  # Store sockets indexed by session.id
+  @sessions = {}
 
   # Store any running HTTP(S) servers here
   @servers = {}
+
 
   ### BACK END ###
   

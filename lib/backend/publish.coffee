@@ -28,11 +28,6 @@ module.exports =
   # Alias Users
   user: (users, event, params) ->
     @users(users, event, params)
-  
-  # Send a system message (at the moment normally from the back end to the front end)
-  _system: (obj) ->
-    throw new Error('System message must be an object') unless typeof(obj) == 'object'
-    SS.redis.main.publish "#{key}:system", JSON.stringify(obj)
 
 
 # Private

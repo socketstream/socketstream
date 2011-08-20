@@ -59,11 +59,10 @@ class Stack
     try
       custom = require("#{SS.root}#{file}")
     catch e
-      util.log "#{file} file missing! Attempting to copy default template..."
-      source = __dirname + "/../../new_project#{file}"
-      destination = "#{SS.root}#{file}"
-      copy.copyFile source, destination
-      util.log "#{file} file created!"
+      if e.message.match(/^Cannot find module/)
+        custom = require(__dirname + "/../../../new_project#{file}")
+      else
+        throw e
 
     if custom[server_name]
       @stack = @stack.concat(custom[server_name])

@@ -1,7 +1,7 @@
 ![SocketStream!](https://github.com/socketstream/socketstream/raw/master/new_project/public/images/logo.png)
 
 
-Latest release: 0.2 preview   ([view changelog](https://github.com/socketstream/socketstream/blob/0.2/doc/annoucements/0.2.md))
+Latest release: 0.2 beta   ([view changelog](https://github.com/socketstream/socketstream/blob/0.2/doc/annoucements/0.2.md))
 
 Twitter: [@socketstream](http://twitter.com/#!/socketstream)  
 Google Group: http://groups.google.com/group/socketstream  
@@ -10,11 +10,11 @@ IRC channel: [#socketstream](http://webchat.freenode.net/?channels=socketstream)
 
 ### Version 0.2 Branch
 
-Note: You're looking at the highly-experimental and currently unstable 0.2 branch. It is truly a work in progress. By all means test your existing apps on 0.2 but we recommend using the latest 0.1 release for development until this branch becomes stable and pushed to NPM.
+Note: You're looking at the 0.2 beta release branch. Although not completley finished yet, if you don't mind living on the edge we now advise using 0.2 for development. We're on track to get the first stable release, 0.2.0, finished and pushed to NPM before the end of August.
 
 IMPORTANT: You will need to install ZeroMQ 2.1 from http://www.zeromq.org/intro:get-the-software __before__ installing SocketStream 0.2.
 
-Install the 0.2 preview by cloning the 0.2 branch from github and running 'sudo npm install -g' inside the directory.  
+Install the 0.2 beta by cloning the 0.2 branch from github and running 'sudo npm install -g' inside the directory.  
 At present SocketStream 0.2 __only works with Node 0.4__ but this will be resolved before 0.2.0 is released.
 
 [Read Full 0.2 Announcement](https://github.com/socketstream/socketstream/blob/0.2/doc/annoucements/0.2.md)
@@ -41,10 +41,11 @@ Follow [@socketstream](http://twitter.com/#!/socketstream) for the latest develo
 * Integrated asset manager - automatically packages and [minifies](https://github.com/mishoo/UglifyJS) all client-side assets
 * In-built User model - with modular authentication. Automatically keeps track of users online (see below)
 * Interactive Console - just type 'socketstream console' and invoke any server-side or shared method from there
-* API Trees - offer a simple, consistent way to namespace large code bases across the front and back end
+* API Trees - offer a simple, consistent way to namespace and organise large code bases across the front and back end
 * Uses [Connect](http://senchalabs.github.com/connect/) - hook in 3rd-party middleware or write your own. Custom code executes first for maximum flexibility and speed
 * Works great on iPads and iPhones using Mobile Safari (iOS 4.2 and above), even over 3G
 * Server-side Events - run custom code server-side when clients initialize or disconnect
+* Most features, such as the HTTP API, are optional and can be prevented from loading if required
 * Bundled with jQuery - though not dependent on it. Will work great with Zepto and other libraries
 * Bundled with [jQuery templates](http://api.jquery.com/category/plugins/templates/) - works like partials in Rails.
 * Easily add additional client libraries such as [Underscore.js](http://documentcloud.github.com/underscore/)
@@ -232,7 +233,7 @@ Want to know how to broadcast a message to all users, or implement private chann
 
 ### Requirements
 
-[Node 0.4](http://nodejs.org/#download) or above
+[Node 0.4](http://nodejs.org/#download) or above (not Node 0.5 yet)
 
 [NPM 1.0](http://npmjs.org/) (Node Package Manager) or above
 
@@ -270,8 +271,8 @@ The directories generated will be very familiar to Rails users. Here's a brief o
 * All publicly available methods should be listed under 'exports.actions'. Private methods must be placed outside this scope and begin 'methodname = (params) ->'
 * Server files can be nested. E.g. SS.server.users.online.yesterday() would call the 'yesterday' method in /app/server/users/online.coffee
 * You may also nest objects within objects to provide namespacing within the same file
-* @getSession gives you direct access to the User's session
-* @user gives you direct access to your custom User instance. More on this coming soon
+* @session gives you direct access to the User's session
+* @request gives you meta data regarding the RPC call (includes any HTTP POST data if present)
 
 #### /app/shared
 * See 'Sharing Code' section below
@@ -279,7 +280,7 @@ The directories generated will be very familiar to Rails users. Here's a brief o
 #### /app/css
 * /app/css/app.styl must exist. This should contain your stylesheet code in [Stylus](http://learnboost.github.com/stylus/) format (similar to SASS)
 * Additional Stylus files can be imported into app.styl using @import 'name_of_file'. Feel free to nest files if you wish.
-* If you wish to use CSS libraries within your project (e.g. reset.css or jQuery UI) put these in /lib/css instead, or feel free to link to hosted CDN files in /app/views/app/jade
+* If you wish to use CSS libraries within your project (e.g. normalize.css or jQuery UI) put these in /lib/css instead, or feel free to link to hosted CDN files in /app/views/app/jade
 * Stylus files are automatically compiled and served on-the-fly in development mode and pre-compiled/compressed/cached in staging and production
 
 #### /app/views
@@ -464,20 +465,6 @@ The default helpers we ship with are also used server-side throughout SocketStre
 Take a look at /lib/client/3.helpers.js to see the available helpers. If for some reason these conflict with a third-party library, or you simply don't want to use them, just delete this file and it won't come back.
 
 
-### Sessions
-
-SocketStream creates a new session when a browser connects to the server for the first time, storing a session cookie on the client and the details in Redis. When the same visitor returns (or presses refresh in the browser), the session is instantly retrieved.
-
-The current session object can be retrieved with the @getSession function within your server-side code. E.g.
-
-``` coffee-script
-exports.actions =
-
-  getInfo: (cb) ->
-    @getSession (session) ->
-      cb("This session was created at #{session.created_at}")
-```
-
 ### Users and Modular Authentication
 
 As almost all web applications have users which need to sign in and out, we have built the concept of a 'current user' into the core of SocketStream. This not only makes life easier for developers, but is vital to the correct functioning of the pub/sub system, authenticating API requests, and tracking which users are currently online (see section below).
@@ -497,20 +484,18 @@ exports.authenticate = (params, cb) ->
 
 * The second argument is the callback. This must return an object with a 'status' attribute (boolean) and a 'user_id' attribute (number or string) if successful. Additional info, such as number of tries remaining etc, can optionally be passed back within the object and pushed upstream to the client if desired.
 
-To use this custom authentication module within your app, you'll need to call @getSession then session.authenticate in your /app/server code, passing the name of the module you've just created as the first argument:
+To use this custom authentication module within your app, you'll need to call @session.authenticate in your /app/server code, passing the name of the module you've just created as the first argument:
 
 ``` coffee-script
 exports.actions =
 
   authenticate: (params, cb) ->
-    @getSession (session) ->
-      session.authenticate 'custom_auth', params, (response) =>
-        session.setUserId(response.user_id) if response.success       # sets session.user.id and initiates pub/sub
-        cb(response)                                                  # sends additional info back to the client
+    @session.authenticate 'custom_auth', params, (response) =>
+      session.setUserId(response.user_id) if response.success       # sets session.user.id and initiates pub/sub
+      cb(response)                                                  # sends additional info back to the client
 
   logout: (cb) ->
-    @getSession (session) ->
-      session.user.logout(cb)                                         # disconnects pub/sub and returns a new Session object
+    @session.user.logout(cb)                                        # disconnects pub/sub and returns a new Session object
 ```
 
 This modular approach allows you to offer your users multiple ways to authenticate. In the future we will also be supporting common authentication services like Facebook Connect.
@@ -525,7 +510,7 @@ exports.authenticate = true
 
 This will check or prompt for a logged in user before any of the methods within that file are executed.
 
-Once a user has been authenticated, their User ID is accessible by getting the session (with @getSession) then calling session.user_id anywhere in your /app/server code.
+Once a user has been authenticated, their User ID is accessible by calling @session.user_id anywhere in your /app/server code.
 
 
 ### Tracking Users Online
@@ -566,15 +551,13 @@ SS.publish.channel(['disney', 'kids'], 'newMessage', {from: 'mickymouse', messag
 Users can subscribe to an unlimited number of channels using the following commands (which must be run inside your /app/server code). E.g:
 
 ``` coffee-script
-    @getSession (session) ->
-      
-      session.channel.subscribe('disney')        # note: multiple channel names can be passed as an array 
+  @session.channel.subscribe('disney')        # note: multiple channel names can be passed as an array 
     
-      session.channel.unsubscribe('kids')        # note: multiple channel names can be passed as an array
+  @session.channel.unsubscribe('kids')        # note: multiple channel names can be passed as an array
 
-      session.channel.unsubscribeAll()           # unsubscribes you from every channel (useful if you've logged out)
+  @session.channel.unsubscribeAll()           # unsubscribes you from every channel (useful if you've logged out)
     
-      session.channel.list()                     # shows which channels the client is currently subscribed to
+  @session.channel.list()                     # shows which channels the client is currently subscribed to
 ```
 
 If the channel name you specify does not exist it will be automatically created. Channel names can be any valid JavaScript object key. If the client gets disconnected and re-connects to another server instance they will automatically be re-subscribed to the same channels, providing they retain the same session ID. Be sure to catch for any errors when using these commands.

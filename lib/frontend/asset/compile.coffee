@@ -87,13 +87,13 @@ namespaceClientFile = (input, file_ary, ext) ->
   ns = file_ary.splice(2)
   # Add file prefix to ensure we only attach functions to initialized objects
   prefix = ns.map (x, i) -> 
-    level = ns.slice(0, i + 1).join('.')
+    level = ns.slice(0, i + 1).map((file) -> "['#{file}']").join('')
     if ext == 'coffee'
-      "SS.#{type}.#{level} = {} unless SS.#{type}.#{level}"
+      "SS.#{type}#{level} = {} unless SS.#{type}#{level}"
     else
-      "if (typeof(SS.#{type}.#{level}) == 'undefined') SS.#{type}.#{level} = {};"
+      "if (typeof(SS.#{type}#{level}) == 'undefined') SS.#{type}#{level} = {};"
   # Replace calls to exports.X with 'SS.{type}.X' to ensure the API is consistent between server and client without any additional overhead
-  prefix.join("\n") + "\n" + input.replace(/exports\./g, "SS.#{type}." + ns.join('.') + '.')
+  prefix.join("\n") + "\n" + input.replace(/exports\./g, ("SS.#{type}" + ns.map((file) -> "['#{file}']").join('') + '.'))
 
 
 # Gets CSS/JS headers and jQuery templates

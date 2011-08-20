@@ -44,7 +44,7 @@ exports.incoming =
 exports.outgoing =
 
   client: (obj, type) ->
-    output 2, "#{obj.id || 'CMD'} #{exports.color('<-', 'green')} client:#{type}"
+    output 4, "#{obj.id || 'CMD'} #{exports.color('<-', 'green')} client:#{type}"
 
   server: (obj) ->
     if !(obj.options && obj.options.silent)

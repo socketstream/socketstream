@@ -38,6 +38,16 @@ setDefaults = ->
     log:
       level:                  3         	    # 0 = none, 1 = calls only, 2 = calls + params, 3 = full, 4 = everything
 
+    # Rename the @request, @session etc object within your server-side files to something else
+    reserved_vars:
+      request:                'request'
+      session:                'session'
+      user:                   'user'
+
+    # Default settings for /app/server files
+    server_files:
+      authenticate:           false           # Only allow authenticated requests (where @request.session.user_id is set)
+
     # Redis
     redis:
       host:                   '127.0.0.1'
@@ -94,7 +104,7 @@ setDefaults = ->
       serialization:          'json'          # left this is to allow others to experiment but so far found JSON to be no slower than msgpack
       sockets:                                # Note: IPC sockets are the default for raw speed on a single machine. Once your app is ready to spread it's wings over multiple servers, TCP sockets must be specified. See docs for full details
         fe_main:              "ipc://tmp/zmq.fe_main.ipc"
-        fe_pub:               "ipc://tmp/zmq.fe_pubsub.ipc"
+        fe_pub:               "ipc://tmp/zmq.fe_pub.ipc"
         be_main:              "ipc://tmp/zmq.be_main.ipc"
     
     # Plug Sockets

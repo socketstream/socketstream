@@ -66,5 +66,5 @@ watchForChanges = ->
             _workers.forEach (worker) -> worker.kill 'SIGHUP'            
             # Note: this only works when you're running the integrated 'socketstream server' as you typically would in development
             # It should really be fired once the worker has reloaded. Will improve in the future
-            SS.io.sockets.emit('client:reload') if SS.io 
+            SS.io.sockets.emit('reload') if SS.io 
 

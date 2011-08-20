@@ -62,7 +62,7 @@ proxyEvents = ->
   redis.pubsub.subscribe "#{key}:broadcast"     # Messages to be delivered to all connected websockets
   redis.pubsub.subscribe "#{key}:users"         # Messages to be delivered to all clients logged in with this user_id
   redis.pubsub.subscribe "#{key}:channels"      # Messages to be delivered to all connected websockets subscribed to these channels
-  redis.pubsub.subscribe "#{key}:system"        # Internal system messages. Normally from back end to front end servers for now
+  redis.pubsub.subscribe "#{key}:frontend"      # Internal system messages. Normally from back end to front end servers for now
 
   # Every time we get get a message from Redis (for SocketStream), fan out upstream to all subscribed frontend servers
   redis.pubsub.on 'message', (channel, message) ->

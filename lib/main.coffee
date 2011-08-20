@@ -40,7 +40,7 @@ exports.init = (load_project = false) ->
   SS.version = SS.internal.package_json.version
 
   # Set client file version. Bumping this automatically triggers re-compliation of lib assets when a user upgrades
-  SS.client.version = '0.1.1'
+  SS.client.version = '0.1.2'
 
   # Set environment
   env = process.env.SS_ENV || 'development'
@@ -115,6 +115,7 @@ exports.process = (args) ->
 start =
 
   server: ->
+    SS.internal.mode = 'integrated'
     util.log('Starting SocketStream server...')
     load.project()
     frontend = require('./frontend')
@@ -126,6 +127,7 @@ start =
     showBanner banner_text
     
   console: ->
+    SS.internal.mode = 'console'
     load.project()
     require('./frontend')
     require('./backend/worker.coffee')
@@ -134,24 +136,28 @@ start =
     repl.start('SocketStream > ')
 
   frontend: ->
+    SS.internal.mode = 'frontend'
     load.project()
     frontend = require('./frontend')
     servers = frontend.server.start()
     showBanner frontend.bannerText(true)
   
   backend: (args) ->
+    SS.internal.mode = 'backend'
     load.project()
     backend = require('./backend')
     backend.init(args)
     showBanner backend.bannerText(true)
   
   router: (args) ->
+    SS.internal.mode = 'router'
     load.project()
     router = require('./router')
     router.init(args)
     showBanner router.bannerText(true)
 
   benchmark: ->
+    SS.internal.mode = 'benchmark'
     load.project()
     benchmark = require('./benchmark')
     showBanner benchmark.bannerText()
@@ -211,6 +217,7 @@ check =
   
   # Version numbers
   versionIsCorrect: ->
+    return true if semver.parse(SS.version)[5]? # Ignore previews, betas, etc
     out_of_date = try
        semver.gt(SS.internal.state.last_known.version.server, SS.version)
     catch e
