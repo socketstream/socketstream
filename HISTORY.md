@@ -1,3 +1,10 @@
+=== Please note
+
+All new development is going on in the 0.2 branch. 0.2.0 will be released to NPM before the end of August.
+
+Checkout the 0.2 changelog: https://github.com/socketstream/socketstream/blob/0.2/HISTORY.md
+
+
 0.1.8 / 2011-07-24
 ==================
 
