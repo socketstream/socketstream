@@ -42,11 +42,8 @@ class Stack
       custom_http_handler = require("#{SS.root}#{file}")
       @stack.push custom_http_handler
     catch e
-      util.log "#{file} file missing! Attempting to copy default template..."
-      source = __dirname + '/../../new_project/config/http.coffee'
-      destination = "#{SS.root}/config/http.coffee"
-      copy.copyFile source, destination
-      util.log "#{file} file created!"
+      SS.log.error.message "Unable to load custom HTTP config: #{SS.root}#{file}"
+      throw e
 
   # Load Internal Middleware
   load: (name) ->
