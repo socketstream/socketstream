@@ -1,4 +1,4 @@
-=== Please note
+### Please note
 
 All new development is going on in the 0.2 branch. 0.2.0 will be released to NPM before the end of August.
 
@@ -34,7 +34,7 @@ Checkout the 0.2 changelog: https://github.com/socketstream/socketstream/blob/0.
 0.1.5 / 2011-07-12
 ==================
 
-* API CHANGE: @session is now @getSession and takes a callback (for compatibility with forthcoming 0.2.0)
+* API CHANGE: @session is now @getSession and takes a callback (for compatibility with forthcoming 0.2.0) (Update: @session is back in 0.2 - no need to change your code)
 * @session will continue to work in 0.1.x releases but please update your code
 * Fixed annoying bug preventing flashsockets working on port 80 or 443. Doh!
 * Messages sent using SS.publish.user() now go to ALL connected clients with that user_id, not the last one to login
