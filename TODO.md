@@ -25,4 +25,3 @@ Pushed back to 0.3
 
 * Make 'socketstream frontend' utalize multiple cores - most likely using Node 0.5 child_process.fork()
 * Refactor coffee compile so we don't repeat ourselves (part of a Client Asset Manager rewrite)
-* SS.server methods should support multiple arguments - implemented in a way consistent with the HTTP API (will maybe do this before 0.3)
