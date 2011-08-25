@@ -6,8 +6,7 @@ util = require('util')
 log = require('../logger.coffee')
 stack = require('./benchmarks.coffee').benchmarks
 
-zmqs = new (require('../zmq_async.coffee').Socket)
-zmqs.internal = true
+rpc = new (require('../rpc/connection.coffee')).Client('benchmark')
 
 serialization = SS.config.cluster.serialization
 
@@ -65,7 +64,7 @@ run = (details, next) ->
   while sent < details.requests
     obj = {responder: details.command}
     sent++
-    zmqs.send obj, (result) ->
+    rpc.send obj, (result) ->
       recv++
       if recv == details.requests
         end = Number(new Date())

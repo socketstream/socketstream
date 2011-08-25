@@ -1,7 +1,7 @@
 ![SocketStream!](https://github.com/socketstream/socketstream/raw/master/new_project/public/images/logo.png)
 
 
-Latest release: 0.2 beta   ([view changelog](https://github.com/socketstream/socketstream/blob/0.2/doc/annoucements/0.2.md))
+Latest release: 0.2 beta 2   ([view changelog](https://github.com/socketstream/socketstream/blob/master/doc/annoucements/0.2.md))
 
 Twitter: [@socketstream](http://twitter.com/#!/socketstream)  
 Google Group: http://groups.google.com/group/socketstream  
@@ -10,56 +10,64 @@ IRC channel: [#socketstream](http://webchat.freenode.net/?channels=socketstream)
 
 ### Version 0.2 Branch
 
-Note: You're looking at the 0.2 beta release branch. Although not completley finished yet, if you don't mind living on the edge we now advise using 0.2 for development. We're on track to get the first stable release, 0.2.0, finished and pushed to NPM before the end of August.
-
-IMPORTANT: You will need to install ZeroMQ 2.1 from http://www.zeromq.org/intro:get-the-software __before__ installing SocketStream 0.2.
+Note: You're looking at the 0.2 beta release branch. Although not completely finished yet, if you don't mind living on the edge we now advise using 0.2 for development. We're on track to get the first stable release, 0.2.0, finished and pushed to NPM before the end of August.
 
 Install the 0.2 beta by cloning the 0.2 branch from github and running 'sudo npm install -g' inside the directory.  
-At present SocketStream 0.2 __only works with Node 0.4__ but this will be resolved before 0.2.0 is released.
+At present SocketStream 0.2 __only works with Node 0.4__ but will support Node 0.5 as soon as Connect does.
 
-[Read Full 0.2 Announcement](https://github.com/socketstream/socketstream/blob/0.2/doc/annoucements/0.2.md)
+[Read Full 0.2 Announcement](https://github.com/socketstream/socketstream/blob/master/doc/annoucements/0.2.md)
 
 
 ### Introduction
 
 SocketStream is a new full stack web framework and distributed hosting platform built around the [Single-page Application](http://en.wikipedia.org/wiki/Single-page_application) paradigm. It embraces websockets, in-memory datastores (Redis), and client-side rendering to provide an ultra-responsive real time experience that will amaze your users.
 
+If you've used Rails or similar frameworks in the past you'll instantly feel at home with SocketStream. While it's still early days, a lot of the functionality you need to build a good-sized real time web app is now present and relatively stable.
+
+Key functionality which is currently missing (most notably an elegant way to do server-side models, authentication, inbuilt test framework and front-end scaling) are in full-time development and will be released in stages over the coming months. All contributions gratefully received to speed up this process.
+
 Follow [@socketstream](http://twitter.com/#!/socketstream) for the latest developments and thinking. Website coming soon.
 
 
 ### Features
 
-#### Developer
+#### General
 
-* True bi-directional communication using websockets (or Socket.IO fallbacks)
-* Works great with Chrome and Safari. Firefox and IE support temperamental but improving thanks to [Socket.IO 0.7](http://socket.io/)
+* True bi-directional communication using websockets (or Socket.IO fallbacks). No more slow, messy AJAX!
 * Write all code in [CoffeeScript](http://jashkenas.github.com/coffee-script/) or JavaScript - your choice
 * Share code between the client and server. Ideal for business logic and model validation
-* HTTP/HTTPS API - all server-side code is automatically accessible over a high-speed request-based API
-* Plug Sockets - high-speed connections to any external server or legacy app using ZeroMQ. Over 20 languages supported
+* Uses [Redis](http://www.redis.io/) for fast session retrieval, pub/sub, list of users online, and any other data your app needs instantly
+* Plug Sockets - high-speed connections to any external server or legacy apps using ZeroMQ. Over 20 languages supported
 * Effortless, scalable, pub/sub baked right in - including Private Channels. See examples below
-* Integrated asset manager - automatically packages and [minifies](https://github.com/mishoo/UglifyJS) all client-side assets
 * In-built User model - with modular authentication. Automatically keeps track of users online (see below)
 * Interactive Console - just type 'socketstream console' and invoke any server-side or shared method from there
-* API Trees - offer a simple, consistent way to namespace and organise large code bases across the front and back end
+* API Trees - offer a simple, consistent way to namespace and organize large code bases
 * Uses [Connect](http://senchalabs.github.com/connect/) - hook in 3rd-party middleware or write your own. Custom code executes first for maximum flexibility and speed
-* Works great on iPads and iPhones using Mobile Safari (iOS 4.2 and above), even over 3G
 * Server-side Events - run custom code server-side when clients initialize or disconnect
-* Most features, such as the HTTP API, are optional and can be prevented from loading if required
-* Bundled with jQuery - though not dependent on it. Will work great with Zepto and other libraries
-* Bundled with [jQuery templates](http://api.jquery.com/category/plugins/templates/) - works like partials in Rails.
-* Easily add additional client libraries such as [Underscore.js](http://documentcloud.github.com/underscore/)
-* Initial layout HTML can be written in [Jade](http://jade-lang.com/) or plain HTML
-* Uses [Stylus](http://learnboost.github.com/stylus/) for CSS (works great with plain CSS too)
+* Modular architecture - any feature you don't need (such as HTTP API) can be disabled in the config and won't be loaded
 * MIT License
 
-#### Deployment
+#### Client Side
 
-* Distributed frontend and backend processes allowing load to be spread over multiple CPU cores / boxes using ZeroMQ
+* Works great with Chrome and Safari. Firefox and IE support temperamental but improving thanks to [Socket.IO 0.7](http://socket.io/)
+* HTTP/HTTPS API - all server-side code is automatically accessible over a high-speed request-based API
+* Integrated asset manager - automatically packages and [minifies](https://github.com/mishoo/UglifyJS) all client-side assets
+* Works well on iPads and iPhones using Mobile Safari (iOS 4.2 and above), even over 3G
+* Bundled with jQuery - though not dependent on it. Will work great with Zepto and other libraries
+* Bundled with [jQuery templates](http://api.jquery.com/category/plugins/templates/) - works like partials in Rails
+* Easily add additional client libraries such as [Underscore.js](http://documentcloud.github.com/underscore/)
+* Initial HTML sent to the browser can be written in [Jade](http://jade-lang.com/) or plain HTML
+* Uses [Stylus](http://learnboost.github.com/stylus/) for CSS (works great with plain CSS too)
+
+#### Distributed Hosting
+
+* Distributed frontend and backend architecture separated by a light-weight RPC abstraction layer 
+* Allows SocketStream to run lightning-fast in a single process with no C libraries to install (ideal for Cloud9 IDE)
+* When you need to scale up, easily spread the load over multiple CPU cores or additional boxes using ZeroMQ
 * Near linear scalability when spreading CPU-intensive tasks over multiple backend servers (run 'socketstream benchmark' to experiment)
-* A separate 'socketstream router' process which can optionally act as firewall, protecting your backend servers, Redis and databases servers
+* Front end servers can be completely isolated from Redis and your databases. They just need to talk to a box running 'socketstream router'
+* RPC layer designed to easily support additional transports and serialization formats in the future
 * Out-of-the-box HTTPS support with auto HTTP redirects. See HTTPS section below
-* Uses [Redis](http://www.redis.io/) for fast session retrieval, pub/sub, list of users online, and any other data your app needs instantly
 
 
 ### How does it work?
@@ -233,7 +241,7 @@ Want to know how to broadcast a message to all users, or implement private chann
 
 ### Requirements
 
-[Node 0.4](http://nodejs.org/#download) or above (not Node 0.5 yet)
+[Node 0.4](http://nodejs.org/#download) or above (Node 0.5/0.6 once Connect supports it)
 
 [NPM 1.0](http://npmjs.org/) (Node Package Manager) or above
 

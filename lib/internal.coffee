@@ -22,8 +22,8 @@ exports.init = ->
   # Save a timestamp for benchmarking later
   @up_since = new Date
 
-  # RPC version
-  @rpc_version = 1
+  # RPC layer
+  @rpc = {version: 1, clients: {}, server: null, event_proxy: null}
 
 
   ### FRONT END ###

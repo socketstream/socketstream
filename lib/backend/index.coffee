@@ -7,18 +7,17 @@ spawn = require('child_process').spawn
 
 file_utils = require('../utils/file.js')
 
-num_workers = 1
-
 # Store worker processes here
 _workers = []
+
+# Declare variable in module scope
+num_workers = 1
 
 exports.bannerText = (standalone) ->
   counters = SS.internal.counters.files_loaded
   text = []
   text.push "Back end server connecting to #{SS.config.cluster.sockets.be_main}" if standalone
   text.push "Spawned #{num_workers} back end worker #{if num_workers == 1 then 'process' else 'processes'} (PID #{(_workers.map (worker) -> worker.pid).join(', ')})"
-  # TODO: Can we put this back in, despite the fact the data lives in another process.... maybe not
-  # "Back end server loaded #{counters.models.pluralize('model')}, #{counters.server} server and #{counters.shared.pluralize('shared file')} in #{SS.internal.uptime()}ms"
   text.push "Plug Sockets: Binding SS.plugs.#{name} to #{details.connect_to}" for name, details of SS.config.plugs
   text
 
@@ -42,10 +41,11 @@ startWorker = ->
   worker = spawn('socketstream', ['backend-worker'])
 
   worker.stdout.on 'data', (data) ->
-    console.log data.toString()
+    # Would be nice to find a better way to prevent two line breaks
+    console.log data.toString().replace("\n",'')
 
   worker.stderr.on 'data', (data) ->
-    console.log data.toString()
+    console.log data.toString().replace("\n",'')
 
   worker.on 'exit', (code, signal) ->
     startWorker() unless code == 1 and SS.env == 'development'

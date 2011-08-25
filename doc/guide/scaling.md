@@ -8,11 +8,19 @@ It's not enough to simply use popular Node libraries such as 'cluster' or 'multi
 
 SocketStream 0.2 addresses this problem by breaking up the overall framework into two pieces: the front end which handles all the HTTP traffic, websockets and API requests, and the back end which talks to Redis, MongoDB (or other dbs) and executes the methods in /app/server and /app/shared. If you browse the SocketStream 0.2 code you'll see this clear separation in the /lib directory.
 
-The front end and back end talk to each other using RPC requests over ZeroMQ sockets. ZeroMQ was chosen because it's screaming fast and good at dealing with servers joining and leaving the cluster ad hoc.
+The front end and back end are deliberately only able to communicate with each other via an asynchronous RPC layer which supports multiple transports.
 
-Because ZeroMQ messages are now the only means of communication between the layers this also has the huge added benefit of allowing your databases and Redis to live on a protected subnet, proving an additional layer of security between your data and any malicious requests from external clients.
+1. In single-process mode message objects are simply exchanged in-memory, without any serialization, for maximum speed
 
-So let's look at each component and see how you can run them individually across multiple machines.
+2. In multi-process (cluster) mode messages are serialized using JSON and sent over high-speed ZeroMQ sockets
+
+ZeroMQ was chosen because it's screaming fast and good at dealing with servers joining and leaving the cluster ad hoc.
+
+Because RPC messages are now the only means of communication between the layers this also has the huge added benefit of allowing your databases and Redis to live on a protected subnet, proving an additional layer of security between your data and any malicious requests from external clients.
+
+To enable the following cluster features and commands, you'll need to install ZeroMQ. This should only take a few minutes. Type 'socketstream help' for instructions.
+
+Once ZeroMQ is installed, let's look at each component and see how you can run them individually across multiple machines.
 
 __socketstream frontend__
 
@@ -30,9 +38,9 @@ Once you have configured the sockets in /app/config.coffee (see below), you may 
 
 __socketstream router__
 
-This is the third and final piece of the distributed architecture. This is the one and only process which binds to fixed TCP ports, allowing multiple front end and back end servers to come and go as they please. As the name suggests, it routes/brokers messages between the front end and back end. Because the router is simply passing binary messages from one socket to another it can take a lot of traffic.
+This is the third and final piece of the distributed architecture. This is the one and only process which binds to fixed TCP ports, allowing multiple front end and back end servers to come and go as they please. As the name suggests, it routes/brokers messages between the front end and back end. Because the router is simply passing binary messages from one socket to another it can handle a lot of traffic.
 
-The router also proxies events from Redis so front end servers don't (and shouldn't) have any connections to Redis. At present only one server can run the router process per cluster. Ideally this machine will have two NICs - allowing it to function as a firewall, protecting your back end servers, Redis and databases from some external attacks.
+The router also proxies events from Redis so front end servers don't need to (and ideally shouldn't) have any direct connection to Redis. At present only one server can run the router process per cluster. Ideally this machine will have two NICs - allowing it to function as a firewall, protecting your back end servers, Redis and databases from some external attacks.
 
 In the unlikely event the router process crashes it will be automatically restarted by the manager process (run by default when you execute 'socketstream router').
 
@@ -51,8 +59,6 @@ Once you know the IP(s), uncomment the 'cluster' section of your /app/config.cof
 
 Next commit your application back to git and ensure every server has the most recent version of your app. Start the router first then your front end and back end servers. SocketStream doesn't know or care how many front end / back end servers you have or what their IP addresses are - only the IP of the router needs to be known and placed in the config file.
 
-Note: ZeroMQ IPC sockets are used by default as they are faster than TCP when running everything on the same box. They are created in /tmp automatically when you start your app. Feel free to delete this directory any time you wish.
-
 We will try to make the cluster configuration procedure even easier / more automatic in future releases.
 
 
@@ -62,7 +68,7 @@ In the future we will continue to work towards eliminating all single points of 
 
 If you're feeling very adventurous you could try setting up two or more clusters in different datacentres / availability zones - each with their own router. We haven't tried this ourselves, but in theory there's no reason why it wouldn't work providing both clusters connect to the same instance of Redis. 
 
-Remember, if all of this sounds way too complex for you and scaling is not foremost on your mind at the moment - don't worry. You'll still be able to get great performance out of a single laptop or server by running 'socketstream server' on it's own. This command is the equivalent of running all three server components in one.
+Remember, if all of this sounds way too complex for you and scaling is not foremost on your mind at the moment - don't worry. You'll still be able to get great performance out of a single process by running 'socketstream single' (which forces SocketStream to run in a single process) on it's own. This command is the equivalent of running all three server components in one.
 
 
 ### Contributing

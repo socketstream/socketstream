@@ -15,8 +15,7 @@ url_lib = require('url')
 base64 = require('../../utils/base64.js')
 server = require('../utils.coffee')
 
-zmqs = new (require('../../zmq_async.coffee').Socket)
-zmqs.internal = true
+rpc = new (require('../../rpc/connection.coffee')).Client('api')
 
 
 # Connect middleware handler
@@ -57,11 +56,11 @@ process = (request, response, url, actions) ->
     request.on 'end', ->
 
       # Generate request for back end and send
-      obj = {responder: 'server', method: actions.join('.'), params: params, origin: 'api'}
+      obj = {responder: 'server', method: actions.join('.'), params: params}
       obj.post = post_data if post_data.length > 0
 
       # Execute the request and deliver the response once it returns
-      zmqs.send obj, (result) ->
+      rpc.send obj, (result) ->
         reply(result, response, format)
     
   catch e

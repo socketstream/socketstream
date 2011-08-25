@@ -11,13 +11,13 @@ Requests are composed of the following params:
        
     **version**      Mandatory. Back end servers will silently drop messages unless they match the same RPC version number (allowing upgrades to be staggered)
     **responder**    Mandatory. Emits the message to back end responders listening on this channel
+    **origin**       Mandatory. Currently either 'socketio' or 'api'
     **id**           Optional. Used when sending a request which requires a response. The 'id' must be passed through to the response
 
     And in addition for messages to /app/server
 
     **method**       Optional. Tells the message handler which command to invoke
     **params**       Optional. Any arguments send to the method, as an array
-    **origin**       Optional. Currently either 'socketio' or 'api'
     **session**      Optional. Sent only if the transport supports persistent sessions. Should be an object containing id, user_id, channel subscriptions and more
     **post**         Optional. Post data, if present, as submitted over the HTTP API
 

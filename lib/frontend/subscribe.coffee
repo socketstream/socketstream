@@ -1,15 +1,15 @@
 # Subscribe
 # ---------
-# Subscribes to a ZeroMQ 'pub' socket on the Router. Effectively listens out for any messages proxied by the Router from Redis
+# Subscribes to a ZeroMQ 'pub' socket on the Router, or internal RPC event emitter (in single process mode).
+# Listens out for any messages proxied from Redis via the /lib/router/event_proxy.coffee file
 
-zeromq = require('zeromq')
+rpc = new (require('../rpc/connection.coffee')).Subscriber
 
 # Listen out of incoming events from Redis proxied from the Router (so we can process them or push them upstream to websocket clients)
-sub = zeromq.createSocket('sub')
-sub.connect SS.config.cluster.sockets.fe_pub
-sub.subscribe('events')
-sub.on 'message', (msg_type, event_type, message) ->
-  dispatch[event_type.toString()](message.toString())
+exports.init = ->
+
+  rpc.listen (event_type, message) -> dispatch[event_type](message)
+
 
 # Private
 

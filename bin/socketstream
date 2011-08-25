@@ -5,6 +5,13 @@
 
 args = require('argsparser').parse()
 
+// If debug is passed as the first argument, start the debugger then continue as normal
+if(args.node[1] == 'debug') {
+  process.kill(process.pid, 'SIGUSR1');
+  console.log('');
+  args.node.splice(1, 1);
+}
+
 require('coffee-script');
 
 require(__dirname + '/../lib/main.coffee').process(args);

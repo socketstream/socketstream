@@ -155,8 +155,8 @@ class exports.Session extends EventEmitter
       forceArray(names).forEach (name) =>
         unless @session.channels.include(name) # clients can only join a channel once
           @session.channels.push(name)
-          #SS.log.pubsub.channels.subscribe @session.user_id, name
-          #SS.events.emit 'channel:subscribe', @session, name
+          SS.log.pubsub.channels.subscribe @session.user_id, name
+          SS.events.emit 'channel:subscribe', @session, name
       @_save cb
      
     # Unsubscribes the client from one or more channels

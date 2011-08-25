@@ -1,14 +1,34 @@
+0.2 beta 2 / 2011-08-25
+=======================
+
+* Added a new internal RPC abstraction layer:
+* - ZeroMQ is no longer required to use SocketStream 0.2
+* - SocketStream will automatically run in a single process (ala SocketStream 0.1) if ZeroMQ is not installed
+* - The new single process mode (which can be forced with 'socketstream single') is only ~7% slower than 0.1, not bad considering the new @request object and additional error checking we perform on each request
+* - Removed ZeroMQ dependency from package.json to allow compatibility with Cloud9IDE and other platform hosting services which do not allow installing and compilation of C libraries
+* - Revised `socketstream help` to show how ZeroMQ and other C dependencies can be optionally installed
+* Added new server-side events:
+* - 'channel:subscribe' and 'channel:unsubscribe'
+* - 'application:exception' allowing you to log any exceptions in your code (or send yourself an email)
+* Now supports the Node.js debugger (and hence also the amazing https://github.com/dannycoates/node-inspector). Just type `debug` before the command you wish to run (e.g. `socketstream debug server`). Most useful in single-process mode
+* Now uses latest 'zqm' 1.0.2 `npm` when you choose to install ZeroMQ
+* SS.users now only loads if the users online functionality is enabled
+* ZeroMQ now only uses TCP sockets by default. IPC sockets were too confusing
+* Updated many `npm` dependencies with latest versions
+* Likely to be the last commit before 0.2.0 is released before the end of the month. Please report any bugs
+
+
 0.2 beta / 2011-08-20
 =====================
 
 * After much experimentation, session data is now cached on front end servers (synced over ZeroMQ) as well as in Redis (allowing your session to hop from one front end server to another). This has brought us the following benefits:
-*   dramatically reduces the load on Redis, increasing response times
-*   gives you access to all session data within server-side events
-*   allows the exports.authentication = true check to function correctly
-*   best of all: allows us to bring back the @session variable without needing to use nasty callbacks! (@getSession will be removed in 0.3)
+* -  dramatically reduces the load on Redis, increasing response times
+* -  gives you access to all session data within server-side events
+* -  allows the exports.authentication = true check to function correctly
+* -  best of all: allows us to bring back the @session variable without needing to use nasty callbacks! (@getSession will be removed in 0.3)
 * Introduced new @request object available to all /app/server methods to access request meta data. See /doc/guide/the_request_object.md
-*   @request.post now returns a new object allowing you to access any POST data sent to the HTTP API
-*   @request.origin shows where the request originated from (currently 'socketio' or 'api')
+* -  @request.post now returns a new object allowing you to access any POST data sent to the HTTP API
+* -  @request.origin shows where the request originated from (currently 'socketio' or 'api')
 * You may now optionally rename the @session, @request and @user reserved variables using SS.config.reserved_vars
 * Added many more optional callbacks to session methods (such as session.setUserId) to aid fast automated testing
 * Moved and updated the 'Session' section from README to its own page in the emerging new user guide /doc/guide/sessions.md

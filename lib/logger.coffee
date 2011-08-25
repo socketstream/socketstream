@@ -21,19 +21,19 @@ exports.incoming =
     
   server: (msg) ->
     if !(msg.options && msg.options.silent)
-      output 2, "#{msg.id} #{exports.color('->', 'cyan')} #{msg.method}#{parseParams(msg.params)}"
+      output 2, "#{msg.id} #{color('->', 'cyan')} #{msg.method}#{parseParams(msg.params)}"
       
   event: (type, message) ->
-    output 2, ((obj = JSON.parse(message)) && "#{type} #{exports.color('=>', 'cyan')} #{obj.event}#{parseParams(obj.params)}")
+    output 2, ((obj = JSON.parse(message)) && "#{type} #{color('=>', 'cyan')} #{obj.event}#{parseParams(obj.params)}")
 
   rtm: (data, socket) ->
-    output 2, "#{socket.id} #{exports.color('~>', 'cyan')} #{data.rtm}.#{data.action}#{parseParams(data.params)}"
+    output 2, "#{socket.id} #{color('~>', 'cyan')} #{data.rtm}.#{data.action}#{parseParams(data.params)}"
 
   api: (actions, params, format) ->
-    output 2, "API (#{format}) #{exports.color('->', 'cyan')} #{actions.join('.')} #{parseParams(params)}"
+    output 2, "API (#{format}) #{color('->', 'cyan')} #{actions.join('.')} #{parseParams(params)}"
 
   rest: (actions, params, format, http_method) ->
-    output 2, "REST #{http_method} (#{format}) #{exports.color('->', 'cyan')} #{actions.join('.')} #{parseParams(params)}"
+    output 2, "REST #{http_method} (#{format}) #{color('->', 'cyan')} #{actions.join('.')} #{parseParams(params)}"
     
   rpsExceeded: (socket) ->
     output 2, "ALERT: Subsequent requests from Client ID: #{socket.id}, Session ID: #{client.session.id}, IP: #{client.connection.remoteAddress} will be dropped as requests-per-second over #{SS.config.limiter.websockets.rps}"
@@ -44,17 +44,17 @@ exports.incoming =
 exports.outgoing =
 
   client: (obj, type) ->
-    output 4, "#{obj.id || 'CMD'} #{exports.color('<-', 'green')} client:#{type}"
+    output 4, "#{obj.id || 'CMD'} #{color('<-', 'green')} client:#{type}"
 
   server: (obj) ->
     if !(obj.options && obj.options.silent)
-      output 2, "#{obj.id} #{exports.color('<-', 'green')} #{obj.method}"
+      output 2, "#{obj.id} #{color('<-', 'green')} #{obj.method}"
   
   rtm: (obj) ->
-    output 2, "#{obj.id} #{exports.color('<~', 'green')} #{obj.rtm}.#{obj.action}#{parseParams(obj.params)}"
+    output 2, "#{obj.id} #{color('<~', 'green')} #{obj.rtm}.#{obj.action}#{parseParams(obj.params)}"
 
   event: (type, event, params) ->
-    output 2, "#{type} #{exports.color('<=', 'green')} #{event}#{parseParams(params)}"
+    output 2, "#{type} #{color('<=', 'green')} #{event}#{parseParams(params)}"
       
 exports.users =
 
@@ -71,10 +71,10 @@ exports.users =
 exports.error =
 
   message: (message) ->
-    output 1, exports.color("Error: #{message}", 'red')
+    output 1, color("Error: #{message}", 'red')
   
   exception: (e) ->
-    output 1, exports.color(e.toString(), 'red')
+    output 1, color(e.toString(), 'red')
 
 exports.pubsub =
 
@@ -88,24 +88,25 @@ exports.pubsub =
 
 
 # Color helper
-exports.color = (msg, color) ->
+exports.color = color = (msg, color) ->
   return msg if SS.config.loaded and !SS.config.enable_color
   msg_ary = msg.split('\n')
   first_line = msg_ary[0]
   other_lines = if msg_ary.length > 1 then '\n' + msg_ary.splice(1).join('\n') else ''
   "\x1B[1;#{color_codes[color]}m#{first_line}\x1b[0m#{other_lines}"
 
+# Test log level
+exports.level = level = (num) ->
+  return true unless SS.config.log # config may not be loaded yet
+  SS.config.log.level >= num
+
 
 # Private Helpers
-output = (level, msg) ->
-  util.log("PID #{process.pid} - #{msg}") if validLevel(level)
-
-validLevel = (level) ->
-  return true unless SS.config.log # config may not be loaded yet
-  SS.config.log.level >= level
+output = (level_num, msg) ->
+  util.log("PID #{process.pid} - #{msg}") if level(level_num)
 
 parseParams = (params) ->
-  params = util.inspect(params) if params and validLevel(3)
+  params = util.inspect(params) if params and level(3)
   if params then ': ' + params else ''
 
 

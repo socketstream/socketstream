@@ -16,3 +16,6 @@
 
 # SS.events.on 'channel:unsubscribe', (session, channel) ->
 #   console.log "The client with Session ID #{session.id} has unsubscribed from #{channel}"
+
+# SS.events.on 'application:exception', (error) ->
+#   console.log "Application exception caught: #{error.message}"

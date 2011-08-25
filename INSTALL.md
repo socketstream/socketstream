@@ -25,23 +25,9 @@ SocketStream runs on all UNIX based platforms, including OS X and Linux.
     to run in the background:
       env redis-server > /tmp/redis.log 2>&1 &
 
-    # install ZeroMQ 2.1
-
-    Download the latest 2.1 from http://www.zeromq.org/intro:get-the-software
-    
-    E.g. http://download.zeromq.org/zeromq-2.1.7.tar.gz
-
-    tar zcvf zeromq-2.1.7.tar.gz
-    cd zeromq-2.1.7
-    ./configure
-    make
-    sudo make install
-    sudo ldconfig
-    
     # install Node.js
     
     Download latest stable (0.4.x) version from http://nodejs.org/#download
-    Note: This version of SocketStream should work fine with Node 0.5.1 but we recommend the stable branch
 
     E.g. for Node 0.4.9
 
@@ -81,23 +67,10 @@ Here is an example that shows how to install SocketStream and it's dependencies 
     make
     sudo make install
     env redis-server > /tmp/redis.log 2>&1 &
-    
-    # install ZeroMQ 2.1
-
-    Download the latest 2.1 from http://www.zeromq.org/intro:get-the-software
-    
-    E.g. http://download.zeromq.org/zeromq-2.1.7.tar.gz
-
-    tar zcvf zeromq-2.1.7.tar.gz
-    cd zeromq-2.1.7
-    ./configure
-    make
-    sudo make install
 
     # install Node.js
     
     Download latest stable (0.4.x) version from http://nodejs.org/#download
-    Note: This version of SocketStream should work fine with Node 0.5.1 but we recommend the stable branch
 
     E.g. for Node 0.4.9
 

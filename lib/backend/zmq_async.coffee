@@ -4,13 +4,12 @@
 # Incoming replies are matched with outgoing requests via the message 'id' which must be passed through
 # as suggested by http://groups.google.com/group/json-rpc/web/json-rpc-2-0
 
-zeromq = require('zeromq')
 #msgpack = require('msgpack-0.4')  (Note: I tried this but it made negligible difference, in some cases slower than JSON!)
 
 class exports.Socket
 
   constructor: (@socket_type = 'xreq', @connect_to = SS.config.cluster.sockets.fe_main, @format = SS.config.cluster.serialization) ->
-    @socket = zeromq.createSocket(@socket_type)
+    @socket = SS.internal.zmq.createSocket(@socket_type)
     @socket.connect @connect_to
     
     @internal = false
@@ -40,10 +39,8 @@ class exports.Socket
   send: () ->
 
     # Ugly but fast. Improvements welcome. Remember store and cb are both optional
-    args = arguments
-    obj =  args[0]
-    cb =   args[1]
-
+    [obj, cb] = arguments
+    
     throw new Error('Message to ZeroMQ async wrapper must be an object') unless typeof(obj) == 'object'
     
     # Callbacks are optional. Sometimes you just want to send a command and not care about a response

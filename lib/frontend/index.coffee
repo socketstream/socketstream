@@ -21,7 +21,7 @@ check.forNameConflicts([tree])
 exports.server = require('./server.coffee')
 
 # Listen for incoming events from router
-require('./subscribe.coffee')
+require('./subscribe.coffee').init()
 
 
 # Private

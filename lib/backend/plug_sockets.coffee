@@ -2,8 +2,7 @@
 # ------------
 # Connect to external services (e.g. legacy Rails apps or high-speed Game Servers) using ZeroMQ sockets
 
-zeromq = require('zeromq')
-zmq_async = require('../zmq_async.coffee')
+zmq_async = require('./zmq_async.coffee')
 
 exports.init = ->
   for name, details of SS.config.plugs
@@ -19,6 +18,6 @@ exports.init = ->
 
     # Else just open up a raw socket
     else 
-      SS.plugs[name] = zeromq.createSocket(socket_type)
+      SS.plugs[name] = SS.internal.zmq.createSocket(socket_type)
       SS.plugs[name].connect(details.connect_to)
 

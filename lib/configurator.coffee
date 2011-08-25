@@ -103,9 +103,9 @@ setDefaults = ->
     cluster:
       serialization:          'json'          # left this is to allow others to experiment but so far found JSON to be no slower than msgpack
       sockets:                                # Note: IPC sockets are the default for raw speed on a single machine. Once your app is ready to spread it's wings over multiple servers, TCP sockets must be specified. See docs for full details
-        fe_main:              "ipc://tmp/zmq.fe_main.ipc"
-        fe_pub:               "ipc://tmp/zmq.fe_pub.ipc"
-        be_main:              "ipc://tmp/zmq.be_main.ipc"
+        fe_main:              "tcp://0.0.0.0:9000"
+        fe_pub:               "tcp://0.0.0.0:9001"
+        be_main:              "tcp://0.0.0.0:9010"
     
     # Plug Sockets
     plugs:                    {}

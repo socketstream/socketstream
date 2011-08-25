@@ -3,9 +3,7 @@
 # Handles incoming web/flash socket clients from Socket.IO
 
 utils = require('../utils')
-zmqs = new (require('../zmq_async.coffee').Socket)
-zmqs.internal = true
-zmqs.debug = false
+rpc = new (require('../rpc/connection.coffee')).Client('socketio')
 
 session_length = 32
 
@@ -23,7 +21,7 @@ exports.connection = (socket) ->
   socket.on 'disconnect', (reason) ->
     try
       delete SS.internal.sessions[socket.ss.session.id]
-      zmqSend socket, {responder: 'client', method: 'disconnect'}
+      rpc.send {responder: 'client', method: 'disconnect', session: socket.ss.session}
 
 
   ### DEFINE INCOMING MESSAGE HANDLERS ###
@@ -32,14 +30,9 @@ exports.connection = (socket) ->
   socket.on 'server', (msg, cb) ->
     preProcess socket, ->
       msg.responder = 'server'
-      request = zmqSend socket, msg, (response) ->
-        
-        # If session has been updated during the request, the deltas will be sent back
-        if response.session_updates?
-          socket.ss.session[field] = value for field, value of response.session_updates
-          delete response.session_updates
-
-        # Send the raw message, minus any session_updates back over the websocket
+      msg.session = socket.ss.session
+      request = rpc.send msg, (response) ->
+        updateSessionCache(socket, response)
         cb response
 
       SS.log.incoming.server(request, socket)
@@ -49,12 +42,15 @@ exports.connection = (socket) ->
     socket.on 'rtm', (msg, cb) ->
       preProcess socket, ->
         msg.responder = 'rtm'
-        request = zmqSend socket, msg, (response) -> cb(response.result)
+        msg.session = socket.ss.session
+        request = rpc.send msg, (response) ->
+          updateSessionCache(socket, response)
+          cb response.result
         SS.log.incoming.rtm(request, socket)
 
   # Pass client heartbeats through to the back end
   socket.on 'heartbeat', ->
-    zmqSend socket, {responder: 'client', method: 'heartbeat'}
+    rpc.send {responder: 'client', method: 'heartbeat', session: socket.ss.session}
   
 
   ### FINALLY, INITIATE SESSION ###
@@ -65,7 +61,7 @@ exports.connection = (socket) ->
     session_id = utils.randomString(session_length) unless session_id.length == session_length
     socket.ss.session = {id: session_id}
     SS.internal.sessions[session_id] = socket
-    zmqSend socket, {responder: 'client', method: 'init'}, (response) ->
+    rpc.send {responder: 'client', method: 'init', session: socket.ss.session}, (response) ->
       result = response.result
       socket.ss.session = result.session
       socket.emit 'init', JSON.stringify(result.send_to_client)
@@ -81,12 +77,9 @@ preProcess = (socket, cb) ->
 
   cb true
 
-# Send a request or command to the back-end servers and deliver the response back through the correct websocket
-zmqSend = (socket, obj = {}, cb) ->
+# Update the local cache of the session if there have been any changes
+updateSessionCache = (socket, response) ->
+  if response.session_updates?
+    socket.ss.session[field] = value for field, value of response.session_updates
+    delete response.session_updates
 
-  # Send meta data with this request
-  obj.session = socket.ss.session if socket.ss.session
-  obj.origin = 'socketio'
-  
-  # Send via ZeroMQ, store the socket and original request ID
-  zmqs.send obj, cb

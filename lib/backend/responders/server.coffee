@@ -87,6 +87,7 @@ process = (obj, cb) ->
   try
     method.apply(server_module, args)
   catch e
+    SS.events.emit 'application:exception', e
     throw error('APPLICATION_ERROR', e.stack)
 
 

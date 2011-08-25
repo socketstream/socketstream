@@ -39,7 +39,7 @@ exports.init = (load_project = false) ->
   # Set server version from package.json
   SS.version = SS.internal.package_json.version
 
-  # Set client file version. Bumping this automatically triggers re-compliation of lib assets when a user upgrades
+  # Set client file version. Bumping this automatically triggers re-compilation of lib assets when a user upgrades
   SS.client.version = '0.1.2'
 
   # Set environment
@@ -69,6 +69,8 @@ exports.process = (args) ->
   switch command
     when 'start', 's'
       start.server()
+    when 'single', 'sn'
+      start.single()
     when 'frontend', 'fe'
       start.frontend()
     when 'backend', 'be'
@@ -87,22 +89,39 @@ exports.process = (args) ->
       console.log '''
       SocketStream Command Line Help
 
+        Tip: Type 'debug' as the first argument before any command to load the Node.js debugger
+
         start (s)       Start server
+        console (c)     Interactive console 
+        version (v)     Print current version
+        new (n)         Create new project
+        single (sn)     Force server to start in single-process mode
+
+      To get the most out of SocketStream we recommend installing ZeroMQ 2.1 and Hiredis.
+
+        On OS X install HomeBrew then type: brew install pkg-config && brew install zeromq 
+        On Linux: Download and install ZeroMQ 2.1 from http://www.zeromq.org/intro:get-the-software
+        On both: Reinstall SocketStream passing the --dev flag: 'sudo npm install -g socketstream --dev'
+
+      You are then able to use the following commands:
+
         frontend (fe)   Start the front end server manager
         backend (be)    Start the back end server manager
         router (r)      Start the router / message broker
-        console (c)     Interactive console
         benchmark (b)   Run benchmark suite
-        version (v)     Print current version
-        new (n)         Create new project
+
+      Note: These libraries are optional as some platforms service providers (i.e. Cloud9IDE) do not
+      allow installation of NPM modules containing C code
 
       '''
 
     # For internal use only (called by the process manager)
     when 'backend-worker'
+      load.zeromq(true)
       load.project()
       require('./backend/worker.coffee')
     when 'router-worker'
+      load.zeromq(true)
       load.project()
       require('./router/worker.coffee').init(args)
 
@@ -114,9 +133,15 @@ exports.process = (args) ->
 # Start methods load things
 start =
 
+  ### SERVERS ###
+
+  # Attempts to load all aspects of the server
+  # Falls back to running in single process mode if ZeroMQ is not installed
   server: ->
+    load.zeromq()
+    return @single() unless SS.internal.zmq
     SS.internal.mode = 'integrated'
-    util.log('Starting SocketStream server...')
+    console.log 'Starting SocketStream server in multi-process mode...'
     load.project()
     frontend = require('./frontend')
     require('./router/worker.coffee').init()
@@ -125,7 +150,61 @@ start =
     servers = frontend.server.start()
     banner_text = frontend.bannerText().concat(backend.bannerText())
     showBanner banner_text
-    
+
+  # Runs the server in single process mode. Used when ZeroMQ is not / can not be installed (i.e. Cloud9IDE)
+  single: ->
+    SS.internal.mode = 'single'
+    console.log 'Starting SocketStream server in single-process mode...'
+    load.project()
+    require('./router/redis_proxy.coffee').init()
+    require('./router/job_scheduler.coffee').run()
+    frontend = require('./frontend')
+    backend = require('./backend/worker.coffee')
+    servers = frontend.server.start()
+    banner_text = frontend.bannerText().concat(backend.bannerText())
+    showBanner banner_text
+
+
+  ### CLUSTER ###
+
+  # The following commands require ZeroMQ to be installed
+
+  frontend: ->
+    SS.internal.mode = 'frontend'
+    load.zeromq(true)
+    load.project()
+    frontend = require('./frontend')
+    servers = frontend.server.start()
+    showBanner frontend.bannerText(true)
+  
+  backend: (args) ->
+    SS.internal.mode = 'backend'
+    load.zeromq(true)
+    load.project()
+    backend = require('./backend')
+    backend.init(args)
+    showBanner backend.bannerText(true)
+  
+  router: (args) ->
+    SS.internal.mode = 'router'
+    load.zeromq(true)
+    load.project()
+    router = require('./router')
+    router.init(args)
+    showBanner router.bannerText(true)
+
+  benchmark: ->
+    SS.internal.mode = 'benchmark'
+    load.zeromq(true)
+    load.project()
+    benchmark = require('./benchmark')
+    showBanner benchmark.bannerText()
+    benchmark.run()
+
+
+  ### UTILS ###
+
+  # Runs the interactive console    
   console: ->
     SS.internal.mode = 'console'
     load.project()
@@ -134,34 +213,6 @@ start =
     showBanner('Press Control + C twice to quit the Interactive Console')
     repl = require('repl')
     repl.start('SocketStream > ')
-
-  frontend: ->
-    SS.internal.mode = 'frontend'
-    load.project()
-    frontend = require('./frontend')
-    servers = frontend.server.start()
-    showBanner frontend.bannerText(true)
-  
-  backend: (args) ->
-    SS.internal.mode = 'backend'
-    load.project()
-    backend = require('./backend')
-    backend.init(args)
-    showBanner backend.bannerText(true)
-  
-  router: (args) ->
-    SS.internal.mode = 'router'
-    load.project()
-    router = require('./router')
-    router.init(args)
-    showBanner router.bannerText(true)
-
-  benchmark: ->
-    SS.internal.mode = 'benchmark'
-    load.project()
-    benchmark = require('./benchmark')
-    showBanner benchmark.bannerText()
-    benchmark.run()
 
 
 # Create methods make things
@@ -175,10 +226,20 @@ create =
 
 load =
 
+  # Try loading the ZeroMQ bindings if present. Fallback to internal EventEmitter unless ZeroMQ is required for this command
+  zeromq: (required = false) ->    
+    try
+      SS.internal.zmq = require 'zmq'
+    catch e
+      if required
+        console.log "Error: You will need to install ZeroMQ to take advantage of the cluster features within SocketStream"
+        console.log "Type 'socketstream help' for installation instructions"
+        process.exit(0)
+  
   # Start up the SocketStream environment based on the current project
   # Needs to run before the Server or Console can start
   project: ->
-  
+
     # Load logger
     SS.log = require('./logger.coffee')
 
