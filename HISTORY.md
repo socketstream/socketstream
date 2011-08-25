@@ -60,6 +60,6 @@
 0.2 preview / 2011-08-07
 ========================
 
-Major changes since 0.1. See full announcement here: https://github.com/socketstream/socketstream/blob/0.2/doc/annoucements/0.2.md
+Major changes since 0.1. See full announcement here: https://github.com/socketstream/socketstream/blob/master/doc/annoucements/0.2.md
 
 All archived history on 0.1 branch

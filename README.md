@@ -1,7 +1,7 @@
 ![SocketStream!](https://github.com/socketstream/socketstream/raw/master/new_project/public/images/logo.png)
 
 
-Latest release: 0.2 beta 2   ([view changelog](https://github.com/socketstream/socketstream/blob/master/doc/annoucements/0.2.md))
+Latest release: 0.2 beta 2   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 
 Twitter: [@socketstream](http://twitter.com/#!/socketstream)  
 Google Group: http://groups.google.com/group/socketstream  
