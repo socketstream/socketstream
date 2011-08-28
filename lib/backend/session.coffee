@@ -132,7 +132,7 @@ class exports.Session extends EventEmitter
       "#{key}:user:#{@session.user_id}"
     
     loggedIn: ->
-      @session.user_id is not null
+      @session.user_id?
       
     logout: (cb = ->) ->
       SS.users.online.remove(@session.user_id) if SS.config.users.online.enabled
