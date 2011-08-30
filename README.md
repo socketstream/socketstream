@@ -477,7 +477,7 @@ Take a look at /lib/client/3.helpers.js to see the available helpers. If for som
 
 As almost all web applications have users which need to sign in and out, we have built the concept of a 'current user' into the core of SocketStream. This not only makes life easier for developers, but is vital to the correct functioning of the pub/sub system, authenticating API requests, and tracking which users are currently online (see section below).
 
-Authentication is completely modular and trivial for developers to implement. Here's an example of a custom authentication module we've placed in /node_modules/custom_auth/index.coffee
+Authentication is completely modular and trivial for developers to implement. Here's an example of a custom authentication module we've placed in /lib/server/custom_auth.coffee
 
 ``` coffee-script
 exports.authenticate = (params, cb) ->
@@ -499,7 +499,7 @@ exports.actions =
 
   authenticate: (params, cb) ->
     @session.authenticate 'custom_auth', params, (response) =>
-      session.setUserId(response.user_id) if response.success       # sets session.user.id and initiates pub/sub
+      @session.setUserId(response.user_id) if response.success       # sets session.user.id and initiates pub/sub
       cb(response)                                                  # sends additional info back to the client
 
   logout: (cb) ->
