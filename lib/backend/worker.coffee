@@ -10,10 +10,11 @@ exports.bannerText = (standalone) ->
   ["Back end server loaded #{counters.models.pluralize('model')}, #{counters.server} server and #{counters.shared.pluralize('shared file')} in #{SS.internal.uptime()}ms"]
 
 # Connect any Plug Sockets if ZeroMQ is installed
-if SS.internal.zmq
-  require('./plug_sockets.coffee').init()
-else
-  SS.config.plugs.any() && SS.log.error.message('Warning: Plug Sockets disabled when running in single process mode. Please install ZeroMQ')
+if SS.config.plug_sockets.enabled
+  if SS.internal.zmq
+    require('./plug_sockets.coffee').init()
+  else
+    SS.config.plug_sockets.plugs.any() && SS.log.error.message('Warning: Plug Sockets disabled when running in single process mode. Please install ZeroMQ')
 
 # Load any database connections
 load.dbConfigFile()
@@ -30,14 +31,14 @@ check.forNameConflicts(trees)
 # Load application files within /app/shared and /app/server
 load.serverSideFiles(trees)
 
-# Load Users Online functionality
-SS.users = require('./users_online.coffee') if SS.config.users.online.enabled
-
 # Load Redis. Note these connections stay open so scripts will cease to terminate on their own once you call this
 SS.redis = require('../redis.coffee').connect()
 
 # Load publish API
 SS.publish = require('./publish.coffee')
+
+# Load optional Users Online module
+SS.users.online = require('./users_online.coffee') if SS.config.users_online.enabled
 
 # Listen for work
 unless SS.internal.mode is 'console'

@@ -1,4 +1,4 @@
-### Using the @request object to access meta data (e.g. HTTP POST)
+### The @request object
 
 SocketStream 0.2 introduces the @request object which contains all the meta data associated with calls to /app/server methods. While the data coming in via the main params will always remain the same regardless if the call was made via the websocket or HTTP API, the contents of the @request object will vary depending upon the way the method was called and the data associated with it.
 

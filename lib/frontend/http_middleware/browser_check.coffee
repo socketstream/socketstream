@@ -10,13 +10,13 @@ file_name = SS.root + '/app/views/' + SS.config.browser_check.view_name
 
 # Default message if no custom error file present
 fallback_content = "<h1>Incompatible Browser</h1>
-<p>Add a custom error message page to #{file_name}.jade (or .html)</p>"
+<p>Add a custom error message page to /app/views/#{file_name}.jade (or .html)</p>"
 
 module.exports = ->
 
   (request, response, next) ->
 
-    return next() unless isValidRequest(request)
+    return next() unless browserIsIncompatible(request)
     
     # This mess will be cleaned up in the future (hopefully 0.3) with a new client asset server
     fs.stat file_name + '.jade', (err) ->
@@ -29,8 +29,7 @@ module.exports = ->
       
 # PRIVATE METHODS
 
-# Does this browser appear to be incompatible?
-isValidRequest = (request) ->
+browserIsIncompatible = (request) ->
   ua = request.headers['user-agent']
 
   # If Strict checking for browsers which have native websocket support
@@ -52,6 +51,13 @@ isValidRequest = (request) ->
       if re.exec(ua) != null
         version = parseFloat( RegExp.$1 )
         return false if version >= 5
+
+    # Allow Firefox version 6 and above
+    if ua.match(/Firefox/)
+      re = new RegExp("Firefox/([0-9]{1,})")
+      if re.exec(ua) != null
+        version = parseFloat( RegExp.$1 )
+        return false if version >= 6
     
     # Mac OS X Dashboard Web Clip  
     return false if ua.match(/WebClip/)

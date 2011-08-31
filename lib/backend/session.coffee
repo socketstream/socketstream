@@ -119,7 +119,7 @@ class exports.Session extends EventEmitter
     return false unless user_id
     @user_id = user_id
     if @id
-      SS.users.online.add(@user_id) if SS.config.users.online.enabled
+      SS.users.online.add(@user_id) if SS.config.users_online.enabled
       SS.redis.main.hset @key(), 'user_id', @user_id, -> cb(true)
     
 
@@ -135,7 +135,7 @@ class exports.Session extends EventEmitter
       @session.user_id?
       
     logout: (cb = ->) ->
-      SS.users.online.remove(@session.user_id) if SS.config.users.online.enabled
+      SS.users.online.remove(@session.user_id) if SS.config.users_online.enabled
       SS.redis.main.hset @session.key(), 'previous_user_id', @session.user_id # for retrospective log analysis
       @session.user_id = null
       SS.redis.main.hdel @session.key(), 'user_id', -> cb(true)

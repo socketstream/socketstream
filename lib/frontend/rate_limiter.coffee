@@ -1,5 +1,5 @@
-# Rate Limiting
-# -------------
+# Rate Limiting Module
+# --------------------
 # Basic things we can do to stop DDOS attacks. Far more to come in the future
 
 
@@ -16,4 +16,4 @@ exports.exceeded = (socket) ->
     socket.ss.rps_ts = ts
     socket.ss.rps_count = 1
     
-  socket.ss.rps_exceeded = (socket.ss.rps_count > SS.config.limiter.websockets.rps)
+  socket.ss.rps_exceeded = (socket.ss.rps_count > SS.config.rate_limiter.websockets.rps)

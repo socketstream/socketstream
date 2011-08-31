@@ -3,7 +3,7 @@
 exports.actions =
   
   init: (cb) ->
-    cb "SocketStream version #{SS.version} is up and running. This message was sent over websockets, so everything is working OK."
+    cb "SocketStream version #{SS.version} is up and running. This message was sent over Socket.IO so everything is working OK."
 
   # Quick Chat Demo
   sendMessage: (message, cb) ->

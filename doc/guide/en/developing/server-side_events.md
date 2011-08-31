@@ -6,5 +6,5 @@ The best way to get started, and to see the most up-to-date list of possible SS.
 
 All custom server-side events are automatically load balanced across available back end servers, allowing you to simply add additional servers to the cluster as traffic increases.
 
-Note: Even though your app may received a client:disconnect event, it doesn't mean the user has logged out. They may still be connected via another client (potentially via another front end server). This is huge problem that still needs to be resolved - mostly at the application level.
+Note: Even though your app may receive a `client:disconnect` event, it doesn't mean the user has logged out. They may still be connected via another client (potentially via another front end server). This is huge problem that still needs to be resolved by good design - mostly at the application level.
 

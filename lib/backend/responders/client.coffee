@@ -23,7 +23,7 @@ methods =
           session_id:       session.id
           env:              SS.env                                                                  # Makes the SS.env variable available client-side. Can be useful within client code
           config:           SS.config.client                                                        # Copies any client configuration settings from the app config files to the client
-          heartbeat:        SS.config.users.online.enabled                                          # Let's the client know if User Online tracking is enabled
+          heartbeat:        SS.config.users_online.enabled                                          # Let's the client know if User Online tracking is enabled
           api:                                                                       
             server:         SS.internal.api_string.server                                           # Transmits a string representation of the Server API
             models:         (if SS.config.rtm.enabled then SS.models.keys() else {})
@@ -37,5 +37,5 @@ methods =
   # A heartbeat is sent every X seconds by clients
   # We will work to make this method faster in the future
   heartbeat: (obj, session, cb) ->
-    SS.users.online.confirm(session.user_id) if session.user_id
+    SS.users.online.confirm(session.user_id) if SS.users.online && session.user_id
     SS.events.emit 'client:heartbeat', session

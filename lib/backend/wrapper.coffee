@@ -1,6 +1,6 @@
-# Backend Server Manager
-# ----------------------
-# Manages back end worker processes which respond to incoming requests
+# Backend Worker - Process Wrapper
+# --------------------------------
+# Manages back end worker processes which respond to incoming requests, restarting them if required
 
 fs = require('fs')
 spawn = require('child_process').spawn
@@ -18,7 +18,7 @@ exports.bannerText = (standalone) ->
   text = []
   text.push "Back end server connecting to #{SS.config.cluster.sockets.be_main}" if standalone
   text.push "Spawned #{num_workers} back end worker #{if num_workers == 1 then 'process' else 'processes'} (PID #{(_workers.map (worker) -> worker.pid).join(', ')})"
-  text.push "Plug Sockets: Binding SS.plugs.#{name} to #{details.connect_to}" for name, details of SS.config.plugs
+  SS.config.plug_sockets.enabled && text.push "Plug Sockets: Binding SS.plugs.#{name} to #{details.connect_to}" for name, details of SS.config.plug_sockets.plugs
   text
 
 
@@ -55,7 +55,7 @@ startWorker = ->
 
 # Kill worker process if any files change (manager will re-spawn)
 watchForChanges = ->
-  dirs = ['/app/server', '/app/models', '/app/shared', '/config']
+  dirs = ['/app/server', '/app/models', '/app/shared', '/config', '/lib/server']
   dirs.forEach (dir) ->
     tree = file_utils.readDirSync(SS.root + dir)
     if tree.files

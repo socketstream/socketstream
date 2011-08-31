@@ -2,7 +2,7 @@
 # -----------------------
 # Very simple wrapper to provide asynchronous RPC requests with callbacks. Can utilize multiple transports (ZeroMQ or internal EventEmitters)
 # Incoming replies are matched with outgoing requests via the message 'id' which must be passed through from the Server to Client
-# Inpired by http://groups.google.com/group/json-rpc/web/json-rpc-2-0 but documented in /doc/guide/rpc_spec.md
+# Inspired by http://groups.google.com/group/json-rpc/web/json-rpc-2-0 but documented in /doc/guide/rpc_spec.md
 
 class Connection
 
@@ -102,9 +102,10 @@ class exports.Subscriber extends Connection
     @transport.listen cb
 
 
-# Private
+# PRIVATE
 
 # If ZeroMQ is present, use it, else fallback on the internal EventEmitter
 # In the near future we will support the child_process JSON API in Node 0.5
 detectTransport = ->
   SS.internal.zmq && 'zeromq' || 'internal'
+

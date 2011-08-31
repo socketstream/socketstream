@@ -1,4 +1,4 @@
-## Scaling
+### Scaling using ZeroMQ
 
 Scaling has been a big focus of the 0.2 release. What we have today is by no means the definitive architecture we want to end up with, but we're well on our way to providing you with a number of options when your new real time app takes off and you need to expand over multiple boxes.
 
@@ -47,7 +47,7 @@ In the unlikely event the router process crashes it will be automatically restar
 Give these three commands a go now by running each one locally in a separate terminal window. Once you're ready to try running them over multiple boxes you'll need to read the next section.
 
 
-### Telling SocketStream how to connect
+#### Telling SocketStream how to connect
 
 You may think running your app over multiple servers sounds terribly complicated and must require a lot of manual setup. Thankfully all you need to do is uncomment three lines in /app/config.coffee, replace them with the IP address of the server running 'socketstream router', and ZeroMQ will do the rest.
 
@@ -62,7 +62,7 @@ Next commit your application back to git and ensure every server has the most re
 We will try to make the cluster configuration procedure even easier / more automatic in future releases.
 
 
-### The future
+#### The future
 
 In the future we will continue to work towards eliminating all single points of failure. But right now, if your web app becomes an overnight success, you've got some good options to work with.
 
@@ -71,7 +71,7 @@ If you're feeling very adventurous you could try setting up two or more clusters
 Remember, if all of this sounds way too complex for you and scaling is not foremost on your mind at the moment - don't worry. You'll still be able to get great performance out of a single process by running 'socketstream single' (which forces SocketStream to run in a single process) on it's own. This command is the equivalent of running all three server components in one.
 
 
-### Contributing
+#### Contributing
 
 If you're an expert in ZeroMQ and fancy helping us in the scaling department, we'd love to hear from you! Also if you have a passion for tuning and benchmarking - please get in touch. We've made a start here already (run 'socketstream benchmark') but there is much more to come.
 

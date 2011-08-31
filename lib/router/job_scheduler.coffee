@@ -9,7 +9,7 @@ rpc = new (require('../rpc/connection.coffee')).Client('scheduler')
 # Will clear this mess up with a nice API in the future
 exports.run = ->
 
-  SS.config.users.online.enabled && setInterval(updateUsersOnline, SS.config.users.online.update_interval * 1000)
+  SS.config.users_online.enabled && setInterval(updateUsersOnline, SS.config.users_online.update_interval * 1000)
 
 
 # Events

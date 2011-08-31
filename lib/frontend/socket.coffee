@@ -1,21 +1,36 @@
-# Sockets
-# -------
+# Socket.IO
+# ---------
 # Handles incoming web/flash socket clients from Socket.IO
 
-utils = require('../utils')
-rpc = new (require('../rpc/connection.coffee')).Client('socketio')
+socketio  = require('socket.io')
+utils     = require('../utils')
+limiter   = require('./rate_limiter.coffee') if SS.config.rate_limiter.enabled
+rpc       = new (require('../rpc/connection.coffee')).Client('socketio')
 
 session_length = 32
 
-# Load optional modules
-limiter = require('./limiter.coffee') if SS.config.limiter.enabled
+exports.init = (server) ->
+
+  # Respond to incoming Socket connections
+  SS.io = socketio.listen(server)
+
+  # Set default Socket.IO config
+  SS.io.set 'log level', 2 # 3 and above are very noisy
+
+  # Run any custom configuration in /config/app.coffee
+  SS.config.socketio.configure(SS.io) if SS.config.socketio?.configure
+
+  # Process events in socket.coffee upon connection
+  SS.io.sockets.on 'connection', newConnection
+
+ 
+# PRIVATE
 
 # Called when a Socket.IO client establishes a connection to the server for the first time
-exports.connection = (socket) ->
+newConnection = (socket) ->
 
   # Define our own namespace to store stuff in
   socket.ss = {}
-
 
   # Called when a Socket.IO client disconnects (e.g. user shuts down the browser window, connection times out or RPS limit exceeded)
   socket.on 'disconnect', (reason) ->
@@ -65,9 +80,6 @@ exports.connection = (socket) ->
       result = response.result
       socket.ss.session = result.session
       socket.emit 'init', JSON.stringify(result.send_to_client)
-
-
-# PRIVATE
 
 # All incoming requests go through here first
 preProcess = (socket, cb) ->

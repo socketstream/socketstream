@@ -5,7 +5,7 @@
 zmq_async = require('./zmq_async.coffee')
 
 exports.init = ->
-  for name, details of SS.config.plugs
+  for name, details of SS.config.plug_sockets.plugs
 
     throw new Error("#{name} Plug Socket must specify a destination ZeroMQ socket with 'connect_to'") unless details.connect_to
 

@@ -27,6 +27,7 @@ exports.init = (load_project = false) ->
     frontend:         {}
     backend:          {}
 
+    users:            {}              # Users API
     events:           {}              # Used to bind to internal server-side events
     plugs:            {}              # Bind plug sockets here
 
@@ -40,7 +41,7 @@ exports.init = (load_project = false) ->
   SS.version = SS.internal.package_json.version
 
   # Set client file version. Bumping this automatically triggers re-compilation of lib assets when a user upgrades
-  SS.client.version = '0.1.2'
+  SS.client.version = '0.2.0'
 
   # Set environment
   env = process.env.SS_ENV || 'development'
@@ -48,6 +49,9 @@ exports.init = (load_project = false) ->
 
   # Load basic Array, String, JS extensions/helpers needed throughout SocketStream
   require('./helpers.js')
+
+  # Add helper to quickly load modules in /lib/server
+  SS.require = (path) -> require(SS.root + '/lib/server/' + path)
   
   load.project() if load_project
 
@@ -101,6 +105,7 @@ exports.process = (args) ->
 
         On OS X install HomeBrew then type: brew install pkg-config && brew install zeromq 
         On Linux: Download and install ZeroMQ 2.1 from http://www.zeromq.org/intro:get-the-software
+                  You may also have to install pkg-config as this is required by the zmq npm package
         On both: Reinstall SocketStream passing the --dev flag: 'sudo npm install -g socketstream --dev'
 
       You are then able to use the following commands:
@@ -143,9 +148,9 @@ start =
     SS.internal.mode = 'integrated'
     console.log 'Starting SocketStream server in multi-process mode...'
     load.project()
-    frontend = require('./frontend')
+    frontend = require('./frontend/manager.coffee')
     require('./router/worker.coffee').init()
-    backend = require('./backend')
+    backend = require('./backend/wrapper.coffee')
     backend.init()
     servers = frontend.server.start()
     banner_text = frontend.bannerText().concat(backend.bannerText())
@@ -158,7 +163,7 @@ start =
     load.project()
     require('./router/redis_proxy.coffee').init()
     require('./router/job_scheduler.coffee').run()
-    frontend = require('./frontend')
+    frontend = require('./frontend/manager.coffee')
     backend = require('./backend/worker.coffee')
     servers = frontend.server.start()
     banner_text = frontend.bannerText().concat(backend.bannerText())
@@ -173,7 +178,7 @@ start =
     SS.internal.mode = 'frontend'
     load.zeromq(true)
     load.project()
-    frontend = require('./frontend')
+    frontend = require('./frontend/manager.coffee')
     servers = frontend.server.start()
     showBanner frontend.bannerText(true)
   
@@ -181,7 +186,7 @@ start =
     SS.internal.mode = 'backend'
     load.zeromq(true)
     load.project()
-    backend = require('./backend')
+    backend = require('./backend/wrapper.coffee')
     backend.init(args)
     showBanner backend.bannerText(true)
   
@@ -208,7 +213,7 @@ start =
   console: ->
     SS.internal.mode = 'console'
     load.project()
-    require('./frontend')
+    require('./frontend/manager.coffee')
     require('./backend/worker.coffee')
     showBanner('Press Control + C twice to quit the Interactive Console')
     repl = require('repl')
@@ -232,7 +237,7 @@ load =
       SS.internal.zmq = require 'zmq'
     catch e
       if required
-        console.log "Error: You will need to install ZeroMQ to take advantage of the cluster features within SocketStream"
+        console.log "Error: You need to install ZeroMQ to take advantage of the cluster features within SocketStream"
         console.log "Type 'socketstream help' for installation instructions"
         process.exit(0)
   

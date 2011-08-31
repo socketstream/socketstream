@@ -1,6 +1,7 @@
-# Users Online
-# ------------
-# Manages users online within the cluster and connected to this particular instance
+# Users Online Module
+# -------------------
+# Only loaded if SS.config.user_online.enabled
+# Traks and manages users online within the cluster
 # TODO: Handle errors by processing callbacks
 
 util = require('util')
@@ -8,7 +9,7 @@ util = require('util')
 key = SS.config.redis.key_prefix
 
 # Users Online
-exports.online =
+module.exports =
 
   # Get a (potentially huge) list of all User IDs online right now
   now: (cb = console.log) ->
@@ -35,7 +36,7 @@ exports.online =
     SS.log.users.online.update.start()
     
     # Concat all the User IDs which have been online within the last X minutes in a temporary key "ss:online:recent"
-    keys = [0..(SS.config.users.online.mins_until_offline - 1)].map (mins_ago) -> "#{key}:online:at:#{minuteCode(mins_ago)}"
+    keys = [0..(SS.config.users_online.mins_until_offline - 1)].map (mins_ago) -> "#{key}:online:at:#{minuteCode(mins_ago)}"
     args = ["#{key}:online:recent"].concat(keys)
     R.sunionstore.apply(R, args)
     
@@ -43,8 +44,8 @@ exports.online =
     R.sinterstore "#{key}:online:now", "#{key}:online:now", "#{key}:online:recent"
     
     # Delete old timestamp keys we no longer need (unless we choose to keep them for analytical purposes)
-    unless SS.config.users.online.keep_historic
-      keys = [0..(SS.config.users.online.mins_until_offline)].map (mins_ago) -> "#{key}:online:at:#{minuteCode(mins_ago)}"
+    unless SS.config.users_online.keep_historic
+      keys = [0..(SS.config.users_online.mins_until_offline)].map (mins_ago) -> "#{key}:online:at:#{minuteCode(mins_ago)}"
       R.del.apply(R, keys)
       
     SS.log.users.online.update.complete()

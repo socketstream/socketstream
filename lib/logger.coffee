@@ -105,8 +105,8 @@ exports.level = level = (num) ->
 output = (level_num, msg) ->
   util.log("PID #{process.pid} - #{msg}") if level(level_num)
 
-parseParams = (params) ->
-  params = util.inspect(params) if params and level(3)
+parseParams = (input) ->
+  params = util.inspect(input) if input and level(4)
   if params then ': ' + params else ''
 
 
@@ -116,3 +116,4 @@ color_codes =
   magenta:    35
   cyan:       36
   green:      32
+  yellow:     33

@@ -11,10 +11,10 @@ class exports.Socket
   constructor: (@socket_type = 'xreq', @connect_to = SS.config.cluster.sockets.fe_main, @format = SS.config.cluster.serialization) ->
     @socket = SS.internal.zmq.createSocket(@socket_type)
     @socket.connect @connect_to
-    
-    @internal = false
+        
     @request_num = 0
     @stack = {}
+    @debug = false
   
     # Listen for incoming responses
     @socket.on 'message', (data) =>
@@ -47,9 +47,6 @@ class exports.Socket
     if cb 
       obj.id = ++@request_num
       @stack[obj.id] = cb
-
-    # Append version number if this is an internal request
-    obj.version = SS.internal.rpc_version if @internal
 
     console.log('ZeroMQ socket about to serialize message object:', obj) if @debug
 

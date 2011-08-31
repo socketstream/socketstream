@@ -1,12 +1,14 @@
 ### Plug Sockets
 
-Plug Sockets allow your SocketStream app to easily connect to external servers using ZeroMQ.
+_Module status: Disabled by default. Enable with `SS.config.plug_sockets.enabled = true`_
+
+Plug Sockets allow your SocketStream app to easily connect to external servers using [ZeroMQ](http://www.zeromq.org/).
 
 As ZeroMQ bindings are available in over 20 languages (including C, C++, Java, Ruby, PHP, .net, Erlang, and of course Node.js), there's a good chance you'll be able to get SocketStream talking to any game server, message server, or anything else you may want to chat to - all at speeds far faster than any HTTP-based webservice can offer.
 
 Plug Sockets are deliberately implemented at a very low level to allow you to decide upon the best message format for your use case. Hence you may send and receive using Msgpack, BSON, Netstrings, or just raw binary buffers.
 
-To help make dealing with typical JSON RPC asynchronous requests easy, the optional 'callbacks = true' option wraps the raw ZeroMQ socket with the same asynchronous request handler SocketStream uses internally.
+To help make dealing with typical JSON RPC asynchronous requests easy, the optional 'callbacks = true' option wraps the raw ZeroMQ socket with an asynchronous request handler.
 
 Let's look at some examples. First, using raw ZeroMQ sockets to talk to a server we'll call 'velocity':
 
@@ -16,9 +18,11 @@ In your app.coffee config file add:
 
   exports.config =
 
-    plugs:
-      velocity:
-        connect_to: 'tcp://10.0.0.1:5000'
+    plug_sockets:
+      enabled: true
+      plugs:
+        velocity:
+          connect_to: 'tcp://10.0.0.1:5000'
 ```
 
 You are now able to access the raw ZeroMQ socket commands from your server-side code:
@@ -43,18 +47,20 @@ Let's setup another Plug Socket, this time one designed to use JSON RPC calls. W
 
   exports.config =
 
-    plugs:
-      velocity:
-        connect_to: 'tcp://10.0.0.1:5000'
-      boomerang:
-        connect_to: 'tcp://rpc.mysite.com:9000'
-        callbacks: true
-        debug: true
+    plug_sockets:
+      enabled: true
+      plugs:
+        velocity:
+          connect_to: 'tcp://10.0.0.1:5000'
+        boomerang:
+          connect_to: 'tcp://rpc.mysite.com:9000'
+          callbacks: true
+          debug: true
 ```
 
-Notice the 'callbacks: true' option.
+Notice the `callbacks: true` option.
 
-Now we don't have to listen to incoming replies in /config/events.coffee - we just send requests with callbacks the same way as you'd call an SS.server method from the browser. Now we could write code in /app/server which looks like this:
+Now we don't have to listen to incoming replies in /config/events.coffee - we just send requests with callbacks the same way as you'd call an `SS.server` method from the browser. Now we can write code in /app/server which looks like this:
 
 ``` coffee-script
 
@@ -62,8 +68,7 @@ Now we don't have to listen to incoming replies in /config/events.coffee - we ju
 
     # Move your car and send the new position directly back via the websocket
     moveCar: (position, cb) ->
-      @getSesion (session) ->
-        SS.plugs.boomerang.send {method: 'moveCar', user_id: session.user_id, position: position}, cb
+      SS.plugs.boomerang.send {method: 'moveCar', user_id: @session.user_id, position: position}, cb
 
     # Get a list of all players from the game server, take the first 10 and make them uppercase
     getPlayers: (cb) ->

@@ -56,6 +56,7 @@ class Stack
   loadCustom: (server_name) ->
     file = "/config/http.coffee"
 
+    # Look for custom middleware. If it doesn't exist automatically use the default file
     try
       custom = require("#{SS.root}#{file}")
     catch e
@@ -67,7 +68,7 @@ class Stack
     if custom[server_name]
       @stack = @stack.concat(custom[server_name])
     else
-      SS.log.error.message "#{file} is out of date - any custom middleware will be ignored. Please upgrade #{file} to the new Connect format introduced in 0.2.0"
+      SS.log.error.message "#{file} is out of date - any custom middleware will be ignored. Please delete this file if you don't need it, or upgrade #{file} to the new Connect format introduced in 0.2.0"
       
 
   # Load Internal Middleware

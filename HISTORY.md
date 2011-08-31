@@ -1,3 +1,16 @@
+0.2.0 / 2011-08-31
+==================
+
+* Upgraded Socket.IO to 0.8.2 to fully support native websockets in Firefox 6 and latest Chrome dev builds
+* Now using default Socket.IO fallbacks which use XHR Polling by default. Socket.IO can be configured in /config/app.coffee if you wish
+* Browser check module now recognizes FF 6 and no longer shows 'Incompatible Browser' message
+* Added SS.require() wrapper to easily share code between /app/server files. See /doc/guide/en/developing/server_code.md
+* Moved Quick Chat Demo code into its own files when creating a new project to demo namespacing and make it easier to delete
+* Made code more modular so it only loads if required
+* Renamed SS.config.users.online config params to SS.config.users_online to match format of other optional modules
+* Moved most of the README into /doc/guide/en. These will form pages on our forthcoming website
+
+
 0.2 beta 2 / 2011-08-25
 =======================
 
@@ -62,4 +75,4 @@
 
 Major changes since 0.1. See full announcement here: https://github.com/socketstream/socketstream/blob/master/doc/annoucements/0.2.md
 
-All archived history on 0.1 branch
+All archived history in the 0.1 branch: https://github.com/socketstream/socketstream/blob/0.1/HISTORY.md
