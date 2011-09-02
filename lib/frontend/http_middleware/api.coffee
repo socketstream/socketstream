@@ -41,6 +41,37 @@ module.exports = ->
 
 # PRIVATE
 
+# Alternative form parser
+if SS.config.api.form_parser.enabled
+
+  form_parser = require('formidable')
+  
+  # Creating form process func
+  process_form = (request, cb)->
+    
+    data = {fields:[], files:[], errors:[]}
+    form = new form_parser.IncomingForm()
+    
+    #Formiblade config
+    form.maxFieldsSize = SS.config.api.form_parser.maxFieldsSize
+    form.keepExtensions = SS.config.api.form_parser.keepExtensions
+    form.encoding = SS.config.api.form_parser.encoding
+    form.uploadDir = SS.config.api.form_parser.uploadDir
+
+    form.on 'field', (field, value)->
+      data.fields.push [field, value]
+
+    form.on 'file', (file, value)->
+      data.files.push [file, value]
+
+    form.on 'error', (error)->
+      data.errors.push [error]
+
+    form.on 'end', ->
+      cb(data)
+
+    form.parse request
+
 # Process an API Request
 process = (request, response, url, actions) ->
 
@@ -50,11 +81,10 @@ process = (request, response, url, actions) ->
       
     # Check format is supported
     throw 'Invalid output format. Supported formats: ' + formatters.keys().join(', ') unless formatters.keys().include(format)
-    
-    post_data = ''
-    request.on 'data', (chunk) -> post_data += chunk.toString()
-    request.on 'end', ->
 
+    post_data = ''
+
+    generate_reply = ->
       # Generate request for back end and send
       obj = {responder: 'server', method: actions.join('.'), params: params}
       obj.post = post_data if post_data.length > 0
@@ -62,6 +92,18 @@ process = (request, response, url, actions) ->
       # Execute the request and deliver the response once it returns
       rpc.send obj, (result) ->
         reply(result, response, format)
+
+    if !SS.config.api.form_parser.enabled
+
+      request.on 'data', (chunk) -> post_data += chunk.toString()
+      request.on 'end', ->
+        generate_reply()
+
+    else
+      process_form request, (data)->
+        post_data = JSON.stringify(data)
+        generate_reply()
+
     
   catch e
     server.showError(response, e)
