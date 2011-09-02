@@ -22,7 +22,8 @@
   },
   "devDependencies": {
     "zmq":              "= 1.0.2",
-    "hiredis":          "= 0.1.12"
+    "hiredis":          "= 0.1.12",
+    "formidable":       "= 1.0.2"
   },
   "directories":  { "lib": "./lib", "doc": "./doc" },
   "main":         "./lib/socketstream.js",

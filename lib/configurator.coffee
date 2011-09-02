@@ -81,6 +81,12 @@ setDefaults = ->
       enabled:                true
       prefix:                 'api'           # defines the URL namespace
       https_only:             false           # only allow API requests over HTTPS
+      form_parser:
+        enabled:              true            # node-formidable middleware
+        maxFieldsSize:        8 * 1024 * 1024 #
+        keepExtensions:       true            #
+        encoding:             'utf-8'         #
+        uploadDir:            SS.root + '/public'
       auth:
         basic:          
           module_name:        false           # replace this with the name of the authentication module. false = basic auth disabled
