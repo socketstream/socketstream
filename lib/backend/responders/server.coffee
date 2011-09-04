@@ -13,6 +13,7 @@ prefix = '/app/server'
 var_session = SS.config.reserved_vars.session
 var_request = SS.config.reserved_vars.request
 var_user =    SS.config.reserved_vars.user
+var_socket_id=SS.config.reserved_vars.socket_id
 
 # Make a list of variables you cannot use as action names (and warn below if you try)
 reserved_variables = ['getSession', var_session, var_request, var_user]
@@ -74,6 +75,9 @@ process = (obj, cb) ->
  
   # Create @session object if we have a session_id
   server_module[var_session] = obj.session_obj
+
+  # Add socket_id
+  server_module[var_socket_id] = obj.socket_id
     
   # Keep in for compatibility until 0.3
   server_module.getSession = (scb) ->

@@ -46,6 +46,7 @@ newConnection = (socket) ->
     preProcess socket, ->
       msg.responder = 'server'
       msg.session = socket.ss.session
+      msg.socket_id = socket.id
       request = rpc.send msg, (response) ->
         updateSessionCache(socket, response)
         cb response
