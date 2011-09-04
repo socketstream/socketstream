@@ -34,8 +34,7 @@ methods =
   disconnect: (obj, session, cb) ->
     SS.events.emit 'client:disconnect', session
 
-  # A heartbeat is sent every X seconds by clients
-  # We will work to make this method faster in the future
+  # A heartbeat is sent every SS.config.client.heartbeat_interval seconds by connected clients
   heartbeat: (obj, session, cb) ->
     SS.users.online.confirm(session.user_id) if SS.users.online && session.user_id
     SS.events.emit 'client:heartbeat', session

@@ -27,7 +27,7 @@ class exports.Client extends Connection
     @transport.listen (obj) =>
 
       # Output message for debugging
-      @debug && console.log("RPC Client: Msg in via #{@transport_type}:", obj)
+      @debug && console.log("RPC Client: Msg in via #{@transport_type} transport:", obj)
   
       # All messages in MUST include an ID field containing the same number contained in the request
       if obj.id
@@ -50,7 +50,7 @@ class exports.Client extends Connection
     obj.origin = @name
 
     # Output message for debugging
-    @debug && console.log("RPC Client: Msg to be sent via #{@transport_type}:", obj)
+    @debug && console.log("RPC Client: Msg to be sent via #{@transport_type} transport:", obj)
 
     # Send to back end
     @transport.send(obj)

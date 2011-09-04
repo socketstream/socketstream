@@ -1,0 +1,10 @@
+{
+  "name": "My new SocketStream app",
+  "description": "An awesome real time application",
+  "version": "0.1.0",
+  "author": "Me <me@mydomain.com>",
+  "engines": { "node": ">= 0.4.0 < 0.5.0" },
+  "dependencies": {
+    "socketstream": "~>0.2.0"
+  }
+}

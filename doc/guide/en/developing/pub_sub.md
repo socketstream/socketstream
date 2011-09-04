@@ -2,21 +2,40 @@
 
 In addition to the `SS.publish.user()` method documented in Example 3 within the README, there are two additional publish commands which allow you to easily message users in bulk.
 
-To send a notification to all users (for example to let everyone know the system is going down for maintenance), use the broadcast method:
+
+#### Broadcasting
+
+To send a notification to every connected client (for example to let everyone know the system is going down for maintenance), use the broadcast method:
 
 ``` coffee-script
 SS.publish.broadcast('flash', {type: 'notification', message: 'Notice: This service is going down in 10 minutes'})
 ```
+
+Receive the event in the browser with:
+
+``` coffee-script
+SS.events.on 'flash', (msg) ->
+  alert(msg.message)
+```
+
+#### Private Channels
     
-Sometimes you may prefer to send events to a sub-set of connected users, for example if you have a chat apps with multiple rooms. SocketStream has a cool feature called Private Channels which let you do just that across multiple servers with minimum overhead.
+Sometimes you'll want to send events to a sub-set of connected users. For example, if you have a chat app with multiple rooms. SocketStream supports Private Channels which let you do just that.
 
 The syntax is similar to the command above with an extra initial argument specifying the channel name (or names as an array):
 
 ``` coffee-script
 SS.publish.channel(['disney', 'kids'], 'newMessage', {from: 'mickymouse', message: 'Has anyone seen Tom?'})
 ```
-    
-Users can subscribe to an unlimited number of channels using the following commands (which must be run inside your /app/server code). E.g:
+
+Receive these events in the browser in the usual way. Note: If the event was sent to a channel, the channel name is passed to the second argument:
+
+``` coffee-script
+SS.events.on 'newMessage', (msg, channel_name) ->
+  console.log "The following message was sent to the #{channel_name} channel:", msg
+```
+ 
+Clients can subscribe to an unlimited number of channels using the following commands (which must be run inside your /app/server code). E.g:
 
 ``` coffee-script
   @session.channel.subscribe('disney')        # note: multiple channel names can be passed as an array 

@@ -4,13 +4,10 @@
 # Version 2.0
 
 # This file defines how incoming HTTP requests are handled
-# Note: The default configuration will probably change a lot in the future. Be warned!
-
 
 # CUSTOM MIDDLEWARE
 
 # Hook-in your own custom HTTP middleware to modify or respond to requests before they're passed to the SocketStream HTTP stack
-# See README for more details and example middleware code
 
 custom = ->
 
@@ -29,7 +26,7 @@ exports.primary =
   [
     #connect.logger()            # example of calling in-built connect middleware. be sure to install connect in THIS project and uncomment out the line above
     #require('connect-i18n')()   # example of using 3rd-party middleware from https://github.com/senchalabs/connect/wiki
-    #custom()                    # example of using your own custom middleware (using the example above)
+    #custom                      # example of using your own custom middleware (using the example above)
   ]
 
 # Stack for Secondary Server

@@ -26,13 +26,14 @@ SS.events =
 
   _events: {}
 
-  on: (name, funct) ->
+  on: (name, fn) ->
     @_events[name] = [] unless @_events[name]?
-    @_events[name].push(funct)
+    @_events[name].push(fn)
   
-  emit: (name, params) ->
+  emit: ->
+    [name, params...] = arguments
     if @_events[name]
-      event(params) for event in @_events[name]
+      event.apply(event, params) for event in @_events[name]
     else
       console.error "Error: Received incoming '#{name}' event but no event handlers registered"
 
@@ -151,10 +152,11 @@ SS.socket.on 'reload', ->
 ### MAIN RESPONDERS ####
 
 # Respond to incoming events
-SS.socket.on 'event', (msg) ->
+SS.socket.on 'event', (msg, destination) ->
   data = JSON.parse(msg)
-  log 2, "=> #{data.event}"
-  SS.events.emit(data.event, data.params)
+  info = destination && (' [' + destination + ']') || ''
+  log 2, "=> #{data.event}#{info}"
+  SS.events.emit(data.event, data.params, destination)
 
 # Respond to Real Time Model requests
 SS.socket.on 'rtm', (msg) ->

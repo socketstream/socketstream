@@ -76,11 +76,12 @@ setDefaults = ->
   
     ### OPTIONAL MODULES ###
 
-    # Configures the HTTP request-based API
+    # HTTP request-based API
     api:
       enabled:                true
       prefix:                 'api'           # defines the URL namespace
       https_only:             false           # only allow API requests over HTTPS
+      post_max_size_kb:       8192            # 8Mb HTTP POST body size limit
       auth:
         basic:          
           module_name:        false           # replace this with the name of the authentication module. false = basic auth disabled

@@ -43,7 +43,5 @@ dispatchMultiple = (name, message) ->
     for socket_id, socket of SS.io.sockets.sockets
       try
         if (name == 'Channels' && socket.ss.session.channels.include(destination)) or (name == 'Users' && socket.ss.session.user_id == destination)
-          sockets_to_message.push(socket) unless socket.disconnected or sockets_to_message.include(socket)
+          socket.emit('event', message, destination) unless socket.disconnected
 
-    # Deliver message to each socket
-    sockets_to_message.forEach (socket) -> socket.emit('event', message)

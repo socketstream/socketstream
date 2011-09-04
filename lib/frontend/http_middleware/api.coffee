@@ -17,6 +17,8 @@ server = require('../utils.coffee')
 
 rpc = new (require('../../rpc/connection.coffee')).Client('api')
 
+post_limit = SS.config.api.post_max_size_kb
+
 
 # Connect middleware handler
 module.exports = ->
@@ -43,30 +45,32 @@ module.exports = ->
 
 # Process an API Request
 process = (request, response, url, actions) ->
-
-  try
-    params = parseParams(url)
-    format = request.ss.parsedURL.extension || 'html'
-      
-    # Check format is supported
-    throw 'Invalid output format. Supported formats: ' + formatters.keys().join(', ') unless formatters.keys().include(format)
+  params = parseParams(url)
+  format = request.ss.parsedURL.extension || 'html'
     
-    post_data = ''
-    request.on 'data', (chunk) -> post_data += chunk.toString()
-    request.on 'end', ->
-
-      # Generate request for back end and send
-      obj = {responder: 'server', method: actions.join('.'), params: params}
-      obj.post = post_data if post_data.length > 0
-
-      # Execute the request and deliver the response once it returns
-      rpc.send obj, (result) ->
-        reply(result, response, format)
-    
-  catch e
+  request.on 'error', (e) ->
+    request.invalid = true # would love to know how to stop 'end' being called without doing this
     server.showError(response, e)
     SS.log.error.exception(e)
-        
+
+  request.on 'end', ->
+    return if request.invalid
+
+    # Generate request for back end and send
+    obj = {responder: 'server', method: actions.join('.'), params: params}
+    obj.post = post_data if post_data?.length > 0
+
+    # Execute the request and deliver the response once it returns
+    rpc.send obj, (result) ->
+      try
+        reply(result, response, format)
+      catch e
+        request.emit 'error', e
+
+  checkOutputFormat(request, format)
+  post_data = processPostData(request) if request.method == 'POST'
+
+
 # Formats and deliver the object
 reply = (data, response, format) ->
   formatters[format](data, response)
@@ -83,6 +87,26 @@ parseParams = (url) ->
       null
   catch e
     throw new Error('Unable to parse params. Check syntax.')
+
+# Make sure we can return a response in the format requested
+checkOutputFormat = (request, format) ->
+  formats_supported = Object.keys(formatters)
+  request.emit 'error', new Error('Invalid output format. Supported formats: ' + formats_supported.join(', ')) unless formats_supported.include(format)
+
+# Listen for incoming HTTP post data, cutting off if necessary so we don't run out of memory
+processPostData = (request) ->
+  overLimit = (bytes) ->
+    bytes >= (post_limit * 1024) && request.emit('error', new Error("HTTP POST exceeded #{post_limit}kb. Adjust limit with SS.config.api.post_max_limit_kb"))
+
+  # Check headers first for speed
+  overLimit(request.headers['content-length'])
+
+  # Then stream the data in, checking as we go as we can't always trust the client to send an accurate header
+  out = ''
+  request.on 'data', (chunk) ->
+    return false if request.invalid
+    !overLimit(out.length) && out += chunk.toString()
+  out
 
 
 ### TODO: Fix this or replace it ###

@@ -1,3 +1,15 @@
+0.2.1 / 2011-09-04
+==================
+
+* When receiving an event sent to a channel the channel name is now passed to the second argument. Updated docs
+* HTTP API now refuses POST data above 8Mb to prevent running out of memory. Limit can be configured with SS.config.api.post_max_size_kb
+* We now take advantage of connect.staticCache() in Connect 1.7.0 for increased performance
+* Upgraded Socket.IO to 0.8.3
+* New projects now include an empty package.json file
+* Added the public/assets directory to the default .gitignore file
+* Few tweaks to /config/app.coffee and /config/http.coffee
+
+
 0.2.0 / 2011-08-31
 ==================
 

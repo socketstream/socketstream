@@ -41,7 +41,7 @@ exports.init = (load_project = false) ->
   SS.version = SS.internal.package_json.version
 
   # Set client file version. Bumping this automatically triggers re-compilation of lib assets when a user upgrades
-  SS.client.version = '0.2.0'
+  SS.client.version = '0.2.1'
 
   # Set environment
   env = process.env.SS_ENV || 'development'
