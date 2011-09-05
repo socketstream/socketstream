@@ -29,6 +29,13 @@ module.exports =
   user: (users, event, params) ->
     @users(users, event, params)
 
+  # Publish event to array of socket ids
+  sockets: (sockets, event, params) ->
+    send 'Sockets', sockets, event, params
+
+  # Alias Sockets
+  socket: (sockets, event, params) ->
+    @sockets(sockets, event, params)
 
 # Private
 
@@ -38,4 +45,9 @@ send = (name, destinations, event, params = null) ->
   throw new Error("No #{name} specified (first argument)") unless destinations.length > 0
   throw new Error('Event Name (second argument) must be a string') unless typeof(event) == 'string'
   SS.log.outgoing.event "#{name} [#{destinations.join(', ')}]", event, params
-  SS.redis.main.publish "#{key}:#{name.toLowerCase()}", JSON.stringify({event: event, params: params, destinations: destinations})
+  channel = "#{key}:#{name.toLowerCase()}"
+  message = JSON.stringify({event: event, params: params, destinations: destinations})
+  if name is 'Sockets'
+      SS.io.sockets.sockets[socket].emit('event', message, socket) for socket in destinations
+  else
+      SS.redis.main.publish channel, message

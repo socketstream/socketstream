@@ -43,6 +43,7 @@ setDefaults = ->
       request:                'request'
       session:                'session'
       user:                   'user'
+      socket_id:              'socket_id'
 
     # Default settings for /app/server files
     server_files:
