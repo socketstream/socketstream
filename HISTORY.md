@@ -1,3 +1,9 @@
+0.2.2 / 2011-09-18
+==================
+
+* Updated Socket.IO to 0.8.4 (resolves issue of WebSockets not working on Google Chrome due to Google switching to draft 10 of the WebSocket protocol)
+
+
 0.2.1 / 2011-09-04
 ==================
 
