@@ -24,7 +24,7 @@ exports.incoming =
       output 2, "#{msg.id} #{color('->', 'cyan')} #{msg.method}#{parseParams(msg.params)}"
       
   event: (type, message) ->
-    output 2, ((obj = JSON.parse(message)) && "#{type} #{color('=>', 'cyan')} #{obj.event}#{parseParams(obj.params)}")
+    output 2, "#{type} #{color('=>', 'cyan')} #{message.event}#{parseParams(message.params)}"
 
   rtm: (data, socket) ->
     output 2, "#{socket.id} #{color('~>', 'cyan')} #{data.rtm}.#{data.action}#{parseParams(data.params)}"

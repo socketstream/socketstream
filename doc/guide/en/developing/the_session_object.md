@@ -1,6 +1,6 @@
 ### The @session object
 
-SocketStream creates a new session when a browser connects to the server for the first time, storing a session cookie on the client and the details in Redis. When the same visitor returns (or refreshes the browser), the session is instantly retrieved.
+SocketStream creates a new session when a browser connects to the server for the first time, storing a session cookie on the client and the details in a session store. When the same visitor returns (or refreshes the browser), the session is instantly retrieved.
 
 The user's session details can be accessed using the @session object from within your server-side code. E.g.
 
@@ -38,4 +38,4 @@ Important: You may use @session.attributes to store any data that can go through
 
 #### Where is session data stored?
 
-All session data is stored in Redis. It is also cached on the front end server the user is currently connected to and sent alongside every internal RPC request to the back end server to avoid hitting Redis for every request.
+All session data is either stored internally in memory (the default when you create a new project), or in Redis (required when hosting your app). It is also cached on the front end server the user is currently connected to and sent alongside every internal RPC request to the back end server to avoid hitting Redis for every request.

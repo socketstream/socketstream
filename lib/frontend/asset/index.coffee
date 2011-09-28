@@ -23,6 +23,9 @@ default_directory_mode = 0755
 exports.pack =     require('./pack.coffee').init(@).pack
 exports.compile =  require('./compile.coffee').init(@).compile
 
+# List file extensions the compiler can handle
+exports.supported_formats = exports.compile.keys()
+
 # Setup shared vars
 exports.files =         {js: {}, css: {}}
 exports.public_path =   './public/assets'

@@ -17,7 +17,7 @@ exports.init = (counter = 0) ->
 
   # Subscribe to the following Redis channels
   # Note: User and channel messages are multiplexed over a single Redis channel. See http://groups.google.com/group/socketstream/browse_thread/thread/f7a8b3e932102d62 for more details
-  ['broadcast', 'users', 'channels', 'frontend'].forEach (channel) ->
+  ['broadcast', 'users', 'channels', 'sockets'].forEach (channel) ->
     redis.pubsub.subscribe "#{key}:#{channel}"
 
   # Every time we get get a message from Redis (for SocketStream), fan out upstream to all subscribed frontend servers

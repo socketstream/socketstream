@@ -15,7 +15,7 @@
 # Oh, and if you fancy writing this router in C or Erlang, please go ahead! We'd love to see the benchmarks :)
 
 # Load Redis event proxy
-proxy = require('./redis_proxy.coffee')
+proxy = require('./redis_proxy.coffee') if SS.config.redis.enabled
 
 # Load Job Scheduler
 scheduler = require('./job_scheduler.coffee')
@@ -34,7 +34,7 @@ backend.bindSync  SS.config.cluster.sockets.be_main
 
 exports.init = (args) ->
   routeRequests()
-  proxy.init()
+  proxy && proxy.init()
   scheduler.run()
 
   showTraffic() if args?['--show-traffic']

@@ -1,3 +1,24 @@
+0.2.3 / 2011-09-27
+==================
+
+Major Update!
+
+* SocketStream no longer requires Redis when developing in single-process mode (the default)
+* Redis support is switched on by default (SS.config.redis.enabled = true) so existing apps work just as before
+* New projects have Redis disabled in the config file along with an explanation how to install & enable
+* All features work without Redis enabled except for Users Online (fixable in the future)
+* This change reduces the barriers to entry for new developers and ensures better support for Windows in the future
+
+* Less (.less) CSS files now supported. Less and Stylus support will be moved out into optional modules in 0.3
+* Plain (.css) CSS files now supported for the first time, though continue to use .styl if you wish to use @import
+* You may now message individual clients (i.e. browser tabs) with SS.publish.socket() - thanks kyokpae!
+* Changed console.log.apply to use new cross-browser window.log() wrapper for IE compatibility
+* Cleaned-up and refactored plenty of code
+* Updated other dependencies, including Jade to 0.16.0
+* Errors in client-side files now shown in server-side console
+* Added new example app link to Readme - thanks syrio!
+
+
 0.2.2 / 2011-09-18
 ==================
 

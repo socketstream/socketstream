@@ -26,10 +26,12 @@ The following directories are created whenever you run `socketstream new`:
 * See 'Sharing Code' section
 
 #### /app/css
-* /app/css/app.styl must exist. This should contain your stylesheet code in [Stylus](http://learnboost.github.com/stylus/) format (similar to SASS). You can also use plain CSS if you prefer.
-* Additional Stylus files can be imported into app.styl using @import 'name_of_file'. Feel free to nest files if you wish.
+* Supports plain .css, .styl ([Stylus](http://learnboost.github.com/stylus/)) or .less ([Less](http://lesscss.org/)) files
+* Your first file should be named app followed by your format of choice (e.g. app.styl)
+* Additional Stylus or Less files can be imported into app.* using @import 'name_of_file'. Feel free to nest files if you wish
+* You cannot @import additional files into static .css files - use Stylus or Less instead
 * If you wish to use CSS libraries within your project (e.g. normalize.css or jQuery UI) put these in /lib/css instead, or feel free to link to hosted CDN files in /app/views/app/jade
-* Stylus files are automatically compiled and served on-the-fly in development mode and pre-compiled/compressed/cached in staging and production
+* Stylus & Less files are automatically compiled and served on-the-fly in development mode and pre-compiled/compressed/cached in staging and production
 
 #### /app/views
 * Either /app/views/app.jade or /app/views/app.html must exist. This should contain all the static layout HTML your app will ever need.

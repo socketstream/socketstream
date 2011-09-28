@@ -18,7 +18,8 @@ exports.init = (load_project = false) ->
     client:           {}              # Used to store any info about the client (the JS code that's sent to the browser)
     config:           {}              # Used to store server and client configuration
     log:              {}              # Outputs to the terminal
-    redis:            {}              # Connect main and pubsub active connections here
+    
+    redis:            null            # Connect main and pubsub active connections here
     
     models:           {}              # Models are preloaded and placed here
     server:           {}              # Server code is preloaded and placed here
@@ -41,7 +42,7 @@ exports.init = (load_project = false) ->
   SS.version = SS.internal.package_json.version
 
   # Set client file version. Bumping this automatically triggers re-compilation of lib assets when a user upgrades
-  SS.client.version = '0.2.1'
+  SS.client.version = '0.2.2'
 
   # Set environment
   env = process.env.SS_ENV || 'development'
@@ -161,7 +162,7 @@ start =
     SS.internal.mode = 'single'
     console.log 'Starting SocketStream server in single-process mode...'
     load.project()
-    require('./router/redis_proxy.coffee').init()
+    require('./router/redis_proxy.coffee').init() if SS.config.redis.enabled
     require('./router/job_scheduler.coffee').run()
     frontend = require('./frontend/manager.coffee')
     backend = require('./backend/worker.coffee')
@@ -260,7 +261,7 @@ load =
       require.paths.unshift('./app/models')
 
     # Set default config and merge it with any application config file
-    require('./configurator.coffee').configure()
+    SS.config = require('./config/index.coffee').load()
     
     # Alias SS to SS.config.ss_var to allow for other custom variable name if desired
     global[SS.config.ss_var] = SS if SS.config.ss_var and SS.config.ss_var != 'SS'

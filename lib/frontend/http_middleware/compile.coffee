@@ -7,7 +7,6 @@ util = require('util')
 server = require('../utils.coffee')
 assets = require('../asset')
 
-
 module.exports = ->
 
   (request, response, next) ->
@@ -22,6 +21,7 @@ module.exports = ->
           SS.log.serve.compiled(file.name, benchmark_result)
       catch e
         server.showError(response, e)
+        SS.log.error.exception(e)
     else
       next()
 
@@ -31,8 +31,8 @@ module.exports = ->
 # Should we attempt to serve this request?
 isValidRequest = (request) ->
   url = request.ss.parsedURL
-  return true if url.isRoot or url.extension == 'styl'
-  isValidScript(url)
+  return false if url.initialDir == 'assets' # ignore pre-cached assets
+  url.isRoot || assets.supported_formats.include(url.extension)
 
 # Parse incoming URL depending on file extension`
 urlToFile = (url) ->
@@ -43,9 +43,9 @@ urlToFile = (url) ->
   else
     {name: url.path, extension: url.extension}
 
-# Excludes lib_*.js asset files
+# Ensure script paths are re-written
 isValidScript = (url) ->
-  ['coffee', 'js'].include(url.extension) and assets.client_dirs.include(url.initialDir)
+  ['coffee', 'js'].include(url.extension)
 
 # Decide which file to serve as the root
 # Note: this synchronous request only runs in developer mode

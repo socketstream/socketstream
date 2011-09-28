@@ -1,7 +1,7 @@
 ![SocketStream!](https://github.com/socketstream/socketstream/raw/master/new_project/public/images/logo.png)
 
 
-Latest release: 0.2.2  ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+Latest release: 0.2.3  ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 
 Twitter: [@socketstream](http://twitter.com/#!/socketstream)  
 Google Group: http://groups.google.com/group/socketstream  
@@ -12,9 +12,18 @@ IRC channel: [#socketstream](http://webchat.freenode.net/?channels=socketstream)
 
 ### Introduction
 
-SocketStream is a new full stack web framework and distributed hosting platform built around the [Single-page Application](http://en.wikipedia.org/wiki/Single-page_application) paradigm. It embraces websockets, in-memory datastores (Redis), and client-side rendering to provide an ultra-responsive real time experience that will amaze your users.
+SocketStream is a new Node.js web framework dedicated to creating single-page real time websites.
 
-While it's still early days, a lot of the functionality you need to build a good-sized real time web app is now present and relatively stable. Key functionality currently missing (most notably an elegant way to do server-side models, external authentication, an inbuilt test framework and front-end scaling) is in full-time development and will be released in stages over the coming months. All contributions gratefully received to speed up this process.
+Unlike traditional web frameworks, there's no routing, AJAX or partials to think about. Instead all application data is streamed over websockets as high-speed bi-directional RPC calls; allowing you to create entirely new ultra-responsive applications that will amaze your users.
+
+SocketStream 0.2 is feature-rich and relatively stable, thanks to a growing community of users. You should find most of the functionality you need to build a good-sized real time web app available today, along with the ability to distribute incoming requests over multiple boxes should your app needs to scale. The 0.2.x branch will continue to be updated with minor new features and bug fixes over the next few months.
+
+
+### Update
+
+Work on SocketStream 0.3 has now begun with a focus on a leaner, more modular core. The goal is to take the lessons learned so far and create a new architecture which will be easier for the community to extend with optional npm modules. From this will come (over time) an elegant way to do server-side models, external authentication, an inbuilt test framework, and front-end scaling.
+
+SocketStream is in full time development, kindly sponsored by AOL. We're actively looking to work with other contributors who wish to provide some of these new features as discreet, well-tested modules.
 
 Follow [@socketstream](http://twitter.com/#!/socketstream) for the latest developments and thinking. Website coming soon.
 
@@ -26,7 +35,7 @@ Follow [@socketstream](http://twitter.com/#!/socketstream) for the latest develo
 * True bi-directional communication using websockets (or [Socket.IO 0.8](http://socket.io/) fallbacks). No more slow, messy AJAX!
 * Write all code in [CoffeeScript](http://jashkenas.github.com/coffee-script/) or JavaScript - your choice
 * Share code between the client and server. Ideal for business logic and model validation
-* Uses [Redis](http://www.redis.io/) for fast session retrieval, pub/sub, list of users online, and any other data your app needs instantly
+* Can use [Redis](http://www.redis.io/) for fast session retrieval, pub/sub, list of users online, and any other data your app needs instantly
 * Effortless, scalable, pub/sub baked right in - including Private Channels
 * In-built User model - with modular internal authentication (authentication with external services e.g. Facebook Connect coming soon)
 * Interactive Console - just type `socketstream console` and invoke any server-side or shared method from there
@@ -45,7 +54,7 @@ Follow [@socketstream](http://twitter.com/#!/socketstream) for the latest develo
 * Bundled with [jQuery templates](http://api.jquery.com/category/plugins/templates/) for ease - works like partials in Rails
 * Easily add additional client libraries such as [Underscore.js](http://documentcloud.github.com/underscore/)
 * Initial HTML sent to the browser can be written in [Jade](http://jade-lang.com/) or plain HTML
-* Uses [Stylus](http://learnboost.github.com/stylus/) for CSS (works great with plain CSS too)
+* Supports [Stylus](http://learnboost.github.com/stylus/) or [Less](http://lesscss.org/) for CSS (works great with plain CSS too)
 
 #### Distributed Hosting
 
@@ -91,9 +100,11 @@ These apps are all in their infancy at the moment, but looking at the code is a 
 
 [SocketChat](https://github.com/addyosmani/socketchat) - simple group chat
 
-[Dashboard](https://github.com/paulbjensen/socketstream_dashboard_example) - real-time dashboard with configurable widgets
+[Dashboard](https://github.com/paulbjensen/socketstream_dashboard_example) - real-time dashboard with configurable widgets (uses MongoDB)
 
 [SocketRacer](https://github.com/alz/socketracer) - multi-player racing game
+
+[Instastream](https://github.com/syrio/instastream-demo) - real time Instagram viewer (needs to be hosted externally)
 
 
 ### Example 1: Basic RPC
@@ -241,8 +252,6 @@ Want to know how to broadcast a message to all users, or implement private chann
 
 [NPM 1.0](http://npmjs.org/) (Node Package Manager) or above
 
-[Redis 2.2](http://redis.io/) or above
-
 
 ### Getting Started
 
@@ -254,7 +263,7 @@ To generate a new empty SocketStream project type:
 
     socketstream new <name_of_your_project>
 
-To start your app, make sure you have Redis running on your localhost, then `cd` into the directory you've just created and type:
+To start your app `cd` into the directory you've just created and type:
 
     socketstream start
     
@@ -313,7 +322,7 @@ These modules will only load if enabled
 
 ### Tests
 
-We have begun to write tests for parts of SocketStream which are unlikely to change in the near future. Currently these live in a separate project any only cover a small number of features - but it's a start. We've chosen Jasmine so far but still need to decide how to organize the files and where to run the specs (as websocket tests are far easier to run in the browser). Once we figure this all out we'll make the tests available on Github.
+We have begun to write tests for parts of SocketStream which are unlikely to change in the near future. Currently these live in a separate project any only cover a small number of features - but it's a start. We've chosen Jasmine so far but still need to decide how to organize the files and where to run the specs (as websocket tests are far easier to run in the browser).
 
 
 ### Known Issues

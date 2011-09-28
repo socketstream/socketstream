@@ -47,6 +47,26 @@ Clients can subscribe to an unlimited number of channels using the following com
   @session.channel.list()                     # shows which channels the client is currently subscribed to
 ```
 
+#### Individual Clients (browser tabs)
+
+_Warning: This method may change in the future_
+
+Multiple tabs will share the same @session.id and Private Channel subscriptions. Normally this is fine. But sometimes you need to be able to message a particular client (i.e. browser tab). In this case you'll want to use
+
+``` coffee-script
+SS.publish.socket('254987654324567', 'justForMe', 'Just for one tab')
+```
+
+You can find the current socket_id using:
+
+``` coffee-script
+SS.socket.socket.sessionid       # client side
+@request.socket_id               # server side (from within an /app/server method)
+```
+
+Please be aware the socket_id will change if you refresh the page, so it's much better to assign clients to Private Channel and use those wherever possible.
+
+
 **Notes**
 
 1. Methods that 'do' things (e.g. `subscribe`) can take an optional callback - especially useful if you're writing high-speed integration tests.

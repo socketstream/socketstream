@@ -69,16 +69,13 @@ process = (obj, cb) ->
   throw error('TOO_MANY_ARGS',      "The #{action} action was sent #{(args.length - 1).pluralize('argument')} (plus a callback) but can only receive #{method.length - 1}") if method.length < args.length
 
   # Create the @request object
-  server_module[var_request] = request = {id: obj.id}
+  server_module[var_request] = request = {id: obj.id, socket_id: obj.socket_id}
   request.origin = obj.origin     if obj.origin
   request.post = post(obj.post)   if obj.post
  
   # Create @session object if we have a session_id
   server_module[var_session] = obj.session_obj
 
-  # Add socket_id
-  server_module[var_socket_id] = obj.socket_id
-    
   # Keep in for compatibility until 0.3
   server_module.getSession = (scb) ->
     console.log 'Warning: @getSession will be removed in 0.3. Please use the @session variable'

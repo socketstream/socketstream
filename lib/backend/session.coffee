@@ -1,16 +1,19 @@
 # Session
 # -------
-# Creates and maintains a persistent session in Redis once a visitor connects over websockets
-# Session data is also synched / cached on the front end server the client is connected to and sent along with every RPC request to avoid callbacks and constantly hammering Redis
+# Creates and maintains a persistent session once a visitor connects over websockets
+# Session data is also synched / cached on the front end server the client is connected to and sent along with every RPC request to avoid callbacks and constantly hammering the session store (e.g. Redis)
 # The goal here is to ensure pressing refresh on the page, accidentally or otherwise, keeps you in the same session - regardless of which front server you connect to
 
 EventEmitter = require('events').EventEmitter
 util = require('util')
 utils = require('./../utils')
 
+# Store session information internally if Redis is not present
+# Note internal store is for development/experimentation only, not production use
+store_name = SS.redis && 'redis' || 'internal'
+store = require("./session_storage/#{store_name}.coffee")
+
 # Set constants
-id_length = 32
-key = SS.config.redis.key_prefix
 fields_to_store = ['id','user_id','channels','attributes']
 
 
@@ -23,7 +26,7 @@ class exports.Session extends EventEmitter
 
   # Note: A unique @id will only be passed if the request originates over websockets
   constructor: (data = {}) ->
-    @attributes = {}            # store a hash of serialised data in redis. e.g. {items_in_cart: 3}
+    @attributes = {}            # store a hash of custom session data. e.g. {items_in_cart: 3}
     @user_id = null             # sessions start off unauthenticated by default
     @channels = []              # records pub/sub private channels the session is subscribed to
     @init()                     # passes this session instance to nested objects
@@ -42,13 +45,12 @@ class exports.Session extends EventEmitter
 
   #### Methods beginning _ should only be used internally
 
-  # Load an existing session or store a new one in Redis
+  # Load an existing session or store a new one
   _findOrCreate: (cb) ->
     if isValidId(@id)
-      # Let's see if we've already seen this visitor in Redis
-      SS.redis.main.hgetall @key(), (err, data) =>
-        if err or !data or !data.created_at
-          cb @_createNew()             # session doesn't exist in Redis or is invalid
+      store.getAll @id, (data) =>
+        if !data or !data.created_at
+          cb @_createNew()             # session doesn't exist or is invalid
         else
           cb @_fromExisting(data)      # session exists so pass through attributes
     else
@@ -73,20 +75,20 @@ class exports.Session extends EventEmitter
         out[field] = @[field] 
     updated && out || undefined
 
-  # Populate session data the hash out of Redis
+  # Load session data from the store
   _fromExisting: (data) ->
     @newly_created = false
     @created_at = data.created_at
     @user_id = data.user_id
-    @attributes = JSON.parse(data.attributes || '{}')
-    @channels = JSON.parse(data.channels) if data.channels
+    @attributes = data.attributes || {}
+    @channels = data.channels || []
     @
 
   # Create a brand new session
   _createNew: ->
     @newly_created = true
     @created_at = Number(new Date())
-    SS.redis.main.hset(@key(), 'created_at', @created_at) if @id # only save if this is a persistent (none-API) connection
+    store.set(@id, 'created_at', @created_at) if @id # only save if this is a persistent (none-API) connection
     @
 
 
@@ -100,14 +102,10 @@ class exports.Session extends EventEmitter
     @user._init(@)
     @channel._init(@)
   
-  # The Session Key in Redis
-  key: ->
-    "#{key}:session:#{@id}"
-  
   # Save Attributes
   save: (cb = ->) ->
     return cb(false) unless @id
-    SS.redis.main.hset @key(), 'attributes', JSON.stringify(@attributes), -> cb(true)
+    store.set @id, 'attributes', @attributes, cb
 
   # Authentication. See README file for full details and examples
   authenticate: (module_name, params, cb) ->
@@ -119,8 +117,8 @@ class exports.Session extends EventEmitter
     return false unless user_id
     @user_id = user_id
     if @id
-      SS.users.online.add(@user_id) if SS.config.users_online.enabled
-      SS.redis.main.hset @key(), 'user_id', @user_id, -> cb(true)
+      SS.users.online && SS.users.online.add(@user_id)
+      store.set @id, 'user_id', @user_id, cb
     
 
   # Authenticated Users
@@ -135,10 +133,10 @@ class exports.Session extends EventEmitter
       @session.user_id?
       
     logout: (cb = ->) ->
-      SS.users.online.remove(@session.user_id) if SS.config.users_online.enabled
-      SS.redis.main.hset @session.key(), 'previous_user_id', @session.user_id # for retrospective log analysis
+      SS.users.online && SS.users.online.remove(@session.user_id)
+      store.set @session.id, 'previous_user_id', @session.user_id # for retrospective log analysis
       @session.user_id = null
-      SS.redis.main.hdel @session.key(), 'user_id', -> cb(true)
+      store.delete @session.id, 'user_id', -> cb(true)
 
 
   # Pub/Sub Private Channels
@@ -172,15 +170,15 @@ class exports.Session extends EventEmitter
     unsubscribeAll: (cb = ->) ->
       @unsubscribe @list(), cb
     
-    # Updates client's channel subscriptions in Redis so they can be re-invoked if the page is reloaded
+    # Stores channel subscriptions so they can be re-invoked if the page is reloaded
     _save: (cb) ->
-      SS.redis.main.hset @session.key(), 'channels', JSON.stringify(@session.channels), -> cb(true)
+      store.set @session.id, 'channels', @session.channels, cb
 
 
 # PRIVATE HELPERS
 
 isValidId = (session_id) ->
-  session_id and session_id.length == id_length
+  session_id and session_id.length == 32
 
 forceArray = (input) ->
   typeof(input) == 'object' && input || [input]

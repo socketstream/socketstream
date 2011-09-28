@@ -1,7 +1,7 @@
 # Users Online Module
 # -------------------
-# Only loaded if SS.config.user_online.enabled
-# Traks and manages users online within the cluster
+# Only loaded if SS.config.user_online.enabled AND SS.config.redis.enabled
+# Tracks and manages users online within the cluster
 # TODO: Handle errors by processing callbacks
 
 util = require('util')

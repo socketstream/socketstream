@@ -2,11 +2,12 @@
 # --------------
 # Transforms lovely languages into ancient text
 
-fs = require('fs')
-util = require('util')
-coffee = require('coffee-script')
-jade = require('jade')
-stylus = require('stylus')
+fs      = require('fs')
+util    = require('util')
+coffee  = require('coffee-script')
+jade    = require('jade')
+stylus  = require('stylus')
+less    = require('less')
 
 templates = require('./templates.coffee')
 
@@ -18,28 +19,14 @@ exports.init = (@assets) ->
 
 exports.compile =
 
-  jade: (input_file_name, cb) ->
-    input = "#{SS.root}/app/views/#{input_file_name}"
-    
-    # Replace the 'SocketStream' magic keyword within the Jade file with all the asset inclusions
-    locals = {locals: {SocketStream: headersAndTemplates().join('')}}
-    
-    jade.renderFile input, locals, (err, html) ->
-      if err
-        e = new Error(err)
-        e.name = "Unable to compile Jade file #{input} to HTML"
-        throw e if SS.config.throw_errors
-      cb {output: html, content_type: 'text/html'}
-  
-  html: (path, cb) ->
-    html = fs.readFileSync "#{SS.root}/app/views/#{path}", 'utf8'
-    
-    # Replace the 'SocketStream' magic attribute within the HTML file with all the asset inclusions
-    html = html.replace '<SocketStream>', headersAndTemplates().join('')
-    
-    cb {output: html, content_type: 'text/html'}
-    
-  
+  # Outputs to JavaScript
+
+  js: (path, cb) ->
+    js = fs.readFileSync "#{SS.root}/#{path}", 'utf8'
+    file_ary = path.split('.')[0].split('/')
+    js = namespaceClientFile(js, file_ary, 'js')
+    cb {output: js, content_type: 'text/javascript; charset=utf-8'}
+
   coffee: (path, cb) ->
     input = fs.readFileSync "#{SS.root}/#{path}", 'utf8'
     try
@@ -52,25 +39,68 @@ exports.compile =
       e.name = "Unable to compile CoffeeScript file #{path} to JS"
       throw e if SS.config.throw_errors
 
-  js: (path, cb) ->
-    js = fs.readFileSync "#{SS.root}/#{path}", 'utf8'
-    file_ary = path.split('.')[0].split('/')
-    js = namespaceClientFile(js, file_ary, 'js')
-    cb {output: js, content_type: 'text/javascript; charset=utf-8'}
+  # Outputs to HTML
+
+  html: (path, cb) ->
+    html = fs.readFileSync "#{SS.root}/app/views/#{path}", 'utf8'
+    # Replace the 'SocketStream' magic attribute within the HTML file with all the asset inclusions
+    html = html.replace '<SocketStream>', headersAndTemplates().join('')
+    cb {output: html, content_type: 'text/html'}
+
+  jade: (input_file_name, cb) ->
+    path = "#{SS.root}/app/views/#{input_file_name}"
+    input = fs.readFileSync path, 'utf8'
+    # Replace the 'SocketStream' magic keyword within the Jade file with all the asset inclusions
+    locals = {SocketStream: headersAndTemplates().join('')}
+    try
+      parser = jade.compile(input)
+      html = parser(locals)
+      cb {output: html, content_type: 'text/html'}
+    catch e
+      e = new Error(e)
+      e.name = "Unable to compile Jade file #{path} to HTML"
+      throw e if SS.config.throw_errors
+
+  
+  # Outputs to CSS
+
+  css: (input_file_name, cb) ->
+    file = cssFile(input_file_name)
+    cb {output: file.read(), content_type: 'text/css'}
 
   styl: (input_file_name, cb) ->
-    dir = "app/css"
-    path = "#{dir}/#{input_file_name}"
-    input = fs.readFileSync "#{SS.root}/#{path}", 'utf8'
-    stylus.render input, {filename: input_file_name, paths: [dir], compress: SS.config.pack_assets}, (err, css) ->
+    file = cssFile(input_file_name)
+    stylus.render file.read(), {filename: input_file_name, paths: [file.dir], compress: SS.config.pack_assets}, (err, css) ->
       if err
         e = Error(err)
-        e.name = "Unable to compile Stylus file #{path} to CSS"
+        e.name = "Unable to compile Stylus file #{file.relative} into CSS"
         throw e if SS.config.throw_errors
+      cb {output: css, content_type: 'text/css'}
+
+  less: (input_file_name, cb) ->
+    file = cssFile(input_file_name)
+    parser = new(less.Parser)({paths: [file.dir], filename: input_file_name})
+    parser.parse file.read(), (err, tree) ->
+      if err
+        e = Error(err)
+        e.name = "Unable to compile Less file #{file.relative} into CSS"
+        throw e if SS.config.throw_errors
+      css = tree.toCSS({ compress: SS.config.pack_assets })
       cb {output: css, content_type: 'text/css'}
 
 
 # PRIVATE
+
+cssFile = (file_name) ->
+  dir = "app/css"
+  relative = "#{dir}/#{file_name}"
+  absolute = "#{SS.root}/#{relative}"
+  { 
+    dir:        dir
+    relative:   relative
+    absolute:   absolute
+    read:       -> fs.readFileSync(absolute, 'utf8')
+  }
 
 # Helpers to generate HTML tags
 tag =
@@ -107,8 +137,12 @@ headersAndTemplates = ->
   if SS.config.pack_assets
     inclusions.push(tag.css('assets', exports.assets.files.css.app))
   else
-    inclusions.push(tag.css('css', 'app.styl')) # additional files should be linked from app.styl
-  
+    files = file_utils.readDirSync("app/css").files
+    files.forEach (path) ->
+      file = path.split('/').last()
+      # additional files should be linked from app.styl
+      inclusions.push(tag.css('css', file)) if file.split('.')[0] == 'app'
+
   # Include JS
   inclusions.push(tag.js('assets', exports.assets.files.js.lib))
   if SS.config.pack_assets

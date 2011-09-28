@@ -2,7 +2,7 @@
 # ---------------------
 # Runs server-side actions and shared code, returning the result for the website or HTTP API
 
-load = require('./loader.coffee')
+load =  require('./loader.coffee')
 check = require('../utils/check.coffee')
 
 exports.bannerText = (standalone) ->
@@ -32,13 +32,16 @@ check.forNameConflicts(trees)
 load.serverSideFiles(trees)
 
 # Load Redis. Note these connections stay open so scripts will cease to terminate on their own once you call this
-SS.redis = require('../redis.coffee').connect()
+if SS.config.redis.enabled
+  SS.redis = require('../redis.coffee').connect()
+
+  # Load optional Users Online module
+  SS.users.online = require('./users_online.coffee') if SS.config.users_online.enabled
+else
+  console.log 'Note: Redis support is disabled. This MUST be enabled before hosting your app, using the Users Online feature, or running in multi-process mode. See /config/app.coffee'
 
 # Load publish API
 SS.publish = require('./publish.coffee')
-
-# Load optional Users Online module
-SS.users.online = require('./users_online.coffee') if SS.config.users_online.enabled
 
 # Listen for work
 unless SS.internal.mode is 'console'

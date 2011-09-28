@@ -27,7 +27,7 @@ A: Not at the moment as Heroku cannot correctly route websockets, but we working
 
 __Q: How do I make models?__
 
-A: There is no ability to create server-side models at the moment. This won't stop you from making many types of apps such as real-time chat, but may prove annoying if your app involves lots of CRUD. The good news is we have a great solution called Real Time Models which will be available in version 0.3.
+A: There is no ability to easily create server-side models at the moment. This won't stop you from making many types of apps such as real-time chat, but may prove annoying if your app involves lots of CRUD. A work-around is to simulate a model in server-side code as shown [here](https://github.com/paulbjensen/socketstream_dashboard_example/blob/master/app/server/widget.coffee). A more integrated solution will be available in a future release of SocketStream.
 
 
 __Q: Does SocketStream work with Backbone.js__

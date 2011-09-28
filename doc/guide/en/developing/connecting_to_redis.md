@@ -1,6 +1,6 @@
 ### Connecting to Redis
 
-An open connection to Redis is automatically accessible anywhere within your server-side code using the R global variable. E.g.
+Once Redis support is enabled in the conifg (`SS.config.redis.enabled = true`) an open connection to Redis is automatically accessible anywhere within your server-side code using the R global variable. E.g.
 
 ``` coffee-script
     R.set("string key", "string val")

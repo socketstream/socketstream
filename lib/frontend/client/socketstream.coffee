@@ -48,19 +48,19 @@ connectionString = ->
 # Setup the websocket connection
 SS.socket = io.connect(connectionString())
 
-# Define the default callback - simply to console.log out the server's response. Used for debugging from the console
+# Define the default callback - simply to log() out the server's response. Used for debugging from the console
 default_cb = (server_response) ->
-  console.log(server_response)
+  log(server_response)
 
 # Sends a command to /app/server code
 SS.internal.remote = ->
   args = Array.prototype.slice.call(arguments)
 
   # Test to see if the last argument passed is a callback function. It should be, however if we're just testing
-  # out a function from the browser's console, use the default callback which simply console.log's the response
+  # out a function from the browser's console, use the default callback which simply log()'s the response
   last_arg = args[args.length - 1]
 
-  # Send supplied callback or use the default ('console.log')
+  # Send supplied callback or use the default log()
   args.push(default_cb) unless typeof(last_arg) == 'function'
   
   # Assemble message
@@ -70,14 +70,14 @@ SS.internal.remote = ->
   msg.params = if args.length > 1 then args.slice(1, (args.length - 1)) else null
 
   # Log if in developer mode
-  console.log('<- ' + msg.method) if (validLevel(4) && !(msg.options && msg.options.silent))
+  log('<- ' + msg.method) if (validLevel(4) && !(msg.options && msg.options.silent))
 
   # Send request to front end servers
   cb = args.pop()
   SS.socket.emit 'server', msg, (data) ->
     return backendError(data.error) if data.error
     #silent = (cb.msg.options and cb.msg.options.silent)
-    log(2, '-> ' + msg.method, data.result) #unless silent
+    output 2, '-> ' + msg.method, data.result #unless silent
     cb(data.result)
 
 
@@ -145,25 +145,24 @@ SS.socket.on 'init', (msg) ->
 # Reload the browser window (normally when the underlying code changes in Dev mode)
 SS.socket.on 'reload', ->
   if SS.config.auto_reload
-    console.log 'Reloading as files have changed...'
+    log 'Reloading as files have changed...'
     window.location.reload()
 
 
 ### MAIN RESPONDERS ####
 
 # Respond to incoming events
-SS.socket.on 'event', (msg, destination) ->
-  data = JSON.parse(msg)
+SS.socket.on 'event', (name, params, destination) ->
   info = destination && (' [' + destination + ']') || ''
-  log 2, "=> #{data.event}#{info}"
-  SS.events.emit(data.event, data.params, destination)
+  output 2, "=> #{name}#{info}"
+  SS.events.emit(name, params, destination)
 
 # Respond to Real Time Model requests
 SS.socket.on 'rtm', (msg) ->
   data = JSON.parse(msg)
   cb = SS.internal.cb_stack[data.id]
   if cb
-    log 2, "~> #{cb.msg.rtm}.#{cb.msg.action}"
+    output 2, "~> #{cb.msg.rtm}.#{cb.msg.action}"
     cb.funkt(data.data)
     delete SS.internal.cb_stack[data.id]
 
@@ -188,11 +187,11 @@ backendError = (error) ->
   msg += "\n#{error.stack}" if error.stack
   console.error msg
 
-log = (level, msg, params) ->
+output = (level, msg, params) ->
   if validLevel(level)
     o = [msg]
     o.push(params) if params and validLevel(3)
-    console.log.apply(console, o)
+    log.apply(log, o)
 
 validLevel = (level) ->
   SS.config.log.level >= level

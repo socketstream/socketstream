@@ -11,10 +11,10 @@ exports.connect = ->
 # Main data channel. Used for session storage, and available within your app
 main = ->
   config = SS.config.redis
-  global.R = open(config)
-  R.auth(SS.config.redis.password) if SS.config.redis.password
-  R.select(config.db_index)
-  R
+  global.R = conn = open(config)
+  conn.auth(SS.config.redis.password) if config.password
+  conn.select(config.db_index)
+  conn
 
 # Redis requires a separate connection for PubSub data
 pubsub = ->

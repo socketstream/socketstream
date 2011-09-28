@@ -17,12 +17,17 @@ exports.config =
     port:         443
     domain:       "www.socketstream.org"
 
+  # Redis support. Must be enabled before hosting your app!
+  # Install Redis 2.2 or above from http://redis.io/ then run 'redis-server'
+  redis:
+    enabled:      false
+
   # HTTP(S) request-based API module
   api:
     enabled:      true
     prefix:       'api'
     https_only:   false
-
+  
   # Load balancing. Install ZeroMQ (type 'socketstream help' for info) then set suitable TCP values for your network once you're ready to run across multiple boxes
   #cluster:
   #  sockets:

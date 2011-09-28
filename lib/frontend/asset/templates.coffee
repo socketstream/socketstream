@@ -27,14 +27,14 @@ compile =
 
   jade: (path, source) ->
     try
-      jade.render(source)
+      jade.compile(source)()
     catch e
       console.error 'Unable to render jade template: ' + path
       throw new Error(e)
    
   html: (path, source) ->
     source
-      
+
 # Templates are transmitted within script tags
 tag = (id, contents) ->
   '<script id="' + id + '" type="text/x-jquery-tmpl">' + contents + '</script>'
