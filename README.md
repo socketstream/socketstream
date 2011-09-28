@@ -16,14 +16,14 @@ SocketStream is a new Node.js web framework dedicated to creating single-page re
 
 Unlike traditional web frameworks, there's no routing, AJAX or partials to think about. Instead all application data is streamed over websockets as high-speed bi-directional RPC calls; allowing you to create entirely new ultra-responsive applications that will amaze your users.
 
-SocketStream 0.2 is feature-rich and relatively stable, thanks to a growing community of users. You should find most of the functionality you need to build a good-sized real time web app available today, along with the ability to distribute incoming requests over multiple boxes should your app needs to scale. The 0.2.x branch will continue to be updated with minor new features and bug fixes over the next few months.
+SocketStream 0.2 is feature-rich and relatively stable, thanks to a growing community of users. You should find most of the functionality you need to build a good-sized real time web app available today, along with the ability to distribute incoming requests over multiple boxes should your app needs to scale. Version 0.2 will continue to be updated with minor new features and bug fixes over the next few months.
 
 
 ### Update
 
 Work on SocketStream 0.3 has now begun with a focus on a leaner, more modular core. The goal is to take the lessons learned so far and create a new architecture which will be easier for the community to extend with optional npm modules. From this will come (over time) an elegant way to do server-side models, external authentication, an inbuilt test framework, and front-end scaling.
 
-SocketStream is in full time development, kindly sponsored by AOL. We're actively looking to work with other contributors who wish to provide some of these new features as discreet, well-tested modules.
+SocketStream is in full time development, kindly sponsored by AOL. We're actively looking to work with other contributors who wish to provide some of these new features as discrete, well-tested modules.
 
 Follow [@socketstream](http://twitter.com/#!/socketstream) for the latest developments and thinking. Website coming soon.
 

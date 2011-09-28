@@ -3,12 +3,11 @@
 
 Major Update!
 
-* SocketStream no longer requires Redis when developing in single-process mode (the default)
-* Redis support is switched on by default (SS.config.redis.enabled = true) so existing apps work just as before
-* New projects have Redis disabled in the config file along with an explanation how to install & enable
-* All features work without Redis enabled except for Users Online (fixable in the future)
-* This change reduces the barriers to entry for new developers and ensures better support for Windows in the future
-
+* SocketStream no longer requires Redis when developing in single-process mode (the default):
+* - Redis support is switched on by default (SS.config.redis.enabled = true) so existing apps work just as before
+* - New projects have Redis disabled in the config file along with an explanation how to install & enable
+* - All features work without Redis enabled except for Users Online (fixable in the future)
+* - This change reduces the barriers to entry for new developers and ensures better support for Windows in the future
 * Less (.less) CSS files now supported. Less and Stylus support will be moved out into optional modules in 0.3
 * Plain (.css) CSS files now supported for the first time, though continue to use .styl if you wish to use @import
 * You may now message individual clients (i.e. browser tabs) with SS.publish.socket() - thanks kyokpae!
