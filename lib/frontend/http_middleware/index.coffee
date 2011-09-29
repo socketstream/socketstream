@@ -5,6 +5,7 @@
 util = require('util')
 connect = require('connect')
 copy = require('../../utils/copy.coffee')
+path = require('path')
 
 #Load middleware stack for the primary HTTP/HTTPS server
 exports.primary = (ssl_options = null) ->
@@ -55,15 +56,11 @@ class Stack
   # Load custom HTTP config file and any custom middleware first
   loadCustom: (server_name) ->
     file = "/config/http.coffee"
+    customPath = "#{SS.root}#{file}"
+    defaultPath = "#{__dirname}/../../../new_project#{file}"
 
     # Look for custom middleware. If it doesn't exist automatically use the default file
-    try
-      custom = require("#{SS.root}#{file}")
-    catch e
-      if e.message.match(/^Cannot find module/)
-        custom = require(__dirname + "/../../../new_project#{file}")
-      else
-        throw e
+    custom = require (if path.existsSync(customPath) then customPath else defaultPath)
 
     if custom[server_name]
       @stack = @stack.concat(custom[server_name])
