@@ -6,13 +6,22 @@ util = require('util')
 connect = require('connect')
 copy = require('../../utils/copy.coffee')
 path = require('path')
+RedisStore = require('connect-redis')(connect)
 
 #Load middleware stack for the primary HTTP/HTTPS server
 exports.primary = (ssl_options = null) ->
   s = new Stack
   
   s.stack.push connect.cookieParser()
-  s.stack.push connect.session({ secret: 'socketstream ses' })
+  config = SS.config.redis
+  s.stack.push connect.session
+    secret: 'socketstream ses'
+    cookie: { path: '/', httpOnly: false, maxAge: 14400000 }
+    store: new RedisStore
+      port: config.port
+      host: config.host
+      pass: if config.password then config.password else undefined
+      db: config.db_index
 
   # Load any custom middleware specified in /config/http.coffee
   s.loadCustom 'primary'
