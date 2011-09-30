@@ -108,10 +108,6 @@ class RTM
 
 # Get the Session ID from the cookie if it exists
 SS.socket.on 'getSessionID', (data, cb) ->
-  alert(document.cookie)
-  alert("jo")
-  alert(document.domain)
-  
   cb getCookie('connect.sid')
 
 # System Init
