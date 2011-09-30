@@ -10,6 +10,9 @@ path = require('path')
 #Load middleware stack for the primary HTTP/HTTPS server
 exports.primary = (ssl_options = null) ->
   s = new Stack
+  
+  s.stack.push connect.cookieParser()
+  s.stack.push connect.session({ secret: 'socketstream ses' })
 
   # Load any custom middleware specified in /config/http.coffee
   s.loadCustom 'primary'
