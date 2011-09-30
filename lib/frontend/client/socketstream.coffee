@@ -108,7 +108,7 @@ class RTM
 
 # Get the Session ID from the cookie if it exists
 SS.socket.on 'getSessionID', (data, cb) ->
-  cb getCookie('session_id')
+  cb getCookie('connect.sid')
 
 # System Init
 SS.socket.on 'init', (msg) ->
@@ -120,9 +120,6 @@ SS.socket.on 'init', (msg) ->
   
   # Copy the client config from the server into SS.config
   SS.config = data.config || {}                  
-
-  # Save the Session ID in a cookie (uses the setCookie method as defined in helpers)
-  setCookie('session_id', data.session_id) if data.session_id
 
   # Passes through the names of RTMs loaded on the server, if any
   for name in data.api.models
@@ -218,8 +215,3 @@ getCookie = (c_name) ->
       c_end = document.cookie.length if c_end == -1
       return unescape(document.cookie.substring(c_start,c_end))
   ""
-
-setCookie = (c_name, value, expiredays) ->
-  exdate = new Date()
-  exdate.setDate(exdate.getDate() + expiredays)
-  document.cookie = "#{c_name}=#{escape(value)}" + (if expiredays == null then "" else ";expires=" + exdate.toUTCString())
