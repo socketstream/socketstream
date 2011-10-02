@@ -8,8 +8,6 @@ limiter   = require('./rate_limiter.coffee') if SS.config.rate_limiter.enabled
 rpc       = new (require('../rpc/connection.coffee')).Client('socketio')
 rpc.debug = false
 
-session_length = 32
-
 exports.init = (server) ->
 
   # Respond to incoming Socket connections
@@ -75,7 +73,6 @@ newConnection = (socket) ->
   # Get the existing session_id if we have one then transmit everything we need to the client
   
   socket.emit 'getSessionID', {}, (session_id) ->
-    session_id = utils.randomString(session_length) unless session_id.length == session_length
     socket.ss.session = {id: session_id}
     SS.internal.sessions[session_id] = socket
     rpc.send {responder: 'client', method: 'init', session: socket.ss.session}, (response) ->
