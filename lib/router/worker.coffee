@@ -53,7 +53,7 @@ routeRequests = ->
 
 # Print out basic status information. If you're seeing more INs than OUTs that's fine - some commands don't return a response
 displayStatus = ->
-  console.log "#{recv} REQ/CMDs IN - #{sent} RESPONSES OUT - #{proxy.num_events_proxied} EVENTS PROXIED"
+  console.log "#{recv} REQ/CMDs IN - #{sent} RESPONSES OUT - #{proxy && proxy.num_events_proxied || '0'} EVENTS PROXIED"
 
 # Show the status every 2 seconds
 showTraffic = ->

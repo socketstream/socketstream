@@ -2,9 +2,6 @@
 # ---------------------
 # Recommended session storage engine
 
-# Load Redis. Note these connections stay open so scripts will cease to terminate on their own once you call this
-#SS.redis = require('../../redis.coffee').connect()
-
 serialize_keys = ['attributes', 'channels']
 
 module.exports =

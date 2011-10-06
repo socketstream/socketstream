@@ -50,7 +50,7 @@ SS.socket = io.connect(connectionString())
 
 # Define the default callback - simply to log() out the server's response. Used for debugging from the console
 default_cb = (server_response) ->
-  log(server_response)
+  console.log(server_response)
 
 # Sends a command to /app/server code
 SS.internal.remote = ->

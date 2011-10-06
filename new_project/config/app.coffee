@@ -21,6 +21,7 @@ exports.config =
   # Install Redis 2.2 or above from http://redis.io/ then run 'redis-server'
   redis:
     enabled:      false
+    db_index:     0       # if you're sharing one Redis server across multiple apps, give each app a different db_index from 0 - 15
 
   # HTTP(S) request-based API module
   api:

@@ -1,7 +1,7 @@
 ![SocketStream!](https://github.com/socketstream/socketstream/raw/master/new_project/public/images/logo.png)
 
 
-Latest release: 0.2.3  ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+Latest release: 0.2.4  ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 
 Twitter: [@socketstream](http://twitter.com/#!/socketstream)  
 Google Group: http://groups.google.com/group/socketstream  
@@ -16,12 +16,14 @@ SocketStream is a new Node.js web framework dedicated to creating single-page re
 
 Unlike traditional web frameworks, there's no routing, AJAX or partials to think about. Instead all application data is streamed over websockets as high-speed bi-directional RPC calls; allowing you to create entirely new ultra-responsive applications that will amaze your users.
 
-SocketStream 0.2 is feature-rich and relatively stable, thanks to a growing community of users. You should find most of the functionality you need to build a good-sized real time web app available today, along with the ability to distribute incoming requests over multiple boxes should your app needs to scale. Version 0.2 will continue to be updated with minor new features and bug fixes over the next few months.
+SocketStream 0.2 is feature-rich and relatively stable, thanks to a growing community of users. You should find most of the functionality you need to build a good-sized real time web app available today, along with the ability to distribute incoming requests over multiple boxes should your app need to scale.
 
 
 ### Update
 
-Work on SocketStream 0.3 has now begun with a focus on a leaner, more modular core. The goal is to take the lessons learned so far and create a new architecture which will be easier for the community to extend with optional npm modules. From this will come (over time) an elegant way to do server-side models, external authentication, an inbuilt test framework, and front-end scaling.
+Whilst SocketStream 0.2 will continue to be the main version we support and update over the next few months, preliminarily work on 0.3 has now begun with a focus on a leaner, more modular core.
+
+The goal is to take the lessons learned so far, plus some brand new ideas, and create a new architecture which will be easier for the community to extend with optional modules. From this will come (over time) an elegant way to do server-side models, external authentication, an inbuilt test framework, and front-end scaling.
 
 SocketStream is in full time development, kindly sponsored by AOL. We're actively looking to work with other contributors who wish to provide some of these new features as discrete, well-tested modules.
 
@@ -111,27 +113,31 @@ These apps are all in their infancy at the moment, but looking at the code is a 
 
 The key to using SocketStream is the `SS` global variable which can be called anywhere within your server or client-side code.
 
-For example, let's write a simple server-side function which squares a number. Add this to the /app/server/app.coffee file:
+For example, let's write a simple server-side function which squares a number. Make a file called /app/server/app.js and put this in it:
 
+``` javascript
+exports.actions = {
 
-``` coffee-script
-exports.actions =
-
-  square: (number, cb) ->
-    cb(number * number)
+  square: function (number, cb) {
+    cb(number * number);
+  }
+}
 ```
 
-To call this from the browser add the following to the /app/client/app.coffee file:
+To call this from the browser make a file called /app/client/app.js and put this in it:
 
-``` coffee-script
-exports.square = (number) ->
-  SS.server.app.square number, (response) ->
-    console.log "#{number} squared is #{response}"
+``` javascript
+exports.square = function (number) {
+
+  SS.server.app.square(number, function (response) {
+    console.log(number + ' squared is ' + response);
+  });
+}
 ```
 
 Restart the server, refresh your page, then type this into the browser console:
 
-``` coffee-script
+``` javascript
 SS.client.app.square(25)
 ```
 
@@ -147,7 +153,7 @@ You can also call this server-side method using the optional HTTP API (enabled b
     
 Or even directly from the server-side console (type `socketstream console`) OR the browser's console OR another server-side file:
 
-``` coffee-script
+``` javascript
 SS.server.app.square(25, function(x){ console.log(x) })
 ```
     
@@ -159,6 +165,8 @@ Ready for something a bit more advanced? Let's take a look at reverse geocoding 
 
 
 ### Example 2: Reverse Geocoding
+
+From now on all examples are in CoffeeScript, the default for SocketStream (though you're completely free to use pure JavaScript throughout your project if you prefer).
 
 For the server code, create the file /app/server/geocode.coffee and paste in the following code:
 
@@ -280,6 +288,7 @@ All documentation is in /doc/guide/en
 
 * [Project Directory Overview](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/developing/project_directory_overview.md)
 * [Namespacing - how to organize your code using API Trees](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/developing/namespacing.md)
+* [Client-side Templates - transform incoming JSON data into HTML](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/developing/client-side_templates.md)
 * [More Pub/Sub - broadcasting to everyone & Private Channels](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/developing/pub_sub.md)
 * [Server-side Code - in /app/server](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/developing/server_code.md)
 * [Shared Code - in /app/shared](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/developing/shared_code.md)

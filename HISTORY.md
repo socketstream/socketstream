@@ -1,3 +1,17 @@
+0.2.4 / 2011-10-06
+==================
+
+* Important change: URLs which are not recognized as assets to be served or compiled now return the main client by default (instead of a Connect GET error)
+* This allows use of mock HTTP routes using HTML5 Pushstate. Checkout the Router included in Backbone.js for a great implementation of this
+* You can now call SocketStream programatically from an external script/test with `ss = require('socketstream'); ss.load();`
+* Start the server with `ss = require('socketstream'); ss.load(); ss.start.single();` if you're using Cloud9
+* Added new much needed documentation on Client-side jQuery templating [here](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/developing/client-side_templates.md)
+* Initial examples in README are now in pure JavaScript to lower barrier to entry for new users
+* Fixed bug which can appear when loading http.coffee if it requires other files. Thanks nponeccop
+* Re-instated bundling of reset.css instead of normalize.css. After trying both I find this easier to work with in practice
+* Added and commented on `SS.config.redis.db_index` in newly generated /config/app.coffee file
+
+
 0.2.3 / 2011-09-27
 ==================
 

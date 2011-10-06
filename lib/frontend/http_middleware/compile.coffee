@@ -32,16 +32,16 @@ module.exports = ->
 isValidRequest = (request) ->
   url = request.ss.parsedURL
   return false if url.initialDir == 'assets' # ignore pre-cached assets
-  url.isRoot || assets.supported_formats.include(url.extension)
+  !url.extension || assets.supported_formats.include(url.extension)
 
 # Parse incoming URL depending on file extension`
 urlToFile = (url) ->
-  if url.isRoot
-    rootHTML()
-  else if isValidScript(url)
+  if isValidScript(url)
     {name: "app/#{url.initialDir}/#{url.path}", extension: url.extension}
-  else
+  else if url.extension
     {name: url.path, extension: url.extension}
+  else
+    rootHTML()
 
 # Ensure script paths are re-written
 isValidScript = (url) ->

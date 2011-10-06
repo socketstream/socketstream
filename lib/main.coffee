@@ -10,7 +10,7 @@ utils = require('./utils')
 file_utils = require('./utils/file')
 
 # Initialize SocketStream. This must always be run to set the basic environment
-exports.init = (load_project = false) ->
+exports.init = ->
 
   # Define global SS variable
   global.SS =
@@ -42,7 +42,7 @@ exports.init = (load_project = false) ->
   SS.version = SS.internal.package_json.version
 
   # Set client file version. Bumping this automatically triggers re-compilation of lib assets when a user upgrades
-  SS.client.version = '0.2.2'
+  SS.client.version = '0.2.3'
 
   # Set environment
   env = process.env.SS_ENV || 'development'
@@ -54,8 +54,6 @@ exports.init = (load_project = false) ->
   # Add helper to quickly load modules in /lib/server
   SS.require = (path) -> require(SS.root + '/lib/server/' + path)
   
-  load.project() if load_project
-
   @
 
 
@@ -137,7 +135,7 @@ exports.process = (args) ->
 
 
 # Start methods load things
-start =
+exports.start = start =
 
   ### SERVERS ###
 
@@ -230,7 +228,7 @@ create =
 
 # PRIVATE HELPERS
 
-load =
+exports.load = load =
 
   # Try loading the ZeroMQ bindings if present. Fallback to internal EventEmitter unless ZeroMQ is required for this command
   zeromq: (required = false) ->    
