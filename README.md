@@ -320,6 +320,7 @@ These modules will only load if enabled
 * [Scaling Up with ZeroMQ](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/deploying/scaling.md)
 * [Using HTTPS / SSL](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/deploying/https_ssl.md)
 * [Security](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/deploying/security.md)
+* [Virtual Hosting - running multiple apps on a single server](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/deploying/virtual_hosting.md)
 
 #### Other
 
