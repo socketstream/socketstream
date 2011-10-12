@@ -26,6 +26,6 @@ bouncy (req, bounce) ->
 
 Run this script with the following command:
 
-   sudo coffee routes.coffee
+    sudo coffee routes.coffee
 
 And there you go! Visit one of the domains you've configured and you'll instantly be directed to the correct SocketStream app.
