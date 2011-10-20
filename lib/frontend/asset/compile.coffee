@@ -53,7 +53,7 @@ exports.compile =
     # Replace the 'SocketStream' magic keyword within the Jade file with all the asset inclusions
     locals = {SocketStream: headersAndTemplates().join('')}
     try
-      parser = jade.compile(input)
+      parser = jade.compile(input, {filename: path})
       html = parser(locals)
       cb {output: html, content_type: 'text/html'}
     catch e
