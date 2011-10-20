@@ -27,7 +27,7 @@ compile =
 
   jade: (path, source) ->
     try
-      jade.compile(source)()
+      jade.compile(source, {filename: "#{SS.root}/#{path}"})()
     catch e
       console.error 'Unable to render jade template: ' + path
       throw new Error(e)
