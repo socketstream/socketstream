@@ -47,7 +47,7 @@ module.exports = ->
 process = (request, response, url, actions) ->
   params = parseParams(url)
   format = request.ss.parsedURL.extension || 'html'
-    
+
   request.on 'error', (e) ->
     request.invalid = true # would love to know how to stop 'end' being called without doing this
     server.showError(response, e)
@@ -74,7 +74,7 @@ process = (request, response, url, actions) ->
 # Formats and deliver the object
 reply = (data, response, format) ->
   formatters[format](data, response)
-  
+
 # Attempts to make sense of the params passed in the query string
 parseParams = (url) ->
   try
@@ -116,7 +116,7 @@ authenticate = (request, response, actions, session, cb) ->
   mod_path = actions.slice(0,-1).join('.')
   if SS.internal.authenticate[mod_path]
     if request.headers.authorization
-      
+
       auth = request.headers.authorization.split(' ')
       details = base64.decode(auth[1]).split(':')
       params = {}
@@ -130,13 +130,13 @@ authenticate = (request, response, actions, session, cb) ->
         else
           server.showError(response, 'Invalid username or password')
           cb(false)
-      
+
     else
       response.writeHead(401, {'WWW-Authenticate': 'Basic realm="' + SS.config.api.auth.basic.realm + '"', 'Content-type': 'text/html'})
       response.end('Not authorized')
       cb(false)
   else
-    cb(true) 
+    cb(true)
 
 
 # Formats data for output
@@ -153,5 +153,5 @@ formatters =
       server.showError(response, message)
     else
       server.deliver(response, 200, 'text/html', JSON.stringify(data.result))
-    
+
   # TODO: add XML once we find a great lightweight object.toXML() library

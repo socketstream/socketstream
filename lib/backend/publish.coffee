@@ -11,12 +11,12 @@ rpc = new (require('../rpc/connection.coffee')).Publisher unless SS.redis
 module.exports =
 
   # Publish event to every client connected to every server
-  broadcast: (event, params) -> 
+  broadcast: (event, params) ->
     throw new Error('Event Name (first argument) must be a string') unless typeof(event) == 'string'
     throw new Error('Params (second argument) must be provided (even if just an empty string or object)') if typeof(params) == 'undefined'
     SS.log.outgoing.event "Broadcast", event, params
     send 'broadcast', {event: event, params: params}
-  
+
   # Publish to private channel (users can subscribe/unsubscribe to channels at anytime - see session code)
   channels: (channels, event, params) ->
     sendMultiple 'Channels', channels, event, params
@@ -64,12 +64,12 @@ sendMultiple = (name, destinations, event, params = null) ->
 # ---------------
 # Either send directly through RPC Publisher connection, or proxy through Redis for better scalability
 
-publishers = 
+publishers =
 
   redis: (msg_type, message) ->
     redis_channel = "#{SS.config.redis.key_prefix}:#{msg_type.toLowerCase()}"
     SS.redis.main.publish redis_channel, message
-  
+
   internal: (msg_type, message) ->
     rpc.send msg_type.toLowerCase(), message
 

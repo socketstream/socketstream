@@ -29,7 +29,7 @@ exports.init = (args) ->
 
   # Start worker processes
   startWorker() for num in [1..num_workers]
-  
+
   # Watch files for changes
   watchForChanges() if SS.env == 'development'
 
@@ -49,7 +49,7 @@ startWorker = ->
 
   worker.on 'exit', (code, signal) ->
     startWorker() unless code == 1 and SS.env == 'development'
-  
+
   _workers.push(worker)
 
 
@@ -63,8 +63,8 @@ watchForChanges = ->
         fs.watchFile path, (curr, prev) ->
           if !curr or (Number(curr.mtime) > Number(prev.mtime))
             console.log "Change detected in #{path}. Restarting back end workers..."
-            _workers.forEach (worker) -> worker.kill 'SIGHUP'            
+            _workers.forEach (worker) -> worker.kill 'SIGHUP'
             # Note: this only works when you're running the integrated 'socketstream server' as you typically would in development
             # It should really be fired once the worker has reloaded. Will improve in the future
-            SS.io.sockets.emit('reload') if SS.io 
+            SS.io.sockets.emit('reload') if SS.io
 

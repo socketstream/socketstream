@@ -12,12 +12,12 @@
 if ( !Function.prototype.bind ) {
   Function.prototype.bind = function( obj ) {
     var slice = [].slice,
-        args = slice.call(arguments, 1), 
-        self = this, 
-        nop = function () {}, 
+        args = slice.call(arguments, 1),
+        self = this,
+        nop = function () {},
         bound = function () {
-          return self.apply( this instanceof nop ? this : ( obj || {} ), 
-                              args.concat( slice.call(arguments) ) );    
+          return self.apply( this instanceof nop ? this : ( obj || {} ),
+                              args.concat( slice.call(arguments) ) );
         };
 
     nop.prototype = self.prototype;
@@ -34,7 +34,7 @@ if ( !String.prototype.unique ) {
 	String.prototype.unique = function(b){
 		 var a = "", i, l = this.length,q="";
 		 for( i=0; i<l; i++ ) {
-		  if( a.indexOf( this[i], 0, b ) < 0 ) { 
+		  if( a.indexOf( this[i], 0, b ) < 0 ) {
 			a += this[i];
 			}
 		 }
@@ -77,7 +77,7 @@ if ( !Array.prototype.last ) {
 	Truncates the current string to the supplied length
 **/
 if ( !String.prototype.truncate ) {
-	String.prototype.truncate = function(length){	
+	String.prototype.truncate = function(length){
 		if (this.length > length) {
 		    return this.slice(0, length - 3) + "...";
 		}else {

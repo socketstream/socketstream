@@ -14,7 +14,7 @@ module.exports =
     store[id] = {} unless store[id]?
     store[id][name] = value
     cb true
-  
+
   delete: (id, name, cb = ->) ->
     store[id] && delete store[id][name]
     cb true

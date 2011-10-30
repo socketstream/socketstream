@@ -10,7 +10,7 @@ exports.config =
   http:
     port:         3000
     hostname:     "0.0.0.0"
-  
+
   # HTTPS server (becomes primary server if enabled)
   https:
     enabled:      false
@@ -28,7 +28,7 @@ exports.config =
     enabled:      true
     prefix:       'api'
     https_only:   false
-  
+
   # Load balancing. Install ZeroMQ (type 'socketstream help' for info) then set suitable TCP values for your network once you're ready to run across multiple boxes
   #cluster:
   #  sockets:

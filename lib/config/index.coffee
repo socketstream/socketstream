@@ -14,7 +14,7 @@ exports.load = ->
   config.extend environmentDefaults()
   mergeConfigFiles()
   config
-      
+
 
 # For now we override default config depending upon environment. This will still be overridden by any app config file in
 # /config/environments/<SS_ENV>.coffee . We may want to remove this in the future and insist upon seperate app config files, ala Rails
@@ -33,7 +33,7 @@ environmentDefaults = ->
 # This will search for the application config file, and merge it if it exists, or raise an error if it does not.
 # It will also search for an optional environment-specific file and merge if it exists
 mergeConfigFiles = ->
-  config_dir_files = fs.readdirSync "#{SS.root}/config/" 
+  config_dir_files = fs.readdirSync "#{SS.root}/config/"
   for file in config_dir_files
     path = "/config"
     merge("#{path}/#{file}") if file.match(/^app\.(js|coffee)$/)?
@@ -48,4 +48,3 @@ merge = (name) ->
   catch e
     SS.log.error.exception(e)
     throw new Error("App config file #{name} loaded and parsed but unable to merge. Check syntax carefully and ensure config values exist.")
-    

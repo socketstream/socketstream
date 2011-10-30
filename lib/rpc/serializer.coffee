@@ -9,7 +9,7 @@ exports.json =
 	  JSON.stringify(obj)
 	unpack: (msg) ->
 	  JSON.parse(msg.toString())
-  
+
 exports.msgpack =
   pack: (obj) ->
     msgpack.pack(obj)

@@ -17,7 +17,7 @@ exports.init = ->
       SS.plugs[name].debug = true if details.debug
 
     # Else just open up a raw socket
-    else 
+    else
       SS.plugs[name] = SS.internal.zmq.createSocket(socket_type)
       SS.plugs[name].connect(details.connect_to)
 

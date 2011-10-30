@@ -40,7 +40,7 @@ valid = (config) ->
 
   ['host','options','port'].forEach (param) ->
     throw ['redis_config_no_required_params', "Redis config is missing the '#{param}' param"] unless SS.config.redis.hasOwnProperty(param)
-   
+
   unless typeof(config.port) == 'number'
     throw ['redis_config_port_nan','Redis port number must be a number']
 

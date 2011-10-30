@@ -11,11 +11,11 @@ class exports.Socket
   constructor: (@socket_type = 'xreq', @connect_to = SS.config.cluster.sockets.fe_main, @format = SS.config.cluster.serialization) ->
     @socket = SS.internal.zmq.createSocket(@socket_type)
     @socket.connect @connect_to
-        
+
     @request_num = 0
     @stack = {}
     @debug = false
-  
+
     # Listen for incoming responses
     @socket.on 'message', (data) =>
 
@@ -25,7 +25,7 @@ class exports.Socket
         console.log('ZeroMQ socket received:', obj) if @debug
       catch e
         throw new Error("Invalid ZeroMQ async message received. Unable to parse #{@format} message. Reason given: #{e.message}")
-  
+
       # All messages in MUST include an ID field containing the same number contained in the request
       if obj.id
         @stack[obj.id](obj)
@@ -40,11 +40,11 @@ class exports.Socket
 
     # Ugly but fast. Improvements welcome. Remember store and cb are both optional
     [obj, cb] = arguments
-    
+
     throw new Error('Message to ZeroMQ async wrapper must be an object') unless typeof(obj) == 'object'
-    
+
     # Callbacks are optional. Sometimes you just want to send a command and not care about a response
-    if cb 
+    if cb
       obj.id = ++@request_num
       @stack[obj.id] = cb
 
@@ -66,8 +66,8 @@ exports.formats =
       JSON.stringify(obj)
     unpack: (msg) ->
       JSON.parse(msg.toString())
-  
-  msgpack:   
+
+  msgpack:
     pack: (obj) ->
       msgpack.pack(obj)
     unpack: (msg) ->

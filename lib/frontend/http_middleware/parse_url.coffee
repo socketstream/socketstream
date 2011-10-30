@@ -11,7 +11,7 @@ module.exports = ->
     [no_params, params] = raw.split('?')
     [url, extension] = no_params.split('.')
     [ignore, initialDir, actions...] = url.split('/')
-    request.ss.parsedURL = 
+    request.ss.parsedURL =
       extension:   (if extension and extension != '/' then extension.toLowerCase() else null)
       initialDir:  (if initialDir then initialDir.toLowerCase() else null)
       actions:     (actions || null)

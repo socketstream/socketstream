@@ -30,7 +30,7 @@ class exports.Session extends EventEmitter
     @user_id = null             # sessions start off unauthenticated by default
     @channels = []              # records pub/sub private channels the session is subscribed to
     @init()                     # passes this session instance to nested objects
-    
+
     # Copy existing data into this instance
     fields_to_store.forEach (field) =>
       if data[field]?
@@ -39,7 +39,7 @@ class exports.Session extends EventEmitter
           data[field].slice(0)
         else
           data[field]
-    
+
     # Return instance
     @
 
@@ -72,7 +72,7 @@ class exports.Session extends EventEmitter
     fields_to_store.forEach (field) =>
       if original[field] != @[field]
         updated = true
-        out[field] = @[field] 
+        out[field] = @[field]
     updated && out || undefined
 
   # Load session data from the store
@@ -93,7 +93,7 @@ class exports.Session extends EventEmitter
 
 
   #### Public methods
-  
+
   # This method is called both by the constructor and each time an incoming websocket call is processed
   # It enables the nested namespaces ('user' and 'group') to access the current session object instead of the last one initialized by the constructor
   # For now this seems to be the best way to allow namespacing without storing separate copies the objects for each Session
@@ -101,7 +101,7 @@ class exports.Session extends EventEmitter
   init: ->
     @user._init(@)
     @channel._init(@)
-  
+
   # Save Attributes
   save: (cb = ->) ->
     return cb(false) unless @id
@@ -119,19 +119,19 @@ class exports.Session extends EventEmitter
     if @id
       SS.users.online && SS.users.online.add(@user_id)
       store.set @id, 'user_id', @user_id, cb
-    
+
 
   # Authenticated Users
   user:
-  
+
     _init: (@session) ->
-    
+
     key: ->
       "#{key}:user:#{@session.user_id}"
-    
+
     loggedIn: ->
       @session.user_id?
-      
+
     logout: (cb = ->) ->
       SS.users.online && SS.users.online.remove(@session.user_id)
       store.set @session.id, 'previous_user_id', @session.user_id # for retrospective log analysis
@@ -141,9 +141,9 @@ class exports.Session extends EventEmitter
 
   # Pub/Sub Private Channels
   channel:
-  
+
     _init: (@session) ->
-  
+
     # Lists all the channels the client is currently subscribed to
     list: ->
       @session.channels
@@ -156,7 +156,7 @@ class exports.Session extends EventEmitter
           SS.log.pubsub.channels.subscribe @session.user_id, name
           SS.events.emit 'channel:subscribe', @session, name
       @_save cb
-     
+
     # Unsubscribes the client from one or more channels
     unsubscribe: (names, cb = ->) ->
       forceArray(names).forEach (name) =>
@@ -165,11 +165,11 @@ class exports.Session extends EventEmitter
           SS.log.pubsub.channels.unsubscribe(@session.user_id, name)
           SS.events.emit 'channel:unsubscribe', @session, name
       @_save cb
-    
+
     # Unsubscribes the client from all channels
     unsubscribeAll: (cb = ->) ->
       @unsubscribe @list(), cb
-    
+
     # Stores channel subscriptions so they can be re-invoked if the page is reloaded
     _save: (cb) ->
       store.set @session.id, 'channels', @session.channels, cb

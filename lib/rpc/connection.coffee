@@ -22,13 +22,13 @@ class exports.Client extends Connection
     # Each client gets it's own request numbers and callback stack
     @request_num = 0
     @stack = {}
-    
+
     # Listen for incoming responses
     @transport.listen (obj) =>
 
       # Output message for debugging
       @debug && console.log("RPC Client: Msg in via #{@transport_type} transport:", obj)
-  
+
       # All messages in MUST include an ID field containing the same number contained in the request
       if obj.id
         @stack[obj.id](obj)
@@ -39,9 +39,9 @@ class exports.Client extends Connection
   send: (obj, cb) ->
 
     throw new Error('Message to RPC client must be an object') unless typeof(obj) == 'object'
-    
+
     # Callbacks are optional. Sometimes you just want to send a command and not care about a response
-    if cb 
+    if cb
       obj.id = ++@request_num
       @stack[obj.id] = cb
 
@@ -65,7 +65,7 @@ class exports.Server extends Connection
     super()
     @transport = new @transport_klass.Server
     @transport.connect()
-  
+
   listen: (cb) ->
 
     # Listen for incoming requests

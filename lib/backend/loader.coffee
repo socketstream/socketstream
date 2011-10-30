@@ -9,7 +9,7 @@ utils = require('../utils')
 file_utils = require('../utils/file')
 
 
-module.exports = load = 
+module.exports = load =
 
   dbConfigFile: ->
     try
@@ -24,24 +24,24 @@ module.exports = load =
         file_utils.readDirSync("#{SS.root}/app/#{api}")
       catch e
         {}
-  
+
   # Server-side files
   serverSideFiles: (trees) ->
     # Load Shared functions into SS.shared
-    load.apiTree "#{SS.root}/app/shared", trees[0], (mod, mod_name, dest, ary) -> 
+    load.apiTree "#{SS.root}/app/shared", trees[0], (mod, mod_name, dest, ary) ->
       dest[mod_name] = mod
-    
+
     # Load Server-side functions into SS.server
     load.apiTree "#{SS.root}/app/server", trees[1], (mod, mod_name, dest, ary) ->
       dest[mod_name] = mod.actions
       SS.internal.authenticate[ary.join('.')] = mod.authenticate if mod.authenticate
-    
+
     # Load Realtime Models into SS.models
     load.apiTree "#{SS.root}/app/models", trees[2], (mod, mod_name, dest, ary) ->
       model_spec = mod[mod_name]
       dest[mod_name] = require("./realtime_models/adapters/#{model_spec.adapter}").init(mod_name, model_spec, exports)
       Object.defineProperty(dest[mod_name], '_rtm', {value: model_spec, enumerable: false})
-  
+
   # Helper to recursively load all files in a dir and attach them to an attribtue of the SS object
   apiTree: (dir, tree, action) ->
     recursively = (destination, ary, path, counter_name, index = 0) ->
@@ -66,10 +66,10 @@ module.exports = load =
         ary.push(mod_name.split('.')[0])
 
         recursively(SS[api_name], ary, path, api_name)
-        
+
         # Turn the API tree into a string we can easily send to the client to be re-constructed into functions
         SS.internal.api_string[api_name] = apiToString(SS[api_name])
-  
+
   # Load Event Emitter in SS.events and any custom server-side events if present
   serverSideEvents: ->
     EventEmitter = require('events').EventEmitter

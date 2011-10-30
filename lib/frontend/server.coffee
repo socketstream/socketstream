@@ -13,19 +13,19 @@ utils       = require('./utils.coffee')
 
 # The main method called when starting the front end server
 exports.start = ->
-  
+
   # Initialize the Asset Manager
   asset.init()
-  
+
   # Start Primary Server (either HTTP or HTTPS)
   primary = SS.internal.servers.primary = primaryServer()
-  
+
   # Listen for HTTP(S) requests
   primary.server.listen(primary.config.port, primary.config.hostname)
 
   # Listen for Socket.IO connections
   socket.init(primary.server)
-  
+
   # Start Secondary HTTP Redirect/API server (if running HTTPS)
   # We will architect this way better in the near future
   if SS.config.https.enabled
@@ -40,10 +40,10 @@ exports.start = ->
 
 # Load the correct server module depending upon HTTPS
 primaryServer = ->
-  
+
   if SS.config.https.enabled
     ssl = require('./ssl')
-    out =  
+    out =
       server:    middleware.primary(ssl.keys.options())
       config:    SS.config.https
       protocol:  'https'
@@ -52,7 +52,7 @@ primaryServer = ->
       server:    middleware.primary()
       config:    SS.config.http
       protocol:  'http'
-  
+
   out
 
 # The secondary server runs on HTTP when HTTPS is enabled

@@ -31,4 +31,4 @@ showFinishText = (name) ->
   console.log "Success! Created app #{name}. You can now run the app:"
   console.log "\t\t cd " + name
   console.log "\t\t socketstream start"
-  
+

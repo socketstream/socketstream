@@ -13,7 +13,7 @@ SS.backend.responders.on 'client', (obj, cb) ->
     methods[obj.method](obj, session, cb)
 
 methods =
-  
+
   # This is the initial object sent to the SocketStream JS client upon connection
   init: (obj, session, cb) ->
     session._findOrCreate ->
@@ -24,7 +24,7 @@ methods =
           env:              SS.env                                                                  # Makes the SS.env variable available client-side. Can be useful within client code
           config:           SS.config.client                                                        # Copies any client configuration settings from the app config files to the client
           heartbeat:        SS.config.users_online.enabled                                          # Let's the client know if User Online tracking is enabled
-          api:                                                                       
+          api:
             server:         SS.internal.api_string.server                                           # Transmits a string representation of the Server API
             models:         (if SS.config.rtm.enabled then SS.models.keys() else {})
       cb {id: obj.id, result: output}

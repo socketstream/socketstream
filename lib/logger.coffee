@@ -10,19 +10,19 @@ exports.serve =
 
   staticFile: (request) ->
     output 1, "STATIC: #{request.url}"
-  
+
   compiled: (file, benchmark_result) ->
     output 2, "DEV INFO: Compiled and served #{file} in #{benchmark_result}ms"
-  
+
   httpsRedirect: (from, to) ->
     output 2, "REDIRECT: From #{from} to correct HTTPS host #{to}"
 
 exports.incoming =
-    
+
   server: (msg) ->
     if !(msg.options && msg.options.silent)
       output 2, "#{msg.id} #{color('->', 'cyan')} #{msg.method}#{parseParams(msg.params)}"
-      
+
   event: (type, message) ->
     output 2, "#{type} #{color('=>', 'cyan')} #{message.event}#{parseParams(message.params)}"
 
@@ -34,7 +34,7 @@ exports.incoming =
 
   rest: (actions, params, format, http_method) ->
     output 2, "REST #{http_method} (#{format}) #{color('->', 'cyan')} #{actions.join('.')} #{parseParams(params)}"
-    
+
   rpsExceeded: (socket) ->
     output 2, "ALERT: Subsequent requests from Client ID: #{socket.id}, Session ID: #{client.session.id}, IP: #{client.connection.remoteAddress} will be dropped as requests-per-second over #{SS.config.limiter.websockets.rps}"
 
@@ -49,40 +49,40 @@ exports.outgoing =
   server: (obj) ->
     if !(obj.options && obj.options.silent)
       output 2, "#{obj.id} #{color('<-', 'green')} #{obj.method}"
-  
+
   rtm: (obj) ->
     output 2, "#{obj.id} #{color('<~', 'green')} #{obj.rtm}.#{obj.action}#{parseParams(obj.params)}"
 
   event: (type, event, params) ->
     output 2, "#{type} #{color('<=', 'green')} #{event}#{parseParams(params)}"
-      
+
 exports.users =
 
   online:
-    
+
     update:
-      
+
       start: ->
         output 4, "INFO: Updating list of Users Online..."
-        
+
       complete: ->
-        output 4, "INFO: List of Users Online updated"  
+        output 4, "INFO: List of Users Online updated"
 
 exports.error =
 
   message: (message) ->
     output 1, color("Error: #{message}", 'red')
-  
+
   exception: (e) ->
     output 1, color(e.toString(), 'red')
 
 exports.pubsub =
 
   channels:
-  
+
     subscribe: (user_id, channel) ->
       output 4, "User ID #{user_id} has subscribed to channel '#{channel}'"
-    
+
     unsubscribe: (user_id, channel) ->
       output 4, "User ID #{user_id} has unsubscribed from channel '#{channel}'"
 

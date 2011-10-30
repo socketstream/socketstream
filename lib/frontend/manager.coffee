@@ -10,7 +10,7 @@ exports.bannerText = (standalone) ->
   text = []
   text.push "Front end server connecting to router on #{SS.config.cluster.sockets.fe_main}" if standalone
   text.push "Primary web server listening on #{formatProtocol(servers.primary.protocol)}://#{servers.primary.config.hostname}:#{servers.primary.config.port}"
-  text.push "Secondary web server listening on #{formatProtocol(servers.secondary.protocol)}://#{servers.secondary.config.hostname}:#{servers.secondary.config.port}" if servers.secondary  
+  text.push "Secondary web server listening on #{formatProtocol(servers.secondary.protocol)}://#{servers.secondary.config.hostname}:#{servers.secondary.config.port}" if servers.secondary
   text
 
 # Load all client-side files and check for conflicts

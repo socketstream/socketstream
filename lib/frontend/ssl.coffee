@@ -24,8 +24,8 @@ exports.keys =
 # PRIVATE
 
 load = (key, cert, ca = null) ->
-  output = 
-    key:  fs.readFileSync(key) 
+  output =
+    key:  fs.readFileSync(key)
     cert: fs.readFileSync(cert)
   output.ca = [fs.readFileSync(ca)] if ca
   output
