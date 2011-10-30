@@ -1,7 +1,7 @@
 # Message Responders
 # ------------------
 
-# Note: Additional custom responders can now be loaded into SS.internal.backend.responders via /lib/server modules or npm packages. 
+# Note: Additional custom responders can now be loaded into SS.internal.backend.responders via /lib/server modules or npm packages.
 # This will remain undocumented until there is a similar solution for the front end :)
 EventEmitter = require('events').EventEmitter
 SS.backend.responders = new EventEmitter

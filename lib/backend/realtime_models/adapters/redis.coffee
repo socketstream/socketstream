@@ -5,25 +5,25 @@
 
 # Instance methods
 class Model
-  
+
   constructor: (@doc = {}) ->
     @isNew = true
-    
+
     # Make a copy of the original data so we can run comparisons
     @original_doc = @doc
-    
+
     # Get fields from schema
     @fields = Model.definition.schema.keys()
     @fields.push('id')
     @fields
-    
+
     # Define getters and setters
     @fields.forEach (field) =>
       @__defineGetter__ field, => @doc[field]
       @__defineSetter__ field, (value) => @doc[field] = value
-    
+
     true
-  
+
   save: (cb = ->) ->
     throw ['rtm_redis_no_id', 'You must specify an "id" before saving the model to Redis'] unless @doc.id?
     R.hmset key(@doc.id), @doc, (err, data) =>
@@ -70,7 +70,7 @@ Model.find = (where, fields, cb) ->
       Model.findById id, {}, (err, data) ->
         output.push(data)
         return cb(null, output) if (i+1) == total_num # Only send reply once all callbacks have completed
-        
+
 # Export model
 exports.init = (name, definition, rtm) ->
   Model.rtm_name = name

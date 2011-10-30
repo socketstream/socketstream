@@ -28,7 +28,7 @@ class exports.Server
   connect: ->
     @socket = SS.internal.zmq.createSocket('xrep')
     @socket.connect SS.config.cluster.sockets.be_main
-  
+
   listen: (cb) ->
     @socket.on 'message', (e1, e2, msg) =>
       try

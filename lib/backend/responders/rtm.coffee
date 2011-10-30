@@ -21,7 +21,7 @@ process = (msg, cb) ->
     rtm[msg.action].apply(rtm, params)
   else
     console.error msg.rtm + ' is NOT found'
-  
+
 # Recursively (thanks Stephen) converts any string containing 'regexp:' into a real regular expression object that can be fed to Mongoose
 convertStringsToRegExps = (params) ->
   params.keys().forEach (key) ->

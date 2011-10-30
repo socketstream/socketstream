@@ -15,7 +15,7 @@ module.exports =
   set: (id, name, value, cb = ->) ->
     value = JSON.stringify(value) if serialize_keys.include(name)
     SS.redis.main.hset key(id), name, value, -> cb true
-  
+
   delete: (id, name, cb = ->) ->
     SS.redis.main.hdel key(id), name, -> cb(true)
 

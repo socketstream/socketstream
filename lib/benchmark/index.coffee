@@ -21,7 +21,7 @@ exports.run = ->
   Welcome to the SocketStream benchmark suite. It's early days yet but we're going to use this command to performance tune and stress test every part of infrastructure.
 
   Right now we're just testing the router and backend so make sure you start the router 'socketstream router' and at least one backend sever 'socketstream backend' before running this command.
-  
+
   See how the load is spread across multiple CPU cores by experimenting with more backend servers on different machines (don't forget to define your SS.config.cluster TCP sockets first). Control how many workers are started per-box with the -w flag. E.g. 'socketstream backend -w 4' for a quad core machine.
 
   '''
@@ -60,7 +60,7 @@ run = (details, next) ->
   console.log "Sending #{details.requests} requests to the back end (via the router) using #{serialization}"
 
   printer = setInterval(printResults, 1000)
-  
+
   while sent < details.requests
     obj = {responder: details.command}
     sent++
@@ -72,6 +72,6 @@ run = (details, next) ->
         output "#{details.requests} responses received from the backend in #{taken}ms (#{parseInt(details.requests/(taken/1000))} rps)\n\n", 'green'
         clearInterval printer
         next()
-   
+
 
 

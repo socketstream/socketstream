@@ -13,9 +13,9 @@ custom = ->
 
   (request, response, next) ->
     # console.log 'This is my custom middleware. The URL requested is', request.url
-    # Unless you're serving a response you'll need to call next() here 
+    # Unless you're serving a response you'll need to call next() here
     next()
-   
+
 
 # CONNECT MIDDLEWARE
 

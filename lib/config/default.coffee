@@ -16,7 +16,7 @@ exports.config =
   http:
     port:                   3000            # if you want to run on port 80 or 443 node must be run as root
     hostname:               '0.0.0.0'       # allows the server to be bound to a particular IP. listens on all by default
-  
+
   # HTTPS / SSL / TLS
   https:
     enabled:                false           # see readme for full details
@@ -49,7 +49,7 @@ exports.config =
     options:                {}
     db_index:               0               # select your databases/keyspace from 0 - 15 (the max redis supports by default)
     key_prefix:             'ss'            # all keys created by SocketStream are prefixed with this value
-  
+
   # Set params which will be passed directly to the client when they connect
   # The client config should match the server as closly as possible
   client:
@@ -58,7 +58,7 @@ exports.config =
     auto_reload:            false           # automatically reload the browser window/tab if an underlying file changes (experimental)
     log:
       level:                2               # 0 = none, 1 = calls only, 2 = calls + params, 3 = full
-  
+
   # ZeroMQ Cluster
   cluster:
     serialization:          'json'          # left this is to allow others to experiment but so far found JSON to be no slower than msgpack
@@ -77,10 +77,10 @@ exports.config =
     https_only:             false           # only allow API requests over HTTPS
     post_max_size_kb:       8192            # 8Mb HTTP POST body size limit
     auth:
-      basic:          
+      basic:
         module_name:        false           # replace this with the name of the authentication module. false = basic auth disabled
         realm:              'Secure API'    # realm name that pops up when you try to access a secure area
-  
+
   # Users
   users_online:
     enabled:                true            # enable tracking of users online in Redis. see README for more details
@@ -90,20 +90,20 @@ exports.config =
 
   # Incompatible Browser Checking
   browser_check:
-    enabled:                false            
+    enabled:                false
     strict:                 false           # when enabled will serve a static page from /static/incompatible_browsers when non websocket browsers connect
     view_name:              'incompatible'  # the name of the jade or html view which will be displayed in /app/views
-  
+
   # Rate Limiter
   rate_limiter:
     enabled:                false           # enables basic rate limiting (off by default for now)
     websockets:
       rps:                  15              # requests per second which can be executed per-client before requests are dropped
-  
+
   # Realtime Models
   rtm:
     enabled:                false           # disabled by default as HIGHLY EXPERIMENTAL and subject to change
-  
+
   # Plug Sockets
   plug_sockets:
     enabled:                false

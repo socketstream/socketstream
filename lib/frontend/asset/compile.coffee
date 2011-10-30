@@ -14,7 +14,7 @@ templates = require('./templates.coffee')
 utils = require('./utils.coffee')
 file_utils = require('../../utils/file.js')
 
-exports.init = (@assets) -> 
+exports.init = (@assets) ->
   @
 
 exports.compile =
@@ -61,7 +61,7 @@ exports.compile =
       e.name = "Unable to compile Jade file #{path} to HTML"
       throw e if SS.config.throw_errors
 
-  
+
   # Outputs to CSS
 
   css: (input_file_name, cb) ->
@@ -95,7 +95,7 @@ cssFile = (file_name) ->
   dir = "app/css"
   relative = "#{dir}/#{file_name}"
   absolute = "#{SS.root}/#{relative}"
-  { 
+  {
     dir:        dir
     relative:   relative
     absolute:   absolute
@@ -116,7 +116,7 @@ namespaceClientFile = (input, file_ary, ext) ->
   type = file_ary[1]
   ns = file_ary.splice(2)
   # Add file prefix to ensure we only attach functions to initialized objects
-  prefix = ns.map (x, i) -> 
+  prefix = ns.map (x, i) ->
     level = ns.slice(0, i + 1).map((file) -> "['#{file}']").join('')
     if ext == 'coffee'
       "SS.#{type}#{level} = {} unless SS.#{type}#{level}"
@@ -128,10 +128,10 @@ namespaceClientFile = (input, file_ary, ext) ->
 
 # Gets CSS/JS headers and jQuery templates
 headersAndTemplates = ->
-  
+
   # Always include links to JS and CSS client-side pre-packed libraries
   inclusions = []
-  
+
   # Include CSS
   inclusions.push(tag.css('assets', exports.assets.files.css.lib))
   if SS.config.pack_assets
@@ -157,7 +157,7 @@ headersAndTemplates = ->
         files.map (file) ->
           file = file.replace(path + '/', '')
           inclusions.push(tag.js(dir, file))
-  
+
   # Include all jQuery templates, if present
   inclusions = inclusions.concat(templates.buildAll())
 

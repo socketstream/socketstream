@@ -51,7 +51,7 @@ process = (obj, cb) ->
 
   # Load the module from the SS.server tree (which is only loaded once)
   server_module = utils.getFromTree(SS.server, actions)
-  
+
   # Check module exists before we attempt to call a function on it
   throw error('MODULE_NOT_FOUND', "Unable to find the #{prefix}/#{actions.join('/')} module. Does the file exist?") unless server_module
 
@@ -72,7 +72,7 @@ process = (obj, cb) ->
   server_module[var_request] = request = {id: obj.id, socket_id: obj.socket_id}
   request.origin = obj.origin     if obj.origin
   request.post = post(obj.post)   if obj.post
- 
+
   # Create @session object if we have a session_id
   server_module[var_session] = obj.session_obj
 
@@ -80,11 +80,11 @@ process = (obj, cb) ->
   server_module.getSession = (scb) ->
     console.log 'Warning: @getSession will be removed in 0.3. Please use the @session variable'
     scb server_module[var_session]
-  
+
   # Make sure we have a valid user_id
   throw error('UNAUTHORIZED', "This session has not been authenticated") if SS.internal.authenticate[actions.join('.')] and !server_module[var_session].user.loggedIn()
 
-  # Execute action  
+  # Execute action
   try
     method.apply(server_module, args)
   catch e

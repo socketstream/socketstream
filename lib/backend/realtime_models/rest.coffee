@@ -11,7 +11,7 @@ exports.processRequest = (actions, params, request, format, cb) ->
   throw ['model_not_rtm',"The '#{model_name}' model does not appear to be a valid Realtime Model"] unless model._rtm?
   throw ['rest_not_enabled','REST support is not enabled for this model'] unless model._rtm.rest and model._rtm.rest.enabled
   request_type = requestType(action, request.method)
-  try  
+  try
     process.init(request, model, action, params, cb)[request_type]()
   catch e
     throw ['rest_request_error', e.stack]
@@ -33,7 +33,7 @@ process =
 
   init: (@request, @model, @action, @params, @cb) ->
     @
-  
+
   create: ->
     parseIncomingData @request, (data) =>
       obj = new(@model)
@@ -43,25 +43,25 @@ process =
           throw ['rest_create', err]
         else
           @cb(true)
-    
+
   show: ->
     @model.findById @action, @_fields(), (err, obj) => @cb(obj)
-  
+
   update: ->
     parseIncomingData @request, (data) =>
       @model.findById @action, @_fields(), (err, obj) =>
         obj = obj.extend(data)
         obj.save()
         @cb(true)
-  
+
   delete: ->
     @model.findById @action, @_fields(), (err, obj) =>
       obj.remove()
       @cb(true)
-  
+
   index: ->
     @model.find @params, @_fields(), (err, data) => @cb(data)
-  
+
   _fields: ->
     if @model._rtm.rest.fields and typeof(@model._rtm.rest.fields) == 'object'
       @model._rtm.rest.fields
@@ -81,5 +81,5 @@ parseIncomingData = (request, cb) ->
       cb(output)
     catch e
       throw ['rest_unable_to_parse_params', 'Unable to parse incoming params']
-  
+
 

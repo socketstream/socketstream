@@ -44,5 +44,5 @@ class exports.Subscriber
   connect: ->
 
   listen: (cb) ->
-    SS.internal.rpc.event_proxy.on 'event', cb 
+    SS.internal.rpc.event_proxy.on 'event', cb
 

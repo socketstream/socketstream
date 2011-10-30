@@ -53,13 +53,13 @@ unless SS.internal.mode is 'console'
 
   # Listen for incoming requests and dispatch them to a responder
   rpc.listen (obj, cb) ->
-    try      
+    try
       # First argument is the event name which a responder must listen for
       args = [obj.responder, obj]
-      
+
       # If the request has an 'id' field it expects a callback (most system commands such as heartbeats do not)
       obj.id? && args.push cb
-      
+
       # Emit the request to one or more responders
       SS.backend.responders.emit.apply SS.backend.responders, args
     catch e

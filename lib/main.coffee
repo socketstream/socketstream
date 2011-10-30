@@ -18,9 +18,9 @@ exports.init = ->
     client:           {}              # Used to store any info about the client (the JS code that's sent to the browser)
     config:           {}              # Used to store server and client configuration
     log:              {}              # Outputs to the terminal
-    
+
     redis:            null            # Connect main and pubsub active connections here
-    
+
     models:           {}              # Models are preloaded and placed here
     server:           {}              # Server code is preloaded and placed here
     shared:           {}              # Shared code is preloaded and placed here
@@ -53,7 +53,7 @@ exports.init = ->
 
   # Add helper to quickly load modules in /lib/server
   SS.require = (path) -> require(SS.root + '/lib/server/' + path)
-  
+
   @
 
 
@@ -95,14 +95,14 @@ exports.process = (args) ->
         Tip: Type 'debug' as the first argument before any command to load the Node.js debugger
 
         start (s)       Start server
-        console (c)     Interactive console 
+        console (c)     Interactive console
         version (v)     Print current version
         new (n)         Create new project
         single (sn)     Force server to start in single-process mode
 
       To get the most out of SocketStream we recommend installing ZeroMQ 2.1 and Hiredis.
 
-        On OS X install HomeBrew then type: brew install pkg-config && brew install zeromq 
+        On OS X install HomeBrew then type: brew install pkg-config && brew install zeromq
         On Linux: Download and install ZeroMQ 2.1 from http://www.zeromq.org/intro:get-the-software
                   You may also have to install pkg-config as this is required by the zmq npm package
         On both: Reinstall SocketStream passing the --dev flag: 'sudo npm install -g socketstream --dev'
@@ -180,7 +180,7 @@ exports.start = start =
     frontend = require('./frontend/manager.coffee')
     servers = frontend.server.start()
     showBanner frontend.bannerText(true)
-  
+
   backend: (args) ->
     SS.internal.mode = 'backend'
     load.zeromq(true)
@@ -188,7 +188,7 @@ exports.start = start =
     backend = require('./backend/wrapper.coffee')
     backend.init(args)
     showBanner backend.bannerText(true)
-  
+
   router: (args) ->
     SS.internal.mode = 'router'
     load.zeromq(true)
@@ -208,7 +208,7 @@ exports.start = start =
 
   ### UTILS ###
 
-  # Runs the interactive console    
+  # Runs the interactive console
   console: ->
     SS.internal.mode = 'console'
     load.project()
@@ -231,7 +231,7 @@ create =
 exports.load = load =
 
   # Try loading the ZeroMQ bindings if present. Fallback to internal EventEmitter unless ZeroMQ is required for this command
-  zeromq: (required = false) ->    
+  zeromq: (required = false) ->
     try
       SS.internal.zmq = require 'zmq'
     catch e
@@ -239,7 +239,7 @@ exports.load = load =
         console.log "Error: You need to install ZeroMQ to take advantage of the cluster features within SocketStream"
         console.log "Type 'socketstream help' for installation instructions"
         process.exit(0)
-  
+
   # Start up the SocketStream environment based on the current project
   # Needs to run before the Server or Console can start
   project: ->
@@ -260,7 +260,7 @@ exports.load = load =
 
     # Set default config and merge it with any application config file
     SS.config = require('./config/index.coffee').load()
-    
+
     # Alias SS to SS.config.ss_var to allow for other custom variable name if desired
     global[SS.config.ss_var] = SS if SS.config.ss_var and SS.config.ss_var != 'SS'
 
@@ -279,7 +279,7 @@ check =
     dirs = fs.readdirSync(SS.root)
     if (!dirs.include('app') || !dirs.include('public')) # All other dirs are optional for now
       fatal 'Unable to start SocketStream here. Not a valid project directory'
-  
+
   # Version numbers
   versionIsCorrect: ->
     return true if semver.parse(SS.version)[5]? # Ignore previews, betas, etc
@@ -302,4 +302,4 @@ showBanner = (additional_text) ->
   text = text.concat(additional_text)
   text.forEach (line) -> util.puts '  ' + line
   util.puts "--------------------------------------------------------------------------\n"
-  
+

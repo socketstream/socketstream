@@ -10,7 +10,7 @@ exports.buildAll = ->
   files = utils.readDirSync('./app/views').files
   files.map (template_path) ->
     if template_path.split('/').length > 3 # only look in sub-folders
-      buildTemplate(template_path) 
+      buildTemplate(template_path)
 
 # PRIVATE
 
@@ -31,7 +31,7 @@ compile =
     catch e
       console.error 'Unable to render jade template: ' + path
       throw new Error(e)
-   
+
   html: (path, source) ->
     source
 

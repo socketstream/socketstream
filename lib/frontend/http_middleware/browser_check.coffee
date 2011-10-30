@@ -17,7 +17,7 @@ module.exports = ->
   (request, response, next) ->
 
     return next() unless browserIsIncompatible(request)
-    
+
     # This mess will be cleaned up in the future (hopefully 0.3) with a new client asset server
     fs.stat file_name + '.jade', (err) ->
       if err and err.code == 'ENOENT'
@@ -26,7 +26,7 @@ module.exports = ->
       else
         jade.renderFile file_name + '.jade', (err, html) ->
           server.deliver(response, 200, 'text/html', html)
-      
+
 # PRIVATE METHODS
 
 browserIsIncompatible = (request) ->
@@ -34,17 +34,17 @@ browserIsIncompatible = (request) ->
 
   # If Strict checking for browsers which have native websocket support
   if SS.config.browser_check.strict
-  
-    # Capture headless browsers (e.g. spiders) 
+
+    # Capture headless browsers (e.g. spiders)
     return true unless ua?
-    
+
     # Allow Chrome version 4 and above
     if ua.match(/Chrom(e|ium)/)
       re = new RegExp("Chrom(e|ium)/([0-9]{1,})")
       if re.exec(ua) != null
         version = parseFloat( RegExp.$2 )
         return false if version >= 4
-        
+
     # Allow Safari version 5 and above
     if ua.match(/Safari/)
       re = new RegExp("Version/([0-9]{1,})")
@@ -58,12 +58,12 @@ browserIsIncompatible = (request) ->
       if re.exec(ua) != null
         version = parseFloat( RegExp.$1 )
         return false if version >= 6
-    
-    # Mac OS X Dashboard Web Clip  
+
+    # Mac OS X Dashboard Web Clip
     return false if ua.match(/WebClip/)
-    # TODO - find out what version of AppleWebKit (~ 533) implemented websockets, 
-    # will allow for greater refactoring of code above.    
-    
+    # TODO - find out what version of AppleWebKit (~ 533) implemented websockets,
+    # will allow for greater refactoring of code above.
+
     # Else show the Browser Incompatible page
     true
 

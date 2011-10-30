@@ -16,11 +16,11 @@ window.SS =
 
   internal:                         # the place for everything the user doesn't need to access
     cb_stack:       {}              # add callbacks to the stack
-  
+
   config:                           # setup default config. this gets overwritten upon connection to server
     log:
       level:        0               # no client-side logging by default
-      
+
 # Event handling
 SS.events =
 
@@ -29,7 +29,7 @@ SS.events =
   on: (name, fn) ->
     @_events[name] = [] unless @_events[name]?
     @_events[name].push(fn)
-  
+
   emit: ->
     [name, params...] = arguments
     if @_events[name]
@@ -62,11 +62,11 @@ SS.internal.remote = ->
 
   # Send supplied callback or use the default log()
   args.push(default_cb) unless typeof(last_arg) == 'function'
-  
+
   # Assemble message
   msg = {}
   msg.method = args[0]
-  msg.method = "#{SS.config.remote_prefix}.#{msg.method}" if SS.config.remote_prefix 
+  msg.method = "#{SS.config.remote_prefix}.#{msg.method}" if SS.config.remote_prefix
   msg.params = if args.length > 1 then args.slice(1, (args.length - 1)) else null
 
   # Log if in developer mode
@@ -116,10 +116,10 @@ SS.socket.on 'init', (msg) ->
   data = JSON.parse(msg)
 
   # Set the SS.env variable. Useful for client-side scripts which need to behave differently depending upon environment loaded
-  SS.env = data.env                              
-  
+  SS.env = data.env
+
   # Copy the client config from the server into SS.config
-  SS.config = data.config || {}                  
+  SS.config = data.config || {}
 
   # Save the Session ID in a cookie (uses the setCookie method as defined in helpers)
   setCookie('session_id', data.session_id) if data.session_id
@@ -132,13 +132,13 @@ SS.socket.on 'init', (msg) ->
   # Load Server API tree into SS.server
   eval('SS.server = ' + data.api.server)
   setupAPI(SS.server, [])
-  
+
   # Indicate we're ready to send
   SS.socket.ready = true
-  
+
   # If User Online tracking is enabled, send a heartbeat to the server every SS.config.users.online.heartbeat_secs
   sendHeartbeat() if data.heartbeat
-  
+
   # Call app.init (if not previously run)
   start()
 
@@ -195,7 +195,7 @@ output = (level, msg, params) ->
 
 validLevel = (level) ->
   SS.config.log.level >= level
-  
+
 setupAPI = (root, ary) ->
   for key, value of root
     ns = ary.slice(0)
@@ -208,7 +208,7 @@ setupAPI = (root, ary) ->
 sendHeartbeat = ->
   SS.socket.emit 'heartbeat' if SS.socket.socket.connected
   setTimeout arguments.callee, (SS.config.heartbeat_interval * 1000)
-  
+
 getCookie = (c_name) ->
   if document.cookie.length > 0
     c_start = document.cookie.indexOf(c_name + "=")

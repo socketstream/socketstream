@@ -42,11 +42,11 @@ exports.init = (args) ->
 
 # Private
 
-routeRequests = ->  
+routeRequests = ->
   frontend.on 'message', (f_env, f_data) ->
     backend.send f_env, f_data
     recv++
-  
+
   backend.on 'message', (b_env, b_data) ->
     frontend.send b_env, b_data
     sent++

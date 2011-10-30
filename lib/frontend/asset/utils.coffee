@@ -10,7 +10,7 @@ exports.fileList = (path, first_file = null) ->
     files = fs.readdirSync(path).filter((file) -> !file.match(/(^_|^\.)/)).sort()
     if first_file and files.include(first_file)
       files = files.delete(first_file)
-      files.unshift(first_file) 
+      files.unshift(first_file)
     files
   catch e
     throw e unless e.code == 'ENOENT' # dir missing
@@ -24,10 +24,10 @@ exports.concatFiles = (path) ->
     if file_name.match(/\.coffee$/i)
       util.log "  Compiling #{file_name} into JS..."
       try
-        output = coffee.compile(output) 
+        output = coffee.compile(output)
       catch e
         util.log "\x1B[1;31mError: Unable to compile CoffeeScript file #{path} to JS\x1B[0m"
-        throw new Error(e) 
+        throw new Error(e)
     output = exports.minifyJS(file_name, output) if file_name.match(/\.(coffee|js)/) and !file_name.match(/\.min/)
     output += ';' # Ensures the file ends with a semicolon. Many libs don't and would otherwise break when concatenated
     output
@@ -45,7 +45,7 @@ exports.minifyJS = (file_name, orig_code) ->
   min_size = (minified.length / 1024)
   util.log("  Minified #{file_name} from #{formatKb(orig_size)} to #{formatKb(min_size)}")
   minified
-  
+
 # When serving client files app.coffee or app.js must always be loaded first, so we're ensuring this here for now.
 # This is only temporary as big changes are coming to the way we serve and organise client files
 exports.ensureCorrectOrder = (files) ->
@@ -53,7 +53,7 @@ exports.ensureCorrectOrder = (files) ->
     file = path.split('/').reverse()[0]
     file.split('.')[0] == 'app'
   first_file = matches[0]
-  if files.include(first_file) 
+  if files.include(first_file)
     files = files.delete(first_file)
     files.unshift(first_file)
   files

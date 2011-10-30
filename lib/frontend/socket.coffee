@@ -24,7 +24,7 @@ exports.init = (server) ->
   # Process events in socket.coffee upon connection
   SS.io.sockets.on 'connection', newConnection
 
- 
+
 # PRIVATE
 
 # Called when a Socket.IO client establishes a connection to the server for the first time
@@ -53,7 +53,7 @@ newConnection = (socket) ->
         cb response
 
       SS.log.incoming.server(request, socket)
-  
+
   # Handle incoming calls to Realtime Models. Highly experimental and switched off by default
   if SS.config.rtm.enabled
     socket.on 'rtm', (msg, cb) ->
@@ -68,12 +68,12 @@ newConnection = (socket) ->
   # Pass client heartbeats through to the back end
   socket.on 'heartbeat', ->
     rpc.send {responder: 'client', method: 'heartbeat', session: socket.ss.session}
-  
+
 
   ### FINALLY, INITIATE SESSION ###
 
   # Get the existing session_id if we have one then transmit everything we need to the client
-  
+
   socket.emit 'getSessionID', {}, (session_id) ->
     session_id = utils.randomString(session_length) unless session_id.length == session_length
     socket.ss.session = {id: session_id}
@@ -85,7 +85,7 @@ newConnection = (socket) ->
 
 # All incoming requests go through here first
 preProcess = (socket, cb) ->
-  
+
   # Disconnect the client if limiter is enabled and requests-per-second have been exceeded
   @disconnect() if limiter and limiter.exceeded(socket)
 

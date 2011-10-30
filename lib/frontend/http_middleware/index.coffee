@@ -20,28 +20,28 @@ exports.primary = (ssl_options = null) ->
   s.load 'api'                if SS.config.api.enabled
   s.load 'browser_check'      if SS.config.browser_check.enabled
   s.load 'compile'            if !SS.config.pack_assets
-  
+
   # Always fall back on serving static files using connect.static
   s.stack.push connect.static(SS.root + '/public')
 
   # Return server
   s.server(ssl_options)
-  
+
 # Load middleware stack for the secondary HTTP server (which serves the API or forwards website requests to HTTPS)
 exports.secondary = ->
   s = new Stack
 
   # Load any custom middleware specified in /config/http.coffee
   s.loadCustom 'secondary'
-  
+
   # Load our own middleware for SocketStream
   s.load 'http_redirect'      if SS.config.https.domain and SS.config.https.redirect_http
   s.load 'parse_url'          # required by other middleware below
   s.load 'api'                if SS.config.api.enabled and !SS.config.api.https_only
-  
+
   # Return server
   s.server()
-  
+
 # Define the stack
 class Stack
 
@@ -66,7 +66,7 @@ class Stack
       @stack = @stack.concat(custom[server_name])
     else
       SS.log.error.message "#{file} is out of date - any custom middleware will be ignored. Please delete this file if you don't need it, or upgrade #{file} to the new Connect format introduced in 0.2.0"
-      
+
 
   # Load Internal Middleware
   load: (name) ->
@@ -75,4 +75,4 @@ class Stack
     catch e
       SS.log.error.message "Unable to load internal HTTP middleware: #{name}"
       throw e
-  
+

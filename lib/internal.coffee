@@ -36,13 +36,13 @@ exports.init = ->
 
 
   ### BACK END ###
-  
+
   # Counters
   @counters = {files_loaded: { models: 0, server: 0, shared: 0}}
-  
+
   # Server files requiring authentication
   @authenticate = {}
-  
+
   # Store the API string we send to the clients here
   @api_string = {}
 
@@ -61,7 +61,7 @@ state =
     @file_name = "#{SS.root}/.socketstream_state"
     @last_known = @load()
     @
-    
+
   current: ->
     version:
       server: SS.version
@@ -69,7 +69,7 @@ state =
 
   save: ->
     fs.writeFileSync(@file_name, JSON.stringify(@current()))
-    
+
   load: ->
     try
       JSON.parse(fs.readFileSync(@file_name))
@@ -81,7 +81,7 @@ state =
       semver.gt @current().version.client, @last_known.version.client
     catch e
       false
-  
+
   # The last known state was never loaded
   missing: ->
     typeof(@last_known.version) != 'object'
