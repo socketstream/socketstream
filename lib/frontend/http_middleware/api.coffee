@@ -18,6 +18,7 @@ server = require('../utils.coffee')
 rpc = new (require('../../rpc/connection.coffee')).Client('api')
 
 post_limit = SS.config.api.post_max_size_kb
+post_data = null
 
 
 # Connect middleware handler
@@ -68,7 +69,7 @@ process = (request, response, url, actions) ->
         request.emit 'error', e
 
   checkOutputFormat(request, format)
-  post_data = processPostData(request) if request.method == 'POST'
+  processPostData(request) if request.method == 'POST'
 
 
 # Formats and deliver the object
@@ -94,7 +95,9 @@ checkOutputFormat = (request, format) ->
   request.emit 'error', new Error('Invalid output format. Supported formats: ' + formats_supported.join(', ')) unless formats_supported.include(format)
 
 # Listen for incoming HTTP post data, cutting off if necessary so we don't run out of memory
+
 processPostData = (request) ->
+  post_data = ''
   overLimit = (bytes) ->
     bytes >= (post_limit * 1024) && request.emit('error', new Error("HTTP POST exceeded #{post_limit}kb. Adjust limit with SS.config.api.post_max_limit_kb"))
 
@@ -102,11 +105,9 @@ processPostData = (request) ->
   overLimit(request.headers['content-length'])
 
   # Then stream the data in, checking as we go as we can't always trust the client to send an accurate header
-  out = ''
   request.on 'data', (chunk) ->
     return false if request.invalid
-    !overLimit(out.length) && out += chunk.toString()
-  out
+    !overLimit(post_data.length) && post_data += chunk.toString()
 
 
 ### TODO: Fix this or replace it ###

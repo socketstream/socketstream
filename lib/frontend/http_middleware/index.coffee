@@ -20,6 +20,7 @@ exports.primary = (ssl_options = null) ->
   s.load 'api'                if SS.config.api.enabled
   s.load 'browser_check'      if SS.config.browser_check.enabled
   s.load 'compile'            if !SS.config.pack_assets
+  s.load 'redirect_to_root'   if SS.config.pack_assets
   
   # Always fall back on serving static files using connect.static
   s.stack.push connect.static(SS.root + '/public')

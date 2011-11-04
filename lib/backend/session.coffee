@@ -16,6 +16,25 @@ store = require("./session_storage/#{store_name}.coffee")
 # Set constants
 fields_to_store = ['id','user_id','channels','attributes']
 
+# When something happens to a session (e.g. a user subscribes to a new channel), the front end server
+# needs to be notified. Events are queued here in the right order, and sent back to the front end server
+# on the very next request; regardless whether or not that request modifies the session object.
+# We will dispense with the enforced RPC layer concept in 0.3. Until then this should prove to be a
+# better solution under load. Any improvements in this area greatly received.
+exports.updates =
+  
+  _buffer: {}
+
+  add: (id, field, value) ->
+    @_buffer[id] = [] unless @_buffer[id]? && typeof(@_buffer[id]) == 'object'
+    update = {field: field, value: value}
+    @_buffer[id].push(update)
+  
+  purge: (id) ->
+    out = @_buffer[id]? && @_buffer[id] || []
+    delete @_buffer[id]
+    out
+
 
 # Session Class
 # -------------
@@ -25,64 +44,33 @@ fields_to_store = ['id','user_id','channels','attributes']
 class exports.Session extends EventEmitter
 
   # Note: A unique @id will only be passed if the request originates over websockets
-  constructor: (data = {}) ->
-    @attributes = {}            # store a hash of custom session data. e.g. {items_in_cart: 3}
-    @user_id = null             # sessions start off unauthenticated by default
-    @channels = []              # records pub/sub private channels the session is subscribed to
-    @init()                     # passes this session instance to nested objects
-    
-    # Copy existing data into this instance
-    fields_to_store.forEach (field) =>
-      if data[field]?
-        # as we're going to be looking for differences we can't copy arrays, must clone
-        @[field] = if @[field]? && typeof(@[field]) == 'object' && @[field].length != undefined
-          data[field].slice(0)
-        else
-          data[field]
-    
-    # Return instance
+  constructor: (cachedData = {}) ->
+    @attributes = {}        # store a hash of custom session data. e.g. {items_in_cart: 3}
+    @user_id = null         # sessions start off unauthenticated by default
+    @channels = []          # records pub/sub private channels the session is subscribed to
+    @init()                 # passes this session instance to nested objects
+    @_copyFrom(cachedData)  # sent as part of the RPC request from the front end. Avoids Redis lookups if no data changes
     @
 
   #### Methods beginning _ should only be used internally
 
   # Load an existing session or store a new one
   _findOrCreate: (cb) ->
-    if isValidId(@id)
-      store.getAll @id, (data) =>
-        if !data or !data.created_at
-          cb @_createNew()             # session doesn't exist or is invalid
-        else
-          cb @_fromExisting(data)      # session exists so pass through attributes
-    else
-      cb @_createNew()
+    @_loadFromStore (sessionExists) =>
+      @_createNew() unless sessionExists?
+      cb @
 
   # Data this session needs to store. Doing it this way to reduce bytes we're storing on the front end and passing over the wire
   _data: ->
-    out = {id: @id}
-    @user_id          && out.user_id = @user_id
-    @channels.any()   && out.channels = @channels
-    @attributes.any() && out.attributes = @attributes
-    out
-
-  # Output only the differences between the original and current session values
-  # The deltas are sent back to the front end server so the socket.ss.session object can be updated
-  _updates: (original) ->
-    updated = false
     out = {}
-    fields_to_store.forEach (field) =>
-      if original[field] != @[field]
-        updated = true
-        out[field] = @[field] 
-    updated && out || undefined
-
-  # Load session data from the store
-  _fromExisting: (data) ->
-    @newly_created = false
-    @created_at = data.created_at
-    @user_id = data.user_id
-    @attributes = data.attributes || {}
-    @channels = data.channels || []
-    @
+    fields_to_store.forEach (field) => out[field] = @[field]
+    out
+  
+  # Get the latest data from the session store
+  _loadFromStore: (cb) ->
+    return cb(false) unless isValidId(@id)
+    store.getAll @id, (data) =>
+      cb data && @_copyFrom(data)
 
   # Create a brand new session
   _createNew: ->
@@ -90,6 +78,24 @@ class exports.Session extends EventEmitter
     @created_at = Number(new Date())
     store.set(@id, 'created_at', @created_at) if @id # only save if this is a persistent (none-API) connection
     @
+
+  # Copy data from an object into this instance
+  _copyFrom: (data) ->
+    fields_to_store.forEach (field) =>
+      if data[field]?
+        # as we're going to be looking for differences we can't copy arrays, must clone
+        @[field] = if @[field]? && typeof(@[field]) == 'object' && @[field].length != undefined
+          data[field].slice(0)
+        else
+          data[field]
+    true
+
+  # Update a value in the store and queue the change to be reflected in the frontend cache
+  _update: (field, value, cb) ->
+    value = value.slice(0) if value? && typeof(value) == 'object' && @[field].length != undefined
+    exports.updates.add @id, field, value
+    value? && store.set(@id, field, value, cb) || store.delete(@id, field, cb)
+
 
 
   #### Public methods
@@ -105,9 +111,9 @@ class exports.Session extends EventEmitter
   # Save Attributes
   save: (cb = ->) ->
     return cb(false) unless @id
-    store.set @id, 'attributes', @attributes, cb
+    @_update 'attributes', @attributes, cb
 
-  # Authentication. See README file for full details and examples
+  # Authentication. See doc file for full details and examples
   authenticate: (module_name, params, cb) ->
     klass = require(module_name)
     klass.authenticate params, cb
@@ -118,7 +124,7 @@ class exports.Session extends EventEmitter
     @user_id = user_id
     if @id
       SS.users.online && SS.users.online.add(@user_id)
-      store.set @id, 'user_id', @user_id, cb
+      @_update 'user_id', @user_id, cb
     
 
   # Authenticated Users
@@ -136,43 +142,45 @@ class exports.Session extends EventEmitter
       SS.users.online && SS.users.online.remove(@session.user_id)
       store.set @session.id, 'previous_user_id', @session.user_id # for retrospective log analysis
       @session.user_id = null
-      store.delete @session.id, 'user_id', -> cb(true)
+      @session._update 'user_id', @session.user_id, cb
 
 
   # Pub/Sub Private Channels
   channel:
-  
+
     _init: (@session) ->
-  
+
     # Lists all the channels the client is currently subscribed to
-    list: ->
-      @session.channels
+    list: (cb) ->
+      throw new Error('@session.channel.list now requires a callback!') unless cb
+      @session._loadFromStore =>
+        cb @session.channels
 
     # Subscribes the client to one or more channels
     subscribe: (names, cb = ->) ->
-      forceArray(names).forEach (name) =>
-        unless @session.channels.include(name) # clients can only join a channel once
-          @session.channels.push(name)
-          SS.log.pubsub.channels.subscribe @session.user_id, name
-          SS.events.emit 'channel:subscribe', @session, name
-      @_save cb
-     
+      @session._loadFromStore =>
+        forceArray(names).forEach (name) =>
+          unless @session.channels.include(name) # clients can only join a channel once
+            @session.channels.push(name)
+            SS.log.pubsub.channels.subscribe @session.user_id, name
+            SS.events.emit 'channel:subscribe', @session, name
+        @session._update 'channels', @session.channels, cb
+
     # Unsubscribes the client from one or more channels
     unsubscribe: (names, cb = ->) ->
-      forceArray(names).forEach (name) =>
-        if @session.channels.include(name)
-          @session.channels = @session.channels.delete(name)
-          SS.log.pubsub.channels.unsubscribe(@session.user_id, name)
-          SS.events.emit 'channel:unsubscribe', @session, name
-      @_save cb
-    
+      @session._loadFromStore =>
+        forceArray(names).forEach (name) =>
+          if @session.channels.include(name)
+            @session.channels = @session.channels.delete(name)
+            SS.log.pubsub.channels.unsubscribe(@session.user_id, name)
+            SS.events.emit 'channel:unsubscribe', @session, name
+        @session._update 'channels', @session.channels, cb
+
     # Unsubscribes the client from all channels
     unsubscribeAll: (cb = ->) ->
-      @unsubscribe @list(), cb
+      @list (channels) =>
+        @unsubscribe channels, cb
     
-    # Stores channel subscriptions so they can be re-invoked if the page is reloaded
-    _save: (cb) ->
-      store.set @session.id, 'channels', @session.channels, cb
 
 
 # PRIVATE HELPERS

@@ -2,9 +2,6 @@
 # ---------------
 # Brokers incoming socket and HTTP connections
 
-https       = require('http')
-connect     = require('connect')
-
 socket      = require('./socket')
 asset       = require('./asset')
 middleware  = require('./http_middleware')

@@ -5,7 +5,8 @@
 
 url_lib = require('url')
 utils = require('../../utils')
-Session = require('../session.coffee').Session
+session = require('../session.coffee')
+Session = session.Session
 
 prefix = '/app/server'
 
@@ -24,10 +25,7 @@ SS.backend.responders.on 'server', (obj, cb) ->
     obj.session_obj = new Session(obj.session)
     process obj, (result) ->
       SS.log.outgoing.server(obj)
-      response = {id: obj.id, result: result}
-      # Send the new session object back only if it has been updated during this request
-      response.session_updates = obj.session_obj._updates(obj.session) if obj.session
-      cb response
+      cb {id: obj.id, result: result, session_updates: session.updates.purge(obj.session_obj.id)}
   catch e
     SS.log.error.exception('Error: ' + e.message) if e.message
     cb {id: obj.id, error: e}

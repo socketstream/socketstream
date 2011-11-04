@@ -53,7 +53,7 @@ send = (msg_type, message) ->
 # directly to websockets (even though you are able in single-process mode)
 sendMultiple = (name, destinations, event, params = null) ->
   destinations = [destinations] unless typeof(destinations) == 'object'
-  throw new Error("No #{name} specified (first argument)") unless destinations.length > 0
+  throw new Error("No #{name} specified (first argument)") unless destinations && destinations.length > 0
   throw new Error('Event Name (second argument) must be a string') unless typeof(event) == 'string'
   SS.log.outgoing.event "#{name} [#{destinations.join(', ')}]", event, params
   send name, {event: event, params: params, destinations: destinations}

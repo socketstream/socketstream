@@ -17,15 +17,14 @@ exports.recursiveCopy = (source, destination) ->
 
   # iterates over current directory
   files.forEach (file) ->
-    unless file.match /^\./
 
-      sourcePath = path.join source, file
-      destinationPath = path.join destination, file
+    sourcePath = path.join source, file
+    destinationPath = path.join destination, file
 
-      stats = fs.statSync sourcePath
-      if stats.isDirectory()
-        fs.mkdirSync destinationPath, 0755
-        exports.recursiveCopy sourcePath, destinationPath
-      else
-        exports.copyFile sourcePath, destinationPath
+    stats = fs.statSync sourcePath
+    if stats.isDirectory()
+      fs.mkdirSync destinationPath, 0755
+      exports.recursiveCopy sourcePath, destinationPath
+    else
+      exports.copyFile sourcePath, destinationPath
 

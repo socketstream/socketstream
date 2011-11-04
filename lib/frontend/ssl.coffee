@@ -19,7 +19,9 @@ exports.keys =
       output = load "#{path}/key.pem", "#{path}/cert.pem"
       util.log "Custom SSL keys not found. Using internal self-signed certificates"
       output
-
+    output.requestCert = SS.config.https.requestCert
+    output.rejectUnauthorized = SS.config.https.rejectUnauthorized
+    output
 
 # PRIVATE
 

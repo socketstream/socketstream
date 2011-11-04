@@ -26,6 +26,8 @@ exports.config =
     domain:                 false           # enter the full host name here as it appears on your SSL cert: (e.g. www.test.com)
     ensure_domain:          true            # if set, will auto-redirect traffic sent to different hosts to the domain specified above
     redirect_http:          true            # automatically redirects requests to http:// to https://#{host}  Host must be set
+    requestCert:            false           # if true the server will request a certificate from clients that connect and attempt to verify that certificate
+    rejectUnauthorized:     false           # if true the server will reject any connection which is not authorized with the list of supplied CAs. This option only has an effect if requestCert is true
 
   # Logger (only to the terminal for now)
   log:

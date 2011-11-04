@@ -1,3 +1,18 @@
+0.2.5 / 2011-11-03
+==================
+
+* Reworked the way sessions are updated and synced for greater reliability under high concurrent load
+* Note: As a result @session.channel.list() now requires a callback
+* Fixed bug preventing mock HTTP routing (e.g. using Backbone.js) working in production
+* Fixed bug preventing .gitignore file been copied into a new project
+* Fixed bug preventing @request.post working in some circumstances
+* You can now `include` other .jade files in /app/views. Thanks metawhite
+* Added new doc on serving multiple sites on one server (Virtual Hosting). Thanks paulbjensen
+* Supports SS.config.https.requestCert and SS.config.https.rejectUnauthorized
+* Updated Socket.IO to 0.8.6 and Jade and Stylus to latest versions
+* Updated bundled jQuery version to 1.6.4
+
+
 0.2.4 / 2011-10-06
 ==================
 

@@ -9,7 +9,10 @@ module.exports =
   getAll: (id, cb) ->
     SS.redis.main.hgetall key(id), (err, data) ->
       serialize_keys.forEach (key) ->
-        data[key] = JSON.parse(data[key]) if data[key]?
+        try
+          data[key] = JSON.parse(data[key]) if data[key]?
+        catch e
+          delete data[key]
       cb data
 
   set: (id, name, value, cb = ->) ->

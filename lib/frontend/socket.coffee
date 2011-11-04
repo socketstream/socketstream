@@ -51,7 +51,6 @@ newConnection = (socket) ->
       request = rpc.send msg, (response) ->
         updateSessionCache(socket, response)
         cb response
-
       SS.log.incoming.server(request, socket)
   
   # Handle incoming calls to Realtime Models. Highly experimental and switched off by default
@@ -93,7 +92,8 @@ preProcess = (socket, cb) ->
 
 # Update the local cache of the session if there have been any changes
 updateSessionCache = (socket, response) ->
-  if response.session_updates?
-    socket.ss.session[field] = value for field, value of response.session_updates
-    delete response.session_updates
+  if response.session_updates? and response.session_updates.any()
+    response.session_updates.forEach (update) ->
+      socket.ss.session[update.field] = update.value
+  delete response.session_updates
 

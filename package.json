@@ -1,7 +1,7 @@
 {
   "name":         "socketstream",
   "description":  "A phenomenally fast real-time web framework for Node.js",
-  "version":      "0.2.4",
+  "version":      "0.2.5",
   "homepage":     "http://www.socketstream.org",
   "author":       "Owen Barnes <owen@socketstream.org>",
   "contributors": [
@@ -11,11 +11,11 @@
   ],
   "dependencies": {
     "coffee-script":    "= 1.1.2",
-    "socket.io":        "= 0.8.4",
+    "socket.io":        "= 0.8.6",
     "redis":            "= 0.6.7",
-    "connect":          "= 1.7.1",
-    "jade":             "= 0.16.0",
-    "stylus":           "= 0.16.0",
+    "connect":          "= 1.7.2",
+    "jade":             "= 0.16.4",
+    "stylus":           "= 0.19.0",
     "less":             "= 1.1.4",
     "uglify-js":        "= 1.0.6",
     "argsparser":       "= 0.0.6",

@@ -44,7 +44,7 @@ Clients can subscribe to an unlimited number of channels using the following com
 
   @session.channel.unsubscribeAll()           # unsubscribes you from every channel (useful if you've logged out)
     
-  @session.channel.list()                     # shows which channels the client is currently subscribed to
+  @session.channel.list(cb)                   # shows which channels the client is currently subscribed to (requires callback)
 ```
 
 #### Individual Clients (browser tabs)
