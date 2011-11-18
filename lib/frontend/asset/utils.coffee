@@ -29,7 +29,7 @@ exports.concatFiles = (path) ->
         util.log "\x1B[1;31mError: Unable to compile CoffeeScript file #{path} to JS\x1B[0m"
         throw new Error(e) 
     output = exports.minifyJS(file_name, output) if file_name.match(/\.(coffee|js)/) and !file_name.match(/\.min/)
-    output += ';' # Ensures the file ends with a semicolon. Many libs don't and would otherwise break when concatenated
+    output += ';' if file_name.match(/\.js/) # Ensures the file ends with a semicolon. Many libs don't and would otherwise break when concatenated
     output
   .join("\n")
 
