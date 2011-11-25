@@ -27,12 +27,12 @@ SocketStream runs on all UNIX based platforms, including OS X and Linux.
 
     # install Node.js
     
-    Download latest stable (0.4.x) version from http://nodejs.org/#download
+    Download latest stable (0.6.x) version from http://nodejs.org/#download
 
-    E.g. for Node 0.4.9
+    E.g. for Node 0.6.2
 
-    tar zxvf node-v0.4.9.tar.gz
-    cd node-v0.4.9
+    tar zxvf node-v0.6.2.tar.gz
+    cd node-v0.6.2
     ./configure
     make # this will take a couple of minutes
     sudo make install
@@ -70,12 +70,12 @@ Here is an example that shows how to install SocketStream and it's dependencies 
 
     # install Node.js
     
-    Download latest stable (0.4.x) version from http://nodejs.org/#download
+    Download latest stable (0.6.x) version from http://nodejs.org/#download
 
-    E.g. for Node 0.4.9
+    E.g. for Node 0.6.2
 
-    tar zxvf node-v0.4.9.tar.gz
-    cd node-v0.4.9
+    tar zxvf node-v0.6.2.tar.gz
+    cd node-v0.6.2
     ./configure
     make # this will take a couple of minutes
     sudo make install

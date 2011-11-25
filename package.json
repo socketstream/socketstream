@@ -1,7 +1,7 @@
 {
   "name":         "socketstream",
   "description":  "A phenomenally fast real-time web framework for Node.js",
-  "version":      "0.2.5",
+  "version":      "0.2.6",
   "homepage":     "http://www.socketstream.org",
   "author":       "Owen Barnes <owen@socketstream.org>",
   "contributors": [
@@ -11,22 +11,22 @@
   ],
   "dependencies": {
     "coffee-script":    "= 1.1.2",
-    "socket.io":        "= 0.8.6",
-    "redis":            "= 0.6.7",
-    "connect":          "= 1.7.2",
-    "jade":             "= 0.16.4",
-    "stylus":           "= 0.19.0",
-    "less":             "= 1.1.4",
-    "uglify-js":        "= 1.0.6",
+    "socket.io":        "= 0.8.7",
+    "redis":            "= 0.7.1",
+    "connect":          "= 1.8.1",
+    "jade":             "= 0.18.0",
+    "stylus":           "= 0.19.3",
+    "less":             "= 1.1.5",
+    "uglify-js":        "= 1.1.1",
     "argsparser":       "= 0.0.6",
-    "semver":           "= 1.0.8"
+    "semver":           "= 1.0.12"
   },
   "devDependencies": {
-    "zmq":              "= 1.0.2",
-    "hiredis":          "= 0.1.12"
+    "zmq":              "= 1.0.3",
+    "hiredis":          "= 0.1.13"
   },
   "directories":  { "lib": "./lib", "doc": "./doc" },
   "main":         "./lib/socketstream.js",
-  "engines":      { "node": ">= 0.4.0 < 0.5.0" },
+  "engines":      { "node": ">= 0.4.0 < 0.7.0" },
   "bin":          { "socketstream": "./bin/socketstream" }
 }

@@ -1,7 +1,7 @@
 ![SocketStream!](https://github.com/socketstream/socketstream/raw/master/new_project/public/images/logo.png)
 
 
-Latest release: 0.2.5  ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+Latest release: 0.2.6  ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 
 Twitter: [@socketstream](http://twitter.com/#!/socketstream)  
 Google Group: http://groups.google.com/group/socketstream  
@@ -19,13 +19,10 @@ Unlike traditional web frameworks, there's no routing, AJAX or partials to think
 SocketStream 0.2 is feature-rich and relatively stable, thanks to a growing community of users. You should find most of the functionality you need to build a good-sized real time web app available today, along with the ability to distribute incoming requests over multiple boxes should your app need to scale.
 
 
-### Update
+### Update as of 25th Novemeber 2011
 
-Whilst SocketStream 0.2 will continue to be the main version we support and update over the next few months, preliminarily work on 0.3 has now begun with a focus on a leaner, more modular core.
+Work on SocketStream 0.3 is progressing well. We're aiming to release the first preview of our ideas to Github in the 1st week of December to encourage community discussion and contributions. Read about the new features and changes coming in SocketStream 0.3 here: https://groups.google.com/forum/#!topic/socketstream/AFwFAPMKzjU
 
-The goal is to take the lessons learned so far, plus some brand new ideas, and create a new architecture which will be easier for the community to extend with optional modules. From this will come (over time) an elegant way to do server-side models, external authentication, an inbuilt test framework, and front-end scaling.
-
-SocketStream is in full time development, kindly sponsored by AOL. We're actively looking to work with other contributors who wish to provide some of these new features as discrete, well-tested modules.
 
 Follow [@socketstream](http://twitter.com/#!/socketstream) for the latest developments and thinking. Website coming soon.
 
@@ -256,7 +253,7 @@ Want to know how to broadcast a message to all users, or implement private chann
 
 ### Requirements
 
-[Node 0.4.X](http://nodejs.org/#download) Note: SocketStream will work with Node 0.5/0.6 once [Connect](http://senchalabs.github.com/connect/) supports it
+[Node 0.6.X](http://nodejs.org/#download)
 
 [NPM 1.0](http://npmjs.org/) (Node Package Manager) or above
 

@@ -1,3 +1,13 @@
+0.2.6 / 2011-11-25
+==================
+
+* Node 0.6 compatibility. Your app should work without modification, just pass the full module path to @session.authenticate()
+* Updated all npm dependencies to latest versions
+* Few minor bug fixes from jjt and 6 (Peter Graham). Thanks!
+
+Update: Work on SocketStream 0.3 is progressing well. We're aiming to release the first preview of our ideas to Github in the 1st week of December to encourage community discussion and contributions. Read about the new features and changes coming in SocketStream 0.3 here: https://groups.google.com/forum/#!topic/socketstream/AFwFAPMKzjU
+
+
 0.2.5 / 2011-11-03
 ==================
 
