@@ -1,7 +1,7 @@
 {
   "name":         "socketstream",
   "description":  "A phenomenally fast real-time web framework for Node.js",
-  "version":      "0.2.6",
+  "version":      "0.2.7",
   "homepage":     "http://www.socketstream.org",
   "author":       "Owen Barnes <owen@socketstream.org>",
   "contributors": [
