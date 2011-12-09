@@ -19,9 +19,9 @@ Unlike traditional web frameworks, there's no routing, AJAX or partials to think
 SocketStream 0.2 is feature-rich and relatively stable, thanks to a growing community of users. You should find most of the functionality you need to build a good-sized real time web app available today, along with the ability to distribute incoming requests over multiple boxes should your app need to scale.
 
 
-### Update as of 25th Novemeber 2011
+### Update as of 9th December 2011
 
-Work on SocketStream 0.3 is progressing well. We're aiming to release the first preview of our ideas to Github in the 1st week of December to encourage community discussion and contributions. Read about the new features and changes coming in SocketStream 0.3 here: https://groups.google.com/forum/#!topic/socketstream/AFwFAPMKzjU
+Work on SocketStream 0.3 is coming along well and we're very excited about the power and flexibility of the new modular design. We're aiming to release the first alpha version by the end of December. Read about the new features and changes coming in SocketStream 0.3 here: https://groups.google.com/forum/#!topic/socketstream/AFwFAPMKzjU
 
 
 Follow [@socketstream](http://twitter.com/#!/socketstream) for the latest developments and thinking. Website coming soon.

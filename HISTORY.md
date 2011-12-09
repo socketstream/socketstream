@@ -3,7 +3,7 @@
 
 * Fixed HTTP API
 
-Update: Work on SocketStream 0.3 is progressing well. We're aiming to release the first preview of our ideas to Github in the 1st week of December to encourage community discussion and contributions. Read about the new features and changes coming in SocketStream 0.3 here: https://groups.google.com/forum/#!topic/socketstream/AFwFAPMKzjU
+Work on SocketStream 0.3 is coming along well and we're very excited about the power and flexibility of the new modular design. We're aiming to release the first alpha version by the end of December. Read about the new features and changes coming in SocketStream 0.3 here: https://groups.google.com/forum/#!topic/socketstream/AFwFAPMKzjU
 
 
 0.2.6 / 2011-11-25
