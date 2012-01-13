@@ -1,9 +1,10 @@
+After 0.2.7 all new development has gone into 0.3.
+
+
 0.2.7 / 2011-11-26
 ==================
 
 * Fixed HTTP API
-
-Work on SocketStream 0.3 is coming along well and we're very excited about the power and flexibility of the new modular design. We're aiming to release the first alpha version by the end of December. Read about the new features and changes coming in SocketStream 0.3 here: https://groups.google.com/forum/#!topic/socketstream/AFwFAPMKzjU
 
 
 0.2.6 / 2011-11-25

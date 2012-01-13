@@ -1,7 +1,7 @@
 ![SocketStream!](https://github.com/socketstream/socketstream/raw/master/new_project/public/images/logo.png)
 
 
-Latest release: 0.2.7  ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+Latest release: 0.2.7  ([view changelog](https://github.com/socketstream/socketstream/blob/0.2/HISTORY.md))
 
 Twitter: [@socketstream](http://twitter.com/#!/socketstream)  
 Google Group: http://groups.google.com/group/socketstream  
@@ -17,12 +17,6 @@ SocketStream is a new Node.js web framework dedicated to creating single-page re
 Unlike traditional web frameworks, there's no routing, AJAX or partials to think about. Instead all application data is streamed over websockets as high-speed bi-directional RPC calls; allowing you to create entirely new ultra-responsive applications that will amaze your users.
 
 SocketStream 0.2 is feature-rich and relatively stable, thanks to a growing community of users. You should find most of the functionality you need to build a good-sized real time web app available today, along with the ability to distribute incoming requests over multiple boxes should your app need to scale.
-
-
-### Update as of 9th December 2011
-
-Work on SocketStream 0.3 is coming along well and we're very excited about the power and flexibility of the new modular design. We're aiming to release the first alpha version by the end of December. Read about the new features and changes coming in SocketStream 0.3 here: https://groups.google.com/forum/#!topic/socketstream/AFwFAPMKzjU
-
 
 Follow [@socketstream](http://twitter.com/#!/socketstream) for the latest developments and thinking. Website coming soon.
 
