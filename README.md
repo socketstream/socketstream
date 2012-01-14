@@ -1,5 +1,7 @@
 ![SocketStream!](https://github.com/socketstream/socketstream/raw/master/new_project/client/static/images/logo.png)
 
+## SocketStream
+
 Latest release: 0.3.0alpha1
 
 Twitter: [@socketstream](http://twitter.com/#!/socketstream)  
