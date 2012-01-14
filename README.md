@@ -106,7 +106,7 @@ SocketStream 0.3 aims to be a library which helps you get up and running quickly
 Ready to give it a whirl? Until 0.3.0 is released and published to `npm` you will need to clone the project locally:
 
     git clone https://github.com/socketstream/socketstream.git
-
+    cd socketstream
     sudo npm link
 
 To generate a new empty SocketStream project type:
