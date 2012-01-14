@@ -1,6 +1,6 @@
 ![SocketStream!](https://github.com/socketstream/socketstream/raw/master/new_project/client/static/images/logo.png)
 
-## SocketStream
+# SocketStream
 
 Latest release: 0.3.0alpha1
 
@@ -116,8 +116,8 @@ To generate a new empty SocketStream project type:
 Install the bundled (optional) dependencies:
 
     cd <name_of_your_project>
-    npm link socketstream
     npm install
+    npm link socketstream
 
 To start your app simply type:
 
