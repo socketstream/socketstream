@@ -1,12 +1,6 @@
 TODO
 ====
 
-Before first release:
-
-* Go through new project format carefully. Can we use modules?
-* Create new Git repo
-
-
 #### WORK TO DO BEFORE 0.3.0 IS RELEASED (updated regularly)
 
 * Release ss-less wrapper module
