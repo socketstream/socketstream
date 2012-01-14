@@ -1,18 +1,54 @@
 TODO
 ====
 
-To complete soon
+Before first release:
 
-* Auto-detect new files (elisee is looking into this using the 'stalker' lib)
-* Can we fix intermittent lack of new line breaks when running in multi-process mode? Anyone any ideas?
-* Investigate Connect Auth and Everyauth. Choose which one to integrate, bearing in mind Models coming in 0.3
-* Re-implement Basic Auth using chosen Auth framework and document use with Facebook Connect etc
-* Write more tests for errors which can be displayed in the browser's console over websockets
-* Test SocketStream with Node 0.5/0.6 once Connect 2.0 is ready. Apart from that we should be able to support it fully in single process mode at least
-* Can we add gzip compression to static assets?
+* Go through new project format carefully. Can we use modules?
+* Create new Git repo
 
-Pushed back for a future release
 
-* Make 'socketstream frontend' utalize multiple cores - most likely using Node 0.5 child_process.fork()
-* Refactor coffee compile so we don't repeat ourselves (part of a Client Asset Manager rewrite)
-* Can we detect and handle idle clients better on the browser. Would be good if it could emit an event after a period of inactivity we can then emit server-side.
+#### WORK TO DO BEFORE 0.3.0 IS RELEASED (updated regularly)
+
+* Release ss-less wrapper module
+* Show how to handle websocket connections / disconnections in README
+* Build interactive 'socketstream new' asking if you want to use CoffeScript or not
+* Need to find a better way to check if an internal module exists. Exception catching hides errors within the module
+* Refactor getting sessions from store and socketsByUserId etc. Lots of work to do in this area
+* Much more error checking around sending bad RPC calls (e.g if a module or function does not exist)
+* Websocket responders need to take a config object. It should also be able to send config to client-side code (hard)
+* Make require() in client-code take relative paths (./ and ../) like Node's require() can
+* Investigate if it's possible to make SocketStream sessions accessible to regular HTTP requests?
+* Make sure it is easy to use Nib (Stylus extension) with SocketStream
+* Delete old asset files after running ss.client.packAssets() (should be a config option)
+* Look into using Engine.IO instead of Socket.IO
+* SocketStream should pass its version number and other meta info to wrapper modules
+* Look into ways we can use multi-core cluster features of Node 0.6, if at all (maybe best at app level?)
+* Ensure we can support CoffeeKup and client-side Jade, using optional 'template engine' modules if required
+* Merge Main Features and New Features together in Readme once people have seen the key changes
+* Finish and release Users Online module
+* Finish and release Pusher Pipe transport module
+* Finish converting SocketRacer to 0.3 and demo new telemetry websocket responder module
+* Testing! Lots of! We are going to use Mocha
+
+Help with any of the above tasks would be appreciated. Please get in touch
+
+
+#### DECISIONS TO MAKE
+
+* Sort out how we're going to do configuration and logging. There is very little of either at the moment!
+* Do we want to implement the server-side events concept we had in 0.2. Is it worth it?
+* Should we show a 404 if a request is invalid? (i.e. not a file or cannot be routed to a client)
+* Figure out if / how the old HTTP RPC API should be a part of the SocketStream core
+* Can we / should we make RPC middleware inheritable? If so what should the syntax be?
+# Should we use Connect Router or Director (from flatiron) instead of a simple EventEmitter for HTTP routing?
+
+Any thoughts on the above are most welcome
+
+
+#### SOCKETSTREAM.ORG WEBSITE
+
+* Lots!!
+* Show all code examples in the tour in JS of CoffeeScript (toggle switch)
+* Give each tour slide it's own unique ID so you can link to it
+* Start work on proper documentation (once the API settles)
+* Build a page to properly honor contributors

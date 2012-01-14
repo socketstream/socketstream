@@ -1,0 +1,17 @@
+// Adapted from http://www.broofa.com/Tools/Math.uuid.js
+exports.randomString = function (len) {
+  var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
+  var uuid = [];
+  radix = chars.length;
+  for (var i = 0; i < len; i++) uuid[i] = chars[0 | Math.random()*radix];
+  return uuid.join('');
+};
+
+// Parse incoming websocket messages into message type and contents
+exports.parseWsMessage = function (msg) {
+  if ((i = msg.indexOf('§')) > 0) {
+    return [msg.substr(0, i), msg.substr(i+1)];
+  } else {
+    throw new Error('Invalid message');
+  }
+};

@@ -1,32 +1,35 @@
 {
   "name":         "socketstream",
-  "description":  "A phenomenally fast real-time web framework for Node.js",
-  "version":      "0.2.7",
+  "description":  "A fast, modular Node.js framework dedicated to building realtime single-page apps",
+  "version":      "0.3.0alpha1-pre",
   "homepage":     "http://www.socketstream.org",
   "author":       "Owen Barnes <owen@socketstream.org>",
   "contributors": [
-    "Paul Jensen <paulbjensen@gmail.com>",
-    "Alan Milford <amilford@gmail.com>",
-    "Addy Osmani <addyosmani@gmail.com>"
+    "Paul Jensen",
+    "Alan Milford",
+    "Addy Osmani"
   ],
   "dependencies": {
-    "coffee-script":    "= 1.1.2",
+    "colors":           "= 0.6.0-1",
+    "commander":        "= 0.5.1",
+    "eventemitter2":    "= 0.4.1",
+    "apitree":          "= 1.0.0",
+    "uglify-js":        "= 1.2.4",
+    "semver":           "= 1.0.13",  
     "socket.io":        "= 0.8.7",
     "redis":            "= 0.7.1",
-    "connect":          "= 1.8.1",
-    "jade":             "= 0.18.0",
-    "stylus":           "= 0.19.3",
-    "less":             "= 1.1.5",
-    "uglify-js":        "= 1.1.1",
-    "argsparser":       "= 0.0.6",
-    "semver":           "= 1.0.12"
+    
+    "qs":               ">= 0.4.0",
+    "mime":             ">= 0.0.1",
+    "formidable":       "1.0.x"
   },
   "devDependencies": {
-    "zmq":              "= 1.0.3",
-    "hiredis":          "= 0.1.13"
+    "coffee-script":    "= 1.2.0",
+    "mocha":            "= 0.9.0",
+    "should":           "= 0.5.0"
   },
   "directories":  { "lib": "./lib", "doc": "./doc" },
-  "main":         "./lib/socketstream.js",
-  "engines":      { "node": ">= 0.4.0 < 0.7.0" },
+  "main":         "./index.js",
+  "engines":      { "node": ">= 0.6.0 < 0.7.0" },
   "bin":          { "socketstream": "./bin/socketstream" }
 }
