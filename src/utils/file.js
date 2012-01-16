@@ -30,7 +30,7 @@ exports.readDirSync = function(start) {
       var files = fs.readdirSync(start).sort();
       total = files.length;
       for(var x=0, l=files.length; x<l; x++) {
-        isDir(path.join(start, files[x]));
+        isDir(path.join(start, files[x]).replace(/\\/g, '/')); // replace '\' with '/' to support Windows
       }
     } else {
       throw (new Error("path: " + start + " is not a directory"));
