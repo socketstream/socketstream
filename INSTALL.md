@@ -1,98 +1,82 @@
 Install Instructions
 ====================
 
-SocketStream runs on all UNIX based platforms, including OS X and Linux.
+SocketStream runs on all UNIX based platforms, including OS X and Linux. Early adopters are reporting good results with SocketStream 0.3 on Windows.
 
-### Mac OS X installation (tested on Snow Leopard 10.6.7)
+Note: These instructions will be changed once the first 0.3 package is published to npm.
+
+
+### Mac OS X installation (tested on OS X Lion)
 
     # install XCode, required for compiling software
     
     http://itunes.apple.com/gb/app/xcode/id422352214?mt=12
     
-    # install Redis
-    
-    download the latest version from http://redis.io
-    
-    tar -xvzf redis-2.2.X.tar.gz
-    cd redis-2.2.X
-    make
-    make test # this is optional, but they recommend it
-    sudo make install
-    
-    to run in the foreground (and see incoming connections):
-      redis-server
-  
-    to run in the background:
-      env redis-server > /tmp/redis.log 2>&1 &
-
     # install Node.js
     
-    Download latest stable (0.4.x) version from http://nodejs.org/#download
-
-    E.g. for Node 0.4.9
-
-    tar zxvf node-v0.4.9.tar.gz
-    cd node-v0.4.9
-    ./configure
-    make # this will take a couple of minutes
-    sudo make install
-    
-    # install npm
-    
-    curl http://npmjs.org/install.sh | sudo sh
+    Download latest stable (0.6.x) version from http://nodejs.org/#download
   
-    # install SocketStream
+    # install SocketStream (latest from Github master)
     
-    sudo npm install socketstream -g
+    git clone https://github.com/socketstream/socketstream.git
+    cd socketstream
+    npm link
     
-    # create a Socketstream app as a test
+    # create a Socketstream app called 'test'
     
     socketstream new test
     cd test
-    socketstream start
+    npm install
+    npm link socketstream
+    node app.js
     
 
 ### Ubuntu 10.04 server installation
 
-Here is an example that shows how to install SocketStream and it's dependencies on Ubuntu Server, including building Redis and Node.js from source:
+Here is an example that shows how to install SocketStream and it's dependencies on Ubuntu Server, including building Node.js from source:
 
     # install prerequisites
     sudo apt-get install build-essential automake git-core curl libssl-dev -y
-    
-    # install and run redis
-    cd ~
-    wget http://redis.googlecode.com/files/redis-2.2.4.tar.gz
-    tar -xvzf redis-2.2.4.tar.gz
-    cd redis-2.2.4
-    make
-    sudo make install
-    env redis-server > /tmp/redis.log 2>&1 &
 
     # install Node.js
     
-    Download latest stable (0.4.x) version from http://nodejs.org/#download
+    Download latest stable (0.6.x) version from http://nodejs.org/#download
 
-    E.g. for Node 0.4.9
+    E.g. for Node 0.6.7
 
-    tar zxvf node-v0.4.9.tar.gz
-    cd node-v0.4.9
+    tar zxvf node-v0.6.7.tar.gz
+    cd node-v0.6.7
     ./configure
     make # this will take a couple of minutes
     sudo make install
 
-    # install npm
-    curl http://npmjs.org/install.sh | sudo sh
+    # install SocketStream (latest from Github master)
     
-    # install SocketStream
-    sudo npm install socketstream -g
+    git clone https://github.com/socketstream/socketstream.git
+    cd socketstream
+    npm link
     
-    # create a new socketstream project called 'test'
-    cd ~
+    # create a Socketstream app called 'test'
+    
     socketstream new test
-    
-    # run test app
     cd test
-    socketstream start
+    npm install
+    npm link socketstream
+    node app.js
     
-    
-    
+
+### Windows
+
+    # install SocketStream (latest from Github master)
+
+    git clone https://github.com/socketstream/socketstream.git
+    cd socketstream
+    npm install
+    cd ..
+
+    # create a Socketstream app called 'test'
+
+    node socketstream\bin\socketstream new test
+    cd test
+    npm install
+    npm install ..\socketstream    

@@ -1,3 +1,10 @@
+0.3 alpha2 / ?
+==============
+
+* Backwards slashes (\) replaced with forward slashes (/) in file paths for Windows compatibility (David Rosen)
+* Updated INSTALL.md
+
+
 0.3 alpha1 / 2012-01-14
 =======================
 

@@ -205,7 +205,7 @@ Install the excellent 'nodemon' module with `sudo npm install -g nodemon` then s
 
 ##### Will it run on Windows?
 
-It will - once we sort out multiple file path slash issues. We are keen to support Windows so any help there would be appreciated.
+Early adopters have reported good results so far, though we still have some work to do to smooth out the rough edges. Please see the Windows installation instructions in INSTALL.md
 
 
 ##### Why not use Require.js, AMD or Browserify?
