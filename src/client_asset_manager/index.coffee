@@ -16,6 +16,7 @@ formattersByExtension = null
 
 # Set defaults
 packAssets = false        # Serve assets live
+packAssetOptions = {}
 codeWrappers =            # JS code wrapping (highly experimental!)
   'libs': false
   'modules': 'module'
@@ -42,7 +43,7 @@ exports.init = (root, router) ->
   # Tell the asset manager to pack and minimise all assets
   packAssets: (options) ->
     packAssets = true
-    # TODO: Make config option to delete old asset files
+    packAssetOptions = options
 
   # Define a new Single Page Client
   define: (name, paths) ->
@@ -65,7 +66,7 @@ exports.init = (root, router) ->
     ssClient = client
     formattersByExtension = formatters.load()
     if packAssets
-      client.pack(ssClient, formattersByExtension) for name, client of clients
+      client.pack(ssClient, formattersByExtension, packAssetOptions) for name, client of clients
     else
       asset = require('./asset').init(root, formattersByExtension, codeWrappers)
       require('./serve_live').init(router, ssClient, asset)

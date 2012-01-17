@@ -12,7 +12,7 @@ templateEngine = require('./template_engine').init(root)
 
 exports.init = (root, codeWrappers) ->
 
-  containerDir = '/client/static/assets'
+  containerDir = pathlib.join(root, 'client/static/assets')
   templateDir = 'client/templates'
 
   class Client
@@ -47,8 +47,8 @@ exports.init = (root, codeWrappers) ->
     # Attempts to serve a cached copy of the HTML for this client if it exists, or generates it live if not
     htmlFromCache: (ssClient, formatters, packAssets, cb) ->
       if packAssets
-        fileName = containerDir + '/' + @name + '/' + @id + '.html'
-        fs.readFile root + fileName, 'utf8', (err, output) ->
+        fileName = pathlib.join(containerDir, @name, @id + '.html')
+        fs.readFile fileName, 'utf8', (err, output) ->
           cb output
       else
         @html(ssClient, formatters, false, cb)
@@ -62,7 +62,7 @@ exports.init = (root, codeWrappers) ->
         view = paths.view
         sp = view.split('.')
         extension = sp[sp.length-1]
-        path = "#{root}/client/views/#{view}"
+        path = pathlib.join(root, 'client/views', view)
 
         formatter = formatters[extension]
         throw new Error("Unable to output view. Unsupported file extension #{extension}. Please provide a suitable formatter") unless formatter
@@ -88,7 +88,7 @@ exports.init = (root, codeWrappers) ->
           else
             outputView()
   
-    pack: (ssClient, formatters) ->
+    pack: (ssClient, formatters, options) ->
 
       asset = require('./asset').init(root, formatters, codeWrappers)
 
@@ -106,28 +106,35 @@ exports.init = (root, codeWrappers) ->
               # This is the final file - output contents
               output = fileContents.join(concatinator)
               output = initialCode + output
-              file = clientDir + '/' + id + '.' + assetType
+              fileName = clientDir + '/' + id + '.' + assetType
 
-              fs.writeFileSync(root + file, output)
-              log('✓'.green, 'Packed ' + filePaths.length + ' files into ' + file)
+              fs.writeFileSync(fileName, output)
+              log('✓'.green, 'Packed ' + filePaths.length + ' files into ' + fileName)
 
         # Expand any dirs into real files
         if paths && paths.length > 0
           filePaths = []
-          prefix = root + '/' + dir
+          prefix = pathlib.join(root, dir)
           paths.forEach (path) ->
             magicPath.files(prefix, path).forEach (file) -> filePaths.push(file)
           processFiles()
 
-
+      # Pack Assets
       id = @id
-      clientDir = containerDir + '/' + @name
+      clientDir = pathlib.join(containerDir, @name)
 
-      log "Pre-packing and minifying the '#{@name}' client...".yellow
+      log("Pre-packing and minifying the '#{@name}' client...".yellow)
 
       # Create directory for this client
-      fs.mkdirSync(root + containerDir) unless pathlib.existsSync(root + containerDir)
-      fs.mkdirSync(root + clientDir) unless pathlib.existsSync(root + clientDir)
+      fs.mkdirSync(containerDir) unless pathlib.existsSync(containerDir)
+      fs.mkdirSync(clientDir) unless pathlib.existsSync(clientDir)
+
+      # Delete any old packed asset files
+      unless options && options.keepOldFiles
+        numFilesDeleted = 0
+        filesDeleted = fs.readdirSync(clientDir).map (fileName) ->
+          fs.unlinkSync(pathlib.join(clientDir, fileName))
+        filesDeleted.length > 1 && log('✓'.green, "#{filesDeleted.length} previous packaged files deleted")
    
       # Output CSS
       packAssetSet('css', @paths.css, 'client/css', "\n")
@@ -138,9 +145,9 @@ exports.init = (root, codeWrappers) ->
 
       # Output HTML view
       @html ssClient, formatters, true, (output) ->
-        file = clientDir + '/' + id + '.html'
-        fs.writeFileSync(root + file, output)
-        log('✓'.green, 'Created and cached HTML file ' + file)
+        fileName = pathlib.join(clientDir, id + '.html')
+        fs.writeFileSync(fileName, output)
+        log('✓'.green, 'Created and cached HTML file ' + fileName)
 
 
 

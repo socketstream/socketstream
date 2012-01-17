@@ -3,7 +3,6 @@ TODO
 
 #### WORK TO DO BEFORE 0.3.0 IS RELEASED (updated regularly)
 
-* Release ss-less wrapper module
 * Show how to handle websocket connections / disconnections in README
 * Build interactive 'socketstream new' asking if you want to use CoffeScript or not
 * Need to find a better way to check if an internal module exists. Exception catching hides errors within the module
@@ -13,7 +12,6 @@ TODO
 * Make require() in client-code take relative paths (./ and ../) like Node's require() can
 * Investigate if it's possible to make SocketStream sessions accessible to regular HTTP requests?
 * Make sure it is easy to use Nib (Stylus extension) with SocketStream
-* Delete old asset files after running ss.client.packAssets() (should be a config option)
 * Look into using Engine.IO instead of Socket.IO
 * SocketStream should pass its version number and other meta info to wrapper modules
 * Look into ways we can use multi-core cluster features of Node 0.6, if at all (maybe best at app level?)
@@ -29,6 +27,7 @@ Help with any of the above tasks would be appreciated. Please get in touch
 
 #### DECISIONS TO MAKE
 
+* Think about how best to do async client-side module loading. Not easy but would be awesome
 * Sort out how we're going to do configuration and logging. There is very little of either at the moment!
 * Do we want to implement the server-side events concept we had in 0.2. Is it worth it?
 * Should we show a 404 if a request is invalid? (i.e. not a file or cannot be routed to a client)
