@@ -32,14 +32,14 @@ exports.init = (root, codeWrappers) ->
       else
         @paths.css?.forEach (path) ->
           magicPath.files(root + '/client/css', path).forEach (file) ->
-            headers.push tag.css("/_dev/css?#{file}&ts=#{ts}")
+            headers.push tag.css("/_serveDev/css?#{file}&ts=#{ts}")
 
         # SocketStream Browser Client
-        headers.push tag.js("/_dev/client?ts=#{ts}")
+        headers.push tag.js("/_serveDev/client?ts=#{ts}")
 
         @paths.code?.forEach (path) ->
           magicPath.files(root + '/client/code', path).forEach (file) ->
-            headers.push tag.js("/_dev/code?#{file}&ts=#{ts}")
+            headers.push tag.js("/_serveDev/code?#{file}&ts=#{ts}")
 
       # Output list of headers
       headers
@@ -88,6 +88,8 @@ exports.init = (root, codeWrappers) ->
           else
             outputView()
   
+    # Pack all assets declared in the ss.client.define() call to be sent upon initial connection
+    # Other code modules can still be served asynchronously later on
     pack: (ssClient, formatters, options) ->
 
       asset = require('./asset').init(root, formatters, codeWrappers)

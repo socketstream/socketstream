@@ -30,7 +30,7 @@ eventMiddleware = (req, res, next) ->
   url = urllib.parse(req.url)
   extension = pathlib.extname(url.pathname)
   extension = extension.substring(1) if extension
-  if extension and req.url.substring(0,5) != '/_dev'
+  if extension and req.url.substring(0,6) != '/_serve'
     next() # serve static asset
   else
     router.route(req.url, req, res)

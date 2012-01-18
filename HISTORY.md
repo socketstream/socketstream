@@ -1,6 +1,7 @@
 0.3 alpha2 / ?
 ==============
 
+* Experimenting with new loadAsync() command to load in additional client-side modules. See post in Google Group
 * Any old files in /client/static/assets are now deleted by default. Override with {keepOldFiles: true}
 * Backwards slashes (\) replaced with forward slashes (/) in file paths for Windows compatibility (David Rosen)
 * Updated INSTALL.md

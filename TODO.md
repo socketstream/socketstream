@@ -27,7 +27,6 @@ Help with any of the above tasks would be appreciated. Please get in touch
 
 #### DECISIONS TO MAKE
 
-* Think about how best to do async client-side module loading. Not easy but would be awesome
 * Sort out how we're going to do configuration and logging. There is very little of either at the moment!
 * Do we want to implement the server-side events concept we had in 0.2. Is it worth it?
 * Should we show a 404 if a request is invalid? (i.e. not a file or cannot be routed to a client)

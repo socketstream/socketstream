@@ -1,32 +1,55 @@
 # Serve Client Assets Live
 # ------------------------
-# Typically used when developing your app. If you call ss.client.packAssets() this code will not be run
+# Serves code to be loaded asynchronously and all code and other assets when running without calling ss.client.packAssets()
 
 require('colors')
 url = require('url')
+pathlib = require('path')
+magicPath = require('./magic_path')
 
-exports.init = (router, ssClient, asset) ->
+exports.init = (router, ssClient, asset, packAssets) ->
 
-  # JAVASCRIPT
+  # Listen for requests to load code asynchronously
 
-  # Listen for requests for the SocketStream browser client (which contains the lib required for the ws transport)
-  router.on '/_dev/client?*', (request, response) ->
-    ssClient.code (output) ->
-      serve(output, 'text/javascript; charset=utf-8', response)
-
-  # Listen for requests for application client code
-  router.on '/_dev/code?*', (request, response) ->
+  router.on '/_serveAsync/code?*', (request, response) ->
     path = parseUrl(request.url)
-    asset.js path, {compess: false}, (output) ->
-      serve(output, 'text/javascript; charset=utf-8', response)
 
-  # CSS
+    # TODO: Implement caching of async code requests in production mode
 
-  # Listen for requests for CSS files
-  router.on '/_dev/css?*', (request, response) ->
-    path = parseUrl(request.url)
-    asset.css path, {compess: false}, (output) ->
-      serve(output, 'text/css', response)
+    dir = pathlib.join(root, 'client/code')
+    files = magicPath.files(dir, [path])
+
+    output = []
+    files.forEach (path) ->
+      asset.js path, {compress: packAssets}, (js) ->
+        output.push(js)
+        if output.length == files.length # last file
+          serve(output.join("\n"), 'text/javascript; charset=utf-8', response)
+
+
+  # If we're not pre-packing assets (i.e. in dev mode) we need to respond to requests to all assets live
+  unless packAssets
+
+    # JAVASCRIPT
+
+    # Listen for requests for the SocketStream browser client (which contains the lib required for the ws transport)
+    router.on '/_serveDev/client?*', (request, response) ->
+      ssClient.code (output) ->
+        serve(output, 'text/javascript; charset=utf-8', response)
+
+    # Listen for requests for application client code
+    router.on '/_serveDev/code?*', (request, response) ->
+      path = parseUrl(request.url)
+      asset.js path, {compress: false}, (output) ->
+        serve(output, 'text/javascript; charset=utf-8', response)
+
+    # CSS
+
+    # Listen for requests for CSS files
+    router.on '/_serveDev/css?*', (request, response) ->
+      path = parseUrl(request.url)
+      asset.css path, {compress: false}, (output) ->
+        serve(output, 'text/css', response)
 
 
 # Private

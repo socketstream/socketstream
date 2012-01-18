@@ -65,10 +65,11 @@ exports.init = (root, router) ->
   load: (client) ->
     ssClient = client
     formattersByExtension = formatters.load()
+     
+    # Bundle initial assets if we're running in production mode
     if packAssets
       client.pack(ssClient, formattersByExtension, packAssetOptions) for name, client of clients
-    else
-      asset = require('./asset').init(root, formattersByExtension, codeWrappers)
-      require('./serve_live').init(router, ssClient, asset)
 
-
+    # Listen out for requests to async load new assets and/or serve all assets live in dev mode 
+    asset = require('./asset').init(root, formattersByExtension, codeWrappers)
+    require('./serve_live').init(router, ssClient, asset, packAssets)
