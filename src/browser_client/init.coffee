@@ -28,7 +28,7 @@ SocketStream.require = (name, currentPath = null) ->
     exports = {}
     req = (name) -> SocketStream.require(name, mod.path)
     mod.mod(exports, req)
-    SocketStream[name] = exports
+    moduleCache[name] = exports
   else
     console.error "SocketStream Error: Module #{name} not found. Ensure client dirs containing modules are loaded first and that calls from one module to another are nested within functions"
 
