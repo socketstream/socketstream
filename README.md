@@ -1,4 +1,4 @@
-![SocketStream!](https://github.com/socketstream/socketstream/raw/master/new_project/public/images/logo.png)
+![SocketStream!](https://github.com/socketstream/socketstream/raw/0.2/new_project/public/images/logo.png)
 
 
 Latest release: 0.2.7  ([view changelog](https://github.com/socketstream/socketstream/blob/0.2/HISTORY.md))
