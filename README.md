@@ -7,7 +7,7 @@ Twitter: [@socketstream](http://twitter.com/#!/socketstream)
 Google Group: http://groups.google.com/group/socketstream  
 IRC channel: [#socketstream](http://webchat.freenode.net/?channels=socketstream) on freenode
 
-[Read Full 0.2 Announcement](https://github.com/socketstream/socketstream/blob/master/doc/annoucements/0.2.md)
+[Read Full 0.2 Announcement](https://github.com/socketstream/socketstream/blob/0.2/doc/annoucements/0.2.md)
 
 
 ### Introduction
@@ -277,47 +277,47 @@ All documentation is in /doc/guide/en
 
 #### Developing your app
 
-* [Project Directory Overview](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/developing/project_directory_overview.md)
-* [Namespacing - how to organize your code using API Trees](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/developing/namespacing.md)
-* [Client-side Templates - transform incoming JSON data into HTML](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/developing/client-side_templates.md)
-* [More Pub/Sub - broadcasting to everyone & Private Channels](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/developing/pub_sub.md)
-* [Server-side Code - in /app/server](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/developing/server_code.md)
-* [Shared Code - in /app/shared](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/developing/shared_code.md)
-* [Users and Authentication](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/developing/users_and_authentication.md)
-* [Environments and Configuration](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/developing/environments_and_configuration.md)
-* [The @session object - getting/setting session data](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/developing/the_session_object.md)
-* [The @request object - obtaining HTTP POST data and more](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/developing/the_request_object.md)
-* [Server-side Events](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/developing/server-side_events.md)
-* [Handling Disconnects](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/developing/handling_disconnects.md)
-* [Javascript Helpers](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/developing/javascript_helpers.md)
-* [Connecting to Redis](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/developing/connecting_to_redis.md)
-* [Connecting to MongoDB and other DBs](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/developing/connecting_to_databases.md)
-* [Custom HTTP Middleware](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/developing/custom_http_middleware.md)
-* [Logging and Debugging](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/developing/logging_and_debugging.md)
+* [Project Directory Overview](https://github.com/socketstream/socketstream/blob/0.2/doc/guide/en/developing/project_directory_overview.md)
+* [Namespacing - how to organize your code using API Trees](https://github.com/socketstream/socketstream/blob/0.2/doc/guide/en/developing/namespacing.md)
+* [Client-side Templates - transform incoming JSON data into HTML](https://github.com/socketstream/socketstream/blob/0.2/doc/guide/en/developing/client-side_templates.md)
+* [More Pub/Sub - broadcasting to everyone & Private Channels](https://github.com/socketstream/socketstream/blob/0.2/doc/guide/en/developing/pub_sub.md)
+* [Server-side Code - in /app/server](https://github.com/socketstream/socketstream/blob/0.2/doc/guide/en/developing/server_code.md)
+* [Shared Code - in /app/shared](https://github.com/socketstream/socketstream/blob/0.2/doc/guide/en/developing/shared_code.md)
+* [Users and Authentication](https://github.com/socketstream/socketstream/blob/0.2/doc/guide/en/developing/users_and_authentication.md)
+* [Environments and Configuration](https://github.com/socketstream/socketstream/blob/0.2/doc/guide/en/developing/environments_and_configuration.md)
+* [The @session object - getting/setting session data](https://github.com/socketstream/socketstream/blob/0.2/doc/guide/en/developing/the_session_object.md)
+* [The @request object - obtaining HTTP POST data and more](https://github.com/socketstream/socketstream/blob/0.2/doc/guide/en/developing/the_request_object.md)
+* [Server-side Events](https://github.com/socketstream/socketstream/blob/0.2/doc/guide/en/developing/server-side_events.md)
+* [Handling Disconnects](https://github.com/socketstream/socketstream/blob/0.2/doc/guide/en/developing/handling_disconnects.md)
+* [Javascript Helpers](https://github.com/socketstream/socketstream/blob/0.2/doc/guide/en/developing/javascript_helpers.md)
+* [Connecting to Redis](https://github.com/socketstream/socketstream/blob/0.2/doc/guide/en/developing/connecting_to_redis.md)
+* [Connecting to MongoDB and other DBs](https://github.com/socketstream/socketstream/blob/0.2/doc/guide/en/developing/connecting_to_databases.md)
+* [Custom HTTP Middleware](https://github.com/socketstream/socketstream/blob/0.2/doc/guide/en/developing/custom_http_middleware.md)
+* [Logging and Debugging](https://github.com/socketstream/socketstream/blob/0.2/doc/guide/en/developing/logging_and_debugging.md)
 
 #### Optional modules
 
 These modules will only load if enabled
 
-* [HTTP API - access /app/server methods over a super-fast JSON API](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/optional_modules/http_api.md)
-* [Users Online - get a list of users online for your app](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/optional_modules/users_online.md)
-* [Plug Sockets - connect to external services using ZeroMQ](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/optional_modules/plug_sockets.md)
-* [Browser Check - dealing with incompatible browsers](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/optional_modules/browser_check.md)
-* [Rate Limiter - very basic protection against DDOS attacks](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/optional_modules/rate_limiter.md)
+* [HTTP API - access /app/server methods over a super-fast JSON API](https://github.com/socketstream/socketstream/blob/0.2/doc/guide/en/optional_modules/http_api.md)
+* [Users Online - get a list of users online for your app](https://github.com/socketstream/socketstream/blob/0.2/doc/guide/en/optional_modules/users_online.md)
+* [Plug Sockets - connect to external services using ZeroMQ](https://github.com/socketstream/socketstream/blob/0.2/doc/guide/en/optional_modules/plug_sockets.md)
+* [Browser Check - dealing with incompatible browsers](https://github.com/socketstream/socketstream/blob/0.2/doc/guide/en/optional_modules/browser_check.md)
+* [Rate Limiter - very basic protection against DDOS attacks](https://github.com/socketstream/socketstream/blob/0.2/doc/guide/en/optional_modules/rate_limiter.md)
 
 
 #### Deploying
 
-* [Scaling Up with ZeroMQ](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/deploying/scaling.md)
-* [Using HTTPS / SSL](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/deploying/https_ssl.md)
-* [Security](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/deploying/security.md)
-* [Virtual Hosting - running multiple apps on a single server](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/deploying/virtual_hosting.md)
+* [Scaling Up with ZeroMQ](https://github.com/socketstream/socketstream/blob/0.2/doc/guide/en/deploying/scaling.md)
+* [Using HTTPS / SSL](https://github.com/socketstream/socketstream/blob/0.2/doc/guide/en/deploying/https_ssl.md)
+* [Security](https://github.com/socketstream/socketstream/blob/0.2/doc/guide/en/deploying/security.md)
+* [Virtual Hosting - running multiple apps on a single server](https://github.com/socketstream/socketstream/blob/0.2/doc/guide/en/deploying/virtual_hosting.md)
 
 #### Other
 
-* [FAQs](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/faqs.md)
-* [Internal RPC Spec](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/rpc_spec.md)
-* [Contributing](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/contributing.md)
+* [FAQs](https://github.com/socketstream/socketstream/blob/0.2/doc/guide/en/faqs.md)
+* [Internal RPC Spec](https://github.com/socketstream/socketstream/blob/0.2/doc/guide/en/rpc_spec.md)
+* [Contributing](https://github.com/socketstream/socketstream/blob/0.2/doc/guide/en/contributing.md)
 
 ***
 
