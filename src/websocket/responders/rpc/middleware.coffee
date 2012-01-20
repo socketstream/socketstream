@@ -1,11 +1,12 @@
 # Inbuilt middleware for RPC calls
 
 require('colors')
+pathlib = require('path')
 apiTree = require('apitree')
 
 exports.init = (root, session, ss) ->
 
-  dir = root + '/server/rpc/middleware'
+  dir = pathlib.join(root, 'server/rpc/middleware')
 
   inbuilt =
 

@@ -1,10 +1,11 @@
 # Telemetry - Unfinished. Do not use yet!
 
+pathlib = require('path')
 apiTree = require('apitree')
 
 exports.init = (root, messagePrefix, extensions) ->
 
-  dir = root + '/server/telemetry'
+  dir = pathlib.join(root, 'server/rpc/actions')
   api = apiTree.buildApiTree(dir)
 
   request: (msg, meta, socket) ->

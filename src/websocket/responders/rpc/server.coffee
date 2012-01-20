@@ -1,10 +1,11 @@
 # RPC - server side
 
+pathlib = require('path')
 apiTree = require('apitree')
 
 exports.init = (root, messagePrefix, session, ss) ->
   
-  dir = root + '/server/rpc/actions'
+  dir = pathlib.join(root, 'server/rpc/actions')
   api = apiTree.createApiTree(dir)
 
   # Load inbuilt and custom middleware
@@ -46,7 +47,7 @@ exports.init = (root, messagePrefix, session, ss) ->
       cb = ->
         args = Array.prototype.slice.call(arguments)
         obj = {id: request.id, p: args, e: request.error}
-        console.log '←'.green, msgLogName, request.method
+        console.log('←'.green, msgLogName, request.method)
         socket message(obj)
 
       # Execute method at the end of the stack
@@ -72,7 +73,7 @@ exports.init = (root, messagePrefix, session, ss) ->
 
     catch e
       name = 'Error: ' + e.message
-      console.log "->".red, msgLogName, request.method, name.red
+      console.log('→'.red, msgLogName, request.method, name.red)
       obj = {id: request.id, e: {message: e.message}}
       socket message(obj)
 

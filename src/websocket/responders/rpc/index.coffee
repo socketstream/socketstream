@@ -1,6 +1,6 @@
 # RPC Responder
 # -------------
-# Preloads all functoins in /server/rpc recursively and executes them when events come in
+# Preloads all functoins in /server/rpc/actions recursively and executes them when events come in
 
 fs = require('fs')
 coffee = require('coffee-script') if process.env['SS_DEV']

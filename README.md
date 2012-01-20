@@ -144,9 +144,63 @@ All this means no more connection latency, HTTP header overhead, or clunky AJAX 
 SocketStream is a perfect fit for all manner of modern applications which require real-time data (chat, stock trading, location monitoring, analytics, etc). It's also a great platform for building real-time HTML5 games. However, right now it would make a poor choice for a blog or other content-rich site which requires unique URLs for search engine optimization.
 
 
-### Example Apps
+### Demo Apps
 
-SocketStream 0.3 demos and example code coming soon!
+SocketStream 0.3 example apps coming soon!
+
+
+### Example 1: Basic RPC
+
+SocketStream 0.3 supports multiple ways to send messages to and from the server. The most common of which, JSON-over-RPC, is included by default. An RPC call can be invoked on the server by calling ss.rpc() in the client.
+
+For example, let's write a simple server-side function which squares a number. Make a file called /server/rpc/actions/app.js and put this in it:
+
+``` javascript
+exports.actions = function(req, res, ss){
+
+  // debug or modify incoming requests here
+  console.log(req);
+
+  // return list of actions which can be called publicly
+  return {
+
+    square: function(number){
+      res(number * number);
+    }
+
+  }
+}
+```
+
+Restart the server and then invoke this function from the brower's command line:
+
+``` javascript
+ss.rpc('app.square', 25)
+```
+
+You'll see the answer `625` logged to the console by default. The eagle-eyed among you will notice `ss.rpc('app.square', 25)` actually returned `undefined`. That's fine. We're only interested in the asynchronous response sent from the server once it has processed your request. 
+
+Now let's write some code in the client to do more with this response. Make a file called /client/code/main/app.js and put this in it:
+
+``` javascript
+// define the number to square (vars are local to this file by default)
+var number = 25
+
+// ensure SocketStream has connected to the server
+SocketStream.event.on('ready', function(){
+
+  ss.rpc('app.square', number, function(response){
+    alert(number + ' squared is ' + response);
+  });
+
+});
+```
+
+Refresh the page and you'll see an alert box popup with the following:
+
+    25 squared is 625
+    
+More examples coming soon!
 
 
 ### Changes since 0.2

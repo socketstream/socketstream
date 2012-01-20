@@ -17,5 +17,6 @@ exports.init = (root, session, extensions, config) ->
     client:
 
       code: ->
-        cs = fs.readFileSync(__dirname + '/client.coffee', 'utf8')
-        coffee.compile(cs)
+        extension = coffee? && 'coffee' || 'js'
+        input = fs.readFileSync(__dirname + '/client.' + extension, 'utf8')
+        coffee? && coffee.compile(input) || input

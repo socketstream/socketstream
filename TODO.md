@@ -16,6 +16,7 @@ TODO
 * SocketStream should pass its version number and other meta info to wrapper modules
 * Look into ways we can use multi-core cluster features of Node 0.6, if at all (maybe best at app level?)
 * Ensure we can support CoffeeKup and client-side Jade, using optional 'template engine' modules if required
+* Allow ss.rpc() calls to be made via the server-side console
 * Merge Main Features and New Features together in Readme once people have seen the key changes
 * Finish and release Users Online module
 * Finish and release Pusher Pipe transport module
