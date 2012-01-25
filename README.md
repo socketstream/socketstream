@@ -83,7 +83,6 @@ SocketStream 0.3 aims to be a library which helps you get up and running quickly
 * Define multiple single-page clients by choosing the CSS, JS and client-side Templates you wish to serve
 * Serve different clients on different URLs, or depending upon the device connecting (i.e. serve a different view to an iPhone)
 * Multiple clients work seamlessly with 'mock routing', enabling your apps to use HTML Push State (e.g. Backbone Router)
-* Now bundled with Twitter Bootstrap CSS by default (instead of reset.css). Easily removed if you prefer an alternative
 * Bundled with Hogan (Mustache compatible) for client-side templating, or use others (e.g. jQuery)
 * Highly Experimental: Designate client-side code files as modules and require() them as you would server-side code
 
