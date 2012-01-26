@@ -3,7 +3,7 @@
 # SocketStream does not concern itself with web servers. It simply provides a stack of Connect Middleware
 # which can be used by the application in any way it wishes.
 
-urllib = require('url')
+fs = require('fs')
 pathlib = require('path')
 
 # Note: Connect 2.0.0alpha1 is bundled within SocketStream for now until it's available on NPM
@@ -12,8 +12,11 @@ connect = require('../connect')
 Router = require('./router').Router
 router = new Router
 
+staticDirs = []
+
 exports.init = (root) ->
   router:     router
+  staticDirs: loadStaticDirs()
   middleware: middlewareStack(root)
 
 
@@ -27,10 +30,13 @@ middlewareStack = (root) ->
   .use(connect.static(root + '/client/static'))
 
 eventMiddleware = (req, res, next) ->
-  url = urllib.parse(req.url)
-  extension = pathlib.extname(url.pathname)
-  extension = extension.substring(1) if extension
-  if extension and req.url.substring(0,6) != '/_serve'
+  initialDir = req.url.split('/')[1]
+  if staticDirs.indexOf(initialDir) >= 0
     next() # serve static asset
   else
-    router.route(req.url, req, res)
+    router.route(req.url, req, res) #
+
+loadStaticDirs = ->
+  path = pathlib.join(root, 'client/static')
+  if pathlib.existsSync(path)
+    staticDirs = fs.readdirSync(path)

@@ -1,6 +1,8 @@
 0.3 alpha2 / ?
 ==============
 
+* Better resolving of nested routes (with dots in) to single-page clients by caching names of static dirs upon startup
+* Warns if you try to define a single-page client which conflicts with the name of a file or folder in /clients/static
 * New projects are bundled with reset.css (http://meyerweb.com/eric/tools/css/reset/) as in 0.2 instead of bootstrap.css
 * Experimenting with new loadAsync() command to load in additional client-side modules. See post in Google Group
 * Any old files in /client/static/assets are now deleted by default. Override with {keepOldFiles: true}

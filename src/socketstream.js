@@ -43,7 +43,7 @@ var publish = exports.publish = require('./publish/index').init();
 var http = exports.http = require('./http/index').init(root);
 
 // Client Asset Manager
-var client = exports.client = require('./client_asset_manager/index').init(root, http.router);
+var client = exports.client = require('./client_asset_manager/index').init(root, http.router, http.staticDirs);
 
 // Session & Session Store
 exports.session = require('./session');

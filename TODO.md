@@ -19,6 +19,7 @@ TODO
 * Allow ss.rpc() calls to be made via the server-side console
 * Merge Main Features and New Features together in Readme once people have seen the key changes
 * Finish and release Users Online module
+* Enable easier debugging of client-side code (Issue #123)
 * Finish and release Pusher Pipe transport module
 * Finish converting SocketRacer to 0.3 and demo new telemetry websocket responder module
 * Testing! Lots of! We are going to use Mocha

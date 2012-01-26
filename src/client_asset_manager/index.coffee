@@ -22,7 +22,7 @@ codeWrappers =            # JS code wrapping (highly experimental!)
   'modules': 'module'
 
 
-exports.init = (root, router) ->
+exports.init = (root, router, reservedNames) ->
   formatters = require('./formatters').init(root)
   Client = require('./client').init(root, codeWrappers)
   
@@ -48,6 +48,7 @@ exports.init = (root, router) ->
   # Define a new Single Page Client
   define: (name, paths) ->
     throw new Error("Client name '#{name}' has already been defined") if clients[name]?
+    throw new Error("Client name '#{name}' conflicts with a directory or file name in /client/static") if reservedNames.indexOf(name) == 0
     client = new Client(name, paths, packAssets)
     clients[name] = client
     client
