@@ -39,7 +39,11 @@ eventMiddleware = (req, res, next) ->
   if staticDirs.indexOf(initialDir) >= 0
     next() # serve static asset
   else
-    router.route(req.url, req, res) #
+    if !router.route(req.url, req, res)
+      console.log 'router returned false'
+      next()
+    else
+      console.log 'router returned true'
 
 loadStaticDirs = ->
   path = pathlib.join(root, 'client/static')

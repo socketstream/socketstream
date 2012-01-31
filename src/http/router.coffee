@@ -17,13 +17,17 @@ class exports.Router
     # TODO allow for widcards with listeners = @ee.listeners(url) - @ee.listenersAny(url)
     if @ee.listeners(url).length > 0
       @ee.emit(url, req, res)
+      true
     else
+      if url == '/'
+        return false
+      console.log 'router', url
       sr = url.split('/')
       sr.pop()
       newUrl = sr.join('/')
       newUrl = '/' unless newUrl.length > 0
       @route(newUrl, req, res)
-      
+
   on: (url, cb) ->
     if url.substring(0,1) == '/' && url.indexOf(' ') == -1
       @ee.on(url, cb)
