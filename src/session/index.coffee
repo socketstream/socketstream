@@ -45,7 +45,7 @@ session = (store, socketId) ->
 
   _bindToSocket: ->
     socketIdsBy.user.add(store.userId, socketId)     if store.userId?
-    channels.init(store, socketId)._bindToSocket()   if store.channels.length > 0
+    channels.init(store, socketId)._bindToSocket()   if store.channels? && store.channels.length > 0
     @
 
 
