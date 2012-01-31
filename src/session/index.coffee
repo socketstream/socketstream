@@ -19,7 +19,7 @@ exports.findOrCreate = (sessionId, socketId, cb) ->
   # Else try to find it in the store
   else
     exports.store.lookup sessionId, (storeSession) ->
-      store = cache[sessionId] = new Store(sessionId)
+      store = new Store(sessionId)
       if storeSession
         store.userId = storeSession.userId
         store.channels = storeSession.channels
