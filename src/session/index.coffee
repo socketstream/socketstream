@@ -11,7 +11,7 @@ Store = exports.store.Store
 cache = {}
 
 exports.findOrCreate = (sessionId, socketId, cb) ->
-  console.log "findOrCreate"
+  console.log "findOrCreate", sessionId
   # Look for the session in the local in-memory cache first
   if store = cache[sessionId]
     cb session(store, socketId)._bindToSocket()

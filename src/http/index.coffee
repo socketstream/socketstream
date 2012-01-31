@@ -26,7 +26,7 @@ middlewareStack = (root) ->
   console.log "tot!"
   connect()
   .use(connect.cookieParser('fkdfhdjkf'))
-  .use(connect.session())
+  .use(connect.session({cookie: { path: '/', httpOnly: false, maxAge: 14400000 }}))
   .use(eventMiddleware)
   .use(connect.static(root + '/client/static'))
 

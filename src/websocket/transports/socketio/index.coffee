@@ -13,18 +13,17 @@ exports.init = (emitter, httpServer, config) ->
 
   # Set default log level. Can be overwritten using app config
   io.set 'log level', 1
-  
+
   # Allow app to configure Socket.IO using the syntax below
   # ss.ws.transport.use('socketio', {io: function(io){
-  #   io.set('log_level', 4) 
+  #   io.set('log_level', 4)
   # }})
   config.io(io) if config?.io?
 
   # Listen out for new connections
   io.sockets.on 'connection', (socket) ->
-
     processSession socket, ->
-      
+
       socket.on 'message', (msg) ->
         try
           [type, content] = utils.parseWsMessage(msg)
@@ -33,12 +32,12 @@ exports.init = (emitter, httpServer, config) ->
             socket.send(data)
         catch e
           console.log 'Invalid websocket message received:'.red, msg
-      
+
       socket.emit 'ready'
 
 
   event: ->
-    
+
     all: (msg) ->
       io.sockets.emit 'message', msg
 
@@ -69,16 +68,11 @@ exports.init = (emitter, httpServer, config) ->
 # Private
 
 processSession = (socket, cb) ->
-  idLength = 32
-
-  return cb() if socket.sessionId && sessionId.length == idLength
+  return cb() if socket.sessionId
 
   socket.emit 'getSessionId', (sessionId) ->
-    if sessionId && sessionId.length == idLength
-      socket.sessionId = sessionId
-      cb()
-    else
-      sessionId = utils.randomString(idLength)
-      socket.emit 'setSessionId', sessionId, (response) ->
-        socket.sessionId = sessionId
-        cb()
+    console.log "getSessionId"
+    console.log sessionId
+    console.log "ooo"
+    socket.sessionId = sessionId
+    cb()
