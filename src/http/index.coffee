@@ -23,9 +23,10 @@ exports.init = (root) ->
 # Private
 
 middlewareStack = (root) ->
+  console.log "tot!"
   connect()
-  .use(connect.cookieParser('secret'))
-  .use(connect.session({key: 'session_id', secret: 'SocketStream'}))
+  .use(connect.cookieParser('fkdfhdjkf'))
+  .use(connect.session())
   .use(eventMiddleware)
   .use(connect.static(root + '/client/static'))
 
