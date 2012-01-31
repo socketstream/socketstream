@@ -8,6 +8,7 @@ pathlib = require('path')
 
 # Note: Connect 2.0.0alpha1 is bundled within SocketStream for now until it's available on NPM
 connect = require('../connect')
+RedisStore = require('connect-redis')(connect)
 
 Router = require('./router').Router
 router = new Router
@@ -26,7 +27,10 @@ middlewareStack = (root) ->
   console.log "tot!"
   connect()
   .use(connect.cookieParser('fkdfhdjkf'))
-  .use(connect.session({cookie: { path: '/', httpOnly: false, maxAge: 14400000 }}))
+  .use(connect.session(
+    cookie: { path: '/', httpOnly: false, maxAge: 14400000 }
+    store: new RedisStore
+  ))
   .use(eventMiddleware)
   .use(connect.static(root + '/client/static'))
 
