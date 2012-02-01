@@ -78,7 +78,7 @@ exports.init = (root, codeWrappers, templateEngine) ->
           includes = includes.concat(@headers(packAssets))
 
           # Add any Client-side Templates
-          paths.tmpl != false && files = magicPath.files(pathlib.join(root, templateDir), paths.tmpl)
+          paths.tmpl != false && files = magicPath.files(pathlib.join(root, templateDir).replace(/\\/g, '/'), paths.tmpl) # replace '\' with '/' to support Windows
           if files && files.length > 0
             templateEngine.generate root, templateDir, files, formatters, (templateHTML) ->
               includes.push templateHTML
@@ -115,7 +115,7 @@ exports.init = (root, codeWrappers, templateEngine) ->
         # Expand any dirs into real files
         if paths && paths.length > 0
           filePaths = []
-          prefix = pathlib.join(root, dir)
+          prefix = pathlib.join(root, dir).replace(/\\/g, '/') # replace '\' with '/' to support Windows
           paths.forEach (path) ->
             magicPath.files(prefix, path).forEach (file) -> filePaths.push(file)
           processFiles()
