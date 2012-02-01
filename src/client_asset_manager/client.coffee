@@ -8,9 +8,7 @@ fs = require('fs')
 pathlib = require('path')
 magicPath = require('./magic_path')
 
-templateEngine = require('./template_engine').init(root)
-
-exports.init = (root, codeWrappers) ->
+exports.init = (root, codeWrappers, templateEngine) ->
 
   containerDir = pathlib.join(root, 'client/static/assets')
   templateDir = 'client/templates'
@@ -80,13 +78,14 @@ exports.init = (root, codeWrappers) ->
           includes = includes.concat(@headers(packAssets))
 
           # Add any Client-side Templates
-          if paths.tmpl?
-            files = magicPath.files(root + '/' + templateDir, paths.tmpl)
+          paths.tmpl != false && files = magicPath.files(pathlib.join(root, templateDir), paths.tmpl)
+          if files && files.length > 0
             templateEngine.generate root, templateDir, files, formatters, (templateHTML) ->
               includes.push templateHTML
               outputView()
           else
             outputView()
+
   
     # Pack all assets declared in the ss.client.define() call to be sent upon initial connection
     # Other code modules can still be served asynchronously later on

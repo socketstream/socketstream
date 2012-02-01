@@ -23,8 +23,10 @@ codeWrappers =            # JS code wrapping (highly experimental!)
 
 
 exports.init = (root, router, reservedNames) ->
+
   formatters = require('./formatters').init(root)
-  Client = require('./client').init(root, codeWrappers)
+  templateEngine = require('./template_engine').init(root)
+  Client = require('./client').init(root, codeWrappers, templateEngine)
   
   clients = {}
   ssClient = null
@@ -39,6 +41,7 @@ exports.init = (root, router, reservedNames) ->
 
   # Return API
   formatters: formatters
+  templateEngine: templateEngine
 
   # Tell the asset manager to pack and minimise all assets
   packAssets: (options) ->

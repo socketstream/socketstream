@@ -6,7 +6,7 @@
 require('colors')
 fileUtils = require('../utils/file')
 
-exports.files = (prefix, paths) ->
+exports.files = (prefix, paths = ['*']) ->
   files = []
   numRootFolders = prefix.split('/').length
 

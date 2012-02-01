@@ -4,20 +4,17 @@ TODO
 #### WORK TO DO BEFORE 0.3.0 IS RELEASED (updated regularly)
 
 * Show how to handle websocket connections / disconnections in README
-* Build interactive 'socketstream new' asking if you want to use CoffeScript or not
+* Build interactive 'socketstream new' asking if you want to use recommended stack + demo or not
 * Need to find a better way to check if an internal module exists. Exception catching hides errors within the module
 * Refactor getting sessions from store and socketsByUserId etc. Lots of work to do in this area
 * Much more error checking around sending bad RPC calls (e.g if a module or function does not exist)
 * Websocket responders need to take a config object. It should also be able to send config to client-side code (hard)
 * Make require() in client-code take relative paths (./ and ../) like Node's require() can
 * Investigate if it's possible to make SocketStream sessions accessible to regular HTTP requests?
-* Make sure it is easy to use Nib (Stylus extension) with SocketStream
 * Look into using Engine.IO instead of Socket.IO
 * SocketStream should pass its version number and other meta info to wrapper modules
 * Look into ways we can use multi-core cluster features of Node 0.6, if at all (maybe best at app level?)
-* Ensure we can support CoffeeKup and client-side Jade, using optional 'template engine' modules if required
 * Allow ss.rpc() calls to be made via the server-side console
-* Merge Main Features and New Features together in Readme once people have seen the key changes
 * Finish and release Users Online module
 * Enable easier debugging of client-side code (Issue #123)
 * Finish and release Pusher Pipe transport module

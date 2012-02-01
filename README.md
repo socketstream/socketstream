@@ -2,20 +2,22 @@
 
 # SocketStream
 
-Latest release: 0.3.0alpha1
+Latest release: 0.3.0alpha2
 
 Twitter: [@socketstream](http://twitter.com/#!/socketstream)  
 Google Group: http://groups.google.com/group/socketstream  
 IRC channel: [#socketstream](http://webchat.freenode.net/?channels=socketstream) on freenode
 
-Welcome to the the first alpha release of SocketStream 0.3 - a complete re-write of previous versions with the main aim of making the project easier to contribute to and extend with third party modules.
+Welcome to SocketStream 0.3 - a complete re-write of previous versions with the main aim of making the project easier to contribute to and extend with third party modules.
 
 Take a tour of all the new features at http://www.socketstream.org/tour
 
 
-### Warning!
+### Status
 
-This initial alpha release of SocketStream 0.3 is intended for experimentation and discussion only. It is nowhere near finished, stable or production-ready just yet. Please share your thoughts on our [Google Group](http://groups.google.com/group/socketstream) after reading [TODO.md](https://github.com/socketstream/socketstream/blob/master/TODO.md) (updated regularly).
+This is a working alpha release of SocketStream 0.3 intended for experimentation and use by early adopters who don't mind a rapidly changing API. There is still [plenty of work](https://github.com/socketstream/socketstream/blob/master/TODO.md) to do to finish features and improve existing code.
+
+Please share your thoughts on our [Google Group](http://groups.google.com/group/socketstream) after reading [TODO.md](https://github.com/socketstream/socketstream/blob/master/TODO.md) (updated regularly).
 
 The previous stable version of SocketStream can be found in the [0.2 branch](https://github.com/socketstream/socketstream/tree/0.2). This is the version currently on NPM.
 
@@ -26,31 +28,23 @@ SocketStream is a new Node.js web framework dedicated to creating single-page re
 
 Unlike traditional web frameworks, there's no routing, AJAX or partials to think about. Instead all application data is streamed over websockets as high-speed bi-directional messages; allowing you to create entirely new ultra-responsive applications that will amaze your users.
 
-The goal of SocketStream 0.3 is provide the absolute minimum amount of features and structure required by ALL realtime single-page apps:
-
-* To serve HTML, CSS and JS code in a structured and optimized way
-* To make it easy to use and organise client-side templates
-* To handle incoming request over websockets (RPC and other types of messages)
-* Support publishing of events to the browser via socket_id, user_id, channels or broadcast
-* Handle transport connections/disconnections
-* Provide a path to scalability
-
-All other features should be, or can be, provided by external modules or by the app itself.
-
-SocketStream 0.3 aims to be a library which helps you get up and running quickly, rather than a black box web framework which fences you in.
-
+SocketStream 0.3 builds on the success of previous versions by introducing more modularity, configurability and extensibility via 3rd party modules. It is designed to work great as both as a stand-alone framework, or when combined with other Node libraries such as Express.js.
 
 
 ## Main Features
 
 #### General
 
-* True bi-directional communication using websockets (or [Socket.IO 0.8](http://socket.io/) fallbacks). No more slow, messy AJAX!
+* Designed for large apps - excellent code organization, modularity and extensibility. Not a black box framework
+* True bi-directional communication using websockets (or [Socket.IO 0.8](http://socket.io) fallbacks). No more slow, messy AJAX!
 * Write all code in [CoffeeScript](http://jashkenas.github.com/coffee-script/) or JavaScript - your choice
-* Share code between the client and server. Ideal for business logic and model validation
-* Can use [Redis](http://www.redis.io/) for fast session retrieval, pub/sub, list of users online, and any other data your app needs instantly
+* New in 0.3: Works great with [Express.js](http://expressjs.com) and other Connect-based frameworks!
+* Easily share code between the client and server. Ideal for business logic and model validation (see README below)
 * Effortless, scalable, pub/sub baked right in - including Private Channels
+* New in 0.3: Websocket Middleware - enabling session access, user records, authentication, logging, distributed requests and more
 * API Trees - offer a simple, consistent way to namespace and organize large code bases
+* Optionally use [Redis](http://www.redis.io) for fast session retrieval, pub/sub, list of users online, and any other data your app needs instantly
+* New in 0.3: Modular transport design allow alternative websocket or back-end event transports to be used
 * Uses [Connect 2.0](http://senchalabs.github.com/connect/) - hook in 3rd-party middleware or write your own
 * MIT License
 
@@ -58,41 +52,16 @@ SocketStream 0.3 aims to be a library which helps you get up and running quickly
 
 * Works great with Chrome, Safari __and now Firefox 6__ using native websockets
 * Compatible with older versions of Firefox and IE thanks to configurable fallback transports provided by Socket.IO
-* Works well on iPads and iPhones using Mobile Safari (iOS 4.2 and above), even over 3G
+* New in 0.3: Define multiple single-page clients by choosing the CSS, JS and client-side templates you wish to serve
 * Integrated asset manager - automatically packages and [minifies](https://github.com/mishoo/UglifyJS) all client-side assets
+* Works with iPads and iPhones using Mobile Safari (iOS 4.2 and above), even over 3G. Send a smaller, lighter client if desired
+* New in 0.3: Use optional code formatters (e.g. CoffeScript, Jade, Stylus, Less, etc) by easily installing wrapper modules
+* Multiple clients work seamlessly with HTML Push State 'mock routing' so you can use [Backbone Router](http://documentcloud.github.com/backbone/#Router), [Davis JS](http://davisjs.com) and more
+* New in 0.3: Support for many client-side template languages (Hogan/Mustache/CoffeeKup/jQuery), including server-side compiled templates
+* New in 0.3: Works great with [Ember.js](http://emberjs.com) for 'reactive templates' which automatically update when data changes 
 * Bundled with jQuery - though not dependent on it. Will work great with Zepto and other libraries
-* Bundled with [Hogan templates](http://twitter.github.com/hogan.js/) for ease - works like partials in Rails
 * Easily add additional client libraries such as [Underscore.js](http://documentcloud.github.com/underscore/)
-* Initial HTML sent to the browser can be written in [Jade](http://jade-lang.com/) or plain HTML
-* Supports [Stylus](http://learnboost.github.com/stylus/) or [Less](http://lesscss.org/) for CSS (works great with plain CSS too) via optional modules
-
-
-
-## New Features in 0.3
-
-#### New Modular Structure
-
-* SocketStream has been stripped down so only the essentials live in the core
-* Works great with Express.js and other page-based frameworks!
-* All optional code formatters (CoffeScript, Jade, Stylus, Less, etc) are now separate wrapper modules
-* Much easier to fork and contribute code as all global variables have been abolished
-* Still bundled with the excellent Socket.IO but no longer wedded to it thanks to new modular transport layer
-
-#### New Client Asset Manager
-
-* Define multiple single-page clients by choosing the CSS, JS and client-side Templates you wish to serve
-* Serve different clients on different URLs, or depending upon the device connecting (i.e. serve a different view to an iPhone)
-* Multiple clients work seamlessly with 'mock routing', enabling your apps to use HTML Push State (e.g. Backbone Router)
-* Bundled with Hogan (Mustache compatible) for client-side templating, or use others (e.g. jQuery)
 * Highly Experimental: Designate client-side code files as modules and require() them as you would server-side code
-
-#### Other
-
-* New Websocket Middleware. This awesome new feature makes pre-loading sessions, user records, authentication, logging and distributing requests to other systems more super easy. Still needs some thought as I think we can make this even better.
-* Instant front-end scalability options by switching to Pusher Pipe without changing your app code (module coming soon)
-* Modular transport design allow alternative websocket or back-end event transports to be used easily
-* All code is now pre-compiled into JS so you no longer need to run CoffeeScript at runtime
-* Faster sessions and startup (much work still to be done around sessions)
 
 
 ### Requirements
