@@ -21,13 +21,12 @@ class exports.Router
     else
       if url == '/'
         return false
-      console.log 'router', url
       sr = url.split('/')
       sr.pop()
       newUrl = sr.join('/')
       newUrl = '/' unless newUrl.length > 0
       @route(newUrl, req, res)
-
+      
   on: (url, cb) ->
     if url.substring(0,1) == '/' && url.indexOf(' ') == -1
       @ee.on(url, cb)

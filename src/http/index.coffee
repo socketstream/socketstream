@@ -24,7 +24,6 @@ exports.init = (root) ->
 # Private
 
 middlewareStack = (root) ->
-  console.log "tot!"
   connect()
   .use(connect.cookieParser('fkdfhdjkf'))
   .use(connect.session(
@@ -40,10 +39,7 @@ eventMiddleware = (req, res, next) ->
     next() # serve static asset
   else
     if !router.route(req.url, req, res)
-      console.log 'router returned false'
       next()
-    else
-      console.log 'router returned true'
 
 loadStaticDirs = ->
   path = pathlib.join(root, 'client/static')

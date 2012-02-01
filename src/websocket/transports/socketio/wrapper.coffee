@@ -15,7 +15,7 @@ window.SocketStream.transport =
         console.error 'Invalid websocket message received:', msg
 
     conn.on 'getSessionId', (cb) ->
-      alert('wrapper.getSid')
+      # 'connect.sid' is the default cookie name used by Connect
       cb SocketStream.cookie.read('connect.sid')
 
     conn.on 'setSessionId', (sessionId, cb) ->
