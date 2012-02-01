@@ -15,11 +15,9 @@ exports.use = (nameOrModule, config = {}) ->
 
 exports.lookup = (sessionId, cb) ->
   if persistantStore
-    console.log "store is present"
     persistantStore.lookup sessionId, (obj) ->
       cb(obj)
   else
-    console.log "store is missing"
     cb(false)
 
 
@@ -30,7 +28,7 @@ class exports.Store
   constructor: (@id) ->
     @userId = null
     @channels = []
-
+  
   save: (cb) ->
     if persistantStore
       persistantStore.store(@id, @, cb)

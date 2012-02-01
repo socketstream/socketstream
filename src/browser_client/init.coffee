@@ -18,7 +18,7 @@ SocketStream.registerApi = (name, fn) ->
     SocketStream.apis[name] = fn
 
 # Highly experimental client-side require() code
-# TODO: Would love someone to contribute an enhanced version of require which correctly deals
+# TODO: Would love someone to contribute an enhanced version of require which correctly deals 
 # with './' and '../' as per https://github.com/joyent/node/blob/master/lib/module.js
 # Note modules are cached once loaded, as in Node.js
 moduleCache = {}
@@ -53,13 +53,12 @@ SocketStream.loadAsync = (nameOrDir, cb) ->
       async.loading.emit(nameOrDir)
     # Send request to server
     $.ajax({url: "/_serveAsync/code?#{nameOrDir}", type: 'GET', cache: false, dataType: 'script', success: onSuccess, error: onError})
-
+    
 
 # Basic Cookie getting and setting for use by Session. These methods may also be used by app if desired
 SocketStream.cookie =
 
   read: (c_name) ->
-    alert "jo read!"
     if document.cookie.length > 0
       c_start = document.cookie.indexOf(c_name + "=")
       if c_start != -1
@@ -70,7 +69,6 @@ SocketStream.cookie =
     ''
 
   write: (c_name, value, expiredays = null) ->
-    alert "jo write!"
     exdate = new Date()
     exdate.setDate(exdate.getDate() + expiredays)
     c = "#{c_name}=#{escape(value)}"
