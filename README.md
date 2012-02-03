@@ -291,7 +291,11 @@ Yes, once the 0.3 API is stable. Right now things are likely to change.
 
 SocketStream is primarily written in CoffeeScript which is 'pre-compiled' into JavaScript using `make build`. If you're actively developing on the code make sure you install the dev dependencies first (just clone the project and type `sudo npm link`).
 
-To avoid having to continually type `make build` every time you make a change, pass the `SS_DEV=1` environment variable. This will run the CoffeeScript code live from the /src directory.
+To avoid having to continually type `make build` every time you make a change, pass the `SS_DEV=1` environment variable when running your SocketStream app:
+
+    $ SS_DEV=1 node app.js
+
+Your app will then directly read code from your local SocketStream repository's /src directory. This means when you make changes to the SocketStream core, you only need to restart your app to see them.
 
 
 ### Testing
