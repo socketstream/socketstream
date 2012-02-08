@@ -55,7 +55,7 @@ SocketStream 0.3 builds on the success of previous versions by introducing more 
 * New in 0.3: Define multiple single-page clients by choosing the CSS, JS and client-side templates you wish to serve
 * Integrated asset manager - automatically packages and [minifies](https://github.com/mishoo/UglifyJS) all client-side assets
 * Works with iPads and iPhones using Mobile Safari (iOS 4.2 and above), even over 3G. Send a smaller, lighter client if desired
-* New in 0.3: Use optional code formatters (e.g. CoffeScript, Jade, Stylus, Less, etc) by easily installing wrapper modules
+* New in 0.3: Use optional code formatters (e.g. CoffeeScript, Jade, Stylus, Less, etc) by easily installing wrapper modules
 * Multiple clients work seamlessly with HTML Push State 'mock routing' so you can use [Backbone Router](http://documentcloud.github.com/backbone/#Router), [Davis JS](http://davisjs.com) and more
 * New in 0.3: Support for many client-side template languages (Hogan/Mustache/CoffeeKup/jQuery), including server-side compiled templates
 * New in 0.3: Works great with [Ember.js](http://emberjs.com) for 'reactive templates' which automatically update when data changes 
@@ -269,7 +269,7 @@ Pass any config as the second argument to either of the above commands as so:
 
 ##### How about scaling?
 
-SocketStream 0.3 makes a big assumption in order to maximise speed and reduce code complexity: All incoming connections with the same session should be routed to the same server (also known as Sticky Sessions). The session details are stored in memory and then optionally saved to Redis to preserve the session should the node fail.
+SocketStream 0.3 makes a big assumption in order to maximize speed and reduce code complexity: All incoming connections with the same session should be routed to the same server (also known as Sticky Sessions). The session details are stored in memory and then optionally saved to Redis to preserve the session should the node fail.
 
 Front end scaling can be achieved using a combination of different websocket transports (such as the bundled Pusher Pipe) and optional features we intend to introduce in the future.
 
