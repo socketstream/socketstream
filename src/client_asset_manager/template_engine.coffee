@@ -11,7 +11,7 @@ pathlib = require('path')
 
 templateEngines = {}
 defaultEngine = null
-lastEngine = null
+prevEngine = null
 
 exports.init = (root) ->
 
@@ -34,7 +34,7 @@ exports.init = (root) ->
       templateEngines[dir] = engine
 
   generate: (root, templatePath, files, formatters, cb) ->
-    lastEngine = null
+    prevEngine = null
     templates = []
 
     files.forEach (path) ->
@@ -53,7 +53,7 @@ exports.init = (root) ->
         # Return if last template
         if templates.length == files.length
           output = templates.join('')      
-          output += lastEngine.suffix() if lastEngine != null and lastEngine.suffix
+          output += prevEngine.suffix() if prevEngine != null and prevEngine.suffix
           cb(output)  
         
 
@@ -70,22 +70,21 @@ wrapTemplate = (template, path) ->
     if engine == undefined and pathAry.length > 0
       getEngine(cb)
     else
-      cb(engine)
-  
-  getEngine (engine) ->
-    # Fallback on the default engine if none specified
-    engine = defaultEngine if engine == undefined
+      engine
 
-    # If the template type has changed since the last template, include any closing suffix from the last engine used (if present)
-    output.push(lastEngine.suffix()) if lastEngine && lastEngine != engine && lastEngine.suffix
+  # Fallback on the default engine if none specified
+  engine = getEngine() || defaultEngine
 
-    # If this is the first template of this type and it has prefix, include it here
-    output.push(engine.prefix()) if (lastEngine == null || lastEngine != engine) && engine.prefix
-     
-    # Add main template output and return
-    lastEngine = engine
-    output.push( engine.process(template.toString(), path, suggestedId(path)) )
-    output.join('')
+  # If the template type has changed since the last template, include any closing suffix from the last engine used (if present)
+  output.push(prevEngine.suffix()) if prevEngine && prevEngine != engine && prevEngine.suffix
+
+  # If this is the first template of this type and it has prefix, include it here
+  output.push(engine.prefix()) if (prevEngine == null || prevEngine != engine) && engine.prefix
+
+  # Add main template output and return
+  prevEngine = engine
+  output.push engine.process(template.toString(), path, suggestedId(path))
+  output.join('')
 
 # Suggest an ID for this template based upon its path
 # 3rd party Template Engine modules are free to use their own naming conventions but we recommend using this where possible
