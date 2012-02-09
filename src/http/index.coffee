@@ -5,38 +5,82 @@
 
 fs = require('fs')
 pathlib = require('path')
+fileUtils = require('../utils/file')
 
 # Note: Connect 2.0.0alpha1 is bundled within SocketStream for now until it's available on NPM
 connect = require('../connect')
 
-Router = require('./router').Router
-router = new Router
+router = new (require('./router').Router)
+
+app = connect()
+
+# Alias app.use to indicate this will be added to the stack BEFORE SocketStream middleware
+app.prepend = app.use
+
+# Allow Connect middleware to be added AFTER SocketStream middleware has been added to the stack
+useAfterStack = []
+
+app.append = ->
+  args = Array.prototype.slice.call(arguments)
+  useAfterStack.push(args)
 
 staticDirs = []
+staticFiles = []
 
 exports.init = (root) ->
+
+  staticPath = pathlib.join(root, 'client/static')
+
+  loadStaticDirs(staticPath)
+
+  # Return API
+  connect:    connect
+  middleware: app
   router:     router
-  staticDirs: loadStaticDirs()
-  middleware: middlewareStack(root)
+  staticDirs: staticDirs
+
+  load: (sessionStore, sessionOptions) ->
+    # Append SocketStream middleware upon server load
+    app
+    .use(connect.cookieParser('SocketStream'))
+    .use(connect.session(
+      cookie: { path: '/', httpOnly: false, maxAge: sessionOptions.maxAge },
+      store: sessionStore
+    ))
+    
+    # Append any custom-defined middleware (e.g. everyauth)
+    useAfterStack.forEach (m) -> app.use.apply(app, m)
+
+    # Finally ensure static asset serving is last
+    app
+    .use(eventMiddleware)
+    .use(connect.static(staticPath))
+
+    # Prevent sessions from loading on requests for static assets
+    # Not working yet as this functionality not present in Connect 2 yet as far as I can tell
+    #connect.session.ignore = connect.session.ignore.concat(staticFiles)
+
+    app
 
 
 # Private
 
-middlewareStack = (root) ->
-  connect()
-  .use(connect.cookieParser('secret'))
-  .use(connect.session({key: 'session_id', secret: 'SocketStream'}))
-  .use(eventMiddleware)
-  .use(connect.static(root + '/client/static'))
-
 eventMiddleware = (req, res, next) ->
   initialDir = req.url.split('/')[1]
-  if staticDirs.indexOf(initialDir) >= 0
-    next() # serve static asset
-  else
-    router.route(req.url, req, res) #
+  # Serve a static asset if the URL starts with a static asset dir OR the router cannot find a matching route
+  #req.session.ob = 1 unless req.session.ob
+  next() if staticDirs.indexOf(initialDir) >= 0 || !router.route(req.url, req, res)
 
-loadStaticDirs = ->
-  path = pathlib.join(root, 'client/static')
+loadStaticDirs = (path) ->
   if pathlib.existsSync(path)
+
+    # Get a list of top-level static directories (used by the router)
     staticDirs = fs.readdirSync(path)
+
+    # Ensure /assets is always present, even if the dir has yet to be created
+    staticDirs.push('assets') unless staticDirs.indexOf('assets') >= 0
+
+    # Get a list of all static files we know about (used to prevent connect.session from loading unnecessarily)
+    pathLength = path.length
+    staticFiles = fileUtils.readDirSync(path).files
+    staticFiles = staticFiles.map (file) -> file.substr(pathLength)

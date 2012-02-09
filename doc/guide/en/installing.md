@@ -1,3 +1,0 @@
-### Installing
-
-Coming soon

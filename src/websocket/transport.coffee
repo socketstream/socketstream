@@ -13,9 +13,10 @@ exports.init = (emitter) ->
     transport = if typeof(nameOrModule) == 'object'
       nameOrModule
     else
-      try
-        require("./transports/#{nameOrModule}")
-      catch e
+      modPath = "./transports/#{nameOrModule}"
+      if require.resolve(modPath)
+        require(modPath)
+      else
         throw new Error("Unable to find the '#{nameOrModule}' websocket transport internally")
 
   load: (httpServer) ->

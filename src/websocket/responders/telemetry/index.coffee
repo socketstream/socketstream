@@ -1,19 +1,19 @@
 # Telemetry Responder
 # -------------------
-# Totally unfinished and undocumented yet. Do not use yet
+# Totally unfinished and undocumented yet. Do not use
 
 fs = require('fs')
 coffee = require('coffee-script') if process.env['SS_DEV']
 
 messagePrefix = 'tel'
 
-exports.init = (root, session, extensions, config) ->
+exports.init = (root, ss, config) ->
 
   messagePrefix: messagePrefix
 
   load: ->
  
-    server: require('./server').init(root, messagePrefix, extensions)
+    server: require('./server').init(root, messagePrefix, ss)
     client:
 
       code: ->

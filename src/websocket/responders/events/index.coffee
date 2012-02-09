@@ -7,7 +7,7 @@ coffee = require('coffee-script') if process.env['SS_DEV']
 
 messagePrefix = 'event'
 
-exports.init = (root, session, extensions, config) ->
+exports.init = (root, ss, config) ->
 
   messagePrefix: messagePrefix
 

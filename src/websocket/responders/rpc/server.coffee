@@ -3,13 +3,10 @@
 pathlib = require('path')
 apiTree = require('apitree')
 
-exports.init = (root, messagePrefix, session, ss) ->
+exports.init = (root, messagePrefix, middleware, ss) ->
   
-  dir = pathlib.join(root, 'server/rpc/actions')
+  dir = pathlib.join(root, 'server/rpc')
   api = apiTree.createApiTree(dir)
-
-  # Load inbuilt and custom middleware
-  middleware = require('./middleware').init(root, session, ss)
 
   message = (obj) ->
     messagePrefix + '§'+ JSON.stringify(obj)
@@ -17,48 +14,72 @@ exports.init = (root, messagePrefix, session, ss) ->
   request: (msg, meta, socket) ->
     try
 
+      # Init request stack
+      stack = []
+
       # RPC responder uses JSON both ways
       obj = JSON.parse(msg)
 
       # Expand fields so they're easier to work with
-      request = {method: obj.m, params: obj.p, id: obj.id, socketId: meta.socketId, sessionId: meta.sessionId, transport: meta.transport}
+      req = 
+        method:     obj.m
+        params:     obj.p
+        id:         obj.id
+        socketId:   meta.socketId
+        sessionId:  meta.sessionId
+        transport:  meta.transport
+
+      # Allow middleware to be defined
+      req.use = (nameOrModule) ->
+        args = Array.prototype.slice.call(arguments)
+
+        mw = if typeof(nameOrModule) == 'function'
+          nameOrModule
+        else
+          middlewareAry = nameOrModule.split('.')
+          getBranchFromTree(middleware, middlewareAry)
+        
+        if mw
+          fn = mw.apply(mw, args.splice(1))
+          stack.push(fn)
+        else
+          throw new Error("Middleware function '#{nameOrModule}' not found. Please reference internal or custom middleware as a string (e.g. 'session' or 'user.checkAuthenticated') or pass a function/module")
     
-      # Log
-      msgLogName = "rpc:#{request.id}".grey
-      console.log('→'.cyan, msgLogName, request.method)
+      # Log request to terminal
+      msgLogName = "rpc:#{req.id}".grey
+      console.log('→'.cyan, msgLogName, req.method)
 
       # Seperate the method name into namespace
-      methodAry = request.method.split('.')
+      methodAry = req.method.split('.')
       methodName = methodAry.pop()
 
-      # Get the correct module from the Api Tree
+      # Get the correct module from the API Tree
       file = getBranchFromTree(api, methodAry)
+      throw new Error("Unable to find '#{req.method}' action module") unless file.actions
 
-      throw new Error("Unable to find '#{request.method}' action module") unless file.actions
-
-      # Middleware stack
-      stack = []
-
-      # Add middleware if exists
-      stack = file.before(middleware) if file.before?
-      stack = [stack] unless stack instanceof Array
+      # REMOVE_BEFORE_0.3.0 : Throw error if using old-style middleware API
+      throw new Error("Important! The RPC middleware API changed in 0.3 alpha3. Please see https://github.com/socketstream/socketstream/blob/master/HISTORY.md") if file.before
 
       # Create callback
       cb = ->
         args = Array.prototype.slice.call(arguments)
-        obj = {id: request.id, p: args, e: request.error}
-        console.log('←'.green, msgLogName, request.method)
+        obj = {id: req.id, p: args, e: req.error}
+        console.log('←'.green, msgLogName, req.method)
         socket message(obj)
+    
+      # Get hold of available actions and populate middleware
+      actions = file.actions(req, cb, ss)
 
       # Execute method at the end of the stack
       main = (req, res, next) ->
 
-        # Find the method we're calling
-        method = file.actions(req, res, ss)[methodName]
+        # Find the action we're calling
+        method = actions[methodName]
 
-        throw new Error("Unable to find '#{request.method}' method in exports.actions") unless method?
+        # Warn if this action doesn't exist
+        throw new Error("Unable to find '#{req.method}' method in exports.actions") unless method?
 
-        # Execute method
+        # Execute action
         method.apply(method, req.params)
 
       # Add RPC call to bottom of middleware stack
@@ -69,12 +90,12 @@ exports.init = (root, messagePrefix, session, ss) ->
           exec(req, res, i + 1)
 
       # Execute stack
-      exec(request, cb)
+      exec(req, cb)
 
     catch e
       name = 'Error: ' + e.message
-      console.log('→'.red, msgLogName, request.method, name.red)
-      obj = {id: request.id, e: {message: e.message}}
+      console.log('→'.red, msgLogName, req.method, name.red)
+      obj = {id: req.id, e: {message: e.message}}
       socket message(obj)
 
 

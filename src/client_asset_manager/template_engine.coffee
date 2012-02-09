@@ -22,10 +22,16 @@ exports.init = (root) ->
   use: (nameOrModule, dirs = ['/'], config) ->
 
     # Pass the name of an existing wrapper or pass your own module with a process() function
-    if typeof(nameOrModule) == 'string'
-      nameOrModule = require('./template_engines/' + nameOrModule)
+    mod = if typeof(nameOrModule) == 'object'
+      nameOrModule
+    else
+      modPath = "./template_engines/#{nameOrModule}"
+      if require.resolve(modPath)
+        require(modPath)
+      else
+        throw new Error("The #{nameOrModule} template engine is not supported by SocketStream internally. Please pass a compatible module instead")
 
-    engine = nameOrModule.init(root, config)
+    engine = mod.init(root, config)
 
     dirs = [dirs] unless dirs instanceof Array
     dirs.forEach (dir) ->

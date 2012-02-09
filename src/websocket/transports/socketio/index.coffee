@@ -22,9 +22,9 @@ exports.init = (emitter, httpServer, config) ->
 
   # Listen out for new connections
   io.sockets.on 'connection', (socket) ->
+ 
+    if processSession(socket)
 
-    processSession socket, ->
-      
       socket.on 'message', (msg) ->
         try
           [type, content] = utils.parseWsMessage(msg)
@@ -34,7 +34,7 @@ exports.init = (emitter, httpServer, config) ->
         catch e
           console.log 'Invalid websocket message received:'.red, msg
       
-      socket.emit 'ready'
+      socket.emit('ready')
 
 
   event: ->
@@ -68,17 +68,14 @@ exports.init = (emitter, httpServer, config) ->
 
 # Private
 
-processSession = (socket, cb) ->
-  idLength = 32
+processSession = (socket) ->
+  return true if socket.sessionId
 
-  return cb() if socket.sessionId && sessionId.length == idLength
+  # Parse session ID from initial hankshake data
+  cookie = socket.handshake.headers.cookie
+  if (i = cookie.indexOf('connect.sid')) >= 0
+    socket.sessionId = cookie.substr(i+12, i+24)
+  else
+    console.error('Warning: connect.sid not detected in cookie')
+    false
 
-  socket.emit 'getSessionId', (sessionId) ->
-    if sessionId && sessionId.length == idLength
-      socket.sessionId = sessionId
-      cb()
-    else
-      sessionId = utils.randomString(idLength)
-      socket.emit 'setSessionId', sessionId, (response) ->
-        socket.sessionId = sessionId
-        cb()

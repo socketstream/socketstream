@@ -7,13 +7,13 @@ coffee = require('coffee-script') if process.env['SS_DEV']
 
 messagePrefix = 'rpc'
 
-exports.init = (root, session, extensions, config) ->
+exports.init = (root, ss, config) ->
 
   messagePrefix: messagePrefix
   
-  load: ->
+  load: (middleware) ->
 
-    server: require('./server').init(root, messagePrefix, session, extensions)
+    server: require('./server').init(root, messagePrefix, middleware, ss)
     client:
 
       code: ->

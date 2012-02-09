@@ -5,12 +5,9 @@ TODO
 
 * Show how to handle websocket connections / disconnections in README
 * Build interactive 'socketstream new' asking if you want to use recommended stack + demo or not
-* Need to find a better way to check if an internal module exists. Exception catching hides errors within the module
-* Refactor getting sessions from store and socketsByUserId etc. Lots of work to do in this area
 * Much more error checking around sending bad RPC calls (e.g if a module or function does not exist)
 * Websocket responders need to take a config object. It should also be able to send config to client-side code (hard)
 * Make require() in client-code take relative paths (./ and ../) like Node's require() can
-* Investigate if it's possible to make SocketStream sessions accessible to regular HTTP requests?
 * Look into using Engine.IO instead of Socket.IO
 * SocketStream should pass its version number and other meta info to wrapper modules
 * Look into ways we can use multi-core cluster features of Node 0.6, if at all (maybe best at app level?)
@@ -20,6 +17,7 @@ TODO
 * Finish and release Pusher Pipe transport module
 * Finish converting SocketRacer to 0.3 and demo new telemetry websocket responder module
 * Testing! Lots of! We are going to use Mocha
+* Add Travis CI
 
 Help with any of the above tasks would be appreciated. Please get in touch
 
@@ -30,7 +28,6 @@ Help with any of the above tasks would be appreciated. Please get in touch
 * Do we want to implement the server-side events concept we had in 0.2. Is it worth it?
 * Should we show a 404 if a request is invalid? (i.e. not a file or cannot be routed to a client)
 * Figure out if / how the old HTTP RPC API should be a part of the SocketStream core
-* Can we / should we make RPC middleware inheritable? If so what should the syntax be?
 # Should we use Connect Router or Director (from flatiron) instead of a simple EventEmitter for HTTP routing?
 
 Any thoughts on the above are most welcome

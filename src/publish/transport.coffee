@@ -8,14 +8,15 @@ exports.init = () ->
   transport = null
   config = {}
 
-  use: (nameOrModule, c = {}) ->
-    config = c
+  use: (nameOrModule, cfg = {}) ->
+    config = cfg
     transport = if typeof(nameOrModule) == 'object'
       nameOrModule
     else
-      try
-        require("./transports/#{nameOrModule}")
-      catch e
+      modPath = "./transports/#{nameOrModule}"
+      if require.resolve(modPath)
+        require(modPath)
+      else
         throw new Error("Unable to find Publish Event Transport '#{nameOrModule}' internally. Please pass a module")
 
   load: ->
