@@ -69,16 +69,8 @@ exports.init = (emitter, httpServer, config) ->
 # Private
 
 processSession = (socket, cb) ->
-  idLength = 32
-
-  return cb() if socket.sessionId && sessionId.length == idLength
+  return cb() if socket.sessionId
 
   socket.emit 'getSessionId', (sessionId) ->
-    if sessionId && sessionId.length == idLength
-      socket.sessionId = sessionId
-      cb()
-    else
-      sessionId = utils.randomString(idLength)
-      socket.emit 'setSessionId', sessionId, (response) ->
-        socket.sessionId = sessionId
-        cb()
+    socket.sessionId = sessionId
+    cb()

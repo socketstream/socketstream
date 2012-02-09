@@ -17,7 +17,10 @@ class exports.Router
     # TODO allow for widcards with listeners = @ee.listeners(url) - @ee.listenersAny(url)
     if @ee.listeners(url).length > 0
       @ee.emit(url, req, res)
+      true
     else
+      if url == '/'
+        return false
       sr = url.split('/')
       sr.pop()
       newUrl = sr.join('/')

@@ -2,6 +2,8 @@
 
 redis = require('redis')
 
+oneDay = 86400
+
 exports.init = (config = {}) ->
 
   port = config.redis && config.redis.port || 6379
@@ -17,10 +19,16 @@ exports.init = (config = {}) ->
 
   store: (sessionId, obj, cb) ->
     data = JSON.stringify(obj)
-    conn.set key(sessionId), data, (err, data) ->
+    # setex is used by Connect to specify timeout for automated eviction
+    # of stale sessions from Redis database so it doesn't grow
+    # over time
+    maxAge = obj.cookie.maxAge
+    ttl = if 'number' == typeof maxAge then maxAge / 1000 | 0 else oneDay
+    conn.setex key(sessionId), ttl, data, (err, data) ->
       cb obj
 
-# Private
-
-key = (id) ->
-  "ss:session:#{id}"
+# converts signed session id to session key used by Connect
+# from session_key.session_key_hmac to sess:session_key
+# TODO check session signature using the secret key passed to connect.cookieParser()
+key = (sessionId) ->
+  'sess:' + sessionId.split('.')[0]
