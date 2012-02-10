@@ -48,8 +48,7 @@ Let's look at a very simple example by adding the following 'route' to `app.js`:
 ```javascript
 // app.js
 ss.http.router.on('/authenticateMe', function(req, res) {
-  var user = 'john';
-  req.session.userId = user;
+  req.session.userId = 'john';
   req.session.save(function(err){
     res.serve('main');
   });
@@ -59,7 +58,7 @@ ss.http.router.on('/authenticateMe', function(req, res) {
 Next, add an RPC action which sends the contents of `req.session.userId` over the websocket:
 
 ```javascript
-// server/rpc/actions/app.js
+// server/rpc/app.js
 exports.actions = function(req, res, ss){
 
   // tell SocketStream to load session data
