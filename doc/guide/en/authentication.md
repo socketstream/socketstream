@@ -59,7 +59,7 @@ ss.http.router.on('/authenticateMe', function(req, res) {
 Next, add an RPC action which sends the contents of `req.session.userId` over the websocket:
 
 ```javascript
-// server/rpc/actions/app.js
+// server/rpc/app.js
 exports.actions = function(req, res, ss){
 
   // tell SocketStream to load session data
