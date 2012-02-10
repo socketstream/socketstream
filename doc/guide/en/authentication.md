@@ -48,8 +48,7 @@ Let's look at a very simple example by adding the following 'route' to `app.js`:
 ```javascript
 // app.js
 ss.http.router.on('/authenticateMe', function(req, res) {
-  var user = 'john';
-  req.session.userId = user;
+  req.session.userId = 'john';
   req.session.save(function(err){
     res.serve('main');
   });
