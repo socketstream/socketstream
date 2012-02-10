@@ -21,7 +21,7 @@ if (pathlib.existsSync('server/rpc/middleware')) {
     "    /server/rpc/actions to /server/rpc\n\n" +
     "so that websocket middleware can be used by other websocket responders (including forthcoming models).\n" +
     "Please make this change to your existing project now then restart the server. Pasting this line into a UNIX-based shell should do the trick:\n\n" +
-    "    mv server/rpc/middleware server && mv server/rpc/actions/* server/rpc/ && rm -d server/rpc/actions\n" + bar);
+    "    mv server/rpc/middleware server && mv server/rpc/actions/* server/rpc/ && rm -fr server/rpc/actions\n" + bar);
   throw new Error("Please paste the line above into the shell then restart the server");
 }
 
