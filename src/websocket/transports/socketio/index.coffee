@@ -73,9 +73,9 @@ processSession = (socket) ->
 
   # Parse session ID from initial hankshake data
   cookie = socket.handshake.headers.cookie
-  if (i = cookie.indexOf('connect.sid')) >= 0
+  if cookie && (i = cookie.indexOf('connect.sid')) >= 0
     socket.sessionId = cookie.substr(i+12, i+24)
   else
-    console.error('Warning: connect.sid not detected in cookie')
+    console.log('Warning: connect.sid session cookie not detected. User may have cookies disabled or session cookie has expired')
     false
 

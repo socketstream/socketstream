@@ -12,7 +12,7 @@ sessionStore = new connect.session.MemoryStore
 
 # Expose options which can be changed in your app
 exports.options = 
-  maxAge: 2592000000 # expire session in 30 days by default
+  maxAge: null # by default session exists for duration of user agent (e.g. until browser is closed)
 
 # Allow use of any Connect Session Store
 exports.store =
