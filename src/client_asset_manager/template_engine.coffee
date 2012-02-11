@@ -10,11 +10,10 @@ fs = require('fs')
 pathlib = require('path')
 tlib = require('./lib/template')
 
-templateEngines = {}
-defaultEngine = null
-prevEngine = null
-
 exports.init = (root) ->
+  templateEngines = {}
+  defaultEngine = null
+  prevEngine = null
 
   # Set the Default Engine - simply wraps each template in a <script> tag
   defaultEngine = require('./template_engines/default').init(root)
@@ -34,7 +33,7 @@ exports.init = (root) ->
         throw new Error("Directory name '#{dir}' passed to second argument of ss.client.templateEngine.use() command must start with /")
       templateEngines[dir] = engine
 
-  generate: (root, templatePath, files, formatters, cb) ->
+  generate: (root, templateDir, files, formatters, cb) ->
     prevEngine = null
     templates = []
 
@@ -46,7 +45,7 @@ exports.init = (root) ->
       throw new Error("Unable to load client side template #{path} because no formatter exists for .#{extension} files") unless formatter?
       throw new Error("Formatter is not for HTML files") unless formatter.assetType == 'html'
 
-      fullPath = pathlib.join(root, templatePath, path)
+      fullPath = pathlib.join(root, templateDir, path)
 
       formatter.compile fullPath, {}, (output) ->
         engine = tlib.selectEngine(templateEngines, path) || defaultEngine
