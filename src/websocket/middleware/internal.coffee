@@ -1,0 +1,22 @@
+# Internal Websocket Middleware
+# -----------------------------
+# Internal middleware occupies the top-level namespace, i.e. does not contain any dots
+
+exports.init = (root, ss) ->
+
+  session = require('../../session')
+
+  debug: (color = 'yellow') ->
+    (request, response, next) ->
+      console.log("Debug incoming message >>\n"[color], request)
+      next()
+
+  session: (options = {}) ->
+    (request, response, next) ->
+      if request.sessionId
+        session.findOrCreate request.sessionId, request.socketId, (thisSession) ->
+          request.session = thisSession
+          console.log("Debug session >>\n".yellow, thisSession) if options.debug?
+          next() if thisSession # end the request here if no session found
+      else
+        throw new Error('Cannot load session. Request does not contain a sessionId')

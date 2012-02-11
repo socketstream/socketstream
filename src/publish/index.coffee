@@ -4,9 +4,9 @@
 
 exports.init = ->
   
-  transport:  require('./transport').init()
+  transport: require('./transport').init()
 
-  api:        (transport) ->
+  api: (transport) ->
 
     methods =
 

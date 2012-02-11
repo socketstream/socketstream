@@ -56,8 +56,27 @@ $(document).ready ->
 ```
 
 
+### Serving different templates to different clients
 
-#### Why not do all templating with Jade?
+By default all templates will be sent to all single-page clients you define with:
+
+    ss.client.define()
+
+However, by organizing your templates into directories, you can specify which templates will be sent to each client as so:
+
+
+``` javascript
+// app.js
+ss.client.define('iphone', {
+  view: 'app.jade',
+  css:  ['libs', 'app.styl'],
+  code: ['libs', 'modules', 'main'],
+  tmpl: ['main', 'mobile']  // will only send templates in the 'main' and 'mobile' directories
+});
+```
+
+
+### Why not do all templating with Jade?
 
 Because SocketStream is a single-page web framework which only uses Jade to serve the initial page of HTML. This is typically the layout; containing a header, navigation, sidebar, footer etc.
 

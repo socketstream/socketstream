@@ -14,13 +14,6 @@ window.SocketStream.transport =
       else
         console.error 'Invalid websocket message received:', msg
 
-    conn.on 'getSessionId', (cb) ->
-      cb SocketStream.cookie.read('session')
-
-    conn.on 'setSessionId', (sessionId, cb) ->
-      SocketStream.cookie.write('session', sessionId)
-      cb()
-
     conn.on 'ready', (cb) ->
       SocketStream.event.emit 'ready'
 

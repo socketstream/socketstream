@@ -22,10 +22,11 @@ exports.init = (root) ->
     mod = if typeof(nameOrModule) == 'object'
       nameOrModule
     else
-      try
-        require("./formatters/#{nameOrModule}")
-      catch e
-        throw new Error("The #{nameOrModule} formatter is not supported by SocketStream. Please pass a compatible module instead")
+      modPath = "./formatters/#{nameOrModule}"
+      if require.resolve(modPath)
+        require(modPath)
+      else
+        throw new Error("The #{nameOrModule} formatter is not supported by SocketStream internally. Please pass a compatible module instead")
 
     formatter = mod.init(root, config)
     mods.push(formatter)
