@@ -79,6 +79,15 @@ describe 'selectEngine', ->
     select('foo/fizz/buzz/five.js').name.should.equal 'L'
 
 
+  it 'should return nothing for no matching engines', ->
+    engines = generateEngineStubs name:'X', dirs:'/foo'
+    select = tlib.selectEngine.curry(engines)
+
+    select('foo/one.js').name.should.equal 'X'
+    should.not.exist select('two.js')
+    should.not.exist select('bar/three.js')
+
+
 
 describe 'suggestedId', ->
   it 'should create an id based on file path', ->
