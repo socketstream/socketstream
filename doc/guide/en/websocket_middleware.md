@@ -153,7 +153,10 @@ exports.checkAuthenticated = function(){
 
 You can now call this function from any `server/rpc` file with:
 
-    req.use('admin.user.checkAuthenticated')
+    req.use('session');
+    req.use('admin.user.checkAuthenticated');
+
+Note: `req.use('session')` must be called first as the `checkAuthenticated` middleware uses the `req.session` object.
 
 Although you strictly don't have to, we highly recommend creating at least one folder in `server/middleware` to store your custom middleware to prevent any future namespace conflicts.
 
