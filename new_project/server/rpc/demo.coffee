@@ -3,9 +3,9 @@
 # Define actions which can be called from the client using ss.rpc('demo.ACTIONNAME', param1, param2...)
 exports.actions = (req, res, ss) ->
 
-  # Example of pre-loading sessions into req.session using inbuilt middleware
-  # To use the 'example' custom middleware you'd append m.example.authenticated() to the array
+  # Example of pre-loading sessions into req.session using internal middleware
   req.use('session')
+  #req.use('example.authenticated') # Uncomment to use the middleware defined in server/middleware/example
 
   sendMessage: (message) ->
     if message && message.length > 0            # Check for blank messages
