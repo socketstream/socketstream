@@ -11,6 +11,7 @@ dir = 'testdata_files'
 
 testTmpl   = fs.readFileSync("#{root}/#{dir}/template.html")
 testTmpl_2 = fs.readFileSync("#{root}/#{dir}/foo/template2.html")
+testTmpl_3 = fs.readFileSync("#{root}/#{dir}/template.foo")
 
 
 describe 'wrapTemplate', ->
@@ -57,6 +58,12 @@ describe 'wrapTemplate', ->
       expected = processWithWrap(engine, testTmpl_2, null, 'foo-template2') +
                  processWithWrap(engine_2, testTmpl, null, 'template')
       output.should.equal  expected
+
+
+  it 'should not modify template content for unrecognized file extensions', ->
+    lib = EngineLib.init()
+    lib.generate root, dir, ['template.foo'], formatters, (output) ->
+      output.should.equal  defaultEngine.process(testTmpl_3, null, 'template')
 
 
 
