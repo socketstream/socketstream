@@ -6,4 +6,4 @@ exports.process = (args) ->
     when 'new', 'n'
       require('./generate').generate(args[1])
     else
-      console.log('Type "socketstream new <projectname>"" to create a new application')
+      console.log('Type "socketstream new <projectname>" to create a new application')
