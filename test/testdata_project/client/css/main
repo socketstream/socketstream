@@ -1,0 +1,31 @@
+// Example Stylus file
+
+@import 'helpers'
+@import 'demo'
+
+// Main
+
+body, html
+  height 100%
+
+body
+  font normal 1em sans-serif
+  vertical-gradient #eee, #fff
+  text-align center
+
+p
+  margin-bottom 1em
+
+a
+  color #000a68
+
+h1
+  font-size 1.5em
+  font-weight normal
+  margin 1.5em
+  color #333
+  text-shadow 1px 1px 2px white
+
+#content
+  padding 50px
+
