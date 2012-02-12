@@ -8,16 +8,16 @@
 
 fs = require('fs')
 pathlib = require('path')
-
-templateEngines = {}
-defaultEngine = null
-lastEngine = null
+tlib = require('./lib/template')
 
 exports.init = (root) ->
+  templateEngines = {}
+  defaultEngine = null
+  prevEngine = null
 
   # Set the Default Engine - simply wraps each template in a <script> tag
   defaultEngine = require('./template_engines/default').init(root)
-  
+
   # Use a template engine for the 'dirs' indicated (will use it on all '/' dirs within /client/templates by default)
   use: (nameOrModule, dirs = ['/'], config) ->
 
@@ -36,11 +36,11 @@ exports.init = (root) ->
     dirs = [dirs] unless dirs instanceof Array
     dirs.forEach (dir) ->
       unless dir.substring(0,1) == '/'
-        throw new Error("Directory name '#{dir}' passed to second argument of ss.client.templateEngine.use() command must start with /") 
+        throw new Error("Directory name '#{dir}' passed to second argument of ss.client.templateEngine.use() command must start with /")
       templateEngines[dir] = engine
 
-  generate: (root, templatePath, files, formatters, cb) ->
-    lastEngine = null
+  generate: (root, templateDir, files, formatters, cb) ->
+    prevEngine = null
     templates = []
 
     files.forEach (path) ->
@@ -51,51 +51,16 @@ exports.init = (root) ->
       throw new Error("Unable to load client side template #{path} because no formatter exists for .#{extension} files") unless formatter?
       throw new Error("Formatter is not for HTML files") unless formatter.assetType == 'html'
 
-      fullPath = pathlib.join(root, templatePath, path)
-      
+      fullPath = pathlib.join(root, templateDir, path)
+
       formatter.compile fullPath, {}, (output) ->
-        templates.push wrapTemplate(output, path)
+        engine = tlib.selectEngine(templateEngines, path) || defaultEngine
+        templates.push tlib.wrapTemplate(output, path, engine, prevEngine)
+        prevEngine = engine
 
         # Return if last template
         if templates.length == files.length
-          output = templates.join('')      
-          output += lastEngine.suffix() if lastEngine != null and lastEngine.suffix
-          cb(output)  
-        
+          output = templates.join('')
+          output += engine.suffix() if engine != null and engine.suffix
+          cb(output)
 
-# Private
-
-wrapTemplate = (template, path) ->
-  pathAry = path.split('/')
-  output = []
-
-  getEngine = (cb) ->
-    pathAry.pop() # remove file name
-    codePath = '/' + pathAry.join('/')
-    engine = templateEngines[codePath]
-    if engine == undefined and pathAry.length > 0
-      getEngine(cb)
-    else
-      cb(engine)
-  
-  getEngine (engine) ->
-    # Fallback on the default engine if none specified
-    engine = defaultEngine if engine == undefined
-
-    # If the template type has changed since the last template, include any closing suffix from the last engine used (if present)
-    output.push(lastEngine.suffix()) if lastEngine && lastEngine != engine && lastEngine.suffix
-
-    # If this is the first template of this type and it has prefix, include it here
-    output.push(engine.prefix()) if (lastEngine == null || lastEngine != engine) && engine.prefix
-     
-    # Add main template output and return
-    lastEngine = engine
-    output.push( engine.process(template.toString(), path, suggestedId(path)) )
-    output.join('')
-
-# Suggest an ID for this template based upon its path
-# 3rd party Template Engine modules are free to use their own naming conventions but we recommend using this where possible
-suggestedId = (path) ->
-  sp = path.split('.')
-  sp.pop() if path.indexOf('.') > 0
-  sp.join('.').replace(/\//g, '-')
