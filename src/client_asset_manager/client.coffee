@@ -80,7 +80,8 @@ exports.init = (root, codeWrappers, templateEngine) ->
           # Add any Client-side Templates
           paths.tmpl != false && files = magicPath.files(pathlib.join(root, templateDir).replace(/\\/g, '/'), paths.tmpl) # replace '\' with '/' to support Windows
           if files && files.length > 0
-            templateEngine.generate root, templateDir, files, formatters, (templateHTML) ->
+            htmlFormatters = (f for ext,f of formatters when f.assetType == 'html')
+            templateEngine.generate root, templateDir, files, htmlFormatters, (templateHTML) ->
               includes.push templateHTML
               outputView()
           else
