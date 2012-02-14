@@ -10,6 +10,8 @@ fs = require('fs')
 pathlib = require('path')
 tlib = require('./lib/template')
 
+echoFormatter = require('./formatters/echo').init()
+
 exports.init = (root) ->
   templateEngines = {}
   defaultEngine = null
@@ -44,18 +46,15 @@ exports.init = (root) ->
     templates = []
 
     files.forEach (path) ->
-      extension = pathlib.extname(path)
-      extension = extension.substring(1) if extension # argh!
-      formatter = formatters[extension]
-
-      throw new Error("Unable to load client side template #{path} because no formatter exists for .#{extension} files") unless formatter?
-      throw new Error("Formatter is not for HTML files") unless formatter.assetType == 'html'
-
       fullPath = pathlib.join(root, templateDir, path)
+      extension = pathlib.extname(path) || ''
+
+      # default to the echo formatter
+      formatter = formatters[extension.substring 1] || echoFormatter
 
       formatter.compile fullPath, {}, (output) ->
         engine = tlib.selectEngine(templateEngines, path) || defaultEngine
-        templates.push tlib.wrapTemplate(output, path, engine, prevEngine)
+        templates.push  tlib.wrapTemplate(output, path, engine, prevEngine)
         prevEngine = engine
 
         # Return if last template
