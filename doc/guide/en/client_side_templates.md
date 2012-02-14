@@ -1,8 +1,6 @@
 # Client-Side Templates
 
-SocketStream's client-side templates generate HTML in the browser, allowing SocketStream to send raw, layoutless data over the websocket. This not only dramatically reduces bandwidth, but also gives you flexibility to render the data into HTML in any number of ways.
-
-**NOTE:** This tutorial uses the [Hogan](http://twitter.github.com/hogan.js/) templating library. You can configure SocketStream to [use other templating libraries](#), or even [write a wrapper](#) for your own favorite library.
+Client-side templates generate HTML in the browser, allowing SocketStream to send raw, layoutless data over the websocket. This not only dramatically reduces bandwidth, but also gives you flexibility to render the data into HTML in any number of ways.
 
 
 ### Why use client-side templates?
@@ -21,6 +19,19 @@ $(document).ready ->
 ```
 
 However, not only does this solution scale poorly for larger templates, but mixing together display logic and HTML is bad practice. Enter client-side templates.
+
+
+### Multiple Templates Engines supported
+
+
+This tutorial uses the [Hogan](http://twitter.github.com/hogan.js/) templating library, using the `ss-hogan` module bundled by default when you create a new project.
+
+A number of other template languages are supported by SocketStream using third-party modules on NPM:
+
+[ss-coffeekup](https://github.com/socketstream/ss-coffeekup) CoffeeKup templates (compiled on the server, no client-side code required)
+[ss-clientjade](https://github.com/sveisvei/ss-clientjade) Client-side Jade templates (compiled on the server, requires small client-side lib)
+
+If you can't find a module for your favorite templating library it's easy to [create your own](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/template_engine_wrappers.md).
 
 
 ### A New Home
@@ -76,9 +87,4 @@ ss.client.define('iphone', {
 ```
 
 
-### Why not do all templating with Jade?
-
-Because SocketStream is a single-page web framework which only uses Jade to serve the initial page of HTML. This is typically the layout; containing a header, navigation, sidebar, footer etc.
-
-Once this initial 'payload' has been sent to the browser, no more HTML should ever be generated on the server. However, as you will note above, you may still use Jade to design the structure of your templates if you wish. In fact, we recommend you do.
 

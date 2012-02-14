@@ -42,3 +42,15 @@ exports.init = function(root, config) {
 Here `prefix` and `suffix` are called one time each. In between those calls, `process` gets called for every file this template engine handles.
 
 In this example, the wrapper is compiling templates on the server side, then passing the compiled templates to the client. The `prefix` and `suffix` functions wrap the compiled templates inside a `<script>` tag, so that the templates are ready to use when the page loads.
+
+
+### Tips
+
+When building your own template wrapper be sure to consider the following points:
+
+* Should you pre-compile the templates on the server before sending them over the wire? (generally a good idea)
+* Does the browser need a VM (small client-side lib) to render the templates?
+
+Try to pick the best trade off between performance and overall bytes sent to the client, bearing in mind it's not uncommon for a large app to have 50 or more templates.
+
+If a client-side VM is needed to render the template (as is normally the case), be sure document this in your modules README file and provide a link. In the future we will make it possible to automatically send any client-side dependencies to the browser. Stay tuned.
