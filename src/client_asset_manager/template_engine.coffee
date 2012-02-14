@@ -10,8 +10,6 @@ fs = require('fs')
 pathlib = require('path')
 tlib = require('./lib/template')
 
-echoFormatter = require('./formatters/echo').init()
-
 exports.init = (root) ->
   templateEngines = {}
   defaultEngine = null
@@ -47,10 +45,11 @@ exports.init = (root) ->
 
     files.forEach (path) ->
       fullPath = pathlib.join(root, templateDir, path)
-      extension = pathlib.extname(path) || ''
+      extension = pathlib.extname(path)
+      extension = extension.substring(1) if extension
 
-      # default to the echo formatter
-      formatter = formatters[extension.substring 1] || echoFormatter
+      # Select the approriate HTML formatter, or default to 'HTML' (echo/bypass)
+      formatter = (f = formatters[extension]) && f.assetType == 'html' && f || formatters['html']
 
       formatter.compile fullPath, {}, (output) ->
         engine = tlib.selectEngine(templateEngines, path) || defaultEngine
