@@ -50,7 +50,7 @@ exports.init = (root) ->
       extension = pathlib.extname(path) || ''
 
       # default to the echo formatter
-      formatter = formatters[extension.substring 1] || echoFormatter
+      formatter = (formatter for formatter in formatters when extension.substring(1) in formatter.extensions)[0] || echoFormatter
 
       formatter.compile fullPath, {}, (output) ->
         engine = tlib.selectEngine(templateEngines, path) || defaultEngine
