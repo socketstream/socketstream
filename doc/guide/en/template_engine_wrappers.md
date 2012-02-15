@@ -5,7 +5,7 @@ Building your own template engine wrapper is easy. For this quick tutorial we'll
 You can see the file structure for a template engine wrapper in the [ss-hogan repository]([ss-hogan](https://github.com/socketstream/ss-hogan)). Let's look at the key file, `engine.js`:
 
 ```javascript
-// lib/engine.js
+/* lib/engine.js */
 
 var hogan = require('hogan');
 
@@ -43,6 +43,32 @@ Here `prefix` and `suffix` are called one time each. In between those calls, `pr
 
 In this example, the wrapper is compiling templates on the server side, then passing the compiled templates to the client. The `prefix` and `suffix` functions wrap the compiled templates inside a `<script>` tag, so that the templates are ready to use when the page loads.
 
+### Selecting a Formatter
+
+By default, SocketStream selects a formatter based on the template file's extension. If you want to change this behavior, you can add a `selectFormatter` function:
+
+```javascript
+/* lib/engine.js */
+
+exports.init = function (root, config) {
+  // ...
+  return {
+    // ...
+    selectFormatter: function (path, formatters, defaultFormatter) {
+      return defaultFormatter;
+    },
+    // ...
+  }
+};
+```
+
+* `path` is path of the template file relative to the `client/templates` folder.
+* `formatters` is a map of formatters SocketStream already knows about:
+    * Each key is a file extension (without a dot `.`)
+    * Each value is a formatter for that extension type
+* `defaultFormatter` is the formatter that SocketStream selects by default.
+
+The formatter that `selectFormatter` returns is the formatter that SocketStream will use to render the template before passing it to the `process` function. If you return `false`, SocketStream will skip the formatter rendering process and pass along the template file raw instead.
 
 ### Tips
 

@@ -45,14 +45,20 @@ exports.init = (root) ->
 
     files.forEach (path) ->
       fullPath = pathlib.join(root, templateDir, path)
+      engine = tlib.selectEngine(templateEngines, path) || defaultEngine
+
+      # default method to select an HTML formatter
       extension = pathlib.extname(path)
       extension = extension.substring(1) if extension
+      formatter = (f = formatters[extension]) && f.assetType == 'html' && f
 
-      # Select the approriate HTML formatter, or default to 'HTML' (echo/bypass)
-      formatter = (f = formatters[extension]) && f.assetType == 'html' && f || formatters['html']
+      # Allow engine to select formatter
+      formatter = engine.selectFormatter(path, formatters, formatter) if engine.selectFormatter
+
+      # default to 'HTML' (echo/bypass)
+      formatter ||= formatters['html']
 
       formatter.compile fullPath, {}, (output) ->
-        engine = tlib.selectEngine(templateEngines, path) || defaultEngine
         templates.push  tlib.wrapTemplate(output, path, engine, prevEngine)
         prevEngine = engine
 
