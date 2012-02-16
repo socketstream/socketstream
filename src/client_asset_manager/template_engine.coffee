@@ -47,17 +47,19 @@ exports.init = (root) ->
       fullPath = pathlib.join(root, templateDir, path)
       engine = tlib.selectEngine(templateEngines, path) || defaultEngine
 
-      # default method to select an HTML formatter
+      # Try and guess the correct formatter to use BEFORE the content is sent to the template engine
       extension = pathlib.extname(path)
       extension = extension.substring(1) if extension
       formatter = (f = formatters[extension]) && f.assetType == 'html' && f
 
-      # Allow engine to select formatter
+      # Optionally allow engine to select a different formatter
+      # This is useful for edge cases where .jade files should be compiled by the engine, not the formatter
       formatter = engine.selectFormatter(path, formatters, formatter) if engine.selectFormatter
 
-      # default to 'HTML' (echo/bypass)
+      # If we still don't have a formatter by this point, default to 'HTML' (echo/bypass)
       formatter ||= formatters['html']
 
+      # Use the formatter to pre-process the template before passing it to the engine
       formatter.compile fullPath, {}, (output) ->
         templates.push  tlib.wrapTemplate(output, path, engine, prevEngine)
         prevEngine = engine

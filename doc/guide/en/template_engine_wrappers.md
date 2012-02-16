@@ -28,7 +28,7 @@ exports.init = function(root, config) {
       return '</script>';
     },
 
-    // Compile template into a function and attach to window.<windowVar>
+    // Compile template into a function and attach to window.<namespace>
     process: function(template, path, id) {
 
       var compiledTemplate = hogan.compile(template, {asString: true});
@@ -43,9 +43,14 @@ Here `prefix` and `suffix` are called one time each. In between those calls, `pr
 
 In this example, the wrapper is compiling templates on the server side, then passing the compiled templates to the client. The `prefix` and `suffix` functions wrap the compiled templates inside a `<script>` tag, so that the templates are ready to use when the page loads.
 
-### Selecting a Formatter
 
-By default, SocketStream selects a formatter based on the template file's extension. If you want to change this behavior, you can add a `selectFormatter` function:
+### Selecting a Formatter (optional)
+
+Formatters are used to transform the contents of each template **before** it is sent to the template engine.
+
+By default SocketStream selects a formatter based on the template file's extension. Most of the time this will prove useful (e.g. automatically transforming .jade files to HTML), but occasionally you will need to overwrite this behavior (e.g. if you want the .jade file to be sent to the template engine as-is).
+
+Simply add a `selectFormatter` function to your engine:
 
 ```javascript
 /* lib/engine.js */
@@ -62,13 +67,14 @@ exports.init = function (root, config) {
 };
 ```
 
-* `path` is path of the template file relative to the `client/templates` folder.
+* `path` is the path of the template file relative to the `client/templates` folder
 * `formatters` is a map of formatters SocketStream already knows about:
     * Each key is a file extension (without a dot `.`)
     * Each value is a formatter for that extension type
-* `defaultFormatter` is the formatter that SocketStream selects by default.
+* `defaultFormatter` is the formatter that SocketStream selects by default
 
-The formatter that `selectFormatter` returns is the formatter that SocketStream will use to render the template before passing it to the `process` function. If you return `false`, SocketStream will skip the formatter rendering process and pass along the template file raw instead.
+The formatter that `selectFormatter` returns is the formatter that SocketStream will use to render the template **before** passing it to the template engine's `process` function. If you return `false`, SocketStream will pass the contents of the file directly to the template engine without any pre-processing.
+
 
 ### Tips
 
