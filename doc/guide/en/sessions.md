@@ -7,7 +7,7 @@ This means you're able to write data to a session from SocketStream and then use
 
 ### Using Sessions over Websockets
 
-For optimum speed and flexibility, session data is not retrieved by default when a websocket request is processed by the server. Before you do anything with sessions, you'll need to activate the internal `session` [Websocket Middleware](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/websocket_middleware.md) as shown below:
+For optimum speed and flexibility, session data is not retrieved by default when a websocket request is processed by the server. Before you do anything with sessions, you'll need to activate the internal `session` [Request Middleware](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/request_middleware.md) as shown below:
 
 ``` javascript
 // server/rpc/app.js

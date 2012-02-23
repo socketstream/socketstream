@@ -1,6 +1,6 @@
 # RPC Responder
 # -------------
-# Preloads all functoins in /server/rpc/actions recursively and executes them when events come in
+# Preloads all functions in /server/rpc recursively and executes them when 'rpc' messages come in
 
 fs = require('fs')
 coffee = require('coffee-script') if process.env['SS_DEV']
@@ -13,9 +13,14 @@ exports.init = (root, ss, config) ->
   
   load: (middleware) ->
 
-    server: require('./server').init(root, messagePrefix, middleware, ss)
-    client:
+    # Get request handler
+    request = require('./handler').init(root, messagePrefix, middleware, ss)
 
+    # Return server interfaces
+    server: require('./interfaces').init(request, messagePrefix)
+
+    # Return code/HTML to be sent to browser
+    client:
       code: ->
         extension = coffee? && 'coffee' || 'js'
         input = fs.readFileSync(__dirname + '/client.' + extension, 'utf8')

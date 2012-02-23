@@ -6,12 +6,11 @@
 fs = require('fs')
 pathlib = require('path')
 fileUtils = require('../utils/file')
-
-# Note: Connect 2.0.0alpha1 is bundled within SocketStream for now until it's available on NPM
-connect = require('../connect')
+connect = require('../connect')  # Note: Connect 2.0.0alpha1 is bundled within SocketStream for now until it's available on NPM
 
 router = new (require('./router').Router)
 
+# Create new Connect app instance which can be accessed from your app.js file with ss.http.middleware
 app = connect()
 
 # Alias app.use to indicate this will be added to the stack BEFORE SocketStream middleware
@@ -67,9 +66,25 @@ exports.init = (root) ->
 
 eventMiddleware = (req, res, next) ->
   initialDir = req.url.split('/')[1]
+  
+  # Rewrite incoming URLs when serving dev assets live  
+  req.url = transformURL(req.url) if initialDir == '_serveDev'
+
   # Serve a static asset if the URL starts with a static asset dir OR the router cannot find a matching route
-  #req.session.ob = 1 unless req.session.ob
   next() if staticDirs.indexOf(initialDir) >= 0 || !router.route(req.url, req, res)
+
+
+# We do this in development mode ONLY to make it easier to identify which file has an error in Chrome, etc, by
+# showing the real file name instead of 'code', without breaking the event-based routing system. Improvements welcome
+# e.g. this function transforms "/serveDev/code/app.js?ts=12345" to "/serveDev/code?app.js&ts=12345"
+transformURL = (url) ->
+  i = 0
+  i = url.indexOf('/',i+1) for x in [0..1]
+  if url[i] == '/'
+    url = url.replace('?','&')
+    url = url.substr(0,i) + '?' + url.substr(i+1)
+  url
+
 
 loadStaticDirs = (path) ->
   if pathlib.existsSync(path)

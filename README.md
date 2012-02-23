@@ -2,7 +2,8 @@
 
 # SocketStream
 
-Latest release: 0.3.0alpha3   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+Latest release: 0.3.0alpha4   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+[![build status](https://secure.travis-ci.org/socketstream/socketstream.png)](http://travis-ci.org/socketstream/socketstream)
 
 Twitter: [@socketstream](http://twitter.com/#!/socketstream)  
 Google Group: http://groups.google.com/group/socketstream  
@@ -15,7 +16,7 @@ Take a tour of all the new features at http://www.socketstream.org/tour
 
 SocketStream 0.3 is in full time development, rapidly progressing thanks to frequent contributions from a growing community.
 
-This is a working alpha release intended for experimentation and use by early adopters who don't mind a changing API as we continue to refine ideas. There is still [plenty of work](https://github.com/socketstream/socketstream/blob/master/TODO.md) to do to finish features and improve existing code.
+This is a working alpha release intended for experimentation and use by early adopters. There is still [plenty of work](https://github.com/socketstream/socketstream/blob/master/TODO.md) to do to finish features and improve existing code; however, most of the server-side API is now stable.
 
 Please share your thoughts on our [Google Group](http://groups.google.com/group/socketstream) after reading [TODO.md](https://github.com/socketstream/socketstream/blob/master/TODO.md) (updated regularly).
 
@@ -24,11 +25,17 @@ The previous stable version of SocketStream can be found in the [0.2 branch](htt
 
 ### Introduction
 
-SocketStream is a new Node.js web framework dedicated to creating single-page real time websites.
+SocketStream is a new 100% open source Node.js web framework dedicated to building **single-page realtime apps**.
 
-Unlike traditional web frameworks, there's no routing, AJAX or partials to think about. Instead all application data is streamed over websockets as high-speed bi-directional messages; allowing you to create entirely new ultra-responsive applications that will amaze your users.
+It does away with old ideas such as routing, AJAX, partials and polling by sending and receiving all application data over the websocket at lightning speed. Requests to the server can be sent using modular Request Handlers (such as the [RPC](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/rpc_responder.md) and forthcoming Model handlers), whilst incoming data can be transformed into HTML using fast, flexible [client-side templates](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/client_side_templates.md).
 
-SocketStream 0.3 builds on the success of previous versions by introducing more modularity, configurability and extensibility via 3rd party modules. It is designed to work great as both as a stand-alone framework, or when combined with other Node libraries such as [Express.js](http://expressjs.com).
+SocketStream provides structure for your client asset files, supporting optional code formatters (such as [Stylus](https://github.com/socketstream/ss-stylus) for CSS) whilst making it easy to send a different mix of assets to iPhones and other clients. It will even [reload the browser](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/live_reload.md) for you whenever a client file changes. Once you go into production, all asset files are automatically packed and minified into one `.js` and one `.css` file.
+
+On the server-side, SocketStream shares [sessions](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/sessions.md) across HTTP and Websocket requests (making it easy to implement [authentication](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/authentication.md)) and supports powerful custom-defined [request middleware](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/request_middleware.md) which can be chained together. An optional [console](https://github.com/socketstream/ss-console) module allows you to connect to any running server to test RPC methods or publish events.
+
+While all this may initially sound like the typical monolithic black box framework of the past, nothing could be further from the truth. SocketStream's real killer feature is that it puts **your** application at the heart of things by creating an `app.js` file which you run like any other Node.js app. This means it's easy to integrate with other great modules such as [Express.js](http://expressjs.com), [Everyauth](https://github.com/bnoguchi/everyauth) and [thousands](http://search.npmjs.org) more - so you're never trapped into **our** way of doing anything.
+
+We think this is revolution in web development. We'd love you give it a go and let us know what you think.
 
 
 ## Main Features
@@ -39,8 +46,8 @@ SocketStream 0.3 builds on the success of previous versions by introducing more 
 * True bi-directional communication using websockets (or [Socket.IO 0.8](http://socket.io) fallbacks). No more slow, messy AJAX!
 * Write all code in [CoffeeScript](http://jashkenas.github.com/coffee-script/) or JavaScript - your choice
 * **NEW** Works great with [Express.js](http://expressjs.com) and other Connect-based frameworks!
-* Easily share code between the client and server. Ideal for business logic and model validation (see README below)
-* **NEW** Websocket Middleware - enabling session access, authentication, logging, distributed requests and more
+* Easily share code between the client and server. Ideal for business logic and model validation (see Questions below)
+* **NEW** Request Middleware - enabling session access, authentication, logging, distributed requests and more
 * Effortless, scalable, pub/sub baked right in - including Private Channels
 * **NEW** Easy authentication - use a backend databases or authenticate against Facebook Connect, Twitter, etc using [Everyauth](https://github.com/bnoguchi/everyauth)
 * **NEW** Share sessions between HTTP and Websocket Requests using Connect Session Stores
@@ -56,8 +63,8 @@ SocketStream 0.3 builds on the success of previous versions by introducing more 
 * Compatible with older versions of Firefox and IE thanks to configurable fallback transports provided by Socket.IO
 * **NEW** Define multiple single-page clients by choosing the CSS, JS and client-side templates you wish to serve
 * Integrated asset manager - automatically packages and [minifies](https://github.com/mishoo/UglifyJS) all client-side assets
+* **NEW** Live Reload - automatically reloads the browser when HTML, CSS or JS client files change
 * Works with iPads and iPhones using Mobile Safari (iOS 4.2 and above), even over 3G. Send a smaller, lighter client if desired
-* **NEW** Use optional code formatters (e.g. CoffeeScript, Jade, Stylus, Less, etc) by easily installing wrapper modules
 * Multiple clients work seamlessly with HTML Push State 'mock routing' so you can use [Backbone Router](http://documentcloud.github.com/backbone/#Router), [Davis JS](http://davisjs.com) and more
 * **NEW** Supports many client-side template languages (Hogan/Mustache/CoffeeKup/jQuery), pre-compiling them for speed
 * **NEW** Works great with [Ember.js](http://emberjs.com) for 'reactive templates' which automatically update when data changes 
@@ -65,15 +72,19 @@ SocketStream 0.3 builds on the success of previous versions by introducing more 
 * Easily add additional client libraries such as [Underscore.js](http://documentcloud.github.com/underscore/)
 * Highly Experimental: Designate client-side code files as modules and require() them as you would server-side code
 
+#### Optional Modules (officially maintained and supported)
 
-### Requirements
+* **[ss-console](https://github.com/socketstream/ss-console)** Connect to a live server and call RPC actions or publish events over the REPL / terminal
+* Code Formatters: **[ss-coffee](https://github.com/socketstream/ss-coffee)** (CoffeeScript), **[ss-jade](https://github.com/socketstream/ss-jade)** Jade (for HTML), **[ss-stylus](https://github.com/socketstream/ss-stylus)** Stylus (for CSS), **[ss-less](https://github.com/socketstream/ss-less)** Less (for CSS)
+* Client-side Template Engines: **[ss-hogan](https://github.com/socketstream/ss-hogan)** Hogan/Mustache, **[ss-hogan](https://github.com/socketstream/ss-coffeekup)** CoffeeKup
 
-[Node 0.6.X](http://nodejs.org/#download)
+
+***
 
 
 ### Getting Started
 
-Ready to give it a whirl? Until 0.3.0 is released and published to `npm` you will need to clone the project locally:
+Ready to give it a whirl? Install [Node 0.6.X](http://nodejs.org/#download) then clone the project locally (just until 0.3.0 is released and published to `npm`):
 
     git clone https://github.com/socketstream/socketstream.git
     cd socketstream
@@ -129,9 +140,6 @@ For example, let's write a simple server-side function which squares a number. M
 // server/rpc/app.js
 exports.actions = function(req, res, ss){
 
-  // debug or modify incoming requests here
-  console.log(req);
-
   // return list of actions which can be called publicly
   return {
 
@@ -149,7 +157,7 @@ Restart the server and then invoke this function from the brower's command line:
 ss.rpc('app.square', 25)
 ```
 
-You'll see the answer `625` logged to the console by default. The eagle-eyed among you will notice `ss.rpc('app.square', 25)` actually returned `undefined`. That's fine. We're only interested in the asynchronous response sent from the server once it has processed your request. 
+You'll see the answer `625` logged to the console by default. The eagle-eyed among you will notice `ss.rpc('app.square', 25)` actually returned `undefined`. That's fine. We're only interested in the asynchronous response sent from the server once it has processed your request.
 
 Now let's write some code in the client to do more with this response. Make a file called `client/code/main/app.js` and put this in it:
 
@@ -157,7 +165,7 @@ Now let's write some code in the client to do more with this response. Make a fi
 // client/code/main/app.js
 
 // define the number to square (vars are local to this file by default)
-var number = 25
+var number = 25;
 
 // ensure SocketStream has connected to the server
 SocketStream.event.on('ready', function(){
@@ -185,73 +193,45 @@ We've made a start on documentation for 0.3. Right now the following sections ha
 ##### Developing (Client-side)
 
 * [Client-side Templates](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/client_side_templates.md)
+* [Live Reload](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/live_reload.md)
 
 ##### Developing (Server-side)
 
 * [RPC Responder](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/rpc_responder.md)
-* [Websocket Middleware](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/websocket_middleware.md)
+* [Request Middleware](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/request_middleware.md)
 * [Sessions](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/sessions.md)
 * [HTTP Middleware](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/http_middleware.md)
 * [Authentication](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/authentication.md)
+
+##### Extending SocketStream
+
+* [Writing Template Engine Wrappers](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/template_engine_wrappers.md)
 
 ##### Other
 
 * [Changes since 0.2](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/changes_since_0.2.md)
 
-
-
+***
 
 ### Questions?
 
+##### How can I make my app auto-restart when /server code changes?
 
-##### Does SocketStream support models?
-
-Not yet. Right now we only support RPC calls and Events. However, websocket middleware and modular websocket responders were introduced in 0.3 to encourage people to start experimenting with different ways to define, access and sync models over websockets. If and when good contributed solutions exist we will promote them here. Models will be our primary focus for the next major release.
-
-
-##### What's happened to the HTTP API?
-
-It's not supported for now. Not because we don't want it (we still fully believe writing the API first is a great idea and a killer feature of SocketStream 0.2), but now we have multiple websocket responders, the decision of where and how to implement the HTTP API layer is little more complex. We will keep giving this some thought. Ideas welcome.
-
-
-##### What's happened to the Users Online functionality?
-
-It is no longer included in the core for a few reasons: 1) Not everyone needs it, 2) Our current implementation requires Redis to be running, 3) There are multiple ways to work out how many people are online and push/pull the result to the client. We have extracted the old functionality into a separate add-on module which will be released shortly.
-
-
-##### What's happened to 'socketstream console' (the REPL)
-
-The command has gone. However we are still keen to have a interactive console which allows you to test publishing events and more. We've not finished working on this yet but if you run `node console` from within your app directory you will see where we are so far.
-
-
-##### How come calls to ss.rpc() don't autocomplete like calls to SS.server() in SocketStream 0.2?
-
-This 'feature' has not been implemented yet and I'm not sure if it will be. It means more code complexity and a slight delay when your app loads as the browser has to build an API function tree. If people really miss this feature it could be brought back with an optional config param. Let me know.
-
-
-##### How can I make my app auto-restart when /server code changes (as in SocketStream 0.2)?
-
-Install the excellent 'nodemon' module with `sudo npm install -g nodemon` then start your app with `nodemon app.js`. Very useful when developing your app.
-
-
-##### Will it run on Windows?
-
-Early adopters have reported good results so far, though we still have some work to do to smooth out the rough edges. Please see the Windows installation instructions in INSTALL.md
-
-
-##### Why not use Require.js, AMD or Browserify?
-
-Right now we're starting off with a much more lightweight solution (about 5 lines of code) which behaves identically to the require() command server-side (at least it will once we implement relative ./ ../ paths). It is not a perfect solution yet but it feels like the right direction to go in given SocketStream already takes care of all the bundling. We will fully document client-side module loading soon.
-
+Install the excellent 'nodemon' module with `sudo npm install -g nodemon` then start your app with `nodemon app.js`. A `.nodemonignore` file has already been created for you with the optimal settings. This feature is very useful when developing your app.
 
 ##### How can I configure Socket.IO?
 
 Like so:
 
-    ss.ws.transport.use('socketio', {io: function(io){
-      io.set('log_level', 4)
-    }})
+```javascript
+ss.ws.transport.use('socketio', {io: function(io){
+  io.set('log level', 4)
+}});
+```
 
+##### Will it run on Windows?
+
+Yes. We have several users running SocketStream on Windows without problems. Please see the Windows installation instructions in INSTALL.md
 
 
 ##### How can I share code between client and server?
@@ -259,6 +239,11 @@ Like so:
 After much thought we decided to abandon the app/shared directory concept in SocketStream 0.2. Thankfully now that we support client-side modules there is a cleaner alternative:
 
 Make the code you wish to share a module (by exporting functions and vars) and save it in `client/code/modules`. You can then `require()` the module in both your client-side and server-side code.
+
+
+##### Does SocketStream support models?
+
+Not yet. Right now we only support RPC calls and Events. However, websocket middleware and modular websocket responders were introduced in 0.3 to encourage people to start experimenting with different ways to define, access and sync models over websockets. If and when good contributed solutions exist we will promote them here. Models will be our primary focus for the next major release.
 
 
 ##### Should I use Redis?
@@ -275,7 +260,6 @@ Pass any config as the second argument to either of the above commands as so:
     {host: 'localhost', port: 6379}
 
 
-
 ##### How about scaling?
 
 SocketStream 0.3 makes a big assumption in order to maximize speed and reduce code complexity: All incoming connections with the same session should be routed to the same server (also known as Sticky Sessions). The session details are stored in memory and then optionally saved to Redis to preserve the session should the node fail.
@@ -285,15 +269,9 @@ Front end scaling can be achieved using a combination of different websocket tra
 Back end scaling has yet to be properly documented, but we're keen to continue looking into ways to use ZeroMQ and also Hook IO. We will make sure back end scaling is as easy and flexible as possible, but it will no longer be a feature of the framework itself.
 
 
-##### How come X isn't implemented?
+##### Why not use Require.js, AMD or Browserify?
 
-Please check TODO.md and let us know if you miss something from 0.2 that's not on the list.
-
-
-##### Will there be a 0.2 to 0.3 migration guide?
-
-Yes, once the 0.3 API is stable. Right now things are likely to change.
-
+Right now we're starting off with a much more lightweight solution (about 5 lines of code) which behaves identically to the require() command server-side (at least it will once we implement relative ./ ../ paths). It is not a perfect solution yet but it feels like the right direction to go in given SocketStream already takes care of all the bundling. We will fully document client-side module loading soon.
 
 
 ### Developing on the SocketStream core
@@ -309,7 +287,11 @@ Your app will then directly read code from your local SocketStream repository's 
 
 ### Testing
 
-We want to have tests for each internal module written in Mocha once the final design and API settles down. These can be run with `make test`. Help very much appreciated in this area.
+There are a number of [Mocha](http://visionmedia.github.com/mocha/) tests starting to appear for parts of the API which are unlikely to change. To run them type:
+
+    $ make test
+    
+More tests coming soon. Contributions very much appreciated.
 
 
 ### Contributors

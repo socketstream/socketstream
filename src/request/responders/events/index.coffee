@@ -15,7 +15,7 @@ exports.init = (root, ss, config) ->
 
     server:
 
-      request: (obj, send, meta) ->
+      websocket: (obj, send, meta) ->
         msg = JSON.stringify(obj)
         send(messagePrefix + '§'+ msg)
 

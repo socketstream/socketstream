@@ -2,6 +2,7 @@
 # -----------------
 # Generates skeleton files needed to create a new SocketStream application
 
+require('colors')
 log = console.log
 fs = require 'fs'
 util = require 'util'
@@ -29,8 +30,10 @@ makeRootDirectory = (name) ->
       throw e
 
 showFinishText = (name) ->
-  log "Success! Created app #{name}. You can now run the app:"
-  log "\t\t cd " + name
-  log "\t\t npm install"
-  log "\t\t npm link socketstream    (until 0.3 is published to npm)"
-  log "\t\t node app.js"
+  log "Success! Created app #{name}. You can now run the app:".green
+  log "    cd " + name
+  log "    sudo npm install"
+  log "    npm link socketstream    (until 0.3 is published to npm)"
+  log "    node app.js"
+  log "Note: You're about to install our full recommended stack of optional modules".grey
+  log "Feel free to remove any you don't need. A 'minimal install' option is coming soon".grey

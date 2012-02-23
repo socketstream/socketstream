@@ -30,14 +30,14 @@ exports.init = (root, codeWrappers, templateEngine) ->
       else
         @paths.css?.forEach (path) ->
           magicPath.files(root + '/client/css', path).forEach (file) ->
-            headers.push tag.css("/_serveDev/css?#{file}&ts=#{ts}")
+            headers.push tag.css("/_serveDev/css/#{file}?ts=#{ts}")
 
         # SocketStream Browser Client
         headers.push tag.js("/_serveDev/client?ts=#{ts}")
 
         @paths.code?.forEach (path) ->
           magicPath.files(root + '/client/code', path).forEach (file) ->
-            headers.push tag.js("/_serveDev/code?#{file}&ts=#{ts}")
+            headers.push tag.js("/_serveDev/code/#{file}?ts=#{ts}")
 
       # Output list of headers
       headers

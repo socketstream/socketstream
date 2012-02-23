@@ -6,8 +6,7 @@ emitter = new EventEmitter2()
 exports.init = ->
 
   listen: (cb) ->
-    emitter.on 'event', (obj) ->
-      cb obj
+    emitter.on 'event', cb
 
   send: (obj) ->
     emitter.emit 'event', obj

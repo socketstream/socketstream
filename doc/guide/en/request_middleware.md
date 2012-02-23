@@ -1,6 +1,6 @@
-# Websocket Middleware
+# Request Middleware
 
-One of the most powerful and exiting features introduced in SocketStream 0.3 is Websocket Middleware. This has the power to inspect, transform, redirect or drop incoming requests over the websocket.
+One of the most powerful and exiting features introduced in SocketStream 0.3 is Request Middleware. This has the power to inspect, transform, redirect or drop incoming requests over the websocket, HTTP API, or console.
 
 If you've used Connect HTTP middleware before the concept and API will be instantly familiar. Essentially incoming requests can be processed through a chain of middleware BEFORE they arrive at their final destination - typically the RPC command you are requesting.
 
@@ -102,7 +102,7 @@ Let's test this out in the browser:
 
 #### Using Middleware for Authorization
 
-Websocket Middleware is the perfect way to check if a user is authorized before proceeding further:
+Request Middleware is the perfect way to check if a user is authorized before proceeding further:
 
 ```javascript
 // server/rpc/app.js
@@ -163,10 +163,10 @@ Although you strictly don't have to, we highly recommend creating at least one f
 
 ### Food for thought
 
-Websocket Middleware allows for many exciting new opportunities around models and scaling.
+Request Middleware allows for many exciting new opportunities around models and scaling.
 
 For example you could write your own middleware which handles CRUD requests (create, update, delete, etc) and forwards them directly to MongoDB, or use [Hook.IO](https://github.com/hookio/hook.io) to forward incoming requests to a different system altogether. 
 
 Bear in mind there's no need to define any RPC actions at all if your middleware can respond to all incoming requests.
 
-We'll be exploring all these ideas in the future when time permits, but you don't have to wait for us. Start experimenting today and publish your websocket middleware module on npm for everyone to use.
+We'll be exploring all these ideas in the future when time permits, but you don't have to wait for us. Start experimenting today and publish your middleware module on npm for everyone to use.

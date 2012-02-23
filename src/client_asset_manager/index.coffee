@@ -31,13 +31,19 @@ exports.init = (root, router, reservedNames) ->
   clients = {}
   ssClient = null
 
-  # Append the 'serve' method to the HTTP Response object
-  res.serve = (nameOrClient) ->
+  # Append the 'serveClient' method to the HTTP Response object
+  res.serveClient = (nameOrClient) ->
     client = typeof(nameOrClient) == 'string' && clients[nameOrClient] || nameOrClient
     throw new Error('Unable to find single-page client: ' + nameOrClient) unless client?
     client.htmlFromCache ssClient, formattersByExtension, packAssets, (output) =>
-      @writeHead(200, {'Content-Type': 'text/html'})
+      @writeHead(200, {
+        'Content-Length': Buffer.byteLength(output),
+        'Content-Type': 'text/html'
+      })
       @end(output)
+
+  # Alias res.serveClient to keep compatibility with existing apps
+  res.serve = res.serveClient
 
   # Return API
   formatters: formatters
@@ -66,13 +72,17 @@ exports.init = (root, router, reservedNames) ->
       codeWrappers[dir] = nameOrModule
 
   # Listen and serve incoming asset requests
-  load: (client) ->
+  load: (client, ss) ->
     ssClient = client
     formattersByExtension = formatters.load()
      
     # Bundle initial assets if we're running in production mode
     if packAssets
       client.pack(ssClient, formattersByExtension, packAssetOptions) for name, client of clients
+    
+    # Else watch for changes to files in development
+    else
+      require('./live_reload').init(root, ss)
 
     # Listen out for requests to async load new assets and/or serve all assets live in dev mode 
     asset = require('./asset').init(root, formattersByExtension, codeWrappers)

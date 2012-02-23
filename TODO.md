@@ -1,36 +1,40 @@
 TODO
 ====
 
-#### WORK TO DO BEFORE 0.3.0 IS RELEASED (updated regularly)
+#### WORK TO DO BEFORE 0.3.0 CAN BE RELEASED
 
-* Show how to handle websocket connections / disconnections in README
-* Build interactive 'socketstream new' asking if you want to use recommended stack + demo or not
+* Build interactive 'socketstream new' asking if you want to use our recommended stack + demo or a vanilla/minimal install
 * Much more error checking around sending bad RPC calls (e.g if a module or function does not exist)
 * Websocket responders need to take a config object. It should also be able to send config to client-side code (hard)
-* Make require() in client-code take relative paths (./ and ../) like Node's require() can
+* Relook at client-side code / modules. Make require() in client-code take relative paths (./ and ../) like Node's require() can
 * Look into using Engine.IO instead of Socket.IO
 * SocketStream should pass its version number and other meta info to wrapper modules
 * Look into ways we can use multi-core cluster features of Node 0.6, if at all (maybe best at app level?)
-* Allow ss.rpc() calls to be made via the server-side console
-* Finish and release Users Online module
-* Enable easier debugging of client-side code (Issue #123)
-* Finish and release Pusher Pipe transport module
-* Finish converting SocketRacer to 0.3 and demo new telemetry websocket responder module
-* Testing! Lots of! We are going to use Mocha
-* Add Travis CI
 
 Help with any of the above tasks would be appreciated. Please get in touch
+
+
+#### WORK TO DO ONCE 0.3.0 IS RELEASED
+
+* Finish and release HTTP API module
+* Finish and release Users Online module
+* Finish and release Pusher Pipe transport module
+* Finish converting SocketRacer to 0.3 and demo new telemetry websocket responder module
 
 
 #### DECISIONS TO MAKE
 
 * Sort out how we're going to do configuration and logging. There is very little of either at the moment!
-* Do we want to implement the server-side events concept we had in 0.2. Is it worth it?
 * Should we show a 404 if a request is invalid? (i.e. not a file or cannot be routed to a client)
-* Figure out if / how the old HTTP RPC API should be a part of the SocketStream core
 # Should we use Connect Router or Director (from flatiron) instead of a simple EventEmitter for HTTP routing?
 
 Any thoughts on the above are most welcome
+
+
+#### DOCUMENTATION
+
+* Lots!!
+* Show how to handle websocket connections / disconnections in README
 
 
 #### SOCKETSTREAM.ORG WEBSITE

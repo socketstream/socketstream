@@ -10,7 +10,7 @@ ss.client.define('main', {
 });
 
 ss.http.router.on('/', function(req, res) {
-  res.serve('main');
+  res.serveClient('main');
 });
 
 // Remove to use only plain .js, .html and .css files if you prefer
@@ -21,9 +21,14 @@ ss.client.formatters.add(require('ss-stylus'));
 // Use server-side compiled Hogan (Mustache) templates. Others engines available
 ss.client.templateEngine.use(require('ss-hogan'));
 
-// Minimise and pack assets if you type  SS_ENV=production node app.js
+// Minimise and pack assets if you type: SS_ENV=production node app.js
 if (ss.env == 'production') ss.client.packAssets();
 
+// Enable optional console server access. Run 'ss-client' to connect
+var consoleServer = require('ss-console').init(ss);
+consoleServer.listen(5000);
+
+// Start web server
 var server = http.Server(ss.http.middleware);
 server.listen(3000);
 

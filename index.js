@@ -25,5 +25,8 @@ if (pathlib.existsSync('server/rpc/middleware')) {
   throw new Error("Please paste the line above into the shell then restart the server");
 }
 
+// Temporary - REMOVE_BEFORE_0.3.0 - Delete 'console.js' file if it exists (no longer needed)
+if (pathlib.existsSync('console.js')) require('fs').unlinkSync('console.js');
+
 // Load SocketStream core
 module.exports = require('./' + dir + '/socketstream.js');

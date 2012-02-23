@@ -1,6 +1,6 @@
 # RPC Server-side Websocket Responder
 
-The RPC Responder allows you to call functions on the server from the browser over the websocket, returning a response if requested. It is powerful when used in conjunction with [Websocket Middleware](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/websocket_middleware.md).
+The RPC Responder allows you to call functions on the server from the browser over the websocket, returning a response if requested. It is powerful when used in conjunction with [Request Middleware](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/request_middleware.md).
 
 To make a Remote Procedure Call from the browser use the `ss.rpc()` function.
 

@@ -1,5 +1,5 @@
-# Internal Websocket Middleware
-# -----------------------------
+# Internal Request Middleware
+# ---------------------------
 # Internal middleware occupies the top-level namespace, i.e. does not contain any dots
 
 exports.init = (root, ss) ->

@@ -1,3 +1,48 @@
+0.3 alpha4 / 2012-02-23
+=======================
+
+This release sees the return of two much-loved features from SocketStream 0.2, redesigned and reimplemented to be better than ever.
+
+
+##### The Console is back!
+
+* Implemented as an optional module, [ss-console](https://github.com/socketstream/ss-console), to keep the core bloat-free
+* Installed by default for now when you create a new project as part of our recommended stack (minimal install option coming soon)
+* Works by connecting to a running server, rather than starting a new instance of your app
+* Invoke any `ss.rpc()` method via the console with exactly the same syntax as in the browser, errors shown in red
+* Publish an event over the console with the normal API - e.g. `ss.publish.all('newMessage', 'Hello from the console!')`
+* Creates a new session when you start it up, so you can use it with `req.use('session')` middleware
+* If you have a `console.js` file in your project it will be deleted as no longer required
+* Huge thanks to mindeavor for contributing code and ideas
+
+
+##### Live Reload is back!
+
+* Automatically detects changes to HTML, CSS and JS files in `/client`
+* Sends an event to all connected browsers instructing them to reload the page
+* Recognises new files and deleted files - much improved from SocketStream 0.2
+* Enabled by default unless you call `ss.client.packAssets()` (i.e. turned off in production)
+
+
+##### Others
+
+* Rearchitected Websocket Responders/Middleware so they are now called Request Responders/Middleware
+* Request Responders now expose multiple interfaces - more work to do here until I'm happy with the API
+* Changed `/serveDev` URLs to make it easier to identify which files have errors in the browser (#123)
+* Refactored and improved template code. Added tests (mindeavor)
+* CoffeeKup templates can now end in `.coffee` (mindeavor)
+* Time taken to process each `ss.rpc()` call now shown in ms. Still need to sort out logging options
+* Creates a `.nodemonignore` file in new projects so changes to `.coffee` files in `server` cause the server to restart as expected
+* Jade templates are now supported in the browser using sveisvei's [ss-clientjade](https://github.com/sveisvei/ss-clientjade) module
+* When processing incoming HTTP requests `res.serve` is now `res.serveClient` as it's more descriptive. `res.serve` will remain as an alias for the foreseeable future
+* `server/middleware` directory is now optional
+* Improved RPC error message handling (work towards #138)
+* HTTP Client headers now include length to prevent chunked encoding (#139)
+* Re-written 'Introduction' in README
+* Added Travis CI integration and build status badge
+
+
+
 0.3 alpha3 / 2012-02-09
 =======================
 

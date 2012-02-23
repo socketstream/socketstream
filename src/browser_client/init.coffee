@@ -74,4 +74,7 @@ SocketStream.cookie =
     c = "#{c_name}=#{escape(value)}"
     document.cookie = "#{c_name}=#{escape(value)}" + (if expiredays == null then "" else ";expires=" + exdate.toUTCString())
 
-
+# Reload browser if reload system event receieved
+SocketStream.event.on '__ss:reload', ->
+  console.log('Reloading as files have changed...')
+  window.location.reload()

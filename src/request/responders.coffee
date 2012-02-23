@@ -1,9 +1,11 @@
-# Websocket Message Responders
-# ----------------------------
+# Request Responders
+# ------------------
 # Allows you to define responders which will listen out for incoming messages of that type
+# Each responder can expose a number of interfaces - e.g. Websocket, Console
+# Responders can optionally choose to use the middleware stack provided
 # The 'events' and 'rpc' responders are loaded by default, though even this can be overruled by calling clear()
 
-exports.init = (root, emitter, ss) ->
+exports.init = (root, ss) ->
 
   middleware = require('./middleware').init(root, ss)
   
@@ -32,14 +34,13 @@ exports.init = (root, emitter, ss) ->
     middlewareStack = middleware.load()
 
     if useDefaults
-      @add 'events'
-      @add 'rpc'
+      @add('events')
+      @add('rpc')
+
+    output = {}
 
     responders.map (mod) ->
       responder = mod.load(middlewareStack)
+      output[mod.messagePrefix] = responder
 
-      # Listen to incoming requests and invoke server.request
-      emitter.on mod.messagePrefix, (msg, meta, cb) ->
-        responder.server.request(msg, meta, cb)
-      
-      responder
+    output
