@@ -37,7 +37,7 @@ exports.init = (transport, responders) ->
       output.push transport.client().code()
 
     # Load client-code for active message responders
-    responders.forEach (responder) ->
+    for name, responder of responders
       output.push responder.client.code()
 
     # Finally assign client-side API window.ss and connect to server
