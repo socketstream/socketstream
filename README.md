@@ -257,7 +257,7 @@ Redis is used in two areas of SocketStream - session storage and internal pubsub
 
 Pass any config as the second argument to either of the above commands as so:
 
-    {host: 'localhost', port: 6379}
+    {host: 'localhost', port: 6379, pass: 'myOptionalPass'}
 
 
 ##### How about scaling?
