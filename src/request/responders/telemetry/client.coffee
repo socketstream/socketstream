@@ -7,7 +7,7 @@ window.SocketStream.registerApi 'telemetry', ->
   msg = args.join('±')
 
   # Send it!
-  SocketStream.transport.send('tel§' + msg)
+  SocketStream.transport.send('tel|' + msg)
 
   # Always return undefined
   undefined

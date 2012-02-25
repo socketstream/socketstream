@@ -37,7 +37,7 @@ exports.init = (request, messagePrefix) ->
         console.log('←'.green, msgLogName, req.method, "(#{timeTaken}ms)".grey)
 
       # Send response object over websocket
-      msg = messagePrefix + '§'+ JSON.stringify(obj)
+      msg = messagePrefix + '|'+ JSON.stringify(obj)
       socket(msg)
 
     # Log incoming request

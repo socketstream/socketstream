@@ -6,7 +6,7 @@ window.SocketStream.transport =
     conn = io.connect()
 
     conn.on 'message', (msg, meta) ->
-      if (i = msg.indexOf('§')) > 0
+      if (i = msg.indexOf('|')) > 0
         type = msg.substr(0, i)
         content = msg.substr(i+1)
 

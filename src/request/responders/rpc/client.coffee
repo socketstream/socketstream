@@ -34,7 +34,7 @@ window.SocketStream.registerApi 'rpc', ->
   msg = JSON.stringify(obj)
 
   # Send it!
-  SocketStream.transport.send('rpc§' + msg)
+  SocketStream.transport.send('rpc|' + msg)
 
   # Always return undefined
   undefined
