@@ -19,6 +19,7 @@ exports.init = (request, messagePrefix) ->
       method:     msg.m
       params:     msg.p
       socketId:   meta.socketId
+      clientIp:   meta.clientIp
       sessionId:  meta.sessionId
       transport:  meta.transport
       receivedAt: Date.now()
