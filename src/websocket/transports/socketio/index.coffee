@@ -28,7 +28,8 @@ exports.init = (emitter, httpServer, config) ->
       socket.on 'message', (msg) ->
         try
           [type, content] = utils.parseWsMessage(msg)
-          meta = {socketId: socket.id, sessionId: socket.sessionId, transport: 'socketio'}
+          clientIp = socket.manager.handshaken[socket.id].address.address
+          meta = {socketId: socket.id, sessionId: socket.sessionId, clientIp: clientIp, transport: 'socketio'}
           emitter.emit type, content, meta, (data) ->
             socket.send(data)
         catch e
