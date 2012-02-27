@@ -13,6 +13,20 @@ Live Reload is automatically enabled unless you call:
 As you typically would in `production` mode.
 
 
-Note: Live Reload is built on Node's `fs.watch()` API which can behave differently on different operating systems. If things don't work as expected, please log an issue and be sure to mention which OS you're using.
+### Known issues
+
+Live Reload is built on Node's `fs.watch()` API which works differently on each operating system. For example, on Linux you'll get an `EMFILE` error if you have many files in your `client` directory. Change this limit with:
+
+    sudo vi /etc/sysctl.conf 
+
+add the following line 
+
+    fs.inotify.max_user_instances = 200 # or higher if needed 
+
+then run 
+    
+    sudo sysctl -p
+
+If things still don't work as expected, please log an issue and be sure to mention which OS you're using.
 
 
