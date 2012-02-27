@@ -30,8 +30,8 @@ exports.init = (request, messagePrefix) ->
     res = (err, response) ->
 
       if err
-        obj = {id: req.id, e: {message: err.message}}
-        console.log('→'.red, msgLogName, req.method, err.name.red)
+        obj = {id: req.id, e: {message: err.stack}}
+        console.log('→'.red, msgLogName, req.method, err.message.red)
       else
         obj = {id: req.id, p: response, e: req.error}
         timeTaken = Date.now() - req.receivedAt

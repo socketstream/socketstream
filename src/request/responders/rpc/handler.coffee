@@ -44,7 +44,8 @@ exports.init = (root, messagePrefix, middleware, ss) ->
       # Get the correct module from the API Tree
       file = getBranchFromTree(api, methodAry)
       throw new Error("Unable to find '#{req.method}' file") unless file
-      throw new Error("Unable to find an 'exports.actions' function in #{req.method}'") unless file.actions
+      throw new Error("Unable to find an 'exports.actions' function for '#{req.method}'") unless file.actions
+      throw new Error("'exports.actions' function for '#{req.method}' must be a function") unless typeof(file.actions) == 'function'
 
       # REMOVE_BEFORE_0.3.0 : Throw error if using old-style middleware API
       throw new Error("Important! The RPC middleware API changed in 0.3 alpha3. Please see https://github.com/socketstream/socketstream/blob/master/HISTORY.md") if file.before
@@ -65,6 +66,7 @@ exports.init = (root, messagePrefix, middleware, ss) ->
 
           # Warn if this action doesn't exist
           throw new Error("Unable to find '#{req.method}' method in exports.actions") unless method?
+          throw new Error("The '#{req.method}' method in exports.actions must be a function") unless typeof(method) == 'function'
 
           # Execute action
           method.apply(method, request.params)
