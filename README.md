@@ -25,20 +25,17 @@ The previous stable version of SocketStream can be found in the [0.2 branch](htt
 
 ### Introduction
 
-SocketStream is a new 100% open source Node.js web framework dedicated to building **single-page realtime apps**.
+SocketStream is a new open source Node.js web framework dedicated to building **single-page realtime apps**.
 
-It does away with old ideas such as routing, AJAX, partials and polling by sending and receiving all application data over the websocket at lightning speed. Requests to the server can be sent using modular Request Handlers (such as the [RPC](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/rpc_responder.md) and forthcoming Model handlers), whilst incoming data can be transformed into HTML using fast, flexible [client-side templates](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/client_side_templates.md).
+Whether you're building a group chat app, multiplayer game or trading platform, SocketStream makes realtime web development fun and easy. It provides the structure and back-end functionality your app needs, whilst allowing you to build the front-end using technologies you already know (such as jQuery, Hogan, Backbone.js, Ember.js).
 
-SocketStream provides structure for your client asset files, supporting optional code formatters (such as [Stylus](https://github.com/socketstream/ss-stylus) for CSS) whilst making it easy to send a different mix of assets to iPhones and other clients. It will even [reload the browser](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/live_reload.md) for you whenever a client file changes. Once you go into production, all asset files are automatically packed and minified into one `.js` and one `.css` file.
+We follow a few guiding principals to keep the framework lean, modular and extensible whilst ensuring your app can easily integrate with other great Node.js modules such as [Express.js](http://expressjs.com), [Everyauth](https://github.com/bnoguchi/everyauth) and [thousands](http://search.npmjs.org) more.
 
-On the server-side, SocketStream shares [sessions](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/sessions.md) across HTTP and Websocket requests (making it easy to implement [authentication](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/authentication.md)) and supports powerful custom-defined [request middleware](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/request_middleware.md) which can be chained together. An optional [console](https://github.com/socketstream/ss-console) module allows you to connect to any running server to test RPC methods or publish events.
-
-While all this may initially sound like the typical monolithic black box framework of the past, nothing could be further from the truth. SocketStream's real killer feature is that it puts **your** application at the heart of things by creating an `app.js` file which you run like any other Node.js app. This means it's easy to integrate with other great modules such as [Express.js](http://expressjs.com), [Everyauth](https://github.com/bnoguchi/everyauth) and [thousands](http://search.npmjs.org) more - so you're never trapped into **our** way of doing anything.
-
-We think this is revolution in web development. We'd love you give it a go and let us know what you think.
+SocketStream is continually evolving but you can join a [growing community](http://groups.google.com/group/socketstream) of developers who are building apps today. Demos and more documentation coming soon.
 
 
-## Main Features
+
+### Main Features
 
 #### General
 
@@ -79,7 +76,15 @@ We think this is revolution in web development. We'd love you give it a go and l
 * Client-side Template Engines: **[ss-hogan](https://github.com/socketstream/ss-hogan)** Hogan/Mustache, **[ss-coffeekup](https://github.com/socketstream/ss-coffeekup)** CoffeeKup
 
 
-***
+
+### How does it work?
+
+SocketStream automatically compresses and minifies all the static HTML, CSS and client-side code your app needs and sends this through the first time a user visits your site.
+
+From then on all application data is sent and received via the websocket (or Socket.IO fallbacks), instantly established when the client connects and automatically re-established if broken. Normally this will be in [JSON RPC](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/rpc_responder.md) format, but SocketStream 0.3 allows you to use different message responders depending upon the task at hand.
+
+All this means no more connection latency, HTTP header overhead, polling, or clunky AJAX. Just true bi-directional, asynchronous, 'streaming' communication between client and server.
+
 
 
 ### Getting Started
@@ -110,14 +115,6 @@ If all goes well you'll see the SocketStream banner coming up, then you're ready
 
 Note: We are aware there is a strange mix of JavaScript/CoffeeScript created at the moment. This will be fixed shortly. The plan is to create vanilla JS files by default with the ability to type `socketstream new -c <name_of_your_project>` if you prefer to use CoffeeScript.
 
-
-### How does it work?
-
-SocketStream automatically compresses and minifies all the static HTML, CSS and client-side code your app will ever need and sends this through the first time a user visits your site.
-
-From then on all application data is sent and received via the websocket (or Socket.IO fallbacks), instantly established when the client connects and automatically re-established if broken. Normally this will be in JSON RPC format, but SocketStream 0.3 allows you to use different message responders depending upon the task at hand.
-
-All this means no more connection latency, HTTP header overhead, or clunky AJAX calls. Just true bi-directional, asynchronous, 'streaming' communication between client and server.
 
 
 ### What can I create with it?
