@@ -34,7 +34,7 @@ loadFile = (path, formatters, options, cb) ->
   extension = pathlib.extname(path)
   extension = extension && extension.substring(1) # argh!
   formatter = formatters[extension]
-  throw new Error("Unsupported file extension #{extension}. Please provide a formatter") unless formatter
+  throw new Error("Unsupported file extension '.#{extension}'. Please provide a formatter for #{path} or remove it from your project") unless formatter
   formatter.compile path, options, cb
 
 minifyJS = (file_name, orig_code) ->
