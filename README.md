@@ -197,6 +197,7 @@ We've made a start on documentation for 0.3. Right now the following sections ha
 * [RPC Responder](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/rpc_responder.md)
 * [Request Middleware](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/request_middleware.md)
 * [Sessions](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/sessions.md)
+* [Pub/Sub Events](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/pub_sub_events.md)
 * [HTTP Middleware](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/http_middleware.md)
 * [Authentication](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/authentication.md)
 

@@ -19,7 +19,7 @@ exports.init = (session, socketId) ->
     forceArray(names).forEach (name) ->
       unless session.channels.indexOf(name) >= 0 # clients can only join a channel once
         session.channels.push(name)
-        console.log 'i'.cyan, 'subscribing session id', session.id, 'socket id', socketId, 'to', name
+        console.log('i'.green + ' subscribed sessionId '.grey + session.id + ' to channel '.grey + name)
     @_bindToSocket()
     session.save cb
    
@@ -30,6 +30,7 @@ exports.init = (session, socketId) ->
       if (i = session.channels.indexOf(name)) >= 0
         session.channels.splice(i, 1)
         socketIdsBy.channel.remove(name, socketId)
+        console.log('i'.green + ' unsubscribed sessionId '.grey + session.id + ' from channel '.grey + name)
     session.save cb
   
   # Unsubscribes the client from all channels
@@ -45,4 +46,4 @@ exports.init = (session, socketId) ->
 # Private
 
 forceArray = (input) ->
-  typeof(input) == 'object' && input || [input]
+  typeof(input) == 'object' && input.slice() || [input]
