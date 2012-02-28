@@ -40,7 +40,7 @@ SocketStream is continually evolving but you can join a [growing community](http
 #### General
 
 * Designed for large apps - excellent code organization, modularity and extensibility. Not a black box framework
-* True bi-directional communication using websockets (or [Socket.IO 0.8](http://socket.io) fallbacks). No more slow, messy AJAX!
+* True bi-directional communication using websockets (or [Socket.IO 0.9](http://socket.io) fallbacks). No more slow, messy AJAX!
 * Write all code in [CoffeeScript](http://jashkenas.github.com/coffee-script/) or JavaScript - your choice
 * **NEW** Works great with [Express.js](http://expressjs.com) and other Connect-based frameworks!
 * Easily share code between the client and server. Ideal for business logic and model validation (see Questions below)
@@ -62,6 +62,7 @@ SocketStream is continually evolving but you can join a [growing community](http
 * Integrated asset manager - automatically packages and [minifies](https://github.com/mishoo/UglifyJS) all client-side assets
 * **NEW** Live Reload - automatically reloads the browser when HTML, CSS or JS client files change
 * Works with iPads and iPhones using Mobile Safari (iOS 4.2 and above), even over 3G. Send a smaller, lighter client if desired
+* **NEW** Use optional code formatters (e.g. CoffeeScript, Jade, Stylus, Less, etc) by easily installing wrapper modules
 * Multiple clients work seamlessly with HTML Push State 'mock routing' so you can use [Backbone Router](http://documentcloud.github.com/backbone/#Router), [Davis JS](http://davisjs.com) and more
 * **NEW** Supports many client-side template languages (Hogan/Mustache/CoffeeKup/jQuery), pre-compiling them for speed
 * **NEW** Works great with [Ember.js](http://emberjs.com) for 'reactive templates' which automatically update when data changes 
