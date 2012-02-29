@@ -24,7 +24,7 @@ ss.client.templateEngine.use(require('ss-hogan'));
 // Minimise and pack assets if you type: SS_ENV=production node app.js
 if (ss.env == 'production') ss.client.packAssets();
 
-// Enable optional console server access. Run 'ss-client' to connect
+// Enable optional console server access. Install client with 'npm install -g ss-console'
 var consoleServer = require('ss-console').init(ss);
 consoleServer.listen(5000);
 
