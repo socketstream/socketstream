@@ -2,7 +2,7 @@
 
 # SocketStream
 
-Latest release: 0.3.0alpha4   ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+Latest release: 0.3.0alpha4  ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 [![build status](https://secure.travis-ci.org/socketstream/socketstream.png)](http://travis-ci.org/socketstream/socketstream)
 
 Twitter: [@socketstream](http://twitter.com/#!/socketstream)  
