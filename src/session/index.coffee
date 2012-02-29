@@ -2,7 +2,7 @@
 # --------
 # Creates a wrapper around a Connect Session Store object
 
-connect = require('../connect')
+connect = require('connect')
 
 channels = require('./channels')
 socketIdsBy = require('../websocket/subscribe').socketIdsBy

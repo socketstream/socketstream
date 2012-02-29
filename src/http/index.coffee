@@ -6,7 +6,7 @@
 fs = require('fs')
 pathlib = require('path')
 fileUtils = require('../utils/file')
-connect = require('../connect')  # Note: Connect 2.0.0alpha1 is bundled within SocketStream for now until it's available on NPM
+connect = require('connect')
 
 router = new (require('./router').Router)
 
