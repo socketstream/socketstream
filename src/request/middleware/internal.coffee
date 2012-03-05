@@ -2,6 +2,8 @@
 # ---------------------------
 # Internal middleware occupies the top-level namespace, i.e. does not contain any dots
 
+require('colors')
+
 exports.init = (root, ss) ->
 
   session = require('../../session')
@@ -17,6 +19,9 @@ exports.init = (root, ss) ->
         session.findOrCreate request.sessionId, request.socketId, (thisSession) ->
           request.session = thisSession
           console.log("Debug session >>\n".yellow, thisSession) if options.debug?
-          next() if thisSession # end the request here if no session found
+          if thisSession
+            next()
+          else
+            console.log("! Error: Session ID #{request.sessionId} not found. Terminating incoming request".red)
       else
         throw new Error('Cannot load session. Request does not contain a sessionId')
