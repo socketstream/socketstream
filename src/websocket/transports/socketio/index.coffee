@@ -2,6 +2,7 @@
 # Alot of this code will be cleaned up and may change in the future
 
 fs = require('fs')
+qs = require('querystring')
 socketio = require('socket.io')
 coffee = require('coffee-script') if process.env['SS_DEV']
 
@@ -73,10 +74,14 @@ processSession = (socket) ->
   return true if socket.sessionId
 
   # Parse session ID from initial hankshake data
-  cookie = socket.handshake.headers.cookie
-  if cookie && (i = cookie.indexOf('connect.sid')) >= 0
-    socket.sessionId = cookie.substr(i+12, 24)
-  else
+  try
+    rawCookie = socket.handshake.headers.cookie
+    cookie = qs.parse(rawCookie)
+    sessionId = cookie['connect.sid'].split('.')[0]
+    socket.sessionId = sessionId
+  catch e
     console.log('Warning: connect.sid session cookie not detected. User may have cookies disabled or session cookie has expired')
     false
+
+
 
