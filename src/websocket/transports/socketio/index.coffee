@@ -14,6 +14,9 @@ exports.init = (emitter, httpServer, config) ->
 
   # Set default log level. Can be overwritten using app config
   io.set 'log level', 1
+
+  # Temporary fix for https://github.com/LearnBoost/socket.io/issues/777  REMOVE_BEFORE_0.3.0
+  io.set('close timeout', 60*60*120)
   
   # Allow app to configure Socket.IO using the syntax below
   # ss.ws.transport.use('socketio', {io: function(io){
