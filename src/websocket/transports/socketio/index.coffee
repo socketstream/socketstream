@@ -56,19 +56,13 @@ exports.init = (emitter, httpServer, config) ->
 
   client: ->
 
+    libs: ->
+      fs.readFileSync(__dirname + '/client.min.js', 'utf8')
+
     code: ->
-      output = []
-
-      # First load the stock Socket.IO Client
-      output.push fs.readFileSync(__dirname + '/client.min.js', 'utf8')
-
-      # Next add the transport wrapper
       ext = coffee? && 'coffee' || 'js'
       input = fs.readFileSync(__dirname + '/wrapper.' + ext, 'utf8')
-      output.push coffee? && coffee.compile(input) || input
-
-      # Concat and return all client code
-      output.join(";\n")
+      coffee? && coffee.compile(input) || input
 
 
 # Private

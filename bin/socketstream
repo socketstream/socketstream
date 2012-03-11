@@ -4,8 +4,10 @@ var ss = require('../')
   , program = require('commander');
 
 program
+  .usage('new <name_of_your_project>')
   .version(ss.version)
-  //.option('-c, --coffee', 'use CoffeeScript') # coming soon!
+  .option('-j, --javascript', 'use Javascript (default)')
+  .option('-c, --coffee', 'use CoffeeScript')
   .parse(process.argv);
 
-require(__dirname + '/../lib/cli').process(program.args);
+require(__dirname + '/../lib/cli').process(program);

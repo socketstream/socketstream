@@ -1,8 +1,10 @@
 # Client-side Wrapper
 
-window.SocketStream.transport =
+conn = null
 
-  connect: (cb) ->
+module.exports = (emitter, message) ->
+
+  connect: (fn) ->
     conn = io.connect()
 
     conn.on 'message', (msg, meta) ->
@@ -10,21 +12,21 @@ window.SocketStream.transport =
         type = msg.substr(0, i)
         content = msg.substr(i+1)
 
-        SocketStream.message.emit(type, content, meta)
+        message.emit(type, content, meta)
       else
         console.error 'Invalid websocket message received:', msg
 
     conn.on 'ready', (cb) ->
-      SocketStream.event.emit 'ready'
+      emitter.emit 'ready'
 
     conn.on 'disconnect', ->
-      SocketStream.event.emit 'disconnect'
+      emitter.emit 'disconnect'
 
     conn.on 'reconnect', ->
-      SocketStream.event.emit 'reconnect'
+      emitter.emit 'reconnect'
 
     conn.on 'connect', ->
-      SocketStream.event.emit 'connect'
+      emitter.emit 'connect'
 
-    SocketStream.transport.send = (msg) ->
-      conn.send(msg)
+    # Return send function
+    (msg) -> conn.send(msg)

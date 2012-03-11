@@ -1,5 +1,7 @@
 # Tell's the browser how to respond to incoming 'rpc' messages
 
+ss = require('socketstream')
+
 numRequests = 0
 cbStack = {}
 
@@ -9,7 +11,7 @@ defaultCallback = (x) -> console.log(x)
 
 # SENDING
 
-window.SocketStream.registerApi 'rpc', ->
+ss.registerApi 'rpc', ->
 
   args = Array.prototype.slice.call(arguments)
 
@@ -34,7 +36,7 @@ window.SocketStream.registerApi 'rpc', ->
   msg = JSON.stringify(obj)
 
   # Send it!
-  SocketStream.transport.send('rpc|' + msg)
+  ss.send('rpc|' + msg)
 
   # Always return undefined
   undefined
@@ -42,7 +44,7 @@ window.SocketStream.registerApi 'rpc', ->
 
 # RECEIVING
 
-window.SocketStream.message.on 'rpc', (msg) ->
+ss.message.on 'rpc', (msg) ->
 
   obj = JSON.parse(msg)
  

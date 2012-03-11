@@ -4,24 +4,22 @@
 
 require('colors')
 url = require('url')
+qs = require('querystring')
 pathlib = require('path')
 magicPath = require('./magic_path')
 
-exports.init = (router, ssClient, asset, packAssets) ->
+exports.init = (router, ssClient, asset, initAppCode, packAssets) ->
 
   # Listen for requests to load code asynchronously
-
+  # TODO: Implement caching of async code requests in production mode
   router.on '/_serveAsync/code?*', (request, response) ->
     path = parseUrl(request.url)
-
-    # TODO: Implement caching of async code requests in production mode
-
     dir = pathlib.join(root, 'client/code')
     files = magicPath.files(dir, [path])
 
     output = []
-    files.forEach (path) ->
-      asset.js path, {compress: packAssets}, (js) ->
+    files.forEach (file) ->
+      asset.js file, {pathPrefix: path, compress: packAssets}, (js) ->
         output.push(js)
         if output.length == files.length # last file
           serve(output.join("\n"), 'text/javascript; charset=utf-8', response)
@@ -39,9 +37,14 @@ exports.init = (router, ssClient, asset, packAssets) ->
 
     # Listen for requests for application client code
     router.on '/_serveDev/code?*', (request, response) ->
+      thisUrl = url.parse(request.url)
+      params = qs.parse(thisUrl.query)
       path = parseUrl(request.url)
-      asset.js path, {compress: false}, (output) ->
+      asset.js path, {pathPrefix: params.pathPrefix, compress: false}, (output) ->
         serve(output, 'text/javascript; charset=utf-8', response)
+
+    router.on '/_serveDev/start?*', (request, response) ->
+      serve(initAppCode, 'text/javascript; charset=utf-8', response)
 
     # CSS
 

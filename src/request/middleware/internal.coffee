@@ -22,6 +22,6 @@ exports.init = (root, ss) ->
           if thisSession
             next()
           else
-            console.log("! Error: Session ID #{request.sessionId} not found. Terminating incoming request".red)
+            console.log("! Error: Session ID #{request.sessionId} not found. Use Redis to persist sessions between server restarts. Terminating incoming request".red)
       else
         throw new Error('Cannot load session. Request does not contain a sessionId')

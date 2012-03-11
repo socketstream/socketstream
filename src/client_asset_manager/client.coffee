@@ -8,7 +8,7 @@ fs = require('fs')
 pathlib = require('path')
 magicPath = require('./magic_path')
 
-exports.init = (root, codeWrappers, templateEngine) ->
+exports.init = (root, templateEngine, initAppCode) ->
 
   containerDir = pathlib.join(root, 'client/static/assets')
   templateDir = 'client/templates'
@@ -21,6 +21,7 @@ exports.init = (root, codeWrappers, templateEngine) ->
 
     # Generate JS/CSS Script/Link tags for inclusion in the client's HTML
     headers: (packAssets = false) ->
+
       ts = @id
       headers = []
 
@@ -32,12 +33,16 @@ exports.init = (root, codeWrappers, templateEngine) ->
           magicPath.files(root + '/client/css', path).forEach (file) ->
             headers.push tag.css("/_serveDev/css/#{file}?ts=#{ts}")
 
-        # SocketStream Browser Client
+        # SocketStream Browser Client (including system modules)
         headers.push tag.js("/_serveDev/client?ts=#{ts}")
 
+        # Send Application Code
         @paths.code?.forEach (path) ->
           magicPath.files(root + '/client/code', path).forEach (file) ->
-            headers.push tag.js("/_serveDev/code/#{file}?ts=#{ts}")
+            headers.push tag.js("/_serveDev/code/#{file}?ts=#{ts}&pathPrefix=#{path}")
+
+        # Start your app and connect to SocketStream
+        headers.push tag.js("/_serveDev/start?ts=#{ts}")
 
       # Output list of headers
       headers
@@ -78,7 +83,7 @@ exports.init = (root, codeWrappers, templateEngine) ->
           includes = includes.concat(@headers(packAssets))
 
           # Add any Client-side Templates
-          paths.tmpl != false && files = magicPath.files(pathlib.join(root, templateDir).replace(/\\/g, '/'), paths.tmpl) # replace '\' with '/' to support Windows
+          paths.tmpl != false && files = magicPath.files(pathlib.join(root, templateDir))
           if files && files.length > 0
             templateEngine.generate root, templateDir, files, formatters, (templateHTML) ->
               includes.push templateHTML
@@ -91,14 +96,14 @@ exports.init = (root, codeWrappers, templateEngine) ->
     # Other code modules can still be served asynchronously later on
     pack: (ssClient, formatters, options) ->
 
-      asset = require('./asset').init(root, formatters, codeWrappers)
+      asset = require('./asset').init(root, formatters)
 
-      packAssetSet = (assetType, paths, dir, concatinator, initialCode = '') ->
+      packAssetSet = (assetType, paths, dir, concatinator, initialCode = '', endCode = '') ->
 
         processFiles = (fileContents = [], i = 0) ->
-          path = filePaths[i]
+          {path, file} = filePaths[i]
 
-          asset[assetType] path, {compress: true}, (output) ->
+          asset[assetType] file, {pathPrefix: path, compress: true}, (output) ->
             fileContents.push(output)
 
             if filePaths[i+1]
@@ -106,18 +111,18 @@ exports.init = (root, codeWrappers, templateEngine) ->
             else
               # This is the final file - output contents
               output = fileContents.join(concatinator)
-              output = initialCode + output
+              output = initialCode + output + endCode
               fileName = clientDir + '/' + id + '.' + assetType
 
               fs.writeFileSync(fileName, output)
-              log('✓'.green, 'Packed ' + filePaths.length + ' files into ' + fileName)
+              log('✓'.green, 'Packed ' + filePaths.length + ' files into ' + fileName.substr(root.length))
 
         # Expand any dirs into real files
         if paths && paths.length > 0
           filePaths = []
-          prefix = pathlib.join(root, dir).replace(/\\/g, '/') # replace '\' with '/' to support Windows
+          prefix = pathlib.join(root, dir)
           paths.forEach (path) ->
-            magicPath.files(prefix, path).forEach (file) -> filePaths.push(file)
+            magicPath.files(prefix, path).forEach (file) -> filePaths.push({path: path, file: file})
           processFiles()
 
       # Pack Assets
@@ -141,14 +146,14 @@ exports.init = (root, codeWrappers, templateEngine) ->
       packAssetSet('css', @paths.css, 'client/css', "\n")
 
       # Output JS
-      ssClient.code (output) =>
-        packAssetSet('js', @paths.code, 'client/code', "; ", output)
+      ssClient.code (clientCode) =>
+        packAssetSet('js', @paths.code, 'client/code', "; ", clientCode, '; ' + initAppCode)
 
       # Output HTML view
       @html ssClient, formatters, true, (output) ->
         fileName = pathlib.join(clientDir, id + '.html')
         fs.writeFileSync(fileName, output)
-        log('✓'.green, 'Created and cached HTML file ' + fileName)
+        log('✓'.green, 'Created and cached HTML file ' + fileName.substr(root.length))
 
 
 
@@ -162,3 +167,7 @@ tag =
 
   js: (path) ->
     '<script src="' + path + '" type="text/javascript"></script>'
+
+
+
+

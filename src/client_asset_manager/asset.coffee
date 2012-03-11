@@ -7,14 +7,17 @@ fs = require('fs')
 uglifyjs = require('uglify-js')
 pathlib = require('path')
 
-exports.init = (root, formatters, codeWrappers) ->
+exports.init = (root, formatters) ->
 
   js: (path, options, cb) ->
     fullPath = pathlib.join(root, 'client/code', path)
     loadFile fullPath, formatters, options, (output) ->
 
+      # Return unwrapped if need be
+      return cb(output) if options.raw == true
+
       # Wrap code in safety or module wrapper
-      output = wrapCode(output, path, codeWrappers)
+      output = wrapCode(output, path, options.pathPrefix)
 
       # If we're packing assets, minify any JS file that doesn't contain .min in the filename
       if options && options.compress
@@ -50,33 +53,31 @@ minifyJS = (file_name, orig_code) ->
   log("  Minified #{file_name} from #{formatKb(orig_size)} to #{formatKb(min_size)}".grey)
   minified
 
-# Code Wrapping - Highly Experimental!
-# Before client-side code is sent to the browser, each file can be wrapped in a top-level function wrapper
-# (to keep all variables local to that file) or a module wrapper (to allow you to require() a module).
-# By default any files in the 'libs' dir are not wrapped and files in 'modules' are wrapped with the module wrapper.
-# Files in all other dirs are wrapped with the safety wrapper. This behavior can be overwritten with ss.client.wrapCode()
-# All subdirectories inherit their parent's wrapping settings automatically unless overridden explicitly
-wrapCode = (code, path, codeWrappers) ->
+# Before client-side code is sent to the browser any file which is NOT a library (e.g. /client/code/libs)
+# is wrapped in a module wrapper (to keep vars local and allow you to require() one file in another).
+# /client/code/system is a special case - any module placed in this dir will not have a leading slash
+wrapCode = (code, path, pathPrefix) ->
   pathAry = path.split('/')
-
-  getWrapper = (cb) ->
-    pathAry.pop() # remove file name
-    codePath = pathAry.join('/')
-    wrapper = codeWrappers[codePath]
-    if wrapper == undefined and pathAry.length > 1
-      getWrapper(cb)
-    else
-      cb(wrapper)
-
-  getWrapper (wrapper) ->
-
-    # Use the safety function wrapper by default
-    wrapper = 'safety' if wrapper == undefined
-      
-    # Pass the name of an existing wrapper or pass your own module with a process() function
-    if wrapper
-      if typeof(wrapper) == 'string'
-        wrapper = require('./code_wrappers/' + wrapper)
-      wrapper.process(code, path)
-    else
+  
+  # Get immidiate dir name
+  dirName = pathAry[pathAry.length-2]
+  
+  switch dirName
+    # Don't touch the code if it's in a 'libs' directory
+    when 'libs'
       code
+    # Don't add a leading slash if this is a system module
+    when 'system'
+      modPath = pathAry[pathAry.length-1]
+      wrapModule(modPath, code)
+    # Otherwise assume this is a regular module
+    else
+      modPath = pathAry.slice(1).join('/')
+      modPath = path.substr(pathPrefix.length+1) if pathPrefix
+      wrapModule('/' + modPath, code)
+
+  
+# Return wrapped code
+wrapModule = (modPath, code) -> 
+  "require.define(\"#{modPath}\", function (require, module, exports, __dirname, __filename){\n#{code}\n});"
+

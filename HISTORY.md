@@ -1,3 +1,49 @@
+0.3 alpha5 / 2012-03-11
+=======================
+
+##### Major improvements to Client-side Code
+
+Please read new documentation on [Client-side Code](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/client_side_code.md) then create a new project to see the updated file structure. Also see the alpha5 announcement on Google Groups if you want a step-by-step migration guide.
+
+Key changes from previous releases:
+
+* All client code files **not** in a directory called 'libs` are now modules by default
+* You can now `require()` modules in the browser in exactly the same way as on the server (thanks to code from Browserify)
+* Where you currently called `require('mymod')` you will now need to add a leading slash: `require('/mymod')`
+* You can now use relative paths such as `require('../../mymod')` as you would on the server
+* `ss.loadAsync()` is now `ss.load.code()` but essentially works the same way. See new On Demand Loading doc
+* No more mandatory `SocketStream` and `ss` global variables...
+* SocketStream is now a system module - make it any global you want or type `var ss = require('socketstream')` at the top of each file if you prefer
+* `SocketStream.event.on` is now `ss.server.on`. Event names have not changed
+* The `SocketStream` global is no longer needed and has been removed
+* An `/entry.js` (or `.coffee`) module is now created by default and must always be present in your app as this is the new single point of entry
+* The `ss.client.wrapCode()` command and code wrappers concept are now redundant and the code has been removed
+
+Note: The next release will see further improvements to client-side code and a lot of internal refactoring / cleaning up. At this stage no more breaking changes to your client or server-side code are anticipated.
+
+
+##### New project installer
+
+* Now creates example code in JavaScript by default
+* Install example code in CoffeeScript by passing the `-c` option
+* Further enhancements planned here
+
+
+##### New documentation
+
+* [Client-side Code](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/client_side_code.md)
+* [Defining multiple Single-Page Clients](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/defining_multiple_clients.md)
+* [Loading Assets On Demand](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/loading_assets_on_demand.md)
+
+
+##### Other changes
+
+* We are no longer bundling `ss-console` in new apps by default
+* You can now disable Live Reload altogether with `ss.client.set({liveReload: false})` in your `app.js` file
+* Upgraded deps: Socket.IO 0.9 and Connect 2.0.2
+
+
+
 0.3 alpha4 / 2012-02-23
 =======================
 

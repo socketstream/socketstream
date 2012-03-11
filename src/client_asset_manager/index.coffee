@@ -15,18 +15,19 @@ res = http.ServerResponse.prototype
 formattersByExtension = null
 
 # Set defaults
-packAssets = false        # Serve assets live
-packAssetOptions = {}
-codeWrappers =            # JS code wrapping (highly experimental!)
-  'libs': false
-  'modules': 'module'
+packAssets = false
+settings = 
+  packAssets: {}
+  liveReload: true
 
+# Code to execute once everything is loaded
+initAppCode = "require('/entry'); require('socketstream').connect();"
 
 exports.init = (root, router, reservedNames) ->
 
   formatters = require('./formatters').init(root)
   templateEngine = require('./template_engine').init(root)
-  Client = require('./client').init(root, codeWrappers, templateEngine)
+  Client = require('./client').init(root, templateEngine, initAppCode)
   
   clients = {}
   ssClient = null
@@ -48,11 +49,16 @@ exports.init = (root, router, reservedNames) ->
   # Return API
   formatters: formatters
   templateEngine: templateEngine
+  
+  # Merge optional settings
+  set: (newSettings) ->
+    throw new Error('ss.client.set() takes an object e.g. {liveReload: false}') unless typeof(newSettings) == 'object'
+    settings[k] = v for k, v of newSettings
 
   # Tell the asset manager to pack and minimise all assets
   packAssets: (options) ->
     packAssets = true
-    packAssetOptions = options
+    settings.packAssets = options
 
   # Define a new Single Page Client
   define: (name, paths) ->
@@ -62,14 +68,9 @@ exports.init = (root, router, reservedNames) ->
     clients[name] = client
     client
   
-  # Wrap client code in safety or module wrappers. By default:
-  # /libs has no wraper
-  # /modules has the module wrapper
-  # everything else has a safty wrapper
+  # Temporary - REMOVE_BEFORE_0.3.0
   wrapCode: (nameOrModule, dirs) ->
-    dirs = [dirs] unless dirs instanceof Array
-    dirs.forEach (dir) ->
-      codeWrappers[dir] = nameOrModule
+    throw new Error("Thanks for upgrading to the latest alpha. The ss.client.wrapCode() command has now been deprecated as every file not in /client/code/libs is now assumed to be a module. Please remove calls to ss.client.wrapCode() in your app and restart SocketStream\n\n")
 
   # Listen and serve incoming asset requests
   load: (client, ss) ->
@@ -78,12 +79,12 @@ exports.init = (root, router, reservedNames) ->
      
     # Bundle initial assets if we're running in production mode
     if packAssets
-      client.pack(ssClient, formattersByExtension, packAssetOptions) for name, client of clients
+      client.pack(ssClient, formattersByExtension, settings.packAssets) for name, client of clients
     
     # Else watch for changes to files in development
     else
-      require('./live_reload').init(root, ss)
+      require('./live_reload').init(root, ss) if settings.liveReload
 
     # Listen out for requests to async load new assets and/or serve all assets live in dev mode 
-    asset = require('./asset').init(root, formattersByExtension, codeWrappers)
-    require('./serve_live').init(router, ssClient, asset, packAssets)
+    asset = require('./asset').init(root, formattersByExtension)
+    require('./serve_live').init(router, ssClient, asset, initAppCode, packAssets)

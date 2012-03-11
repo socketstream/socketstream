@@ -30,3 +30,8 @@ then run
 If things still don't work as expected, please log an issue and be sure to mention which OS you're using.
 
 
+### Disabling
+
+To disable Live Reload, even in development mode, put the following in your `app.js` code:
+
+    ss.client.set({liveReload: false})

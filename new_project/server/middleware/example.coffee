@@ -1,4 +1,4 @@
-# Example middleware
+# Example request middleware
 
 # Only let a request through if the session has been authenticated
 exports.authenticated = ->

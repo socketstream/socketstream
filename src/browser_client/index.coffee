@@ -6,6 +6,7 @@
 # so all the client-side code can be sent
 
 fs = require('fs')
+fsUtils = require('../utils/file')
 coffee = require('coffee-script') if process.env['SS_DEV']
 
 exports.init = (transport, responders) ->
@@ -23,30 +24,43 @@ exports.init = (transport, responders) ->
 
     output = []
 
-    # Load essential libs for compatibility with all browsers
-    ['json.min.js','console_log.min.js', 'event_emitter.js'].forEach (file) ->
+    # Load essential libs for backwards compatibility with all browsers
+    ['json.min.js','console_log.min.js'].forEach (file) ->
       output.push fs.readFileSync(__dirname + '/libs/' + file, 'utf8')
 
-    # Load main client
-    ext = coffee? && 'coffee' || 'js'
-    input = fs.readFileSync(__dirname + '/init.' + ext, 'utf8')
-    output.push coffee? && coffee.compile(input) || input
+    # Load Browserify code (handles 'require'ing of modules)
+    output.push fs.readFileSync(__dirname + '/browserify.js', 'utf8')
+
+    systemMods = {}
+
+    # Send System Modules
+    modDir = __dirname + '/system_modules'
+    fsUtils.readDirSync(modDir).files.forEach (mod) ->
+      input = fs.readFileSync(mod, 'utf8')
+      sp = mod.split('.')
+      ext = sp[sp.length-1]
+      code = ext == 'coffee' && coffee? && coffee.compile(input) || input
+      systemMods[mod.substr(modDir.length + 1)] = code
 
     # Next load the code we need for the selected websocket transport
+    if transport.client().libs?
+      output.push(transport.client().libs() + "\n")
+
     if transport.client().code?
-      output.push transport.client().code()
+      systemMods['socketstream-transport'] = transport.client().code()
 
     # Load client-code for active message responders
     for name, responder of responders
-      output.push responder.client.code()
+      systemMods['socketstream-' + name] = responder.client.code()
+
+    for name, code of systemMods
+      output.push("require.define(\"#{name}\", function (require, module, exports, __dirname, __filename){\n#{code} \n});")
+
 
     # Finally assign client-side API window.ss and connect to server
-    output.push """
-    window.ss = window.SocketStream.apis;
-    SocketStream.transport.connect();
-
-    """
-    
+    for name, responder of responders
+      output.push("require('socketstream-#{name}');")
+   
     # Output final JS for the browser
     cb output.join("\n")
 

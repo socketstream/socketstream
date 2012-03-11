@@ -5,7 +5,9 @@ exports.actions = (req, res, ss) ->
 
   # Example of pre-loading sessions into req.session using internal middleware
   req.use('session')
-  #req.use('example.authenticated') # Uncomment to use the middleware defined in server/middleware/example
+
+  # Uncomment line below to use the middleware defined in server/middleware/example
+  #req.use('example.authenticated')
 
   sendMessage: (message) ->
     if message && message.length > 0            # Check for blank messages
