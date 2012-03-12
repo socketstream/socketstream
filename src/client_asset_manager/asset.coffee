@@ -73,7 +73,13 @@ wrapCode = (code, path, pathPrefix) ->
     # Otherwise assume this is a regular module
     else
       modPath = pathAry.slice(1).join('/')
-      modPath = path.substr(pathPrefix.length+1) if pathPrefix
+      # Work out namespace for module
+      if pathPrefix
+        # Ignore any filenames in the path
+        if pathPrefix.indexOf('.') > 0
+          sp = pathPrefix.split('/'); sp.pop();
+          pathPrefix = sp.join('/')
+        modPath = path.substr(pathPrefix.length+1)
       wrapModule('/' + modPath, code)
 
   
