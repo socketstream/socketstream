@@ -8,12 +8,12 @@ fileUtils = require('../utils/file')
 
 exports.files = (prefix, paths = ['*']) ->
   files = []
+  prefix = prefix.replace(/\\/g, '/') # replace '\' with '/' to support Windows
   numRootFolders = prefix.split('/').length
 
   paths = [paths] unless paths instanceof Array
   
   paths.forEach (path) ->
-    path = path.replace(/\\/g, '/') # replace '\' with '/' to support Windows
     sp = path.split('/')
     if sp[sp.length-1].indexOf('.') > 0
       files.push(path)
