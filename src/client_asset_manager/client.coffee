@@ -62,14 +62,16 @@ exports.init = (root, templateEngine, initAppCode) ->
       paths = @paths
 
       outputView = ->
-        view = paths.view
-        sp = view.split('.')
+        throw new Error("You may only define one HTML view per single-page client. Please pass a filename as a string, not an Array") if typeof(paths.view) != 'string'
+        throw new Error("The '#{paths.view}' view must have a valid HTML extension (such as .html or .jade)") if paths.view.indexOf('.') == -1
+        
+        sp = paths.view.split('.')
         extension = sp[sp.length-1]
-        path = pathlib.join(root, 'client/views', view)
-
+        path = pathlib.join(root, 'client/views', paths.view)
         formatter = formatters[extension]
-        throw new Error("Unable to output view. Unsupported file extension #{extension}. Please provide a suitable formatter") unless formatter
-        throw new Error("Unable to render view. #{formatter.name} is not a HTML formatter") unless formatter.assetType == 'html'
+        
+        throw new Error("Unable to output view '#{paths.view}'. Unsupported file extension #{extension}. Please provide a suitable formatter") unless formatter
+        throw new Error("Unable to render view '#{paths.view}'. #{formatter.name} is not a HTML formatter") unless formatter.assetType == 'html'
 
         formatter.compile(path, {headers: includes.join(''), filename: path}, cb)
       
@@ -77,16 +79,23 @@ exports.init = (root, templateEngine, initAppCode) ->
         
         ssClient.html (codeForView) =>
 
+          # Add SocketStream browser client and system mods
           includes.push(codeForView)
 
           # Add links to CSS and JS files
           includes = includes.concat(@headers(packAssets))
 
           # Add any Client-side Templates
-          paths.tmpl != false && files = magicPath.files(pathlib.join(root, templateDir))
-          if files && files.length > 0
+          paths.tmpl = paths.templates if paths.templates
+          if paths.tmpl
+            dir = pathlib.join(root, templateDir)
+            paths.tmpl = [paths.tmpl] unless paths.tmpl instanceof Array
+            
+            files = []
+            paths.tmpl.forEach (tmpl) -> files = files.concat(magicPath.files(dir, tmpl))
+            
             templateEngine.generate root, templateDir, files, formatters, (templateHTML) ->
-              includes.push templateHTML
+              includes.push(templateHTML)
               outputView()
           else
             outputView()
