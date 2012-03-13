@@ -24,5 +24,5 @@ exports.files = (prefix, paths = ['*']) ->
         tree.files.sort().forEach (file) ->
           files.push(file.split('/').slice(numRootFolders).join('/'))
       else
-        console.log("!  error - /#{dir} directory not found".red)
+        console.log("! Error: #{dir} directory not found".red)
   files
