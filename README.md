@@ -12,16 +12,6 @@ IRC channel: [#socketstream](http://webchat.freenode.net/?channels=socketstream)
 Take a tour of all the new features at http://www.socketstream.org/tour
 
 
-### Status
-
-SocketStream 0.3 is in full time development, rapidly progressing thanks to frequent contributions from a growing community.
-
-This is a working alpha release intended for experimentation and use by early adopters. There is still [plenty of work](https://github.com/socketstream/socketstream/blob/master/TODO.md) to do to finish features and improve existing code; however, most of the server-side API is now stable.
-
-Please share your thoughts on our [Google Group](http://groups.google.com/group/socketstream) after reading [TODO.md](https://github.com/socketstream/socketstream/blob/master/TODO.md) (updated regularly).
-
-The previous stable version of SocketStream can be found in the [0.2 branch](https://github.com/socketstream/socketstream/tree/0.2). This is the version currently on NPM.
-
 
 ### Introduction
 
@@ -31,7 +21,7 @@ Whether you're building a group chat app, multiplayer game or trading platform, 
 
 We follow a few guiding principals to keep the framework lean, modular and extensible whilst ensuring your app can easily integrate with other great Node.js modules such as [Express.js](http://expressjs.com), [Everyauth](https://github.com/bnoguchi/everyauth) and [thousands](http://search.npmjs.org) more.
 
-SocketStream is continually evolving but you can join a [growing community](http://groups.google.com/group/socketstream) of developers who are building apps today. Demos and more documentation coming soon.
+SocketStream 0.3 is in full-time development, rapidly progressing thanks to frequent contributions from a [growing community](http://groups.google.com/group/socketstream) of developers. Now the 0.3 API is pretty much stable, there will one or two further beta releases to refine features and improve existing code before we push 0.3.0 to NPM. Demos and more documentation coming soon.
 
 
 
