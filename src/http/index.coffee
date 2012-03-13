@@ -7,6 +7,7 @@ fs = require('fs')
 pathlib = require('path')
 fileUtils = require('../utils/file')
 connect = require('connect')
+gzippo = require('gzippo')
 
 router = new (require('./router').Router)
 
@@ -53,7 +54,7 @@ exports.init = (root) ->
     # Finally ensure static asset serving is last
     app
     .use(eventMiddleware)
-    .use(connect.static(staticPath))
+    .use(gzippo.staticGzip(staticPath))
 
     # Prevent sessions from loading on requests for static assets
     # Not working yet as this functionality not present in Connect 2 yet as far as I can tell
