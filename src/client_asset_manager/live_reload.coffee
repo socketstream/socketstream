@@ -11,10 +11,15 @@ lastReload = Date.now()
 
 exports.init = (root, ss) ->
 
-  handleFileChange = ->
+  handleFileChange = (action)->
     if (Date.now() - lastReload) > 1000  # Reload browser max once per second
-      console.log('✎'.green, 'Client files changed. Reloading browser...'.grey)
-      ss.publish.all('__ss:reload')
+      switch action
+        when "update"
+          console.log('✎'.green, 'Client files changed. Updating browser...'.grey)
+          ss.publish.all('__ss:update')
+        when "reload"
+          console.log('✎'.green, 'Client files changed. Reloading browser...'.grey)
+          ss.publish.all('__ss:reload')
       lastReload = Date.now()
 
   assetsToWatch = ->
@@ -25,7 +30,12 @@ exports.init = (root, ss) ->
 
   watch = (paths) ->
     paths.dirs.forEach (dir) ->   fs.watch(dir, detectNewFiles)
-    paths.files.forEach (file) -> fs.watch(file, handleFileChange)
+    paths.files.forEach (file) -> 
+      extension = file.split('.')[file.split('.').length-1]
+      if extension is 'styl' or extension is 'css'
+        fs.watch file, (event, filename) -> handleFileChange('update')
+      else
+        fs.watch file, (event, filename) -> handleFileChange('reload')
 
   detectNewFiles = ->
     pathsNow = assetsToWatch()

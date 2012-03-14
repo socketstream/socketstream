@@ -58,3 +58,11 @@ exports.load =
 server.on '__ss:reload', ->
   console.log('Reloading as files have changed...')
   window.location.reload()
+
+# Update browser is update system event receieved
+server.on '__ss:update', ->
+  console.log('Updating as files have changed...')
+  for tag in document.getElementsByTagName("link")
+    if tag.rel.toLowerCase().indexOf("stylesheet") >= 0 and tag.href
+      h = tag.href.replace(/(&|%5C?)\d+/, "")
+      tag.href = h + (if h.indexOf("?") >= 0 then "&" else "?") + (new Date().valueOf())
