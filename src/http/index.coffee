@@ -10,6 +10,10 @@ connect = require('connect')
 
 router = new (require('./router').Router)
 
+# User-configurable settings with sensible defaults
+settings = 
+  static: {maxAge: 30 * 1000}  # cache static assets in the browser for 30 seconds
+
 # Create new Connect app instance which can be accessed from your app.js file with ss.http.middleware
 app = connect()
 
@@ -26,6 +30,7 @@ app.append = ->
 staticDirs = []
 staticFiles = []
 
+
 exports.init = (root) ->
 
   staticPath = pathlib.join(root, 'client/static')
@@ -37,6 +42,11 @@ exports.init = (root) ->
   middleware: app
   router:     router
   staticDirs: staticDirs
+
+  # Merge optional settings
+  set: (newSettings) ->
+    throw new Error('ss.http.set() takes an object e.g. {static: {maxAge: 60000}}') unless typeof(newSettings) == 'object'
+    settings[k] = v for k, v of newSettings
 
   load: (sessionStore, sessionOptions) ->
     # Append SocketStream middleware upon server load
@@ -53,7 +63,7 @@ exports.init = (root) ->
     # Finally ensure static asset serving is last
     app
     .use(eventMiddleware)
-    .use(connect.static(staticPath))
+    .use(connect.static(staticPath, settings.static))
 
     # Prevent sessions from loading on requests for static assets
     # Not working yet as this functionality not present in Connect 2 yet as far as I can tell
