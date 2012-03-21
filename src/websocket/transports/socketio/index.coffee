@@ -73,7 +73,7 @@ processSession = (socket) ->
   # Parse session ID from initial hankshake data
   try
     rawCookie = socket.handshake.headers.cookie
-    cookie = qs.parse(rawCookie)
+    cookie = qs.parse(rawCookie, '; ')
     sessionId = cookie['connect.sid'].split('.')[0]
     socket.sessionId = sessionId
   catch e
