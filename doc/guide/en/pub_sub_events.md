@@ -88,6 +88,16 @@ Please be aware that `req.socketId` will change if you refresh the page, so it's
 
 
 
+### Publishing Events via app.js
+
+Sometimes you'll want to publish events from outside your `/server/rpc` files, such as your `app.js` file. The entire `ss` API available to actions in `/server/rpc` is also available in `app.js` via the `ss.api` object. Hence to publish an event to `all` you would call:
+
+``` javascript
+// in /app.js
+ss.api.publish.all()
+```
+
+
 ### Event Transports
 
 By default SocketStream sends all published events over an internal event emitter. This works fine during development and under moderate load, however; once your app outgrows a single process, you'll need to switch to an external event transport to allow you to run multiple SocketStream processes/servers at once.

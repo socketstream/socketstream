@@ -2,7 +2,7 @@
 
 # SocketStream
 
-Latest release: 0.3.0alpha5  ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+Latest release: 0.3.0beta1  ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 [![build status](https://secure.travis-ci.org/socketstream/socketstream.png)](http://travis-ci.org/socketstream/socketstream)
 
 Twitter: [@socketstream](http://twitter.com/#!/socketstream)  
@@ -21,7 +21,7 @@ Whether you're building a group chat app, multiplayer game or trading platform, 
 
 We follow a few guiding principals to keep the framework lean, modular and extensible whilst ensuring your app can easily integrate with other great Node.js modules such as [Express.js](http://expressjs.com), [Everyauth](https://github.com/bnoguchi/everyauth) and [thousands](http://search.npmjs.org) more.
 
-SocketStream 0.3 is in full-time development, rapidly progressing thanks to frequent contributions from a [growing community](http://groups.google.com/group/socketstream) of developers. Now the 0.3 API is pretty much stable, there will one or two further beta releases to refine features and improve existing code before we push 0.3.0 to NPM. Demos and more documentation coming soon.
+SocketStream 0.3 is in full-time development, rapidly progressing thanks to frequent contributions from a [growing community](http://groups.google.com/group/socketstream) of developers. Now the 0.3 API is pretty much stable, there will one one further beta releases to refine features and improve existing code before we push 0.3.0 to NPM. Demos and more documentation coming soon.
 
 
 
@@ -32,31 +32,29 @@ SocketStream 0.3 is in full-time development, rapidly progressing thanks to freq
 * Designed for large apps - excellent code organization, modularity and extensibility. Not a black box framework
 * True bi-directional communication using websockets (or [Socket.IO 0.9](http://socket.io) fallbacks). No more slow, messy AJAX!
 * Write all code in [CoffeeScript](http://jashkenas.github.com/coffee-script/) or JavaScript - your choice
-* **NEW** Works great with [Express.js](http://expressjs.com) and other Connect-based frameworks!
+* Works great with [Express.js](http://expressjs.com) and other Connect-based frameworks!
 * Easily share code between the client and server. Ideal for business logic and model validation (see Questions below)
-* **NEW** Request Middleware - enabling session access, authentication, logging, distributed requests and more
+* Request Middleware - enabling session access, authentication, logging, distributed requests and more
 * Effortless, scalable, pub/sub baked right in - including Private Channels
-* **NEW** Easy authentication - use a backend database or authenticate against Facebook Connect, Twitter, etc using [Everyauth](https://github.com/bnoguchi/everyauth)
-* **NEW** Share sessions between HTTP and Websocket Requests using Connect Session Stores
+* Easy authentication - use a backend database or authenticate against Facebook Connect, Twitter, etc using [Everyauth](https://github.com/bnoguchi/everyauth)
+* Uses [Connect 2.0](http://senchalabs.github.com/connect/) - Hook-in your own HTTP middleware, share sessions between HTTP/Connect/Express/SocketStream
 * Optionally use [Redis](http://www.redis.io) for fast session retrieval, pub/sub, list of users online, and any other data your app needs instantly
-* **NEW** Modular transport design allow alternative websocket or back-end event transports to be used
-* API Trees - offer a simple, consistent way to namespace and organize large code bases
-* Uses [Connect 2.0](http://senchalabs.github.com/connect/) - hook in 3rd-party HTTP middleware or write your own
+* Modular transport design allow alternative websocket or back-end event transports to be used
 * MIT License
 
 #### Client Side
 
-* Works great with Chrome, Safari __and now Firefox 6__ using native websockets
+* Works great with Chrome, Safari, Firefox 6 (and above) using native websockets
 * Compatible with older versions of Firefox and IE thanks to configurable fallback transports provided by Socket.IO
-* **NEW** Use `require()` and `exports` in your client-side code as you would on the server
-* **NEW** Define multiple single-page clients by choosing the CSS, JS and client-side templates you wish to serve
+* Use `require()` and `exports` in your client-side code as you would on the server
+* Define multiple single-page clients by choosing the CSS, JS and client-side templates you wish to serve
 * Integrated asset manager - automatically packages and [minifies](https://github.com/mishoo/UglifyJS) all client-side assets
-* **NEW** Live Reload - automatically reloads the browser when an HTML, CSS or JS client file changes (in development)
+* Live Reload - automatically reloads the browser when a HTML, CSS or JS client file changes
 * Works with iPads and iPhones using Mobile Safari (iOS 4.2 and above), even over 3G. Send a smaller, lighter client if desired
-* **NEW** Use optional code formatters (e.g. CoffeeScript, Jade, Stylus, Less, etc) by easily installing wrapper modules
+* Use optional code formatters (e.g. CoffeeScript, Jade, Stylus, Less, etc) by easily installing wrapper modules
 * Multiple clients work seamlessly with HTML Push State 'mock routing' so you can use [Backbone Router](http://documentcloud.github.com/backbone/#Router), [Davis JS](http://davisjs.com) and more
-* **NEW** Supports many client-side template languages (Hogan/Mustache/CoffeeKup/jQuery), pre-compiling them for speed
-* **NEW** Works great with [Ember.js](http://emberjs.com) for 'reactive templates' which automatically update when data changes 
+* Supports many client-side template languages (Hogan/Mustache/CoffeeKup/jQuery), pre-compiling them for speed
+* Works great with [Ember.js](http://emberjs.com) for 'reactive templates' which automatically update when data changes
 * Bundled with jQuery - though not dependent on it. Will work great with Zepto and other libraries
 * Easily add additional client libraries such as [Underscore.js](http://documentcloud.github.com/underscore/)
 
@@ -180,13 +178,14 @@ We've made a start on documentation for 0.3. Right now the following sections ha
 * [Defining multiple Single-Page Clients](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/defining_multiple_clients.md)
 * [Loading Assets On Demand](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/loading_assets_on_demand.md)
 * [Live Reload](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/live_reload.md)
+* [Web Workers](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/web_workers.md)
 
 ##### Developing (Server-side)
 
 * [RPC Responder](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/rpc_responder.md)
-* [Request Middleware](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/request_middleware.md)
-* [Sessions](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/sessions.md)
 * [Pub/Sub Events](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/pub_sub_events.md)
+* [Sessions](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/sessions.md)
+* [Request Middleware](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/request_middleware.md)
 * [HTTP Middleware](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/http_middleware.md)
 * [Authentication](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/authentication.md)
 
@@ -242,7 +241,7 @@ Redis is used in two areas of SocketStream - session storage and internal pubsub
 
 Pass any config as the second argument to either of the above commands as so:
 
-    {host: 'localhost', port: 6379, pass: 'myOptionalPass'}
+    {host: 'localhost', port: 6379, pass: 'myOptionalPass', db: 3}
 
 
 ##### How about scaling?

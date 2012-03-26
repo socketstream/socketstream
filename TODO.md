@@ -1,17 +1,9 @@
 TODO
 ====
 
-#### WORK TO DO BEFORE 0.3.0 CAN BE RELEASED
-
-* Serious refactoring of internal client_asset_manager code now we know what we're doing here
 * Make 'socketstream new' install recommended stack of optional modules by default, but add a minimal install option
-* More error checking around sending bad RPC calls (e.g if a module or function does not exist)
 * Websocket responders need to take a config object. It should also be able to send config to client-side code (
-* Look into using Engine.IO instead of Socket.IO
 * SocketStream should pass its version number and other meta info to wrapper modules
-* Look into ways we can use multi-core cluster features of Node 0.6, if at all (maybe best at app level?)
-
-Help with any of the above tasks would be appreciated. Please get in touch
 
 
 #### WORK TO DO ONCE 0.3.0 IS RELEASED
@@ -20,21 +12,17 @@ Help with any of the above tasks would be appreciated. Please get in touch
 * Finish and release Users Online module
 * Finish and release Pusher Pipe transport module
 * Finish converting SocketRacer to 0.3 and demo new telemetry websocket responder module
+* Move to Engine.IO instead of Socket.IO once it's ready
+* Look into ways we can use multi-core cluster features of Node 0.6, if at all (maybe best at app level?)
 
 
 #### DECISIONS TO MAKE
 
-* Sort out how we're going to do configuration and logging. There is very little of either at the moment!
+* Sort out how we're going to do logging
 * Should we show a 404 if a request is invalid? (i.e. not a file or cannot be routed to a client)
 # Should we use Connect Router or Director (from flatiron) instead of a simple EventEmitter for HTTP routing?
 
 Any thoughts on the above are most welcome
-
-
-#### DOCUMENTATION
-
-* Lots!!
-* Show how to handle websocket connections / disconnections in README
 
 
 #### SOCKETSTREAM.ORG WEBSITE

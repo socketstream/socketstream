@@ -21,7 +21,7 @@ While we try to keep the experience between browser and server as similar as pos
 
 Any file which lives in a directory called 'libs' will NOT be served as a module. Instead these files will be sent as-is without any modification. Typically you'll want to ensure jQuery and other libraries which use the `window` variable are always placed in a `/client/code` directory called 'libs'.
 
-As load order is critically important for non Common JS libraries **either** name your files alphanumerically within the `libs` directory **or** list each file explicitly in your `ss.client.define()` command - your choice. Directories called 'libs' may not contain sub-directories, though you may serve multiple 'libs' directories to the same client in any order you choose.
+As load order is critically important for non Common JS libraries **either** name your files alphanumerically within the `libs` directory **or** list each file explicitly in your `ss.client.define()` command - your choice.
 
 
 #### 'system' - System Modules
@@ -31,8 +31,6 @@ System modules are similar to regular modules but with one important difference:
 So why do we need this distinction? Because some libraries such as Backbone.js (when used as a module, rather than in a 'libs' directory) depend upon other system modules. In this case Backbone calls `require('underscore')` internally, therefore both `backbone.js` and `underscore.js` must live in a `system` directory.
 
 As SocketStream uses code from [Browserify](https://github.com/substack/node-browserify), the 'system' directory also allows you to use one of Node's inbuilt modules in the browser. Just head over to https://github.com/substack/node-browserify/tree/master/builtins and copy the libraries you need into any directory within `/client/code` called `system`.
-
-Note that, as with 'libs', 'system' directories may not contain sub-directories, though you may serve multiple 'system' directories to the same client in any order you choose (just watch out for conflicting module names!).
 
 
 #### '/entry.js' - A single point of entry

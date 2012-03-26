@@ -4,19 +4,15 @@
 fs = require('fs')
 qs = require('querystring')
 socketio = require('socket.io')
-coffee = require('coffee-script') if process.env['SS_DEV']
 
 utils = require('../../../utils/misc.js')
 
-exports.init = (emitter, httpServer, config) ->
+exports.init = (client, emitter, httpServer, config) ->
 
   io = socketio.listen(httpServer)
 
   # Set default log level. Can be overwritten using app config
   io.set 'log level', 1
-
-  # Temporary fix for https://github.com/LearnBoost/socket.io/issues/777  REMOVE_BEFORE_0.3.0
-  io.set('close timeout', 60*60*120)
   
   # Allow app to configure Socket.IO using the syntax below
   # ss.ws.transport.use('socketio', {io: function(io){
@@ -41,7 +37,15 @@ exports.init = (emitter, httpServer, config) ->
       
       socket.emit('ready')
 
+  # Send Socket.IO Client to browser
+  socketioClient = fs.readFileSync(__dirname + '/client.min.js', 'utf8')
+  client.assets.add('lib', 'socketio-client', socketioClient, {minified: true})
 
+  # Send socketstream-transport module
+  code = fs.readFileSync(__dirname + '/wrapper.' + (process.env['SS_DEV'] && 'coffee' || 'js'), 'utf8')
+  client.assets.add('mod', 'socketstream-transport', code, {coffee: process.env['SS_DEV']})
+
+  # Export API
   event: ->
     
     all: (msg) ->
@@ -53,16 +57,6 @@ exports.init = (emitter, httpServer, config) ->
       else
         false
 
-
-  client: ->
-
-    libs: ->
-      fs.readFileSync(__dirname + '/client.min.js', 'utf8')
-
-    code: ->
-      ext = coffee? && 'coffee' || 'js'
-      input = fs.readFileSync(__dirname + '/wrapper.' + ext, 'utf8')
-      coffee? && coffee.compile(input) || input
 
 
 # Private

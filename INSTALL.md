@@ -1,7 +1,7 @@
 Install Instructions
 ====================
 
-SocketStream runs on all UNIX based platforms, including OS X and Linux. Early adopters are reporting good results with SocketStream 0.3 on Windows.
+SocketStream runs well on UNIX based platforms (including OS X and Linux) and Windows.
 
 Note: These instructions will be changed once the first 0.3 package is published to npm.
 

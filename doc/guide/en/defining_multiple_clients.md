@@ -65,11 +65,11 @@ Here we're not only specifying a different view (`/client/views/iphone.jade`) bu
 Once you've defined a single-page client you can choose to serve it on a particular URL:
 
 ```javascript
-ss.http.router.on('/', function(req, res) {
-  res.serveClient('main');
-});
+// short format
+ss.http.route('/').serveClient('main');
 
-ss.http.router.on('/iphone', function(req, res) {
+// long format
+ss.http.route('/iphone', function(req, res) {
   res.serveClient('iphone');
 });
 ```
@@ -77,7 +77,7 @@ ss.http.router.on('/iphone', function(req, res) {
 or depending upon the browser's UserAgent:
 
 ```javascript
-ss.http.router.on('/', function(req, res) {
+ss.http.route('/', function(req, res) {
   if (req.headers['user-agent'].match(/iPhone/))
     res.serveClient('iphone');
   else

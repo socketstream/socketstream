@@ -6,7 +6,7 @@
 ss.event.on('newMessage', function(message) {
 
   // Example of using the Hogan Template in client/templates/chat/message.jade to generate HTML for each message
-  var html = HT['chat-message'].render({
+  var html = ss.tmpl['chat-message'].render({
     message: message,
     time: function() { return timestamp(); }
   });

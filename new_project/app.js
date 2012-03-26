@@ -12,9 +12,9 @@ ss.client.define('main', {
 });
 
 // Serve this client on the root URL
-ss.http.router.on('/', function(req, res) {
+ss.http.route('/', function(req, res){
   res.serveClient('main');
-});
+})
 
 // Remove to use only plain .js, .html and .css files if you prefer
 ss.client.formatters.add(require('ss-coffee'));

@@ -6,7 +6,7 @@
 ss.event.on 'newMessage', (message) ->
 
   # Example of using the Hogan Template in client/templates/chat/message.jade to generate HTML for each message
-  html = HT['chat-message'].render({message: message, time: -> timestamp() })
+  html = ss.tmpl['chat-message'].render({message: message, time: -> timestamp() })
 
   # Append it to the #chatlog div and show effect
   $(html).hide().appendTo('#chatlog').slideDown()

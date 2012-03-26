@@ -3,11 +3,10 @@
 # Preloads all functions in /server/rpc recursively and executes them when 'rpc' messages come in
 
 fs = require('fs')
-coffee = require('coffee-script') if process.env['SS_DEV']
 
 messagePrefix = 'rpc'
 
-exports.init = (root, ss, config) ->
+exports.init = (root, ss, client, config) ->
 
   messagePrefix: messagePrefix
   
@@ -16,12 +15,15 @@ exports.init = (root, ss, config) ->
     # Get request handler
     request = require('./handler').init(root, messagePrefix, middleware, ss)
 
+    # Serve client code
+    code = fs.readFileSync(__dirname + '/client.' + (process.env['SS_DEV'] && 'coffee' || 'js'), 'utf8')
+    client.assets.add('mod', 'socketstream-rpc', code, {coffee: process.env['SS_DEV']})
+    client.assets.add('code', 'init', "require('socketstream-rpc');")
+
+    ### RETURN API ###
+
     # Return server interfaces
     server: require('./interfaces').init(request, messagePrefix)
 
-    # Return code/HTML to be sent to browser
-    client:
-      code: ->
-        extension = coffee? && 'coffee' || 'js'
-        input = fs.readFileSync(__dirname + '/client.' + extension, 'utf8')
-        coffee? && coffee.compile(input) || input
+
+        

@@ -145,7 +145,7 @@ exports.checkAuthenticated = function(){
   
   return function(req, res, next){
     if (req.session && req.session.userId) return next();
-    res('Access denied'); // prevent request from continuing
+    res(false); // Access denied: prevent request from continuing
   }
 
 }

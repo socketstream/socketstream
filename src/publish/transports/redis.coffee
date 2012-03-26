@@ -10,14 +10,14 @@ exports.init = (config = {}) ->
   # Set options or use the defaults
   port = config.port || 6379
   host = config.host || "127.0.0.1"
-  password = config.pass if config.pass
   options = config.options || {}
 
   # Redis requires a separate connection for pub/sub
   conn = {}
   ['pub','sub'].forEach (name) ->
     conn[name] = redis.createClient(port, host, options)
-    conn[name].auth(password) if password    
+    conn[name].auth(config.pass) if config.pass 
+    conn[name].select(config.db) if config.db
 
   listen: (cb) ->
     conn.sub.subscribe "ss:event"

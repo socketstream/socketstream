@@ -5,10 +5,13 @@
 
 fs = require('fs')
 pathlib = require('path')
-fileUtils = require('../utils/file')
 connect = require('connect')
 
+fileUtils = require('../utils/file')
 router = new (require('./router').Router)
+
+staticDirs = []
+staticFiles = []
 
 # User-configurable settings with sensible defaults
 settings = 
@@ -27,8 +30,6 @@ app.append = ->
   args = Array.prototype.slice.call(arguments)
   useAfterStack.push(args)
 
-staticDirs = []
-staticFiles = []
 
 
 exports.init = (root) ->
@@ -43,6 +44,7 @@ exports.init = (root) ->
   router:     router
   staticDirs: staticDirs
 
+
   # Merge optional settings
   set: (newSettings) ->
     throw new Error('ss.http.set() takes an object e.g. {static: {maxAge: 60000}}') unless typeof(newSettings) == 'object'
@@ -52,6 +54,7 @@ exports.init = (root) ->
     # Append SocketStream middleware upon server load
     app
     .use(connect.cookieParser('SocketStream'))
+    .use(connect.favicon(staticPath + '/favicon.ico'))
     .use(connect.session(
       cookie: { path: '/', httpOnly: false, maxAge: sessionOptions.maxAge },
       store: sessionStore
@@ -65,12 +68,18 @@ exports.init = (root) ->
     .use(eventMiddleware)
     .use(connect.static(staticPath, settings.static))
 
-    # Prevent sessions from loading on requests for static assets
-    # Not working yet as this functionality not present in Connect 2 yet as far as I can tell
-    #connect.session.ignore = connect.session.ignore.concat(staticFiles)
-
     app
 
+  # Expose short-form routing API
+  route: (url, fn) ->
+    if fn
+      router.on(url, fn)
+    else
+      { 
+        serveClient: (name) ->
+          cb = (req, res) -> res.serveClient(name)
+          router.on(url, cb) 
+      }
 
 # Private
 

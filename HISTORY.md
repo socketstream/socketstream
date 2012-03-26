@@ -1,3 +1,44 @@
+0.3 beta1 / 2012-03-26
+======================
+
+##### Major improvements to Client Asset Manager
+
+* Massive amount of refactoring to improve code
+* Live Reload: CSS changes now only refresh the CSS, not the entire page (thanks cjm!)
+* All client code is now properly minified in production
+* HTML views (one per client) and `ss.load.code` output is now cached in RAM in production
+* `/client/code/libs` and `system` directories can now contain sub-dirs which are treated the same way
+* Added `connect.favicon` to the Connect middleware stack
+* New internal API for adding client code. Will be documented for use by 3rd party modules in the future
+* Static assets are now cached for 30 seconds by default (no caching before). Change with `ss.client.set({static: {maxAge: newValue}})`
+* `ss.load` commands no longer allow access to files outside of the correct asset dir
+* Better warning message if you put the wrong file in the wrong dir (e.g. a `png` in `/client/css`)
+* Due to the large amount of code changed, please check existing projects carefully and report any errors
+
+
+##### New Feature: Web Workers
+
+* Please see new documentation: [Web Workers](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/web_workers.md)
+* Implemented with minimal code. Leverages existing modules
+
+
+##### API Changes
+
+* `ss.http.router.on` has been shortened to `ss.http.route`. Old API will continue to work
+* Optional new short form if you're only serving one client per URL: `ss.http.route('/').serveClient('main')`
+
+
+##### ss-hogan Module
+
+* ***Breaking Change*** No more global variables (e.g. `HT`) for templates
+* Access all templates from 'ss.tmpl' instead of `HT`, assuming you `require('socketstream')` as `ss`
+* Tip: Alias 'ss.tmpl' with 'window.HT = ss.tmpl;' in your `entry.js` file if you don't want to change your code
+
+
+Also: Documentation updates to Client Side Templating & Pub Sub Events
+
+
+
 0.3 alpha5 / 2012-03-11
 =======================
 

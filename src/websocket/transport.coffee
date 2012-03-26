@@ -3,7 +3,7 @@
 # Define the transport to carry all realtime requests
 # Uses 'socketio' by default. See README to see how to configure it
 
-exports.init = (emitter) ->
+exports.init = (client, emitter) ->
   
   transport = null
   config = {}
@@ -21,4 +21,4 @@ exports.init = (emitter) ->
 
   load: (httpServer) ->
     @use 'socketio' unless transport?
-    transport.init(emitter, httpServer, config)
+    transport.init(client, emitter, httpServer, config)
