@@ -46,7 +46,7 @@ loadFile = (root, dir, fileName, type, options, cb) ->
   throw new Error("Invalid path. Request for #{path} must not live outside #{dir}") if path.substr(0, dir.length) != dir
   throw new Error("Unsupported file extension '.#{extension}' when we were expecting some type of #{type.toUpperCase()} file. Please provide a formatter for #{path.substring(root.length)} or move it to /client/static") unless formatter
   throw new Error("Unable to render #{type.toUpperCase()} '#{paths.view}'. #{formatter.name} is not a #{type.toUpperCase()} formatter") unless formatter.assetType == type
-  formatter.compile(path, options, cb)
+  formatter.compile(path.replace(/\\/g, '/'), options, cb) # replace '\' with '/' to support Windows
 
 formatKb = (size) ->
   "#{Math.round(size * 1000) / 1000} KB"
