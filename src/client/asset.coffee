@@ -12,22 +12,24 @@ formatters = require('./formatters')
 
 # Load, compile and minify the following assets
 
-exports.js = (root, path, options, cb) ->
-  loadFile root, 'client/code', path, 'js', options, (output) ->
-    output = wrapCode(output, path, options.pathPrefix)
-    output = minifyJSFile(output, path) if options.compress && !path.indexOf('.min') >= 0
-    cb(output)
+exports.init = (root, options) ->
 
-exports.worker = (root, path, options, cb) ->
-  loadFile root, 'client/workers', path, 'js', options, (output) ->
-    output = minifyJSFile(output, path) if options.compress
-    cb(output)
+  js: (path, opts, cb) ->
+    loadFile root, options.dirs.code, path, 'js', opts, (output) ->
+      output = wrapCode(output, path, opts.pathPrefix)
+      output = minifyJSFile(output, path) if opts.compress && !path.indexOf('.min') >= 0
+      cb(output)
 
-exports.css = (root, path, options, cb) ->
-  loadFile(root, 'client/css', path, 'css', options, cb)
+  worker: (path, opts, cb) ->
+    loadFile root, options.dirs.workers, path, 'js', opts, (output) ->
+      output = minifyJSFile(output, path) if opts.compress
+      cb(output)
 
-exports.html = (root, path, options, cb) ->
-  loadFile(root, 'client/views', path, 'html', options, cb)
+  css: (path, opts, cb) ->
+    loadFile(root, options.dirs.css, path, 'css', opts, cb)
+
+  html: (path, opts, cb) ->
+    loadFile(root, options.dirs.views, path, 'html', opts, cb)
 
 
 # Shared util method: Wrap a code module

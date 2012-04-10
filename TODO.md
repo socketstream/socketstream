@@ -1,9 +1,7 @@
 TODO
 ====
 
-* Make 'socketstream new' install recommended stack of optional modules by default, but add a minimal install option
 * Websocket responders need to take a config object. It should also be able to send config to client-side code (
-* SocketStream should pass its version number and other meta info to wrapper modules
 
 
 #### WORK TO DO ONCE 0.3.0 IS RELEASED

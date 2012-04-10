@@ -21,7 +21,7 @@ exports.init = (client, request, ss) ->
 
     # Listen to incoming requests and invoke server.request
     for name, responder of responders
-      emitter.on(name, responder.server.websocket)
+      emitter.on(name, responder.websocket)
 
     # Return active WS transport
     thisTransport

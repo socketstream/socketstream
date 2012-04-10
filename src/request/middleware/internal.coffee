@@ -4,7 +4,7 @@
 
 require('colors')
 
-exports.init = (root, ss) ->
+exports.init = (ss) ->
 
   session = require('../../session')
 

@@ -14,5 +14,5 @@ ss.server.on 'ready', ->
   # Wait for the DOM to finish loading
   jQuery ->
     
-    # Load chat demo app
-    require('/demo')
+    # Load app
+    require('/app')

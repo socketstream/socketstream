@@ -17,9 +17,6 @@ if (root == '/') throw new Error("You must change into the project directory bef
 // Set environment
 var env = exports.env = (process.env['SS_ENV'] || 'development').toLowerCase();
 
-// Create internal Events bus
-var events = exports.events = new EventEmitter2();
-
 // Create an internal API object which is passed to sub-modules and can be used within your app
 var api = exports.api = {
 
@@ -39,6 +36,9 @@ var api = exports.api = {
   }
 }
 
+// Create internal Events bus
+var events = exports.events = new EventEmitter2();
+
 // Make sure nothing kills the server
 //process.on('uncaughtException', function (err) { console.error('Exception caught: ', err)})
 
@@ -52,13 +52,13 @@ var session = exports.session = require('./session');
 var http = exports.http = require('./http/index').init(root);
 
 // Client Asset Manager
-var client = exports.client = require('./client/index').init(root, http.router, http.staticDirs);
+var client = exports.client = require('./client/index').init(api, http.router);
 
-// Request Handlers
-var request = exports.request = require('./request/index').init(root, client, api);
+// Incoming Request Responders
+var responders = exports.responders = require('./request/index').init(api, client);
 
 // Websocket Layer (transport, message responders, transmit incoming events)
-var ws = exports.ws = require('./websocket/index').init(client, request, api);
+var ws = exports.ws = require('./websocket/index').init(client, responders, api);
 
 // When server starts
 exports.start = function(httpServer) {
@@ -67,7 +67,7 @@ exports.start = function(httpServer) {
 
   // Load SocketStream server instance
   var server = {
-    responders:      request.load(),
+    responders:      responders.load(),
     eventTransport:  publish.transport.load(),
     sessionStore:    session.store.get()
   };
@@ -79,10 +79,10 @@ exports.start = function(httpServer) {
   if (httpServer) {
 
     // Bind responders to websocket
-    var wsTransport = ws.load(httpServer, server.responders, server.eventTransport);
+    ws.load(httpServer, server.responders, server.eventTransport);
 
     // Append SocketStream middleware to stack
-    var app = http.load(server.sessionStore, session.options);
+    http.load(client.options.dirs.static, server.sessionStore, session.options);
 
     // Load Client Asset Manager
     client.load(api);

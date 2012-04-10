@@ -19,7 +19,7 @@ assets =
 
 
 # API to add new System Library or Module
-exports.add = add = (type, name, content, options = {}) ->
+exports.send = send = (type, name, content, options = {}) ->
   content = coffee.compile(content) if coffee && options.coffee
   switch type
     when 'code'
@@ -38,11 +38,11 @@ exports.load = ->
 
   # Load essential libs for backwards compatibility with all browsers
   # and to enable module loading. Note with libs, order is important!
-  ['json.min.js','console_log.min.js', 'browserify.js'].forEach (fileName) ->
+  ['json.min.js', 'console_log.min.js', 'browserify.js'].forEach (fileName) ->
     path = pathlib.join(__dirname, '/libs/' + fileName)
     code = fs.readFileSync(path, 'utf8')
     preMinified = fileName.indexOf('.min') >= 0
-    add('lib', fileName, code, {minified: preMinified})
+    send('lib', fileName, code, {minified: preMinified})
 
   # System Modules. Including main SocketStream client code
   # Load order is not important
@@ -52,7 +52,7 @@ exports.load = ->
     sp = fileName.split('.')
     extension = sp[sp.length-1]
     modName = fileName.substr(modDir.length + 1)
-    add('mod', modName, code, {coffee: extension == 'coffee'})
+    send('mod', modName, code, {coffee: extension == 'coffee'})
 
 
 # Serve system assets

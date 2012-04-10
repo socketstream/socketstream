@@ -31,18 +31,12 @@ app.append = ->
   useAfterStack.push(args)
 
 
-
 exports.init = (root) ->
-
-  staticPath = pathlib.join(root, 'client/static')
-
-  loadStaticDirs(staticPath)
 
   # Return API
   connect:    connect
   middleware: app
   router:     router
-  staticDirs: staticDirs
 
 
   # Merge optional settings
@@ -50,7 +44,11 @@ exports.init = (root) ->
     throw new Error('ss.http.set() takes an object e.g. {static: {maxAge: 60000}}') unless typeof(newSettings) == 'object'
     settings[k] = v for k, v of newSettings
 
-  load: (sessionStore, sessionOptions) ->
+  load: (staticPath, sessionStore, sessionOptions) ->   
+    staticPath = pathlib.join(root, staticPath)
+
+    loadStaticDirs(staticPath)
+
     # Append SocketStream middleware upon server load
     app
     .use(connect.cookieParser('SocketStream'))

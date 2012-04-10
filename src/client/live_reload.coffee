@@ -16,7 +16,7 @@ consoleMessage =
   reload:    'Client files changed. Reloading browser...'
 
 
-module.exports = (root, clientDirsToWatch, ss) ->
+module.exports = (root, options, ss) ->
 
   handleFileChange = (action) ->
     if (Date.now() - lastReload) > 1000  # Reload browser max once per second
@@ -26,8 +26,8 @@ module.exports = (root, clientDirsToWatch, ss) ->
 
   assetsToWatch = ->
     output = {files: [], dirs: []}
-    clientDirsToWatch.forEach (dir) ->
-      path = pathlib.join(root, 'client', dir)
+    options.liveReload.forEach (dir) ->
+      path = pathlib.join(root, options.dirs[dir])
       result = fileUtils.readDirSync(path)
       output.files = output.files.concat(result.files)
       output.dirs = output.dirs.concat(result.dirs)

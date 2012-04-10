@@ -2,7 +2,7 @@
 
 # SocketStream
 
-Latest release: 0.3.0beta1  ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+Latest release: 0.3.0beta2  ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
 [![build status](https://secure.travis-ci.org/socketstream/socketstream.png)](http://travis-ci.org/socketstream/socketstream)
 
 Twitter: [@socketstream](http://twitter.com/#!/socketstream)  
@@ -21,7 +21,7 @@ Whether you're building a group chat app, multiplayer game or trading platform, 
 
 We follow a few guiding principals to keep the framework lean, modular and extensible whilst ensuring your app can easily integrate with other great Node.js modules such as [Express.js](http://expressjs.com), [Everyauth](https://github.com/bnoguchi/everyauth) and [thousands](http://search.npmjs.org) more.
 
-SocketStream 0.3 is in full-time development, rapidly progressing thanks to frequent contributions from a [growing community](http://groups.google.com/group/socketstream) of developers. Now the 0.3 API is pretty much stable, there will one one further beta releases to refine features and improve existing code before we push 0.3.0 to NPM. Demos and more documentation coming soon.
+SocketStream 0.3 is in full-time development, rapidly progressing thanks to frequent contributions from a [growing community](http://groups.google.com/group/socketstream) of developers. Now the 0.3 API is pretty much stable there will be frequent updates to master before 0.3.0 is pushed to NPM later in April. Demos and more documentation coming soon.
 
 
 
@@ -31,8 +31,8 @@ SocketStream 0.3 is in full-time development, rapidly progressing thanks to freq
 
 * Designed for large apps - excellent code organization, modularity and extensibility. Not a black box framework
 * True bi-directional communication using websockets (or [Socket.IO 0.9](http://socket.io) fallbacks). No more slow, messy AJAX!
-* Write all code in [CoffeeScript](http://jashkenas.github.com/coffee-script/) or JavaScript - your choice
-* Works great with [Express.js](http://expressjs.com) and other Connect-based frameworks!
+* Write all code in JavaScript or [CoffeeScript](http://jashkenas.github.com/coffee-script/) - your choice
+* Works well alongside [Express.js](http://expressjs.com) and other Connect-based frameworks
 * Easily share code between the client and server. Ideal for business logic and model validation (see Questions below)
 * Request Middleware - enabling session access, authentication, logging, distributed requests and more
 * Effortless, scalable, pub/sub baked right in - including Private Channels
@@ -101,7 +101,6 @@ To start your app simply type:
 If all goes well you'll see the SocketStream banner coming up, then you're ready to visit your new app at:
 
     http://localhost:3000
-
 
 
 ### What can I create with it?
@@ -205,6 +204,7 @@ We've made a start on documentation for 0.3. Right now the following sections ha
 
 Install the excellent 'nodemon' module with `sudo npm install -g nodemon` then start your app with `nodemon app.js`. A `.nodemonignore` file has already been created for you with the optimal settings. This feature is very useful when developing your app.
 
+
 ##### How can I configure Socket.IO?
 
 Like so:
@@ -248,7 +248,7 @@ Pass any config as the second argument to either of the above commands as so:
 
 SocketStream 0.3 makes a big assumption in order to maximize speed and reduce code complexity: All incoming connections with the same session should be routed to the same server (also known as Sticky Sessions). The session details are stored in memory and then optionally saved to Redis to preserve the session should the node fail.
 
-Front end scaling can be achieved using a combination of different websocket transports (such as the bundled Pusher Pipe) and optional features we intend to introduce in the future.
+Front end scaling can be achieved using a combination of different websocket transports (such as the forthcoming Pusher Pipe module) and optional features we intend to introduce in the future.
 
 Back end scaling has yet to be properly documented, but we're keen to continue looking into ways to use ZeroMQ and also Hook IO. We will make sure back end scaling is as easy and flexible as possible, but it will no longer be a feature of the framework itself.
 
@@ -279,7 +279,7 @@ Creator and lead developer: Owen Barnes.
 
 Special thanks to Paul Jensen for contributing code, ideas and testing early prototypes. Big thanks also to Addy Osmani for help with everything JavaScript related, Alan Milford for the excellent SocketRacer.com demo (which will be running on SocketStream 0.3 soon!), and Craig Jordan Muir for designing the awesome new SocketStream logo.
 
-Thanks also to the many who have contributed code to 0.1 and 0.2. We plan to properly feature contributors on our website in the near future.
+Thanks also to the many who have contributed code and ideas. We plan to properly feature contributors on our website in the near future.
 
 
 ### Credits

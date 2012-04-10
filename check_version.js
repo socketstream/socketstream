@@ -31,3 +31,17 @@ if (pathlib.existsSync('client/code/modules')) {
     "This message will go away when /client/code/modules has been renamed to\nsomething else (we suggest 'app') so we know you've upgraded your code" + bar);
   throw new Error("Please update your /client/code with the latest changes (see above)");
 }
+
+// Ensure two hogan-template.js files are not served together
+var hoganFile = 'client/code/libs/hogan-template.js';
+if (pathlib.existsSync(hoganFile)) {
+  require('fs').unlinkSync(hoganFile);
+  console.log(bar +
+    "Thanks for upgrading to the latest SocketStream 0.3 beta.\n\n" +
+    "SocketStream now allows Template Engine modules to deliver client-side code.\n\n" +
+    "We've deleted " + hoganFile + " from your project as it is\n" +
+    "no longer required. Please ensure you have ss-hogan 0.1.3 installed by running:\n\n" +
+    "     sudo npm update" + bar);
+  throw new Error("Please run 'sudo npm update'");
+
+}

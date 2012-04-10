@@ -5,16 +5,17 @@
 pathlib = require('path')
 apiTree = require('apitree')
 
-exports.init = (root, ss) ->
+exports.init = (ss) ->
 
-  customDir = pathlib.join(root, 'server/middleware')
+  customDir = pathlib.join(ss.root, 'server/middleware')
 
   # Load internal middleware
-  internal = require('./internal').init(root, ss)
+  internal = require('./internal').init(ss)
   
   # Return API
   load: ->
-    if pathlib.existsSync(customDir)
-      stack = apiTree.createApiTree(customDir)    # Load custom middleware
-      stack[k] = v for k, v of internal           # Append internal/default middleware
+    # Load custom middleware
+    stack = pathlib.existsSync(customDir) && apiTree.createApiTree(customDir) || {}
+    # Append internal/default middleware
+    stack[k] = v for k, v of internal        
     stack

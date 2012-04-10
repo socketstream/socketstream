@@ -5,11 +5,12 @@
 url = require('url')
 qs = require('querystring')
 
-asset = require('../asset')
 system = require('../system')
 utils = require('./utils')
 
-module.exports = (root, router) ->
+module.exports = (root, router, options) ->
+
+  asset = require('../asset').init(root, options)
 
   # JAVASCRIPT
 
@@ -22,7 +23,7 @@ module.exports = (root, router) ->
     thisUrl = url.parse(request.url)
     params = qs.parse(thisUrl.query)
     path = utils.parseUrl(request.url)
-    asset.js root, path, {pathPrefix: params.pathPrefix}, (output) ->
+    asset.js path, {pathPrefix: params.pathPrefix}, (output) ->
       utils.serve.js(output, response)
 
   router.on '/_serveDev/start?*', (request, response) ->
@@ -33,5 +34,5 @@ module.exports = (root, router) ->
   # Listen for requests for CSS files
   router.on '/_serveDev/css?*', (request, response) ->
     path = utils.parseUrl(request.url)
-    asset.css root, path, {}, (output) ->
+    asset.css path, {}, (output) ->
       utils.serve.css(output, response)

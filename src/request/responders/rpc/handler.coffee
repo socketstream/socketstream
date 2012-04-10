@@ -7,9 +7,9 @@
 pathlib = require('path')
 apiTree = require('apitree')
 
-exports.init = (root, messagePrefix, middleware, ss) ->
+exports.init = (ss, messagePrefix, middleware) ->
   
-  dir = pathlib.join(root, 'server/rpc')
+  dir = pathlib.join(ss.root, 'server/rpc')
   api = apiTree.createApiTree(dir)
 
   request = (req, res) ->

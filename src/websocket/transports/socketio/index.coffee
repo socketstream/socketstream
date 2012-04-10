@@ -39,11 +39,11 @@ exports.init = (client, emitter, httpServer, config) ->
 
   # Send Socket.IO Client to browser
   socketioClient = fs.readFileSync(__dirname + '/client.min.js', 'utf8')
-  client.assets.add('lib', 'socketio-client', socketioClient, {minified: true})
+  client.assets.send('lib', 'socketio-client', socketioClient, {minified: true})
 
   # Send socketstream-transport module
   code = fs.readFileSync(__dirname + '/wrapper.' + (process.env['SS_DEV'] && 'coffee' || 'js'), 'utf8')
-  client.assets.add('mod', 'socketstream-transport', code, {coffee: process.env['SS_DEV']})
+  client.assets.send('mod', 'socketstream-transport', code, {coffee: process.env['SS_DEV']})
 
   # Export API
   event: ->

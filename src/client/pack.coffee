@@ -12,13 +12,15 @@ pathlib = require('path')
 system = require('./system')
 magicPath = require('./magic_path')
 view = require('./view')
-asset = require('./asset')
+
     
 module.exports = (root, client, options) ->
 
+  asset = require('./asset').init(root, options)
+
   client.pack = true
 
-  containerDir = pathlib.join(root, 'client/static/assets')
+  containerDir = pathlib.join(root, options.dirs.assets)
   clientDir = pathlib.join(containerDir, client.name)
 
   packAssetSet = (assetType, paths, dir, postProcess) ->
@@ -30,7 +32,7 @@ module.exports = (root, client, options) ->
 
     processFiles = (fileContents = [], i = 0) ->
       {path, file} = filePaths[i]
-      asset[assetType] root, file, {pathPrefix: path, compress: true}, (output) ->
+      asset[assetType] file, {pathPrefix: path, compress: true}, (output) ->
         fileContents.push(output)
         if filePaths[++i]
           processFiles(fileContents, i)
@@ -53,18 +55,18 @@ module.exports = (root, client, options) ->
   # Prepare folder
   mkdir(containerDir)
   mkdir(clientDir)
-  deleteOldFiles(clientDir) unless options && options.keepOldFiles
+  deleteOldFiles(clientDir) unless options.packAssets && options.packAssets.keepOldFiles
 
   # Output CSS
-  packAssetSet 'css', client.paths.css, 'client/css', (files) ->
+  packAssetSet 'css', client.paths.css, options.dirs.css, (files) ->
     files.join("\n")
 
   # Output JS
-  packAssetSet 'js', client.paths.code, 'client/code', (files) ->
+  packAssetSet 'js', client.paths.code, options.dirs.code, (files) ->
     system.serve.js({compress: true}) + files.join(';') + ';' + system.serve.initCode()
 
   # Output HTML view
-  view root, client, (html) ->
+  view root, client, options, (html) ->
     fileName = pathlib.join(clientDir, client.id + '.html')
     fs.writeFileSync(fileName, html)
     log('✓'.green, 'Created and cached HTML file ' + fileName.substr(root.length))

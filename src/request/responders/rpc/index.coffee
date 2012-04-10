@@ -6,24 +6,19 @@ fs = require('fs')
 
 messagePrefix = 'rpc'
 
-exports.init = (root, ss, client, config) ->
+exports.init = (ss, config) ->
 
   messagePrefix: messagePrefix
   
   load: (middleware) ->
 
     # Get request handler
-    request = require('./handler').init(root, messagePrefix, middleware, ss)
+    request = require('./handler').init(ss, messagePrefix, middleware)
 
     # Serve client code
     code = fs.readFileSync(__dirname + '/client.' + (process.env['SS_DEV'] && 'coffee' || 'js'), 'utf8')
-    client.assets.add('mod', 'socketstream-rpc', code, {coffee: process.env['SS_DEV']})
-    client.assets.add('code', 'init', "require('socketstream-rpc');")
-
-    ### RETURN API ###
+    ss.client.send('mod', 'socketstream-rpc', code, {coffee: process.env['SS_DEV']})
+    ss.client.send('code', 'init', "require('socketstream-rpc');")
 
     # Return server interfaces
-    server: require('./interfaces').init(request, messagePrefix)
-
-
-        
+    require('./interfaces').init(request, messagePrefix)

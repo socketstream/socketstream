@@ -1,3 +1,37 @@
+0.3 beta2 / 2012-04-10
+======================
+
+##### Improved New App Creation
+
+* Now creates plain HTML, CSS and Javascript files by default
+* Pass `-j` for Jade and `-c` for CoffeeScript if preferred
+* Pass `-m` for Minimal Install (no chat demo)
+* Pass `-r` to include Console Server / REPL
+* Plain CSS/Stylus/Less options coming soon
+* `package.json` and `app.js` now dynamically created based upon the modules you choose
+
+
+##### Template Engine improvements
+
+* Breaking change to Template Engine module format
+* Template Engine external modules can now deliver client-side code
+* Hence the Hogan client-side library has been removed from the core and now included within `ss-hogan` 0.1.3
+* `ss-coffeekup` and `ss-clientjade` have also be updated. Please `sudo npm update` to get the latest module
+* Template Engine API documentation updated and unlikely to change again
+
+
+##### Other
+
+* The names of all client-side dirs can now be optionally changed to improve compatibility with 3rd party frameworks. E.g. `ss.client.set({dirs: {code: '/client/code', static: '/public'}})`
+* Added support for hosting packaged assets files on a CDN. To use: `ss.client.packAssets({cdn: {js: "http://my.cdn.com/my.js", css: "http://my.cdn.com/my.css"}})`
+* Internal Request Middleware now loads even if there is no `/server/middleware` directory present
+* Bit of internal refactoring. Be sure to update `ss-console` to 0.1.1
+* Upgraded Socket.IO to 0.9.5
+
+Note: Several minor tweaks and improvements will be pushed to master before 0.3.0 is released and published to NPM later this month
+
+
+
 0.3 beta1 / 2012-03-26
 ======================
 

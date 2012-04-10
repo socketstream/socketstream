@@ -4,28 +4,29 @@
 
 pathlib = require('path')
 magicPath = require('./magic_path')
-asset = require('./asset')
 engine = require('./template_engine')
 
 
-module.exports = (root, client, cb) ->
+module.exports = (root, client, options, cb) ->
+
+  asset = require('./asset').init(root, options)
 
   # Add links to CSS and JS files
-  includes = headers(root, client)
+  includes = headers(root, client, options)
 
   # Add any Client-side Templates
-  includes = includes.concat( templates(root, client) )
+  includes = includes.concat( templates(root, client, options) )
 
   # Output HTML
-  options = {headers: includes.join(''), compress: client.pack, filename: client.paths.view}
-  asset.html(root, client.paths.view, options, cb)
+  htmlOptions = {headers: includes.join(''), compress: client.pack, filename: client.paths.view}
+  asset.html(client.paths.view, htmlOptions, cb)
 
 
 # Private
 
-templates = (root, client) ->
+templates = (root, client, options) ->
 
-  dir = pathlib.join(root, 'client/templates')
+  dir = pathlib.join(root, options.dirs.templates)
   
   output = []
 
@@ -40,7 +41,7 @@ templates = (root, client) ->
   output
 
 
-headers = (root, client) ->
+headers = (root, client, options) ->
 
   # Return an array of headers. Order is important!
   output = []
@@ -48,8 +49,8 @@ headers = (root, client) ->
   # If assets are packed, we only need one CSS and one JS file
   if client.pack
     
-    output.push tag.css("/assets/#{client.name}/#{client.id}.css")
-    output.push tag.js("/assets/#{client.name}/#{client.id}.js")
+    output.push tag.css(options.packAssets?.cdn?.css || "/assets/#{client.name}/#{client.id}.css")
+    output.push tag.js(options.packAssets?.cdn?.js || "/assets/#{client.name}/#{client.id}.js")
 
   # Otherwise, in development, list all files individually so debugging is easier
   else
@@ -59,12 +60,12 @@ headers = (root, client) ->
 
     # Send all CSS
     client.paths.css.forEach (path) ->
-      magicPath.files(root + '/client/css', path).forEach (file) ->
+      magicPath.files(pathlib.join(root, options.dirs.css), path).forEach (file) ->
         output.push tag.css("/_serveDev/css/#{file}?ts=#{client.id}")
 
     # Send Application Code
     client.paths.code.forEach (path) ->
-      magicPath.files(root + '/client/code', path).forEach (file) ->
+      magicPath.files(pathlib.join(root, options.dirs.code), path).forEach (file) ->
         output.push tag.js("/_serveDev/code/#{file}?ts=#{client.id}&pathPrefix=#{path}")
 
     # Start your app and connect to SocketStream

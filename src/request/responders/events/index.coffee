@@ -6,7 +6,7 @@ fs = require('fs')
 
 messagePrefix = 'event'
 
-exports.init = (root, ss, client, config) ->
+exports.init = (ss, config) ->
 
   messagePrefix: messagePrefix
 
@@ -14,13 +14,10 @@ exports.init = (root, ss, client, config) ->
 
     # Serve Client Code
     code = fs.readFileSync(__dirname + '/client.' + (process.env['SS_DEV'] && 'coffee' || 'js'), 'utf8')
-    client.assets.add('mod', 'socketstream-events', code, {coffee: process.env['SS_DEV']})
-    client.assets.add('code', 'init', "require('socketstream-events');")
+    ss.client.send('mod', 'socketstream-events', code, {coffee: process.env['SS_DEV']})
+    ss.client.send('code', 'init', "require('socketstream-events');")
 
-    ### RETURN API ###
-
-    server:
-
-      websocket: (obj, send, meta) ->
-        msg = JSON.stringify(obj)
-        send(messagePrefix + '|'+ msg)
+    ### RETURN SERVER API ###
+    websocket: (obj, send, meta) ->
+      msg = JSON.stringify(obj)
+      send(messagePrefix + '|' + msg)

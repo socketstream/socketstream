@@ -6,8 +6,13 @@ var ss = require('../')
 program
   .usage('new <name_of_your_project>')
   .version(ss.version)
-  .option('-j, --javascript', 'use Javascript (default)')
+  .option('-m, --minimal', 'minimal install (no chat demo)')
   .option('-c, --coffee', 'use CoffeeScript')
+  .option('-j, --jade', 'use Jade for Views')
+  // To be implemented...
+  //.option('-s, --stylus', 'use Stylus for CSS')
+  //.option('-l, --less', 'use Less for CSS')
+  .option('-r, --repl', 'include Console Server / REPL')
   .parse(process.argv);
 
 require(__dirname + '/../lib/cli').process(program);

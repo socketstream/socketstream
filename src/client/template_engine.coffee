@@ -8,15 +8,16 @@
 
 pathlib = require('path')
 formatters = require('./formatters')
+client = require('./system')
 
 templateEngines = {}
 defaultEngine = null
 
 # Allow Template Engine to be configured
-exports.init = (root) ->
+exports.init = (ss, options) ->
 
   # Set the Default Engine - simply wraps each template in a <script> tag
-  defaultEngine = require('./template_engines/default').init(root)
+  defaultEngine = require('./template_engines/default').init(ss.root)
 
   # Use a template engine for the 'dirs' indicated (will use it on all '/' dirs within /client/templates by default)
   use: (nameOrModule, dirs = ['/'], config) ->
@@ -31,7 +32,7 @@ exports.init = (root) ->
       else
         throw new Error("The #{nameOrModule} template engine is not supported by SocketStream internally. Please pass a compatible module instead")
 
-    engine = mod.init(root, config)
+    engine = mod.init(ss, config)
 
     dirs = [dirs] unless dirs instanceof Array
     dirs.forEach (dir) ->
@@ -68,7 +69,7 @@ exports.generate = (dir, files, cb) ->
 
     # Use the formatter to pre-process the template before passing it to the engine
     formatter.compile fullPath, {}, (output) ->
-      templates.push(wrapTemplate(output, path, engine, prevEngine))
+      templates.push(wrapTemplate(output, path, fullPath, engine, prevEngine))
       prevEngine = engine
 
       # Return if last template
@@ -80,7 +81,7 @@ exports.generate = (dir, files, cb) ->
 
 # PRIVATE
 
-wrapTemplate = (template, path, engine, prevEngine) ->
+wrapTemplate = (template, path, fullPath, engine, prevEngine) ->
   output = []
 
   # If the template type has changed since the last template, include any closing suffix from the last engine used (if present)
@@ -91,7 +92,7 @@ wrapTemplate = (template, path, engine, prevEngine) ->
 
   # Add main template output and return
   prevEngine = engine
-  output.push engine.process(template.toString(), path, suggestedId(path))
+  output.push engine.process(template.toString(), fullPath, suggestedId(path))
   output.join('')
 
 selectEngine = (templateEngines, pathAry) ->
