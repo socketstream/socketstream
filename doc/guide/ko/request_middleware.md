@@ -9,13 +9,15 @@ One of the most powerful and exiting features introduced in SocketStream 0.3 is 
 -->
 If you've used Connect HTTP middleware before the concept and API will be instantly familiar. Essentially incoming requests can be processed through a chain of middleware BEFORE they arrive at their final destination - typically the RPC command you are requesting.
 
+미들웨어는 내부으로, 외부 모듈으로, 직접 장성해서 지원할 수 있습니다.
 <!---
--->
 Middleware can be provided internally, via external modules, or custom-defined in your app.
-
-<!---
 -->
+
+어쩃든, 모든 미들웨어는 `server/rpc`폴더 밑의 코드에서 `req.use()`명령으로 부릅니다.
+<!---
 Regardless, all middleware is invoked using the `req.use()` command from within your `server/rpc` code.
+-->
 
 
 ### 내부 미들웨어
@@ -27,7 +29,7 @@ Right now SocketStream provides two simple internal middleware functions: `debug
 
 #### debug
 
-`debug` 미들웨어는 `req`객체의 내용을 터미널에 출력합니다.
+`debug` 미들웨어는 디버그에 유용한 `req`객체의 내용을 터미널에 출력합니다. 원한다면 메세지의 출력 색상을 정하는 옵션을 넣어줄 수 있습니다.
 <!---
 The `debug` middleware will output the contents of the `req` object to the terminal, useful when you're debugging problems. It takes an optional argument indicating which color to output the message in:
 -->
@@ -36,7 +38,7 @@ The `debug` middleware will output the contents of the `req` object to the termi
 // server/rpc/app.js
 exports.actions = function(req, res, ss){
 
-  // output all incoming requests to the console in cyan
+  // 모든 받은 요청을 콘솔에서 하늘색으로 출력
   req.use('debug', 'cyan');
 
   return {
@@ -46,18 +48,22 @@ exports.actions = function(req, res, ss){
   }
 }
 ```
+<!---
+  // output all incoming requests to the console in cyan
+-->
 
 #### session
 
+`session` 미들웨어는 다음 액션을 실행하기 전의 유저세션을 세션스토어에서 꺼내옵니다.
 <!---
--->
 The `session` middleware instructs SocketStream to retrieve the user's session from the session store BEFORE executing the next action:
+-->
 
 ```javascript
 // server/rpc/app.js
 exports.actions = function(req, res, ss){
 
-  // load user's session into req.session
+  // user의 session을 req.session에 할당
   req.use('session');
 
   return {
@@ -67,13 +73,19 @@ exports.actions = function(req, res, ss){
   }
 }
 ```
-
 <!---
+  // load user's session into req.session
 -->
+
+`req.session`에 어떻게 세션데이터가 들어있는지 보고 싶으시면,  `req.use('session')`이후에 `req.use('debug')`를 넣어보세요. 다시한번 강조하는데, 미들웨어를 부르는 순서는 매우 중요합니다.
+<!---
 Try adding `req.use('debug')` after `req.use('session')` to see how the session data has been loaded into `req.session`. Remember, the order you call middleware in is very important.
+-->
 
-
+### 서드파티 미들웨어 사용하기
+<!---
 ### Using third-party middleware
+-->
 
 단순히 모듈이나 함수를 직접 넘기세요. 예를들면:
 <!---
@@ -86,12 +98,12 @@ Simply pass the module/function directly. E.g:
 
 ### Creating your own Middleware
 
-어플리케이션에서 커스텀 미들웨어를 직접 만드는건 쉽습니다. 
+어플리케이션에서 커스텀 미들웨어를 직접 만드는건 쉽습니다.
 <!---
 Creating custom middleware in your application is easy.
 -->
 
-들어오는 값(첫번째 인자)을 곱하는 미들웨어를 만들어 봅시다. 
+들어오는 값(첫번째 인자)을 곱하는 미들웨어를 만들어 봅시다.
 <!---
 Let's start by creating a function which multiplies incoming numbers (the first param).
 -->
@@ -100,7 +112,7 @@ Let's start by creating a function which multiplies incoming numbers (the first 
 // server/rpc/app.js
 exports.actions = function(req, res, ss){
 
-  // pass the multiplier to the second arg
+  // 곱할 숫자를 두번쨰 인자로 넘김
   req.use(multiplyNumber, 2);
 
   return {
@@ -110,18 +122,23 @@ exports.actions = function(req, res, ss){
   }
 }
 
-// define my custom middleware function
+// 자작 미들웨어
 multiplyNumber = function(multiplier){
 
   return function(req, res, next){
     var = num = req.params[0];
     if (num && typeof(num) == 'number')
       req.params[0] = (num * multiplier);
-    next() // indicates middleware is finished processing
+    next() // 미들 웨어의 작업이 끝났다는 표시
   }
 
 }
 ```
+<!---
+  // pass the multiplier to the second arg
+// define my custom middleware function
+    next() // indicates middleware is finished processing
+-->
 
 브라우저에서 태스트 해 봅시다:
 <!---
@@ -131,11 +148,15 @@ Let's test this out in the browser:
     ss.rpc('app.showResult', 80)   // outputs "The incoming number is 160" to the console
 
 
-#### Using Middleware for Authorization
-
+#### 인증을 위해 미들웨어 사용하기
 <!---
+#### Using Middleware for Authorization
 -->
+
+Request Middleware 는 더 진행하기 전에 유저가 로그인되었는지를 채크하는 좋은 방법입니다:
+<!---
 Request Middleware is the perfect way to check if a user is authorized before proceeding further:
+-->
 
 ```javascript
 // server/rpc/app.js
@@ -190,7 +211,7 @@ exports.checkAuthenticated = function(){
 }
 ```
 
-이제 `server/rpc`폴더 아래에 있는 어떤 파일에서도 이 함수를 부를수 있습니다: 
+이제 `server/rpc`폴더 아래에 있는 어떤 파일에서도 이 함수를 부를수 있습니다:
 <!---
 You can now call this function from any `server/rpc` file with:
 -->
