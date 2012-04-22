@@ -91,7 +91,7 @@ Simply pass the module/function directly. E.g:
 Creating custom middleware in your application is easy.
 -->
 
-들어오는 값(첫번째 인자)을 곱하하는 미들웨어를 만들어 봅시다. 
+들어오는 값(첫번째 인자)을 곱하는 미들웨어를 만들어 봅시다. 
 <!---
 Let's start by creating a function which multiplies incoming numbers (the first param).
 -->
@@ -190,9 +190,10 @@ exports.checkAuthenticated = function(){
 }
 ```
 
+이제 `server/rpc`폴더 아래에 있는 어떤 파일에서도 이 함수를 부를수 있습니다: 
 <!---
--->
 You can now call this function from any `server/rpc` file with:
+-->
 
     req.use('session');
     req.use('admin.user.checkAuthenticated');
