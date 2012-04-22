@@ -5,12 +5,12 @@
 pathlib = require('path')
 apiTree = require('apitree')
 
-exports.init = (ss) ->
+module.exports = (ss, config) ->
 
   customDir = pathlib.join(ss.root, 'server/middleware')
 
   # Load internal middleware
-  internal = require('./internal').init(ss)
+  internal = require('./internal')(ss)
   
   # Return API
   load: ->

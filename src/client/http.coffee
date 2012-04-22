@@ -17,7 +17,7 @@ cache = {}
 res = http.ServerResponse.prototype
 
 
-exports.init = (root, clients, options) ->
+module.exports = (root, clients, options) ->
 
   # Append the 'serveClient' method to the HTTP Response object
   res.serveClient = (name) ->

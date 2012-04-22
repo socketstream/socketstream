@@ -5,7 +5,7 @@
 connect = require('connect')
 
 channels = require('./channels')
-socketIdsBy = require('../websocket/subscribe').socketIdsBy
+subscriptions = require('../websocket/subscriptions')
 
 # Define default session store
 sessionStore = new connect.session.MemoryStore
@@ -28,8 +28,20 @@ exports.store =
   get: ->
     sessionStore
 
-# Note the sessionId is the first part of the connect.sid string (before the .)
-exports.findOrCreate = (sessionId, socketId, cb) ->
+# Manually create a new session (for running server-side tests, or calling responders from ss-console)
+exports.create = ->
+  Session = connect.session.Session
+  sessionID = connect.utils.uid(24)
+
+  thisSession = new Session({sessionID: sessionID, sessionStore: sessionStore})
+  thisSession.cookie = {maxAge: null}
+  thisSession.save()
+  sessionID
+
+# Find a session from the Connect Session Store
+# Note: Sessions are automatically created by the connect.session()
+# middlware when the browser makes a HTTP request
+exports.find = (sessionId, socketId, cb) ->
 
   sessionStore.load sessionId, (err, session) ->
 
@@ -37,7 +49,7 @@ exports.findOrCreate = (sessionId, socketId, cb) ->
     return cb(false) unless session
 
     # Append methods
-    session.channel = channels.init(session, socketId)
+    session.channel = channels(session, socketId)
 
     session.setUserId = (userId, cb = ->) ->
       @userId = userId
@@ -45,8 +57,8 @@ exports.findOrCreate = (sessionId, socketId, cb) ->
       @save(cb)
 
     session._bindToSocket = ->
-      socketIdsBy.user.add(session.userId, socketId)     if session.userId?
-      channels.init(session, socketId)._bindToSocket()   if session.channels? && session.channels.length > 0
+      subscriptions.user.add(session.userId, socketId)  if session.userId?
+      session.channel._bindToSocket()                 if session.channels? && session.channels.length > 0
       @
 
     session.save = (cb) ->

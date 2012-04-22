@@ -11,8 +11,5 @@ if (process.env['SS_DEV']) {
   dir = 'lib';
 }
 
-// Check to see if existing project must be upgraded
-require('./check_version.js');
-
 // Load SocketStream core
 module.exports = require('./' + dir + '/socketstream.js');

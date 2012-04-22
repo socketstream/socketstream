@@ -130,7 +130,7 @@ server.listen(3000);
 // Start Console Server (REPL)
 // To install client: sudo npm install -g ss-console
 // To connect: ss-console <optional_host_or_port>
-var consoleServer = require('ss-console').init(ss);
+var consoleServer = require('ss-console')(ss);
 consoleServer.listen(5000);
 
 """

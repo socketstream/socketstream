@@ -12,6 +12,8 @@ message = exports.message = new EventEmitter2
 # Provide a place to store templates
 exports.tmpl = {}
 
+sendFn = null
+
 exports.registerApi = (name, fn) ->
   api = exports[name]
   if api 
@@ -20,8 +22,10 @@ exports.registerApi = (name, fn) ->
     exports[name] = fn
 
 exports.connect = (fn) ->
-  exports.send = transport(server, message).connect()
+  sendFn = transport(server, message).connect()
 
+exports.send = (responderId) ->
+  (msg) -> sendFn(responderId + '|' + msg)
 
 
 ### ON DEMAND LOADING ###

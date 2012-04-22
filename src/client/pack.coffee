@@ -8,6 +8,7 @@ require('colors')
 
 fs = require('fs')
 pathlib = require('path')
+cleanCSS = require('clean-css')
 
 system = require('./system')
 magicPath = require('./magic_path')
@@ -59,7 +60,10 @@ module.exports = (root, client, options) ->
 
   # Output CSS
   packAssetSet 'css', client.paths.css, options.dirs.css, (files) ->
-    files.join("\n")
+    original = files.join("\n")
+    minified = cleanCSS.process(original)
+    log("  Minified CSS from #{formatKb(original.length)} to #{formatKb(minified.length)}".grey)
+    minified
 
   # Output JS
   packAssetSet 'js', client.paths.code, options.dirs.code, (files) ->
@@ -73,6 +77,9 @@ module.exports = (root, client, options) ->
 
 
 # PRIVATE
+
+formatKb = (size) ->
+  "#{Math.round((size / 1024) * 1000) / 1000} KB"
 
 mkdir = (dir) ->
   fs.mkdirSync(dir) unless pathlib.existsSync(dir)

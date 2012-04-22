@@ -2,9 +2,9 @@
 # -----------------
 # Allows you to publish events to browser clients. All this code is closely related to the 'event' websocket responder
 
-exports.init = ->
+module.exports = ->
   
-  transport: require('./transport').init()
+  transport: require('./transport')()
 
   api: (transport) ->
 

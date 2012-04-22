@@ -1,7 +1,7 @@
 {
   "name":         "socketstream",
   "description":  "A fast, modular Node.js framework dedicated to building realtime single-page apps",
-  "version":      "0.3.0beta2",
+  "version":      "0.3.0RC1",
   "homepage":     "http://www.socketstream.org",
   "author":       "Owen Barnes <owen@socketstream.org>",
   "repository": {
@@ -11,7 +11,11 @@
   "contributors": [
     "Paul Jensen",
     "Alan Milford",
-    "Addy Osmani"
+    "Addy Osmani",
+    "nponeccop",
+    "Gilbert B Garza",
+    "Craig Jordan Muir",
+    "David Rosen"
   ],
   "dependencies": {
     "colors":           "= 0.6.0-1",
@@ -19,8 +23,9 @@
     "eventemitter2":    "= 0.4.9",
     "apitree":          "= 1.0.0",
     "uglify-js":        "= 1.2.6",
+    "clean-css":        "= 0.3.2",
     "semver":           "= 1.0.13",  
-    "socket.io":        "= 0.9.5",
+    "socket.io":        "= 0.9.6",
     "redis":            "= 0.7.1",
     "connect":          "= 2.0.3",
     "connect-redis":    "= 1.3.0"

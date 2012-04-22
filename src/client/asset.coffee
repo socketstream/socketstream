@@ -51,13 +51,11 @@ loadFile = (root, dir, fileName, type, options, cb) ->
   formatter.compile(path.replace(/\\/g, '/'), options, cb) # replace '\' with '/' to support Windows
 
 formatKb = (size) ->
-  "#{Math.round(size * 1000) / 1000} KB"
+  "#{Math.round((size / 1024) * 1000) / 1000} KB"
 
 minifyJSFile = (originalCode, fileName) ->
-  originalSize = (originalCode.length / 1024)
   minifiedCode = minifyJS(originalCode)
-  minifiedSize = (minifiedCode.length / 1024)
-  log("  Minified #{fileName} from #{formatKb(originalSize)} to #{formatKb(minifiedSize)}".grey)
+  log("  Minified #{fileName} from #{formatKb(originalCode.length)} to #{formatKb(minifiedCode.length)}".grey)
   minifiedCode
 
 minifyJS = (originalCode) ->

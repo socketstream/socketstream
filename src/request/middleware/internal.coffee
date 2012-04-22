@@ -4,7 +4,7 @@
 
 require('colors')
 
-exports.init = (ss) ->
+module.exports = (ss) ->
 
   session = require('../../session')
 
@@ -16,7 +16,7 @@ exports.init = (ss) ->
   session: (options = {}) ->
     (request, response, next) ->
       if request.sessionId
-        session.findOrCreate request.sessionId, request.socketId, (thisSession) ->
+        session.find request.sessionId, request.socketId, (thisSession) ->
           request.session = thisSession
           console.log("Debug session >>\n".yellow, thisSession) if options.debug?
           if thisSession

@@ -4,20 +4,19 @@
 
 fs = require('fs')
 
-messagePrefix = 'event'
+module.exports = (responderId, config, ss) ->
 
-exports.init = (ss, config) ->
+  name = config && config.name || 'events'
 
-  messagePrefix: messagePrefix
+  # Serve client code
+  code = fs.readFileSync(__dirname + '/client.' + (process.env['SS_DEV'] && 'coffee' || 'js'), 'utf8')
+  ss.client.send('mod', 'events-responder', code, {coffee: process.env['SS_DEV']})
+  ss.client.send('code', 'init', "require('events-responder')(#{responderId}, {}, require('socketstream').send(#{responderId}));")
 
-  load: ->
+  # Return API
+  name: name
 
-    # Serve Client Code
-    code = fs.readFileSync(__dirname + '/client.' + (process.env['SS_DEV'] && 'coffee' || 'js'), 'utf8')
-    ss.client.send('mod', 'socketstream-events', code, {coffee: process.env['SS_DEV']})
-    ss.client.send('code', 'init', "require('socketstream-events');")
+  interfaces: (middleware) ->
 
-    ### RETURN SERVER API ###
-    websocket: (obj, send, meta) ->
-      msg = JSON.stringify(obj)
-      send(messagePrefix + '|' + msg)
+    websocket: (msg, meta, send) ->
+      send(JSON.stringify(msg))

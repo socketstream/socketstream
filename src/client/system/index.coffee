@@ -28,7 +28,7 @@ exports.send = send = (type, name, content, options = {}) ->
       assets.libs.push({name: name, content: content, options: options})
     when 'mod', 'module'
       if assets.modules[name]
-        throw new Error('System module name already exists')
+        throw new Error("System module name '#{name}' already exists")
       else
         assets.modules[name] = {content: content, options: options}
 
@@ -38,7 +38,7 @@ exports.load = ->
 
   # Load essential libs for backwards compatibility with all browsers
   # and to enable module loading. Note with libs, order is important!
-  ['json.min.js', 'console_log.min.js', 'browserify.js'].forEach (fileName) ->
+  ['json.min.js', 'browserify.js'].forEach (fileName) ->
     path = pathlib.join(__dirname, '/libs/' + fileName)
     code = fs.readFileSync(path, 'utf8')
     preMinified = fileName.indexOf('.min') >= 0

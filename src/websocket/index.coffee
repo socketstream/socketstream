@@ -5,9 +5,9 @@
 EventEmitter2 = require('eventemitter2').EventEmitter2
 emitter = new EventEmitter2({wildcard: true})
 
-exports.init = (client, request, ss) ->
+module.exports = (client, request, ss) ->
 
-  transport = require('./transport').init(client, emitter)
+  transport = require('./transport')(client, emitter)
 
   # Return API
   transport: transport
@@ -16,12 +16,12 @@ exports.init = (client, request, ss) ->
 
     thisTransport = transport.load(httpServer)
     
-    # Listen for incoming events
-    require('./subscribe/index').init(eventTransport, thisTransport, emitter)
+    # Dispatch incoming events to websocket clients
+    require('./event_dispatcher')(eventTransport, thisTransport, emitter)
 
     # Listen to incoming requests and invoke server.request
-    for name, responder of responders
-      emitter.on(name, responder.websocket)
+    for id, responder of responders
+      emitter.on(id, responder.interfaces.websocket)
 
     # Return active WS transport
     thisTransport
