@@ -9,8 +9,12 @@ One of the most powerful and exiting features introduced in SocketStream 0.3 is 
 -->
 If you've used Connect HTTP middleware before the concept and API will be instantly familiar. Essentially incoming requests can be processed through a chain of middleware BEFORE they arrive at their final destination - typically the RPC command you are requesting.
 
+<!---
+-->
 Middleware can be provided internally, via external modules, or custom-defined in your app.
 
+<!---
+-->
 Regardless, all middleware is invoked using the `req.use()` command from within your `server/rpc` code.
 
 
@@ -45,6 +49,8 @@ exports.actions = function(req, res, ss){
 
 #### session
 
+<!---
+-->
 The `session` middleware instructs SocketStream to retrieve the user's session from the session store BEFORE executing the next action:
 
 ```javascript
@@ -62,12 +68,17 @@ exports.actions = function(req, res, ss){
 }
 ```
 
+<!---
+-->
 Try adding `req.use('debug')` after `req.use('session')` to see how the session data has been loaded into `req.session`. Remember, the order you call middleware in is very important.
 
 
 ### Using third-party middleware
 
+단순히 모듈이나 함수를 직접 넘기세요. 예를들면:
+<!---
 Simply pass the module/function directly. E.g:
+-->
 
     req.use(require('text-utils').sanitize, {anyConfig: 'can be passed here'});
 
@@ -75,9 +86,15 @@ Simply pass the module/function directly. E.g:
 
 ### Creating your own Middleware
 
+어플리케이션에서 커스텀 미들웨어를 직접 만드는건 쉽습니다. 
+<!---
 Creating custom middleware in your application is easy.
+-->
 
+들어오는 값(첫번째 인자)을 곱하하는 미들웨어를 만들어 봅시다. 
+<!---
 Let's start by creating a function which multiplies incoming numbers (the first param).
+-->
 
 ```javascript
 // server/rpc/app.js
@@ -106,13 +123,18 @@ multiplyNumber = function(multiplier){
 }
 ```
 
+브라우저에서 태스트 해 봅시다:
+<!---
 Let's test this out in the browser:
+-->
 
     ss.rpc('app.showResult', 80)   // outputs "The incoming number is 160" to the console
 
 
 #### Using Middleware for Authorization
 
+<!---
+-->
 Request Middleware is the perfect way to check if a user is authorized before proceeding further:
 
 ```javascript
@@ -141,13 +163,19 @@ checkAuthenticated = function(){
 }
 ```
 
+<!---
+-->
 You could take this one step further and load the user's data from a database and attach it to `req.user`.
 
 
 ### Sharing middleware across multiple files
 
+<!---
+-->
 Once you've created your custom middleware you'll probably want to use it across multiple files. SocketStream makes this easy by allowing middleware to be placed in `server/middleware` and loaded into an API Tree.
 
+<!---
+-->
 For example let's move the `checkAuthenticated` function above to its new home in `server/middleware/admin/user.js`:
 
 ```javascript
@@ -162,22 +190,36 @@ exports.checkAuthenticated = function(){
 }
 ```
 
+<!---
+-->
 You can now call this function from any `server/rpc` file with:
 
     req.use('session');
     req.use('admin.user.checkAuthenticated');
 
+<!---
+-->
 Note: `req.use('session')` must be called first as the `checkAuthenticated` middleware uses the `req.session` object.
 
+<!---
+-->
 Although you strictly don't have to, we highly recommend creating at least one folder in `server/middleware` to store your custom middleware to prevent any future namespace conflicts.
 
 
 ### Food for thought
 
+<!---
+-->
 Request Middleware allows for many exciting new opportunities around models and scaling.
 
+<!---
+-->
 For example you could write your own middleware which handles CRUD requests (create, update, delete, etc) and forwards them directly to MongoDB, or use [Hook.IO](https://github.com/hookio/hook.io) to forward incoming requests to a different system altogether.
 
+<!---
+-->
 Bear in mind there's no need to define any RPC actions at all if your middleware can respond to all incoming requests.
 
+<!---
+-->
 We'll be exploring all these ideas in the future when time permits, but you don't have to wait for us. Start experimenting today and publish your middleware module on npm for everyone to use.
