@@ -263,7 +263,8 @@ Request Middleware allows for many exciting new opportunities around models and 
 <!--
 -->
 
-예를 들면 CRUD 리퀘스트를 처리하는 미들웨어(create, update, delete 등등)를 직접 작성하는 방법이 있어요. 그리고 나서 몽고DB(MongoDB)에 올리셔도 좋고요, 아니면 [Hook.IO](https://github.com/hookio/hook.io)를 사용해서 들어오는 요청(request)를 여러가지 시스템에 전달해줄 수도 있고요. 
+예를 들면 CRUD 리퀘스트를 처리하는 미들웨어(create, update, delete 등등)를 직접 작성하시고 몽고DB(MongoDB)에 올리세요.
+아니면 [Hook.IO](https://github.com/hookio/hook.io)를 사용해서 들어오는 요청(request)을 여러가지 시스템에 전달해줘도 되고요. 
 
 For example you could write your own middleware which handles CRUD requests (create, update, delete, etc) and forwards them directly to MongoDB, or use [Hook.IO](https://github.com/hookio/hook.io) to forward incoming requests to a different system altogether.
 
