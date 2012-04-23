@@ -7,8 +7,8 @@ One of the most powerful and exiting features introduced in SocketStream 0.3 is 
 
 Connect HTTP 미들웨어를 사용해 보신 적이 있으면 지금 설명하는 컨샙과 api는 직관적이고 눈에 익으실 겁니다. 요점만 말하자면 들어오는 요청(보통은 요청한 RPC 명령들)은 최종 목적지에 도달하기 **전의** 미들웨어 체인으로 처리 할수 있습니다.
 <!---
--->
 If you've used Connect HTTP middleware before the concept and API will be instantly familiar. Essentially incoming requests can be processed through a chain of middleware BEFORE they arrive at their final destination - typically the RPC command you are requesting.
+-->
 
 미들웨어는 내부으로, 외부 모듈으로, 직접 작성해서 지원할 수 있습니다.
 <!---
@@ -260,22 +260,21 @@ Request Middleware는 모델과 스케일링에 무궁무진한 활용방법이 
 Request Middleware allows for many exciting new opportunities around models and scaling.
 -->
 
+예를 들면 CRUD 리퀘스트를 처리하는 미들웨어(create, update, delete 등등)를 직접 작성하시고 몽고DB(MongoDB)에 올리세요. 아니면 [Hook.IO](https://github.com/hookio/hook.io)를 사용해서 들어오는 요청(request)을 여러가지 시스템에 전달해줘도 되고요.
 <!--
--->
-
-예를 들면 CRUD 리퀘스트를 처리하는 미들웨어(create, update, delete 등등)를 직접 작성하시고 몽고DB(MongoDB)에 올리세요.
-아니면 [Hook.IO](https://github.com/hookio/hook.io)를 사용해서 들어오는 요청(request)을 여러가지 시스템에 전달해줘도 되고요. 
-
 For example you could write your own middleware which handles CRUD requests (create, update, delete, etc) and forwards them directly to MongoDB, or use [Hook.IO](https://github.com/hookio/hook.io) to forward incoming requests to a different system altogether.
-
-<!---
 -->
-여러분이 작성한 미들웨어에서 들어오는 리퀘스트에 응답할 수 있다면, RPC 액션을 정의할 필요는 전혀 없습니다. 
 
+
+
+여러분이 작성한 미들웨어에서 들어오는 리퀘스트에 응답할 수 있다면, RPC 액션을 정의할 필요는 전혀 없습니다.
+<!---
 Bear in mind there's no need to define any RPC actions at all if your middleware can respond to all incoming requests.
+-->
+
 
 <!---
 -->
-시간이 허락하면 이런 부분에 대해서도 나중에 다루겠습니다. 하지만 우리가 할때까지 기다리지 마세요. 오늘 바로 실험해보시고, 여러분이 만드신 미들웨어 모듈을 npm에다가 발행해보세요. 다른 사람들이 쓸 수 있도록이요. 
+시간이 허락하면 이런 부분에 대해서도 나중에 다루겠습니다. 하지만 우리가 할때까지 기다리지 마세요. 오늘 바로 실험해보시고, 여러분이 만드신 미들웨어 모듈을 npm에다가 발행해보세요. 다른 사람들이 쓸 수 있도록이요.
 
 We'll be exploring all these ideas in the future when time permits, but you don't have to wait for us. Start experimenting today and publish your middleware module on npm for everyone to use.
