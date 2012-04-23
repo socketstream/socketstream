@@ -174,7 +174,7 @@ exports.actions = function(req, res, ss){
 
   return {
     topSecret: function(){
-      // 이 함수는 로그인 했을떄만 호출됨
+      // 이 함수는 로그인 했을때만 호출됨
       res(bankCodes);
     }
   }
@@ -265,16 +265,12 @@ Request Middleware allows for many exciting new opportunities around models and 
 For example you could write your own middleware which handles CRUD requests (create, update, delete, etc) and forwards them directly to MongoDB, or use [Hook.IO](https://github.com/hookio/hook.io) to forward incoming requests to a different system altogether.
 -->
 
-
-
 여러분이 작성한 미들웨어에서 들어오는 리퀘스트에 응답할 수 있다면, RPC 액션을 정의할 필요는 전혀 없습니다.
 <!---
 Bear in mind there's no need to define any RPC actions at all if your middleware can respond to all incoming requests.
 -->
 
-
-<!---
--->
 시간이 허락하면 이런 부분에 대해서도 나중에 다루겠습니다. 하지만 우리가 할때까지 기다리지 마세요. 오늘 바로 실험해보시고, 여러분이 만드신 미들웨어 모듈을 npm에다가 발행해보세요. 다른 사람들이 쓸 수 있도록이요.
-
+<!---
 We'll be exploring all these ideas in the future when time permits, but you don't have to wait for us. Start experimenting today and publish your middleware module on npm for everyone to use.
+-->
