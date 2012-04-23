@@ -270,12 +270,12 @@ For example you could write your own middleware which handles CRUD requests (cre
 
 <!---
 -->
-여러분이 작성한 미들웨어에서 들어오는 리퀘스트에 모두 응답을 보낼 수 있다면, RPC 액션을 정의할 필요는 전혀 없습니다. 
+여러분이 작성한 미들웨어에서 들어오는 리퀘스트에 응답할 수 있다면, RPC 액션을 정의할 필요는 전혀 없습니다. 
 
 Bear in mind there's no need to define any RPC actions at all if your middleware can respond to all incoming requests.
 
 <!---
 -->
-시간이 허락하면 이런 부분에 대해서도 나중에 다루겠습니다. 하지만 우리가 할때까지 기다리지 마세요. 바로 직접 실험해보시고, 여러분이 만드신 미들웨어 모듈을 npm에다가 발행해보세요. 다른 사람들이 쓸 수 있도록이요. 
+시간이 허락하면 이런 부분에 대해서도 나중에 다루겠습니다. 하지만 우리가 할때까지 기다리지 마세요. 오늘 바로 실험해보시고, 여러분이 만드신 미들웨어 모듈을 npm에다가 발행해보세요. 다른 사람들이 쓸 수 있도록이요. 
 
 We'll be exploring all these ideas in the future when time permits, but you don't have to wait for us. Start experimenting today and publish your middleware module on npm for everyone to use.
