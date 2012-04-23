@@ -260,15 +260,20 @@ Request Middleware는 모델과 스케일링에 무궁무진한 활용방법이 
 Request Middleware allows for many exciting new opportunities around models and scaling.
 -->
 
-<!---
-예를들면
+
+<!--
+예를 들면 CRUD 리퀘스트를 처리하는 미들웨어(create, update, delete 등등)를 직접 작성하는 방법이 있어요. 그리고 나서 몽고DB(MongoDB)에 올리셔도 좋고요, 아니면 [Hook.IO](https://github.com/hookio/hook.io)를 사용해서 들어오는 요청(request)를 여러가지 시스템에 전달해줄 수도 있고요. 
 -->
 For example you could write your own middleware which handles CRUD requests (create, update, delete, etc) and forwards them directly to MongoDB, or use [Hook.IO](https://github.com/hookio/hook.io) to forward incoming requests to a different system altogether.
 
 <!---
 -->
+여러분이 작성한 미들웨어에서 들어오는 리퀘스트에 모두 응답을 보낼 수 있다면, RPC 액션을 정의할 필요는 전혀 없습니다. 
+
 Bear in mind there's no need to define any RPC actions at all if your middleware can respond to all incoming requests.
 
 <!---
 -->
+시간이 허락하면 이런 부분에 대해서도 나중에 다루겠습니다. 하지만 우리가 할때까지 기다리지 마세요. 바로 직접 실험해보시고, 여러분이 만드신 미들웨어 모듈을 npm에다가 발행해보세요. 다른 사람들이 쓸 수 있도록이요. 
+
 We'll be exploring all these ideas in the future when time permits, but you don't have to wait for us. Start experimenting today and publish your middleware module on npm for everyone to use.
