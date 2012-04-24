@@ -30,41 +30,52 @@ exports.store =
 
 # Manually create a new session (for running server-side tests, or calling responders from ss-console)
 exports.create = ->
-  Session = connect.session.Session
-  sessionID = connect.utils.uid(24)
-
-  thisSession = new Session({sessionID: sessionID, sessionStore: sessionStore})
-  thisSession.cookie = {maxAge: null}
-  thisSession.save()
-  sessionID
+  sessionId = connect.utils.uid(24)
+  create(sessionId)
+  sessionId
+  
 
 # Find a session from the Connect Session Store
 # Note: Sessions are automatically created by the connect.session()
-# middlware when the browser makes a HTTP request
+# middleware when the browser makes a HTTP request
 exports.find = (sessionId, socketId, cb) ->
 
   sessionStore.load sessionId, (err, session) ->
 
-    # If no session found, cb(false) so the websocket middleware can terminate the request
-    return cb(false) unless session
+    # Create a new session if we don't have this sessionId in memory
+    # Note: in production you should be using Redis or another
+    # persistent store so this should rarely happen
+    session = create(sessionId) unless session
 
-    # Append methods
-    session.channel = channels(session, socketId)
+    appendMethods(session, socketId, cb)
 
-    session.setUserId = (userId, cb = ->) ->
-      @userId = userId
-      @_bindToSocket()
-      @save(cb)
 
-    session._bindToSocket = ->
-      subscriptions.user.add(session.userId, socketId)  if session.userId?
-      session.channel._bindToSocket()                 if session.channels? && session.channels.length > 0
-      @
+# PRIVATE
 
-    session.save = (cb) ->
-      sessionStore.set(sessionId, session, cb)
+appendMethods = (session, socketId, cb) ->
+  session.channel = channels(session, socketId)
 
-    # Bind username and any channel subscriptions to this socketID on each request
-    session._bindToSocket()
-      
-    cb(session)
+  session.setUserId = (userId, cb = ->) ->
+    @userId = userId
+    @_bindToSocket()
+    @save(cb)
+
+  session._bindToSocket = ->
+    subscriptions.user.add(session.userId, socketId)  if session.userId?
+    session.channel._bindToSocket()                   if session.channels? && session.channels.length > 0
+    @
+
+  session.save = (cb) ->
+    sessionStore.set(sessionId, session, cb)
+
+  # Bind username and any channel subscriptions to this socketID on each request
+  session._bindToSocket()
+    
+  cb(session)
+
+create = (sessionId) ->
+  Session = connect.session.Session
+  session = new Session({sessionID: sessionId, sessionStore: sessionStore})
+  session.cookie = {maxAge: options.maxAge}
+  session.save()
+  session

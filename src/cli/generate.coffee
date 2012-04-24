@@ -77,8 +77,6 @@ exports.generate = (program) ->
       cp("/server/rpc/demo.#{codeExtension}")
       cp('/client/css/libs/reset.css')
       cp("/client/css/app.demo.styl", "/client/css/app.styl")
-      cp('/client/css/demo.styl')
-      cp('/client/css/helpers.styl')
       mkdir('/client/templates/chat')
       cp("/client/templates/chat/message.#{viewExtension}")
       cp("/client/views/app.demo.#{viewExtension}", "/client/views/app.#{viewExtension}")

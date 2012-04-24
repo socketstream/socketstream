@@ -46,9 +46,6 @@ module.exports = (ss, middleware) ->
     throw new Error("Unable to find an 'exports.actions' function for '#{req.method}'") unless file.actions
     throw new Error("'exports.actions' function for '#{req.method}' must be a function") unless typeof(file.actions) == 'function'
 
-    # REMOVE_BEFORE_0.3.0 : Throw error if using old-style middleware API
-    throw new Error("Important! The RPC middleware API changed in 0.3 alpha3. Please see https://github.com/socketstream/socketstream/blob/master/HISTORY.md") if file.before
-  
     # Create callback to send to interface
     cb = ->
       args = Array.prototype.slice.call(arguments)

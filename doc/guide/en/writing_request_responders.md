@@ -38,7 +38,7 @@ Note the `responderId` is sent before the pipe (`|`) character.
 
 Request Responders are simply regular Node.js modules which you can easily create and publish on NPM. To help you get started quickly, we've made an ultra-simple example called `echo` which you can clone from Github and extend as you wish:
 
-   git clone https://github.com/socketstream/ss-echo-responder.git
+    git clone https://github.com/socketstream/ss-echo-responder.git
 
 
 ### Adding a new responder to your app

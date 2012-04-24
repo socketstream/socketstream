@@ -6,6 +6,7 @@
 # You may combine several types of template engines together - very useful when converting a site from one format
 # to another, or experimenting with different template engines
 
+require('colors')
 pathlib = require('path')
 formatters = require('./formatters')
 client = require('./system')
@@ -68,15 +69,20 @@ exports.generate = (dir, files, cb) ->
     formatter ||= formatters.byExtension['html']
 
     # Use the formatter to pre-process the template before passing it to the engine
-    formatter.compile fullPath, {}, (output) ->
-      templates.push(wrapTemplate(output, path, fullPath, engine, prevEngine))
-      prevEngine = engine
+    try
+      formatter.compile fullPath, {}, (output) ->
+        templates.push(wrapTemplate(output, path, fullPath, engine, prevEngine))
+        prevEngine = engine
 
-      # Return if last template
-      if templates.length == files.length
-        output = templates.join('')
-        output += engine.suffix() if engine != null and engine.suffix
-        cb(output)
+        # Return if last template
+        if templates.length == files.length
+          output = templates.join('')
+          output += engine.suffix() if engine != null and engine.suffix
+          cb(output)
+    catch e
+      console.log("! Errror formatting #{formatter.name} template".red)
+      console.error(e.message)
+      cb('')
 
 
 # PRIVATE

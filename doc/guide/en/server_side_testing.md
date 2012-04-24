@@ -14,7 +14,7 @@ First install `mocha` and `should.js`:
 
 Create a directory for your tests:
 
-   mkdir test
+    mkdir test
 
 For this example we're going to test the `ss.rpc('app.square')` function shown below:
 

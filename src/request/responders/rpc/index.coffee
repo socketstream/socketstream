@@ -55,7 +55,7 @@ module.exports = (responderId, config, ss) ->
       catch e
         message = (meta.clientIp == '127.0.0.1') && e.stack || 'See server-side logs'
         obj = {id: req.id, e: {message: message}}
-        ss.log('↪'.red, msgLogName, req.method, e.message.red)
+        ss.log('↩'.red, msgLogName, req.method, e.message.red)
         send(JSON.stringify(obj))
 
 
