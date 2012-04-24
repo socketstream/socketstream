@@ -11,7 +11,7 @@ subscriptions = require('../websocket/subscriptions')
 sessionStore = new connect.session.MemoryStore
 
 # Expose options which can be changed in your app
-exports.options = 
+exports.options =
   maxAge: null # by default session exists for duration of user agent (e.g. until browser is closed)
 
 # Allow use of any Connect Session Store
@@ -72,8 +72,7 @@ exports.find = (sessionId, socketId, cb) ->
 # PRIVATE
 
 create = (sessionId) ->
-  Session = connect.session.Session
-  session = new Session({sessionID: sessionId, sessionStore: sessionStore})
-  session.cookie = {maxAge: options.maxAge}
+  session = new connect.session.Session({sessionID: sessionId, sessionStore: sessionStore})
+  session.cookie = {maxAge: exports.options.maxAge}
   session.save()
   session
