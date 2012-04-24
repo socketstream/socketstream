@@ -47,31 +47,29 @@ exports.find = (sessionId, socketId, cb) ->
     # persistent store so this should rarely happen
     session = create(sessionId) unless session
 
-    appendMethods(session, socketId, cb)
+    # Append methods to session object
+    session.channel = channels(session, socketId)
+
+    session.setUserId = (userId, cb = ->) ->
+      @userId = userId
+      @_bindToSocket()
+      @save(cb)
+
+    session._bindToSocket = ->
+      subscriptions.user.add(session.userId, socketId)  if session.userId?
+      session.channel._bindToSocket()                   if session.channels? && session.channels.length > 0
+      @
+
+    session.save = (cb) ->
+      sessionStore.set(sessionId, session, cb)
+
+    # Bind username and any channel subscriptions to this socketID on each request
+    session._bindToSocket()
+      
+    cb(session)
 
 
 # PRIVATE
-
-appendMethods = (session, socketId, cb) ->
-  session.channel = channels(session, socketId)
-
-  session.setUserId = (userId, cb = ->) ->
-    @userId = userId
-    @_bindToSocket()
-    @save(cb)
-
-  session._bindToSocket = ->
-    subscriptions.user.add(session.userId, socketId)  if session.userId?
-    session.channel._bindToSocket()                   if session.channels? && session.channels.length > 0
-    @
-
-  session.save = (cb) ->
-    sessionStore.set(sessionId, session, cb)
-
-  # Bind username and any channel subscriptions to this socketID on each request
-  session._bindToSocket()
-    
-  cb(session)
 
 create = (sessionId) ->
   Session = connect.session.Session
