@@ -40,7 +40,11 @@ module.exports = (root, options, ss) ->
     paths.files.forEach (file) ->
       extension = file.split('.')[file.split('.').length-1]
       changeAction = cssExtensions.indexOf(extension) >= 0 && 'updateCSS' || 'reload'
-      fs.watch file, (event, filename) -> handleFileChange(changeAction)
+      watcher = fs.watch file, (event, filename) ->
+        handleFileChange(changeAction)
+        if event == "rename"
+          watcher.close()
+          watch({files: [file], dirs: []})
 
   detectNewFiles = ->
     pathsNow = assetsToWatch()
