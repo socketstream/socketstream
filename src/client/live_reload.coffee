@@ -7,7 +7,9 @@ fs = require('fs')
 pathlib = require('path')
 fileUtils = require('../utils/file')
 
-lastReload = Date.now()
+lastRun =
+  updateCSS: Date.now()
+  reload:    Date.now()
 
 cssExtensions = ['css', 'styl', 'stylus', 'less']
 
@@ -19,10 +21,10 @@ consoleMessage =
 module.exports = (root, options, ss) ->
 
   handleFileChange = (action) ->
-    if (Date.now() - lastReload) > 1000  # Reload browser max once per second
+    if (Date.now() - lastRun[action]) > 1000  # Reload browser max once per second
       console.log('✎'.green, consoleMessage[action].grey)
       ss.publish.all('__ss:' + action)
-      lastReload = Date.now()
+      lastRun[action] = Date.now()
 
   assetsToWatch = ->
     output = {files: [], dirs: []}
