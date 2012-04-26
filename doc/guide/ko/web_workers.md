@@ -19,7 +19,7 @@
 각 워커는 반드시 독립된 `.js` 나 (`ss-coffee`모듈을 인스톨 했다면) `.coffee`로 작성되어야 합니다. 이 투토리얼에서는 자바스크립트를 사용하겠습니다.
 <!--Each worker should be written as a separate `.js` or `.coffee` file (if you have the `ss-coffee` module installed). For this tutorial we'll be using JavaScript.-->
 
-### 가본 예제
+### 기본 예제
 <!---### Basic Example-->
 
 [Leibniz 방정식](http://en.wikipedia.org/wiki/Leibniz_formula_for_%CF%80)으로 파이를 계산하는 워커를 만들어 봅시다.
