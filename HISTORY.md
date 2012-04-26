@@ -21,7 +21,7 @@
 * Removed code to check for previous versions of 0.3
 * Updated `package.json` with names of significant/regular contributors. Thanks guys!
 
-Note: This release, plus any minor changes, will be officially launched as 0.3.0 in a few weeks time, once www.socketstream.org has been updated
+Note: SocketStream 0.3.0 will be officially launched in May, along with example apps, screencasts, more documentation and improvements to [www.socketstream.org](http://www.socketstream.org). Read announcement [here](https://groups.google.com/forum/?fromgroups#!topic/socketstream/Y6OIOrJRX7w).
 
 
 

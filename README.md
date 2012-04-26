@@ -36,9 +36,9 @@ SocketStream apps can easily be deployed to [Nodejitsu](http://nodejitsu.com), [
 
 ### Status
 
-SocketStream is in full-time development, rapidly progressing thanks to frequent contributions from a [growing community](http://groups.google.com/group/socketstream) of developers. Assuming no problems, 0.3.0 RC1 will be pushed to NPM as 0.3.0 and officially launched within a few weeks (once we've improved our website!).
+SocketStream is in full-time development, rapidly progressing thanks to frequent contributions from a [growing community](http://groups.google.com/group/socketstream) of developers.
 
-Example apps, live demos, screencasts and more documentation are all coming soon. Please get in touch if you are interested in contributing and/or having your app featured on [www.socketstream.org](http://www.socketstream.org).
+SocketStream 0.3.0 will be officially launched in May, along with example apps, screencasts, more documentation and improvements to [www.socketstream.org](http://www.socketstream.org). Read announcement [here](https://groups.google.com/forum/?fromgroups#!topic/socketstream/Y6OIOrJRX7w).
 
 
 ## Features
