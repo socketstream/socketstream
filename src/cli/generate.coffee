@@ -77,8 +77,6 @@ exports.generate = (program) ->
       cp("/server/rpc/demo.#{codeExtension}")
       cp('/client/css/libs/reset.css')
       cp("/client/css/app.demo.styl", "/client/css/app.styl")
-      cp('/client/css/demo.styl')
-      cp('/client/css/helpers.styl')
       mkdir('/client/templates/chat')
       cp("/client/templates/chat/message.#{viewExtension}")
       cp("/client/views/app.demo.#{viewExtension}", "/client/views/app.#{viewExtension}")
@@ -130,7 +128,7 @@ server.listen(3000);
 // Start Console Server (REPL)
 // To install client: sudo npm install -g ss-console
 // To connect: ss-console <optional_host_or_port>
-var consoleServer = require('ss-console').init(ss);
+var consoleServer = require('ss-console')(ss);
 consoleServer.listen(5000);
 
 """
@@ -153,6 +151,7 @@ ss.start(server);
   "private": true,
   "engines": { "node": ">= 0.6.0" },
   "dependencies": {
+    "socketstream": "git://github.com/socketstream/socketstream.git#master",
 
 """
     mods = selectedFormatters.concat(['hogan'])

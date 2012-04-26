@@ -6,29 +6,34 @@
 # Responders can optionally choose to use the middleware stack provided
 # The 'events' and 'rpc' responders are loaded by default, though even this can be overruled by calling clear()
 
-exports.init = (ss, client) ->
-  middleware = require('./middleware').init(ss)
+module.exports = (ss, client) ->
+
+  middleware = require('./middleware')(ss)
   
-  responders = []
+  responderCount = 0
+  responders = {}
   useDefaults = true
 
   clear: ->
     useDefaults = false
 
   add: (nameOrModule, config = null) ->
-    mod = if typeof(nameOrModule) == 'object'
+    mod = if typeof(nameOrModule) == 'function'
       nameOrModule
     else
       modPath = "./responders/#{nameOrModule}"
       if require.resolve(modPath)
         require(modPath)
       else
-        throw new Error("Unable to find the '#{nameOrModule}' websocket responder internally")
+        throw new Error("Unable to find the '#{nameOrModule}' Request Responder internally")
     try
-      responders.push mod.init(ss, config)
+      id = nameOrModule == 'events' && '0' || ++responderCount
+      responders[id] = mod(id, config, ss)
     catch e
-      throw new Error('Unable to initalize websocket responder')
-      console.error e
+      responderName = responders[id] && responders[id].name || ''
+      err = Error("Unable to initalize Request Responder '#{responderName}'")
+      err.stack = e.stack
+      throw e
     
   load: ->
     middlewareStack = middleware.load()
@@ -38,9 +43,6 @@ exports.init = (ss, client) ->
       @add('rpc')
 
     output = {}
-
-    responders.map (mod) ->
-      responder = mod.load(middlewareStack)
-      output[mod.messagePrefix] = responder
-
+    for id, responder of responders
+      output[id] = {name: responder.name, interfaces: responder.interfaces(middlewareStack)} 
     output

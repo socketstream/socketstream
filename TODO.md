@@ -1,9 +1,6 @@
 TODO
 ====
 
-* Websocket responders need to take a config object. It should also be able to send config to client-side code (
-
-
 #### WORK TO DO ONCE 0.3.0 IS RELEASED
 
 * Finish and release HTTP API module

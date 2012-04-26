@@ -1,15 +1,10 @@
-# PubSub Event Subscriber
-# -----------------------
-# Stores a list of which socket IDs are subscribed to which users or channels
-# and delivers events accordingly
+# Websocket Event Dispatcher
+# --------------------------
+# Delivers events to individual (or groups of) websocket IDs 
 
-UniqueSet = require('../../utils/unique_set').UniqueSet
+subscriptions = require('./subscriptions')
 
-exports.socketIdsBy = 
-  user:     new UniqueSet
-  channel:  new UniqueSet
-
-exports.init = (eventTransport, wsTransport, emitter) ->
+module.exports = (eventTransport, wsTransport, emitter) ->
 
   eventTransport.listen (obj) ->
 
@@ -25,8 +20,8 @@ exports.init = (eventTransport, wsTransport, emitter) ->
       when 'user'
         (msg) -> sendToMultiple(send, msg, obj.users, 'user')
 
-    # Emit message to the event responder
-    emitter.emit 'event', obj, cb
+    # Emit message to the event responder (always Responder ID 0)
+    emitter.emit('0', obj, {}, cb)
 
 
 # Private
@@ -35,7 +30,7 @@ exports.init = (eventTransport, wsTransport, emitter) ->
 sendToMultiple = (send, msg, destinations, type) ->
   destinations = destinations instanceof Array && destinations || [destinations]
   destinations.forEach (destination) ->
-    set = exports.socketIdsBy[type]
+    set = subscriptions[type]
     if socketIds = set.members(destination)
       socketIds.slice(0).forEach (socketId) ->
         set.removeFromAll(socketId) unless send.socketId(socketId, msg, destination)

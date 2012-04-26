@@ -31,7 +31,7 @@ app.append = ->
   useAfterStack.push(args)
 
 
-exports.init = (root) ->
+module.exports = (root) ->
 
   # Return API
   connect:    connect

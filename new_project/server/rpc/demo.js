@@ -10,6 +10,7 @@ exports.actions = function(req, res, ss) {
   //req.use('example.authenticated')
 
   return {
+
     sendMessage: function(message) {
       if (message && message.length > 0) {         // Check for blank messages
         ss.publish.all('newMessage', message);     // Broadcast the message to everyone
@@ -18,5 +19,7 @@ exports.actions = function(req, res, ss) {
         return res(false);
       }
     }
+
   };
+
 };

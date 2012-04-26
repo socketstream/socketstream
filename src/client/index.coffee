@@ -28,9 +28,9 @@ options =
 # Store each client as an object
 clients = {}
 
-exports.init = (ss, router) ->
+module.exports = (ss, router) ->
 
-  http = require('./http').init(ss.root, clients, options)
+  http = require('./http')(ss.root, clients, options)
   
   systemAssets.load()
 

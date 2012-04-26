@@ -3,7 +3,7 @@
 # Right now you can either use the internal transport or inbuilt Redis module
 # The idea behind making this modular is to allow others to experiment with other message queues / servers
 
-exports.init = () ->
+module.exports = () ->
   
   transport = null
   config = {}
@@ -21,4 +21,4 @@ exports.init = () ->
 
   load: ->
     @use 'internal' unless transport?
-    transport.init(config)
+    transport(config)

@@ -1,3 +1,30 @@
+0.3 RC1 / 2012-04-22
+====================
+
+##### New Request Responder API!
+
+* This powerful low-level API will allow SocketStream to support models, reactive templates, user presence, custom low-level gaming protocols and much more!
+* Create own Request Responder by [reading the documentation](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/writing_request_responders.md) and [downloading the example module](https://github.com/socketstream/ss-echo-responder)
+* Publish your Request Responder module on NPM. The best modules will be featured on www.socketstream.org
+* Include any third-party responder in your `app.js` with `ss.responders.add(require('mod-name'));`
+
+
+##### Other
+
+* IMPORTANT: Removed `console.log` compatibility wrapper for older browsers. See #192 for full explanation
+* New experimental server-side testing API. [See docs](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/server_side_testing.md)
+* CSS is now minified using `css-clean` when you call `ss.client.packAssets()`. Thanks plievone!
+* RPC error stack traces are now only sent to the browser if the request was made from `localhost`
+* Improved and updated `ss-console` to 0.1.2. Slight API change: add it to your project with `require('ss-console')(ss);`
+* Upgraded Socket.IO to 0.9.6
+* Changed a lot of `exports.init` to `module.exports` in line with Node best practice
+* Removed code to check for previous versions of 0.3
+* Updated `package.json` with names of significant/regular contributors. Thanks guys!
+
+Note: SocketStream 0.3.0 will be officially launched in May, along with example apps, screencasts, more documentation and improvements to [www.socketstream.org](http://www.socketstream.org). Read announcement [here](https://groups.google.com/forum/?fromgroups#!topic/socketstream/Y6OIOrJRX7w).
+
+
+
 0.3 beta2 / 2012-04-10
 ======================
 

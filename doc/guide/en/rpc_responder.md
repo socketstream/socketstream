@@ -72,6 +72,4 @@ You may pass as many arguments as you want - just remember the last argument sho
 
 The RPC Responder serializes messages in both directions using JSON. Thus the actual message sent over the wire is a string which looks like this:
 
-    rpc|{id: 1, m: 'method.to.call', p: [param1, param2, ...]}
-
-Note: Each incoming message is split on the `|` symbol so SocketStream knows which server-side responder to send it to, in this case the `rpc` responder.
+    {id: 1, m: 'method.to.call', p: [param1, param2, ...]}

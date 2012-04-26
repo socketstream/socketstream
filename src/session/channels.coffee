@@ -5,9 +5,9 @@
 require('colors')
 
 # Stores the relationship between sessionId and socketIds
-socketIdsBy = require('../websocket/subscribe').socketIdsBy
+subscriptions = require('../websocket/subscriptions')
 
-exports.init = (session, socketId) ->
+module.exports = (session, socketId) ->
 
   # Lists all the channels the client is currently subscribed to
   list: ->
@@ -29,7 +29,7 @@ exports.init = (session, socketId) ->
     forceArray(names).forEach (name) =>
       if (i = session.channels.indexOf(name)) >= 0
         session.channels.splice(i, 1)
-        socketIdsBy.channel.remove(name, socketId)
+        subscriptions.channel.remove(name, socketId)
         console.log('i'.green + ' unsubscribed sessionId '.grey + session.id + ' from channel '.grey + name)
     session.save cb
   
@@ -40,7 +40,7 @@ exports.init = (session, socketId) ->
   _bindToSocket: ->
     session.channels = [] unless session.channels
     forceArray(session.channels).forEach (name) ->
-      socketIdsBy.channel.add(name, socketId)
+      subscriptions.channel.add(name, socketId)
 
 
 # Private

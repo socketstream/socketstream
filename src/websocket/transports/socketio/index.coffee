@@ -7,7 +7,7 @@ socketio = require('socket.io')
 
 utils = require('../../../utils/misc.js')
 
-exports.init = (client, emitter, httpServer, config) ->
+module.exports = (client, emitter, httpServer, config) ->
 
   io = socketio.listen(httpServer)
 
@@ -27,13 +27,13 @@ exports.init = (client, emitter, httpServer, config) ->
 
       socket.on 'message', (msg) ->
         try
-          [type, content] = utils.parseWsMessage(msg)
+          [responderId, content] = utils.parseWsMessage(msg)
           clientIp = socket.manager.handshaken[socket.id].address.address
           meta = {socketId: socket.id, sessionId: socket.sessionId, clientIp: clientIp, transport: 'socketio'}
-          emitter.emit type, content, meta, (data) ->
-            socket.send(data)
+          emitter.emit responderId, content, meta, (data) ->
+            socket.send(responderId + '|' + data)
         catch e
-          console.log 'Invalid websocket message received:'.red, msg
+          console.log('Invalid websocket message received:'.red, msg)
       
       socket.emit('ready')
 
@@ -49,11 +49,11 @@ exports.init = (client, emitter, httpServer, config) ->
   event: ->
     
     all: (msg) ->
-      io.sockets.emit 'message', msg
+      io.sockets.emit('message', '0|' + msg)
 
     socketId: (id, msg, meta = null) ->
       if (socket = io.sockets.sockets[id])?
-        socket.emit 'message', msg, meta
+        socket.emit('message', '0|' + msg, meta)
       else
         false
 

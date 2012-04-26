@@ -32,6 +32,8 @@ So why do we need this distinction? Because some libraries such as Backbone.js (
 
 As SocketStream uses code from [Browserify](https://github.com/substack/node-browserify), the 'system' directory also allows you to use one of Node's inbuilt modules in the browser. Just head over to https://github.com/substack/node-browserify/tree/master/builtins and copy the libraries you need into any directory within `/client/code` called `system`.
 
+Tip: If you're making a new folder called `/client/code/system`, don't forget to add `system` to the list of code directores to serve in the `ss.client.define()` statement within `app.js`.
+
 
 #### '/entry.js' - A single point of entry
 

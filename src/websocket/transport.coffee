@@ -3,7 +3,7 @@
 # Define the transport to carry all realtime requests
 # Uses 'socketio' by default. See README to see how to configure it
 
-exports.init = (client, emitter) ->
+module.exports = (client, emitter) ->
   
   transport = null
   config = {}
@@ -20,5 +20,5 @@ exports.init = (client, emitter) ->
         throw new Error("Unable to find the '#{nameOrModule}' websocket transport internally")
 
   load: (httpServer) ->
-    @use 'socketio' unless transport?
-    transport.init(client, emitter, httpServer, config)
+    @use('socketio') unless transport?
+    transport(client, emitter, httpServer, config)

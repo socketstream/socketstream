@@ -2,7 +2,7 @@
 
 redis = require('redis')
 
-exports.init = (config = {}) ->
+module.exports = (config = {}) ->
 
   # REMOVE_BEFORE_0.3.0
   throw new Error("Note the {redis: {}} object wrapper was removed in 0.3 alpha3. Please pass any Redis server options to ss.session.store.use('redis') and ss.publish.transport.use('redis') directly.") if config.redis
