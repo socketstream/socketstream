@@ -67,7 +67,7 @@ Common JS라이브러리가 아닌 파일은 로드 순서가 매우 중요하�
 ### 없는 모듈을 요청하면 어떤 일이 생기나요?
 <!---### What happens if I try to require a module which doesn't exist?-->
 
-브라우저 콘솔에서 에러를 보실수 있습니다. 앞으로는 소켓스트림에서는 그런 일이 발생하기 전에 잡을수 있게 할 생각입니다.
+브라우저 콘솔에서 에러를 보실수 있습니다. 앞으로는 소켓스트림에서 그런 일이 발생하기 전에 잡을수 있게 할 생각입니다.
 <!--You'll see an error in the browser's console. In the future SocketStream will be able to catch these problems before they arise.-->
 
 
