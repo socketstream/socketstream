@@ -87,11 +87,11 @@ Common JS라이브러리가 아닌 파일은 로드 순서가 매우 중요하�
 웹 개발자들은 너무나 오랫동안 네임스페이스와 의존성을 관리할 방법이 없는 체로 구조화되지 않은 자바스크립트 파일 더미와 씨름해야만 했습니다.
 <!--For too long web developers have had to wade through a mess of unstructured JavaScript files without anyway to manage namespacing or dependencies.-->
 
-이런 혼돈스러운 상태에서, [Require.js](http://requirejs.org)같은 해결책과 다른 AMD 접근법은 어느정도 질서를 가져올 수 있었습니다만, 개발자들에게 의존성을 수동으로 목록을 만들고 추적해야하는 책임이 생겨 버렸습니다. 더 문제인 점은, 파일을`require()`할때 다른 문법으로 하고 있었다는 점입니다. - 이것떄문에 클라이언트 와 서버의 파일공유하려는 시도는 꿈도 꿀 수 없었죠.
+이런 혼돈스러운 상태에서, [Require.js](http://requirejs.org)같은 해결책과 다른 AMD 접근법은 어느정도 질서를 가져올 수 있었습니다만, 개발자들에게 의존성을 수동으로 목록을 만들고 추적해야하는 책임이 생겨 버렸습니다. 더 문제인 점은, 클라이언트와 서버에서 파일을 `require()`하고 싶을때 각각 다른 문법으로 하고 있었다는 점입니다. - 이것 때문에 클라이언트 와 서버의 파일공유하려는 시도는 꿈도 꿀 수 없었죠.
 <!--Solutions such as [Require.js](http://requirejs.org) and other AMD approaches have successfully brought order to chaos, but put the onus on the developer to manually track and list dependencies. What's more, they use a different syntax to `require()` files - instantly killing all hopes of sharing the same file between the client and server.-->
 
 소켓스트림에서는 좀 더 잘하고 싶었습니다. 결국, 소켓스트림은 클라이언트와 서버 스택을 모두 관리하는 독특한 프레임워크가 되어 버렸습니다. 이 솔루션은 [Browserify](https://github.com/substack/node-browserify) 덕분입니다. - 멋지고, 가볍고, 모든 문제를 한방에 해결해주는 라이브러리 였지요.
 <!--We wanted to do much better with SocketStream. After all, we are in the unique position of managing both the client and server stack. The solution came in the form of [Browserify](https://github.com/substack/node-browserify) - an awesome, lightweight, library which solves all these problems once and for all.-->
 
-소켓스트림은 Browserify 모듈을 의존하지 않습니다(거기에 우리가 필요없는 코드가 들어있거든요), 하지만 우리는 거기에서 핵심 컴포넌트를 가져왔습니다.(`require()`라는 마법을 가능하게 해주는 핵심 코드를 포함해서요.) 이 까다로운 문제에 대한 깔끔한 해결책을 주신 Substack에게 감사합니다.
+소켓스트림은 Browserify 를 `package.json`에 추가하고 그 위에 구현을 추가하는 방식으로 개발하지는 않았습니다. 왜냐하면 거기에 우리가 필요없는 코드가 들어있었거든요, 하지만 우리는 거기에서 핵심 컴포넌트를 가져왔습니다.(`require()`라는 마법을 가능하게 해주는 핵심 코드를 포함해서요.) 이 까다로운 문제에 대한 깔끔한 해결책을 주신 Substack에게 감사합니다.
 <!--SocketStream doesn't depend upon the Browserify module (as it contains code we don't need), but we use major components from it (including the critical code which performs all the `require()` magic). Our thanks go to Substack for coming up with a clean solution to a very tricky problem.-->
