@@ -1,11 +1,9 @@
 # Client-side Wrapper
 
-conn = null
+module.exports = (serverStatus, message, config = {}) ->
 
-module.exports = (emitter, message) ->
-
-  connect: (fn) ->
-    conn = io.connect()
+  connect: ->
+    conn = io.connect(undefined, config)
 
     conn.on 'message', (msg, meta) ->
       if (i = msg.indexOf('|')) > 0
@@ -17,16 +15,16 @@ module.exports = (emitter, message) ->
         console.error('Invalid websocket message received:', msg)
 
     conn.on 'ready', (cb) ->
-      emitter.emit('ready')
+      serverStatus.emit('ready')
 
     conn.on 'disconnect', ->
-      emitter.emit('disconnect')
+      serverStatus.emit('disconnect')
 
     conn.on 'reconnect', ->
-      emitter.emit('reconnect')
+      serverStatus.emit('reconnect')
 
     conn.on 'connect', ->
-      emitter.emit('connect')
+      serverStatus.emit('connect')
 
     # Return send function
     (msg) -> conn.send(msg)

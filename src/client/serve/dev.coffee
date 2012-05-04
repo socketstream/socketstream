@@ -8,9 +8,9 @@ qs = require('querystring')
 system = require('../system')
 utils = require('./utils')
 
-module.exports = (root, router, options) ->
+module.exports = (ss, router, options) ->
 
-  asset = require('../asset').init(root, options)
+  asset = require('../asset')(ss, options)
 
   # JAVASCRIPT
 

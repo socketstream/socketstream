@@ -6,7 +6,7 @@
 # Responders can optionally choose to use the middleware stack provided
 # The 'events' and 'rpc' responders are loaded by default, though even this can be overruled by calling clear()
 
-module.exports = (ss, client) ->
+module.exports = (ss) ->
 
   middleware = require('./middleware')(ss)
   

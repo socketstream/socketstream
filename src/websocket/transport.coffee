@@ -3,14 +3,14 @@
 # Define the transport to carry all realtime requests
 # Uses 'socketio' by default. See README to see how to configure it
 
-module.exports = (client, emitter) ->
+module.exports = (ss, emitter) ->
   
   transport = null
   config = {}
 
   use: (nameOrModule, cfg = {}) ->
     config = cfg
-    transport = if typeof(nameOrModule) == 'object'
+    transport = if typeof(nameOrModule) == 'function'
       nameOrModule
     else
       modPath = "./transports/#{nameOrModule}"
@@ -21,4 +21,4 @@ module.exports = (client, emitter) ->
 
   load: (httpServer) ->
     @use('socketio') unless transport?
-    transport(client, emitter, httpServer, config)
+    transport(ss, emitter, httpServer, config)

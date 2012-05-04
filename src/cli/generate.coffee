@@ -151,7 +151,6 @@ ss.start(server);
   "private": true,
   "engines": { "node": ">= 0.6.0" },
   "dependencies": {
-    "socketstream": "git://github.com/socketstream/socketstream.git#master",
 
 """
     mods = selectedFormatters.concat(['hogan'])

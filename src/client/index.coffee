@@ -30,12 +30,9 @@ clients = {}
 
 module.exports = (ss, router) ->
 
-  http = require('./http')(ss.root, clients, options)
+  http = require('./http')(ss, clients, options)
   
   systemAssets.load()
-
-  # Allow third-party modules to send libs to the client by extending the ss API
-  ss.client = {send: systemAssets.send}
 
   # Return API
   formatters:     formatters.init(ss.root)
@@ -79,19 +76,19 @@ module.exports = (ss, router) ->
     formatters.load()
 
     # Code to execute once everything is loaded
-    systemAssets.send('code', 'init', "require('/entry'); require('socketstream').connect();")
+    systemAssets.send('code', 'init', "require('/entry');")
      
     # Bundle initial assets if we're running in production mode
     if packAssets
       pack = require('./pack')
-      pack(ss.root, client, options) for name, client of clients
+      pack(ss, client, options) for name, client of clients
     
     # Else serve files and watch for changes to files in development
     else
-      require('./serve/dev')(ss.root, router, options)
-      require('./live_reload')(ss.root, options, ss) if options.liveReload
+      require('./serve/dev')(ss, router, options)
+      require('./live_reload')(ss, options) if options.liveReload
 
     # Listen out for requests to async load new assets
-    require('./serve/ondemand')(ss.root, router, options)
+    require('./serve/ondemand')(ss, router, options)
 
     
