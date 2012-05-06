@@ -3,7 +3,6 @@
 # The code in this file is always sent to the browser, regardless which websocket transport is used
 
 EventEmitter2 = require('eventemitter2').EventEmitter2
-transport = require('socketstream-transport')
 
 # Setup message emitters
 server = exports.server = new EventEmitter2
@@ -12,7 +11,11 @@ message = exports.message = new EventEmitter2
 # Provide a place to store templates
 exports.tmpl = {}
 
-sendFn = null
+transport = null
+
+exports.assignTransport = (config) ->
+  transport = require('socketstream-transport')(server, message, config)
+  transport.send = transport.connect()
 
 exports.registerApi = (name, fn) ->
   api = exports[name]
@@ -21,11 +24,15 @@ exports.registerApi = (name, fn) ->
   else
     exports[name] = fn
 
-exports.connect = (fn) ->
-  sendFn = transport(server, message).connect()
-
 exports.send = (responderId) ->
-  (msg) -> sendFn(responderId + '|' + msg)
+  (msg) -> transport.send(responderId + '|' + msg)
+
+
+# Experimental and undocumented for now
+exports.template = (name) ->
+  if name && name.length > 0
+    key = name.replace(/\./g,'-')
+    exports.tmpl[key] || console.error('Template not found', key)
 
 
 ### ON DEMAND LOADING ###

@@ -10,9 +10,9 @@ utils = require('./utils')
 # having to re-compile and minify assets. TODO: Add limits/purging
 queryCache = {}
 
-module.exports = (root, router, options) ->
+module.exports = (ss, router, options) ->
 
-  asset = require('../asset').init(root, options)
+  asset = require('../asset')(ss, options)
 
   serve = (processor) ->
     (request, response) ->
@@ -27,7 +27,7 @@ module.exports = (root, router, options) ->
   # Async Code Loading
   code = (request, response, path, cb) ->
     output = []
-    dir = pathlib.join(root, options.dirs.code)
+    dir = pathlib.join(ss.root, options.dirs.code)
     files = magicPath.files(dir, [path])
     files.forEach (file) ->
       asset.js file, {pathPrefix: path, compress: options.packAssets}, (js) ->

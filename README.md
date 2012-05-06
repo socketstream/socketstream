@@ -2,7 +2,8 @@
 
 # SocketStream
 
-Latest release: 0.3.0 RC1  ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+Latest release: 0.3.0 RC2  ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+
 [![build status](https://secure.travis-ci.org/socketstream/socketstream.png)](http://travis-ci.org/socketstream/socketstream)
 
 Twitter: [@socketstream](http://twitter.com/#!/socketstream)  
@@ -10,6 +11,8 @@ Google Group: http://groups.google.com/group/socketstream
 IRC channel: [#socketstream](http://webchat.freenode.net/?channels=socketstream) on freenode
 
 Take a tour of all the new features at http://www.socketstream.org/tour
+
+**NEW** [Watch the introductory presentation](http://2011.krtconf.com/videos/owen_barnes) I gave at [KrtConf](http://krtconf.com) last November. Although the first half refers to the previous version (SocketStream 0.2), all the upcoming features I speak about (mid-way through) are now available in SocketStream 0.3.
 
 
 ### Introduction
@@ -23,6 +26,8 @@ Rather than attempting to do everything, SocketStream is just a regular Node.js 
 Whilst we have chosen not to support models or reactive templating in the core, we offer a [powerful API](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/writing_request_responders.md) that allows developers to build optional modules to experiment with different approaches. The best third-party modules will be featured on our website in the near future.
 
 SocketStream apps can easily be deployed to [Nodejitsu](http://nodejitsu.com), [EC2 servers](http://aws.amazon.com/ec2) or any other hosting platform supporting websockets (sadly that excludes [Heroku](http://www.heroku.com) for the moment).
+
+While it is still early days, our end goal is to ensure SocketStream can be used to power large-scale 'serious' web apps where scalability, flexibility and high availability are key.
 
 
 #### Quick Facts
@@ -46,7 +51,7 @@ SocketStream 0.3.0 will be officially launched in May, along with example apps, 
 #### Client Side
 
 * Works great with Chrome, Safari, Firefox 6 (and above) using native websockets
-* Compatible with older versions of Firefox and IE thanks to configurable fallback transports provided by Socket.IO
+* Compatible with older versions of Firefox and IE thanks to configurable fallback transports
 * Use `require()` and `exports` in your client-side code as you would on the server
 * Define multiple single-page clients by choosing the CSS, JS and client-side templates you wish to serve
 * Integrated asset manager - automatically packages and [minifies](https://github.com/mishoo/UglifyJS) all client-side assets
@@ -62,7 +67,8 @@ SocketStream 0.3.0 will be officially launched in May, along with example apps, 
 
 #### Server Side
 
-* True bi-directional communication using websockets (or [Socket.IO 0.9](http://socket.io) fallbacks). No more slow, messy AJAX!
+* True bi-directional communication using websockets (or websocket fallbacks). No more slow, messy AJAX!
+* Modular Websocket Transports - switch between [Socket.IO](http://socket.io) (bundled by default) or [SockJS](https://github.com/socketstream/ss-sockjs) without changing your app code
 * Easily share code between the client and server. Ideal for business logic and model validation (see Questions below)
 * Request Middleware - enabling session access, authentication, logging, distributed requests and more
 * Effortless, scalable, pub/sub baked right in - including Private Channels
@@ -73,6 +79,7 @@ SocketStream 0.3.0 will be officially launched in May, along with example apps, 
 
 #### Optional Modules (officially maintained and supported)
 
+* **[ss-sockjs](https://github.com/socketstream/ss-sockjs)** Use [SockJS](https://github.com/sockjs/sockjs-client) as the websocket transport instead of Socket.IO
 * **[ss-console](https://github.com/socketstream/ss-console)** Connect to a live server and call RPC actions or publish events over the REPL / terminal
 * Code Formatters: **[ss-coffee](https://github.com/socketstream/ss-coffee)** (CoffeeScript), **[ss-jade](https://github.com/socketstream/ss-jade)** Jade (for HTML), **[ss-stylus](https://github.com/socketstream/ss-stylus)** Stylus (for CSS), **[ss-less](https://github.com/socketstream/ss-less)** Less (for CSS)
 * Client-side Template Engines: **[ss-hogan](https://github.com/socketstream/ss-hogan)** Hogan/Mustache, **[ss-coffeekup](https://github.com/socketstream/ss-coffeekup)** CoffeeKup
@@ -83,7 +90,7 @@ SocketStream 0.3.0 will be officially launched in May, along with example apps, 
 
 SocketStream automatically compresses and minifies the static HTML, CSS and client-side code your app needs and sends this through the first time a user visits your site.
 
-From then on all application data is sent and received via the websocket (or Socket.IO fallbacks), instantly established when the client connects and automatically re-established if broken. Normally this will be in [JSON RPC](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/rpc_responder.md) format, but SocketStream 0.3 allows you to use different Request Responders depending upon the task at hand.
+From then on all application data is sent and received via the websocket (or websocket fallbacks), instantly established when the client connects and automatically re-established if broken. Normally this will be in [JSON RPC](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/rpc_responder.md) format, but SocketStream 0.3 allows you to use different Request Responders depending upon the task at hand.
 
 All this means no more connection latency, HTTP header overhead, polling, or clunky AJAX. Just true bi-directional, asynchronous, 'streaming' communication between client and server.
 
@@ -225,17 +232,27 @@ Install the excellent 'nodemon' module with `sudo npm install -g nodemon` then s
 
 ##### How can I configure Socket.IO?
 
-Like so:
+You may fully configure the Socket.IO server and client libraries like so:
 
 ```javascript
-ss.ws.transport.use('socketio', {io: function(io){
-  io.set('log level', 4)
-}});
+ss.ws.transport.use('socketio', {
+  client: {
+    transports: ['websocket', 'htmlfile', 'xhr-polling', 'jsonp-polling']
+  },
+  server: function(io){
+    io.set('log level', 4)
+  }
+});
 ```
+
 
 ##### Where can I deploy my apps to?
 
 SocketStream works great with [Nodejitsu.com](http://www.nodejitsu.com), as well as custom EC2 / cloud servers. Sadly [Heroku.com](http://www.heroku.com) does not currently support websockets.
+
+Tip: If you're deploying to Nodejitsu add the following dependency to your `package.json`:
+
+    "socketstream": "git://github.com/socketstream/socketstream.git#master"
 
 
 ##### Will it run on Windows?

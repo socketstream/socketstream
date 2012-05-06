@@ -7,15 +7,15 @@ magicPath = require('./magic_path')
 engine = require('./template_engine')
 
 
-module.exports = (root, client, options, cb) ->
+module.exports = (ss, client, options, cb) ->
 
-  asset = require('./asset').init(root, options)
+  asset = require('./asset')(ss, options)
 
   # Add links to CSS and JS files
-  includes = headers(root, client, options)
+  includes = headers(ss.root, client, options)
 
   # Add any Client-side Templates
-  includes = includes.concat( templates(root, client, options) )
+  includes = includes.concat( templates(ss.root, client, options) )
 
   # Output HTML
   htmlOptions = {headers: includes.join(''), compress: client.pack, filename: client.paths.view}

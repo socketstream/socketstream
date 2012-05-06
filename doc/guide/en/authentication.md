@@ -87,7 +87,14 @@ And you'll see the following output:
 
 SocketStream integrates well with popular authentication libraries such as [Everyauth](https://github.com/bnoguchi/everyauth).
 
-Here's an example of a full app which authenticates against Twitter's OAuth service:
+Tip: Don't be tempted to follow the docs on the Everyauth website too closely - they are mainly geared at multi-page apps and/or specific to Express.
+
+Here's an example of a full app which authenticates against Twitter's OAuth service.
+
+To get started, register your new app at https://dev.twitter.com/apps/new
+
+When testing your app supply `http://127.0.0.1:3000` as the Callback URL. Change this to the real URL when your app goes into production.
+
 
 ```javascript
 // app.js

@@ -15,13 +15,13 @@ magicPath = require('./magic_path')
 view = require('./view')
 
     
-module.exports = (root, client, options) ->
+module.exports = (ss, client, options) ->
 
-  asset = require('./asset').init(root, options)
+  asset = require('./asset')(ss, options)
 
   client.pack = true
 
-  containerDir = pathlib.join(root, options.dirs.assets)
+  containerDir = pathlib.join(ss.root, options.dirs.assets)
   clientDir = pathlib.join(containerDir, client.name)
 
   packAssetSet = (assetType, paths, dir, postProcess) ->
@@ -29,7 +29,7 @@ module.exports = (root, client, options) ->
     writeFile = (fileContents) ->
       fileName = clientDir + '/' + client.id + '.' + assetType
       fs.writeFileSync(fileName, postProcess(fileContents))
-      log('✓'.green, 'Packed ' + filePaths.length + ' files into ' + fileName.substr(root.length))
+      log('✓'.green, 'Packed ' + filePaths.length + ' files into ' + fileName.substr(ss.root.length))
 
     processFiles = (fileContents = [], i = 0) ->
       {path, file} = filePaths[i]
@@ -43,7 +43,7 @@ module.exports = (root, client, options) ->
     # Expand any dirs into real files
     if paths && paths.length > 0
       filePaths = []
-      prefix = pathlib.join(root, dir)
+      prefix = pathlib.join(ss.root, dir)
       paths.forEach (path) ->
         magicPath.files(prefix, path).forEach (file) -> filePaths.push({path: path, file: file})
       processFiles()
@@ -70,10 +70,10 @@ module.exports = (root, client, options) ->
     system.serve.js({compress: true}) + files.join(';') + ';' + system.serve.initCode()
 
   # Output HTML view
-  view root, client, options, (html) ->
+  view ss, client, options, (html) ->
     fileName = pathlib.join(clientDir, client.id + '.html')
     fs.writeFileSync(fileName, html)
-    log('✓'.green, 'Created and cached HTML file ' + fileName.substr(root.length))
+    log('✓'.green, 'Created and cached HTML file ' + fileName.substr(ss.root.length))
 
 
 # PRIVATE

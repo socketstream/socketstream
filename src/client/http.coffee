@@ -17,7 +17,7 @@ cache = {}
 res = http.ServerResponse.prototype
 
 
-module.exports = (root, clients, options) ->
+module.exports = (ss, clients, options) ->
 
   # Append the 'serveClient' method to the HTTP Response object
   res.serveClient = (name) ->
@@ -39,7 +39,7 @@ module.exports = (root, clients, options) ->
 
       # Return from in-memory cache if possible
       unless cache[name]
-        fileName = pathlib.join(root, options.dirs.assets, client.name, client.id + '.html')
+        fileName = pathlib.join(ss.root, options.dirs.assets, client.name, client.id + '.html')
         cache[name] = fs.readFileSync(fileName, 'utf8')
       
       # Send to browser   
@@ -47,7 +47,7 @@ module.exports = (root, clients, options) ->
 
     # Generate View from scratch in development 
     else
-      view(root, client, options, sendHTML)
+      view(ss, client, options, sendHTML)
 
   # Alias res.serveClient to keep compatibility with existing apps
   res.serve = res.serveClient

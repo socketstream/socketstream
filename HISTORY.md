@@ -1,3 +1,18 @@
+0.3 RC2 / 2012-05-04
+====================
+
+* New: Multiple Websocket Transports now fully supported. Switch between Socket.IO (bundled by default) and [SockJS](https://github.com/socketstream/ss-sockjs) (first alpha release) without changing any of your application code
+* New: Socket.IO client library can now be configured (see updated example in README)
+* Live Reload: Working on fixing issues whilst renaming files in VIM (see #227, thanks madscoaducom), fixed issue saving CSS + normal files together
+* Errors in formatting templates (e.g. bad `.jade`) now caught properly
+* Any missing sessions are now automatically recreated (useful when developing without using Redis)
+* New project example code now uses [Nib](http://visionmedia.github.com/nib) instead of custom Stylus helpers
+* Minor refactoring
+* Updated README with video link
+
+Note: SocketStream 0.3.0 will be officially launched later in May, along with example apps, screencasts, more documentation and improvements to [www.socketstream.org](http://www.socketstream.org). Read announcement [here](https://groups.google.com/forum/?fromgroups#!topic/socketstream/Y6OIOrJRX7w).
+
+
 0.3 RC1 / 2012-04-22
 ====================
 

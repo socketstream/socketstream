@@ -7,8 +7,14 @@ socketio = require('socket.io')
 
 utils = require('../../../utils/misc.js')
 
-module.exports = (client, emitter, httpServer, config) ->
+module.exports = (ss, emitter, httpServer, config = {}) ->
 
+  config.client = config.client || {}
+
+  # Alias config.io to config.server to ensure we don't break apps using the old API
+  config.server = config.io
+
+  # Bind Socket.IO to the HTTP server
   io = socketio.listen(httpServer)
 
   # Set default log level. Can be overwritten using app config
@@ -18,7 +24,7 @@ module.exports = (client, emitter, httpServer, config) ->
   # ss.ws.transport.use('socketio', {io: function(io){
   #   io.set('log_level', 4) 
   # }})
-  config.io(io) if config?.io?
+  config.io(io) if config.io
 
   # Listen out for new connections
   io.sockets.on 'connection', (socket) ->
@@ -39,11 +45,15 @@ module.exports = (client, emitter, httpServer, config) ->
 
   # Send Socket.IO Client to browser
   socketioClient = fs.readFileSync(__dirname + '/client.min.js', 'utf8')
-  client.assets.send('lib', 'socketio-client', socketioClient, {minified: true})
+  ss.client.send('lib', 'socketio-client', socketioClient, {minified: true})
 
   # Send socketstream-transport module
   code = fs.readFileSync(__dirname + '/wrapper.' + (process.env['SS_DEV'] && 'coffee' || 'js'), 'utf8')
-  client.assets.send('mod', 'socketstream-transport', code, {coffee: process.env['SS_DEV']})
+  ss.client.send('mod', 'socketstream-transport', code, {coffee: process.env['SS_DEV']})
+
+  # Tell the SocketStream client to use this transport, passing any client-side config along to the wrapper
+  ss.client.send('code', 'transport', "require('socketstream').assignTransport(" + JSON.stringify(config.client) + ");");
+
 
   # Export API
   event: ->

@@ -5,9 +5,9 @@
 EventEmitter2 = require('eventemitter2').EventEmitter2
 emitter = new EventEmitter2({wildcard: true})
 
-module.exports = (client, request, ss) ->
+module.exports = (ss, request) ->
 
-  transport = require('./transport')(client, emitter)
+  transport = require('./transport')(ss, emitter)
 
   # Return API
   transport: transport

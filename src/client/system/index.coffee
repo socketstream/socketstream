@@ -8,7 +8,7 @@ pathlib = require('path')
 uglifyjs = require('uglify-js')
 coffee = require('coffee-script') if process.env['SS_DEV']
 
-asset = require('../asset')
+wrap = require('../wrap')
 fsUtils = require('../../utils/file')
 
 # Allow internal modules to deliver assets to the browser
@@ -65,7 +65,7 @@ exports.serve =
 
     # Modules
     for name, mod of assets.modules
-      code = asset.wrapModule(name, mod.content)
+      code = wrap.module(name, mod.content)
       code = minifyJS(code) if options.compress && !mod.options.minified 
       output.push(code)
 

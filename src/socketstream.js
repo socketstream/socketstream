@@ -56,11 +56,14 @@ var http = exports.http = require('./http/index')(root);
 // Client Asset Manager
 var client = exports.client = require('./client/index')(api, http.router);
 
+// Allow other libs to send assets to the client
+api.client = {send: client.assets.send};
+
 // Incoming Request Responders
-var responders = exports.responders = require('./request/index')(api, client);
+var responders = exports.responders = require('./request/index')(api);
 
 // Websocket Layer (transport, message responders, transmit incoming events)
-var ws = exports.ws = require('./websocket/index')(client, responders, api);
+var ws = exports.ws = require('./websocket/index')(api, responders);
 
 // Only one instance of the server can be started at once
 var serverInstance = null; 

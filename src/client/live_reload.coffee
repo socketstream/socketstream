@@ -18,7 +18,7 @@ consoleMessage =
   reload:    'Client files changed. Reloading browser...'
 
 
-module.exports = (root, options, ss) ->
+module.exports = (ss, options) ->
 
   handleFileChange = (action) ->
     if (Date.now() - lastRun[action]) > 1000  # Reload browser max once per second
@@ -29,7 +29,7 @@ module.exports = (root, options, ss) ->
   assetsToWatch = ->
     output = {files: [], dirs: []}
     options.liveReload.forEach (dir) ->
-      path = pathlib.join(root, options.dirs[dir])
+      path = pathlib.join(ss.root, options.dirs[dir])
       result = fileUtils.readDirSync(path)
       output.files = output.files.concat(result.files)
       output.dirs = output.dirs.concat(result.dirs)
@@ -42,11 +42,13 @@ module.exports = (root, options, ss) ->
     paths.files.forEach (file) ->
       extension = file.split('.')[file.split('.').length-1]
       changeAction = cssExtensions.indexOf(extension) >= 0 && 'updateCSS' || 'reload'
-      watcher = fs.watch file, (event, filename) ->
+      watcher = fs.watch file, (event) ->
         handleFileChange(changeAction)
         if event == "rename"
           watcher.close()
-          watch({files: [file], dirs: []})
+          # Disabling for now as file = the old filename and although fs.watch
+          # should pass (event, filename) this does not work on all OSes
+          #watch({files: [file], dirs: []})
 
   detectNewFiles = ->
     pathsNow = assetsToWatch()
