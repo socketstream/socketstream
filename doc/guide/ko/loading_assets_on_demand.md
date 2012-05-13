@@ -46,7 +46,8 @@ ss.load.code('/mail', function(){
 
 
 <!--Note: Regardless of the directory you load, the modules inside will always be loaded into the root (/) namespace by default. If you want to mount the new modules in a different namespace, just create one or more sub-directories in the folder you're loading.-->
-주의하세요: 여러분이 로드하는 폴더와 상관없이, 폴더 안에 있는 모듈은 별도의 설졍이 없으면 항상 루트 (/) 안에 로드될 것입니다. 새로운 모듈을 다른 네임스페이스 안에 마운트(??)하시려면 로드하시려는 폴더를 하나 만들거나, 로드하는 폴더 안에 하위 폴더를 하나 만드세요.-->
+
+주의하세요: 여러분이 로드하는 폴더와 상관없이, 폴더 안에 있는 모듈은 별도의 설졍이 없으면 항상 루트 (/) 안에 로드될 것입니다. 새로운 모듈을 다른 네임스페이스 안에 마운트(??)하시려면 로드하시려는 폴더를 하나 만들거나, 로드하는 폴더 안에 하위 폴더를 하나 만드세요.
 
 
 <!--### Automatic Caching-->
