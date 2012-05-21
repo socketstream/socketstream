@@ -12,7 +12,7 @@ IRC channel: [#socketstream](http://webchat.freenode.net/?channels=socketstream)
 
 Take a tour of all the new features at http://www.socketstream.org/tour
 
-**NEW** [Watch the introductory presentation](http://2011.krtconf.com/videos/owen_barnes) I gave at [KrtConf](http://krtconf.com) last November. Although the first half refers to the previous version (SocketStream 0.2), all the upcoming features I speak about (mid-way through) are now available in SocketStream 0.3.
+Note: I will be talking about SocketStream 0.3 at [LNUG](http://lnug.org) on Wednesday 23rd May.
 
 
 ### Introduction
@@ -223,6 +223,7 @@ Documentation is constantly expanding and can be found in `/doc/guide/en`.
 
 ***
 
+
 ### Questions?
 
 ##### How can I make my app auto-restart when /server code changes?
@@ -293,6 +294,11 @@ SocketStream 0.3 makes a big assumption in order to maximize speed and reduce co
 Front end scaling can be achieved using a combination of different websocket transports (such as the forthcoming Pusher Pipe module) and optional features we intend to introduce in the future.
 
 Back end scaling has yet to be properly documented, but we're keen to continue looking into ways to use ZeroMQ and also Hook IO. We will make sure back end scaling is as easy and flexible as possible, but it will no longer be a feature of the framework itself.
+
+
+### Videos
+
+**NEW** [Watch the introductory presentation](http://2011.krtconf.com/videos/owen_barnes) I gave at [KrtConf](http://krtconf.com) last November. Although the first half of the video refers to the previous version (SocketStream 0.2), all the upcoming features I speak about are now available in SocketStream 0.3.
 
 
 ### Developing on the SocketStream core
