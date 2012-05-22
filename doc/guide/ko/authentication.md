@@ -2,7 +2,8 @@
 # 인증
 
 Users can be authenticated in two ways: over the websocket or over HTTP.
-사용지들은 두가지 방법으로 인증될 수 있다: 웹소켓으로 또는 HTTP 
+
+사용자들은 두가지 방법으로 인증될 수 있다: 웹소켓으로 또는 HTTP 
 
 The first option
  is useful 
@@ -19,6 +20,7 @@ Either way,
 the goal is the same: 
 to update `req.session.userId` 
 with the user's unique ID.
+
 어느 경우라도, 목표는 같다:`req.session.userId`를 사용자의 고유한 ID로 변경
 
 
@@ -43,7 +45,7 @@ exports.actions = function(req, res, ss){
   	authenticate: function(username, password){
   		
       // lookup user in DB, LDAP, etc
-      // BD, LDAP, 등에서 사용자를 찾음
+      // BD, LDAP, 등에서 사용자를 확인
 
       if (user) {
         req.session.setUserId(user.id);
@@ -78,12 +80,14 @@ the same session object
  is also available over HTTP 
  you may easily authenticate a user by updating `req.session.userId` 
 whilst processing a HTTP request. 
+
 같은 세션 객체는 HTTP를 통해도 가능하기 때문에 HTTP Request를 처리하는 동안 `req.session.userId`을 변경하여 인증할 수 있다.
 
 Let's look at 
 a very simple example 
 by 
 adding the following 'route' to `app.js`:  
+
 `app.js`에 추가된 다음' route' 예제를 보자:
 
 ```javascript
@@ -97,6 +101,7 @@ ss.http.router.on('/authenticateMe', function(req, res) {
 ```
 
 Next, add an RPC action which sends the contents of `req.session.userId` over the websocket:
+
 다음으로 웹소켓을 통해 `req.session.userId`의 컨턴츠를 전송하는 작업을 하는 RPC를 추가한다.
 
 ```javascript
@@ -118,12 +123,14 @@ exports.actions = function(req, res, ss){
 ```
 
 Now visit `http://localhost:3000/authenticateMe` then enter the following command in the browser's console:
+
 이제 `http://localhost:3000/authenticateMe` 방문하고나서 브라우저 콘솔에 다음 내용을 입력하라:
     
     ss.rpc('app.getCurrentUser')
     
 And you'll see the following output:
-그리고 당신은 다음과 같은 결과를 볼 것이다.:
+
+그러면 당신은 다음과 같은 결과를 볼 것이다.:
 
     The current user is john
 
@@ -132,18 +139,23 @@ And you'll see the following output:
 ### Facebook Connect, Twitter, Github 등 을 위한 Everyauth 사용 
 
 SocketStream integrates well with popular authentication libraries such as [Everyauth](https://github.com/bnoguchi/everyauth).
+
 SocketStream [Everyauth](https://github.com/bnoguchi/everyauth)같은 유명한 인증 라이브러리들과 잘 통합된다.
 
 Tip: Don't be tempted to follow the docs on the Everyauth website too closely - they are mainly geared at multi-page apps and/or specific to Express.
+
 팁: Everyauth 웹사이트의 문서를 너무 자세히 따르지 마라 - 그것들은 주로 멀티페이지 앱에 연관되거나/또는 Express를 명시하고 있다.  
 
 Here's an example of a full app which authenticates against Twitter's OAuth service.
+
 여기 트위터의 oAuth 서비스에 대한 인증을 하는 전체 app의 예제가 있다. 
 
 To get started, register your new app at https://dev.twitter.com/apps/new
+
 시작할때 https://dev.twitter.com/apps/new 에서 당신의 app을 등록하라
 
 When testing your app supply `http://127.0.0.1:3000` as the Callback URL. Change this to the real URL when your app goes into production.
+
 당신의 앱을 테스트 할때 콜백 URL로 `http://127.0.0.1:3000`이 제공된다. 당신을 앱을 제품으로 만들때 할때 이것을 실제URL로 변경하라. 
 
 ```javascript
@@ -187,4 +199,5 @@ ss.start(server);
 ```
 
 Many more details on this and other examples coming soon.
+
 이것에 대한 많고 더 상세함과 다른 예제들이 곧 옵니다.
