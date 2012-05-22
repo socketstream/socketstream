@@ -2,7 +2,7 @@
 # 인증
 
 Users can be authenticated in two ways: over the websocket or over HTTP.
-사용지들은 두가지 방법으로 인증될 수 있다.:웹소켓으로 또는 HTTP로  
+사용지들은 두가지 방법으로 인증될 수 있다: 웹소켓으로 또는 HTTP 
 
 The first option
  is useful 
@@ -19,7 +19,7 @@ Either way,
 the goal is the same: 
 to update `req.session.userId` 
 with the user's unique ID.
-어느 경우라도, 목표는 같다: `req.session.userId`를 사용자의 고유한 ID로 변경
+어느 경우라도, 목표는 같다:`req.session.userId`를 사용자의 고유한 ID로 변경
 
 
 ### Authenticating over websockets
@@ -68,7 +68,7 @@ to immediately start sending events
 for this user (sent using `ss.publish.user()`) 
 over the current websocket connection.
 
-메모: 당신은 `req.session.userId`을 그냥 손수 바꿀 수 있으나 호출되는 `req.session.setUserId()` 함수가 세션을 저장하고 SocketStream에게 즉시 (`ss.publish.user()`를 사용해 보낸)이 사용자에게 이벤트 전송을 시작하라는고 통보한다.
+메모: 당신은 `req.session.userId`을 그냥 손수 바꿀 수 있지만 호출되는 `req.session.setUserId()` 함수는 세션을 저장하고 SocketStream에게 즉시 (`ss.publish.user()`를 이용하여 보낸)이 사용자에게 이벤트 전송을 시작을 알린다.
 
 ### Authenticating using HTTP
 ### HTTP를 이용한 인증
