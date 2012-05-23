@@ -97,11 +97,9 @@ All this means no more connection latency, HTTP header overhead, polling, or clu
 
 ### Getting Started
 
-Ready to give it a whirl? Install [Node 0.6.X](http://nodejs.org/#download) then clone the project locally (just until 0.3.0 is released and published to `npm`):
+Ready to give it a whirl? Install [Node 0.6.X](http://nodejs.org/#download) then install SocketStream from NPM:
 
-    git clone https://github.com/socketstream/socketstream.git
-    cd socketstream
-    sudo npm link
+    [sudo] npm install -g socketstream
 
 To generate a new empty SocketStream project type:
 
@@ -113,7 +111,6 @@ Install the bundled (optional) dependencies:
 
     cd <name_of_your_project>
     npm install
-    npm link socketstream
 
 To start your app simply type:
 
