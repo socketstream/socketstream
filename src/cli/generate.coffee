@@ -153,11 +153,11 @@ ss.start(server);
   "dependencies": {
 
 """
+    pacakgejs += "    \"socketstream\": \"0.3.x\""
     mods = selectedFormatters.concat(['hogan'])
     mods.push('console') if program.repl
     mods.forEach (name, i) ->
-      pacakgejs += ",\n" unless i == 0
-      pacakgejs += "    \"ss-#{name}\": \"0.1.x\""
+      pacakgejs += ",\n    \"ss-#{name}\": \"0.1.x\""
 
     pacakgejs += "\n  }\n}"
 
@@ -195,7 +195,6 @@ ss.start(server);
     log "Next, run the following commands:".yellow
     log "   cd " + name
     log "   sudo npm install"
-    log "   npm link socketstream", " (just until 0.3 is published to npm)".grey
     log "To start your app:".yellow
     log "   node app.js"
 
