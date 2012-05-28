@@ -3,7 +3,7 @@
 
 <!--Note: This feature is brand new and still in the 'experimental' stage. Please help us by reporting any problems so we can perfect server-side testing in future releases.-->
 
-주의하세요: 이 기능은 완전히 새로운 기능이며, 아직 '실험'단계입니다. 문제를 발견하시면 저희에게 알려주세요. 그럼 다음번 릴리즈에서는 서버-사이트 테스트하는 기능이 더 완전해질 것입니다.
+주의: 이 기능은 완전히 새로운 기능이며, 아직 '실험'단계입니다. 문제를 발견하시면 저희에게 알려주세요. 그러면 다음번 릴리즈에서는 서버-사이트 테스트기능은 더 완전해질 것입니다.
 
 <!--SocketStream allows you to test your app using Node's `assert` module, or any test framework of your choice. We recommend using [Mocha](http://visionmedia.github.com/mocha) with [should.js](https://github.com/visionmedia/should.js). This is the combination used in the example below.-->
 소켓스트림에서는 Node의 'assert'모듈을 사용해서 앱을 테스트할 수 있습니다. 아니면 다른 테스트 프레임워크를 사용할 수도 있습니다. [Mocha](http://visionmedia.github.com/mocha) 와 [should.js](https://github.com/visionmedia/should.js)를 조합하여 사용하는 것을 추천합니다.  아래의 예제에서는 이 두 개의 조합을 사용하였습니다.
