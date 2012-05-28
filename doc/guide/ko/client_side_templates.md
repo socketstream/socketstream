@@ -25,7 +25,7 @@ $(document).ready ->
 ```
 
 <!--However, not only does this solution scale poorly for larger templates, but mixing together display logic and HTML is bad practice. Enter client-side templates.-->
-하지만, 이 솔루션은 큰 템플릿일경우 좋지 않을 뿐아니라 HTML과 표현 로직을 을 함께 섞어 쓰는 것은 나쁜 관행입니다. 이제 클라이언트측 템플릿들을 살펴봅시다.
+하지만, 이 방법은 큰 템플릿일 경우 좋지 않을 뿐 아니라 HTML과 표현 로직을 을 함께 섞어 쓰는 것은 나쁜 관행입니다. 이제 클라이언트측 템플릿들을 살펴봅시다.
 
 
 <!---### Template Engines-->
@@ -55,7 +55,7 @@ ss.client.templateEngine.use('ember');
 ```
 
 <!--As built-in template engines are only simple wrappers, most of the time you'll want to use one of the several template languages supported via optional modules on NPM:-->
-내장된 템플릿 엔진은 정말 단순한 래퍼이기 때문에, 당신은 대부분의 시간을 NPM에 선택적 모듈을 통해 지원되는 몇가지 템플릿 언어 중에 한가지를 이용하기를 원할 겁니다.
+내장된 템플릿 엔진은 정말 단순한 래퍼이기 때문에, 대부분은 NPM에 선택적 모듈을 통해 지원되는 몇가지 템플릿 언어 중에 한가지를 이용하기를 원할 겁니다.
 
 <!--
 * [ss-hogan](https://github.com/socketstream/ss-hogan) Mustache templates (compiled on the server, requires small client-side lib). This is our recommended template engine.
@@ -74,18 +74,18 @@ ss.client.templateEngine.use(require('ss-hogan'));
 ```
 
 <!--If you can't find a module for your favorite templating library it's easy to [create your own](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/template_engine_wrappers.md).-->
-당신이 선호하는 템플릿라이브러리를 찾을수 없다면 쉽게 [자신의 것](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/template_engine_wrappers.md) 을 생성 할 수 있습니다.
+당신이 선호하는 템플릿라이브러리를 위한 모듈을 찾을 수 없다면 쉽게 [자신의 것](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/template_engine_wrappers.md) 을 생성 할 수 있습니다.
 <!--(!!! 머지 시점에서 위에 문서 링크 [자신의 것](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/template_engine_wrappers.md) 적당히 바꿔준다.)-->
 
 
 <!---### Mix and match different template engines-->
-### 다른 템플릿 엔진들과 섞기 그리고 매치(일치) 시키기
+### 다른 템플릿 엔진들과 같이 쓰기
 
 <!--All client-side templates live in the `client/templates` folder; however you don't have to serve every template with the same engine.-->
 모든 클라이언트 템플릿들은 `client/templates`폴더 안에 있습니다; 하지만 같은 엔진과 모든 템플릿을 제공하지 않아도 됩니다.
 
 <!--SocketStream allows you to mix and match different templates, perfect for trying out something like Ember.js without having to convert all your exiting templates over at once.-->
-SocketStream 당신이 다른 템플릿들을 동시에 사용하고 매치(일치)시키는 것을 허용합니다, Ember.js처럼 존재하는 당신의 모든 템플릿들의 변환 종료 없이 시도하는 것에 알맞다. ???? 엉???
+SocketStream 당신이 다른 템플릿들을 같이 쓰는 것을 허용합니다, 예를들어 Ember.js같은 것을 시도해 볼때 기존에 짜놓은 템플릿들을 한꺼번에 변환하지 않아도 되게 해줍니다.
 
 <!--You may limit the scope of a template engine by passing the name of a directory as the second argument.-->
 두번때 인자로 디렉토리 이름을 전달하여 템플릿엔진의 범위를 재한 할 수 있습니다.
@@ -115,13 +115,13 @@ ss.client.templateEngine.use('ember', '/em');
 ```
 
 <!--**NOTE:** If you prefer, you may use a formatter to construct your HTML templates. For example, to use Jade, use `.jade` instead of `.html` for your template's file extension.-->
-**메모:** 만약 완벽하게 하고 싶다면, 당신의 HTML 템믈릿들을 구성하기 위한 포매터를 사용하시오. 예로 Jade 사용할 경우 당신의 템플릿 파일들의 확장자를 `.jade` 대신 `.html` 사용하세요.
+**메모:** 혹시, HTML 템플릿을 쓰기 원한다면. Jade라면 `.html` 대신 `.jade`를 파일 확장자로 하세요.
 
 <!--If you refresh the page and view the HTML source code you'll see a new `<script>` tag containing the compiled template.-->
 페이지를 새로고친 후 HTML 소스를 보면 당신은 컴파일된 템플릿을 포함하는 새로운 `<script>`태그를 볼 수 있을 것입니다.
 
 <!--The `person.html` file in the `templates` folder is now accessible via `ss.tmpl['person']`. If the file was in a subdirectory `model/person.html`, then it would be accessible via `ss.tmpl['model-person']`.-->
-`templates` 폴더 안에 `person.html`파일은 이제  `ss.tmpl['person']`을 통해 접근할 수 있습니다. 파일이 `model/person.html` 처럼 서브디렉토리에 있다면 `ss.tmpl['model-person']로 접근 할 수 있습니다.
+`templates` 폴더 안에 `person.html`파일은 이제  `ss.tmpl['person']`을 통해 접근할 수 있습니다. 파일이 `model/person.html` 처럼 서브디렉토리에 있다면 `ss.tmpl['model-person']`로 접근 할 수 있습니다.
 
 <!--Now that we have a template, let's put it to good use by refactoring our code:-->
 템플릿은 만들었습니다,  코드를 리펙토링해서 잘 동작하도록 집어 넣어 봅시다.
