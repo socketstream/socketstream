@@ -69,7 +69,7 @@ worker.postMessage(10000000);
 <!--// print output to console-->
 <!--// start worker with 10000000 cycles-->
 
-조금 시간이 지나 테스크가 끝나면 브라우져 콘설에서 다음 출력을 볼수있습니다:
+조금 시간이 지나 테스크가 끝나면 브라우져 콘솔에서 다음 출력을 볼수있습니다:
 <!--A few seconds after the task has run you should see the output in the browser's console:-->
 
     10000000 사이클로 파이를 계산중
