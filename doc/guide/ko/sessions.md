@@ -1,17 +1,17 @@
 # 세션
 <!---# Sessions-->
 
-소켓스트림은 웹소켓과 http사이의 세션이 비슷한api를 사용해 쉽게 공유할수있도록 보장하기위해 커넥트의 세션스토어를 사용합니다.
+소켓스트림은 웹소켓과 http사이의 세션이 비슷한 api를 사용해 쉽게 공유 할수 있도록 하기 위해 커넥트의 세션스토어를 사용합니다.
 <!--SocketStream uses the Connect Session Store to ensure sessions can be easily shared between HTTP and Websocket requests using a similar API.-->
 
-이것은 소켓스트림에서 적은 데이터를 익스프레스나 커넥트를 사용했다면 어떤 페이지 기반의 프레임 워크에서도 사용할수 있다는 이야기가 됩니다. 특히나 인증을 구현할떄 유용하죠.
+이것은 소켓스트림에서 적은 데이터를 익스프레스나 커넥트를 사용했다면 어떤 페이지 기반의 프레임 워크에서도 사용할수 있다는 이야기가 됩니다. 특히나 인증을 구현할 때 유용하죠.
 <!--This means you're able to write data to a session from SocketStream and then use it in Express.js or any other page-based framework which uses Connect - especially useful when performing authentication.-->
 
 
 ### 웹소켓을 통해 세션 사용하기
 <!---### Using Sessions over Websockets-->
 
-속도 최적화와 유연성을 위해, 웹소켓 요청이 처리될때 세션 데이터는 기본적으로 검색하지 않도록 되어있습니다. 세션으로 무엇을 하고싶으시면 [Request Middleware](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/request_middleware.md)의 설명에 따라 내부 `session`을 활성화 할 필요가있습니다.
+속도 최적화와 유연성을 위해, 웹소켓 요청이 처리될 때 세션 데이터는 기본적으로 검색하지 않도록 되어있습니다. 세션으로 무언가 하고 싶으시면 [Request Middleware](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/request_middleware.md)의 설명에 따라 내부 `session`을 활성화 할 필요가 있습니다.
 <!--For optimum speed and flexibility, session data is not retrieved by default when a websocket request is processed by the server. Before you do anything with sessions, you'll need to activate the internal `session` [Request Middleware](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/request_middleware.md) as shown below:-->
 
 ``` javascript
@@ -24,7 +24,7 @@ exports.actions = function(req, res, ss){
   return {
 
     testAction: function(){
-      console.log('이 요청은 이제 세션을 사용할수 있습니다:', req.session);
+      console.log('이 요청은 이제 세션을 사용할 수 있습니다:', req.session);
     }
 
   }
@@ -87,7 +87,7 @@ ss.http.router.on('/updateSession', function(req, res) {
 ### 세션 스토어
 <!---### Session Stores-->
 
-메모리에 저장되는 커넥트 세션 스토어는 개발 편의성을 위해 기본값으로 재공 됩니다. 하지만 실버서를 운영한다면 **반드시** 메모리 누수를 막기위해 영속적인 백엔드를 사용해야 합니다.
+메모리에 저장되는 커넥트 세션 스토어는 개발 편의성을 위해 기본값으로 재공 됩니다. 하지만 실서버를 운영한다면 **반드시** 메모리 누수를 막기위해 영속적인 백엔드를 사용해야 합니다.
 <!--The in-memory Connect Session Store is used by default to allow you to start developing easily. Before your app goes into production you **must** use a Connect Session Store with a persistent backend to avoid memory leaks.-->
 
 `connect-redis`라는 이름의 번들은 일반적이고 좋은 선택입니다. 사용하시려면 밑에 코드를 `app.js` 파일에 추가하세요.
@@ -102,7 +102,7 @@ ss.http.router.on('/updateSession', function(req, res) {
 ### 세션의 자동 만료
 <!---### Auto-expiring Sessions-->
 
-기본적으로 세션은 30일 이후에 만료됩니다. 그전에 세션이 만료되지않으면 말이죠(뭐 브라우져를 닫는다던가). 다른 세션 만료 시간을 설정 하고 싶으시면 밑에 코드를 `app.js` 파일에 추가하세요.
+기본적으로 세션은 30일 이후에 만료됩니다. 그전에 세션이 만료되지 않으면 말이죠(뭐 브라우져를 닫는다던가). 다른 세션 만료 시간을 설정하고 싶으시면 밑에 코드를 `app.js` 파일에 추가하세요.
 <!--By default sessions will expire within 30 days, unless the session is terminated beforehand (e.g. the user closes the browser). To set a different expiry time put the following in your `app.js` file:-->
 
     ss.session.options.maxAge = 8640000;  // 하루를 백분의1초단위로 환산
