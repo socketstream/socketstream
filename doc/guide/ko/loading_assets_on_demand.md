@@ -1,5 +1,5 @@
 <!---# Loading Assets On Demand-->
-# 요청이 왔을 때, asset(??)을 불러오기.
+# 필요할때만 Assets을 불러오기
 
 
 <!--If you're writing a small app you can safely ignore this section, as it's always better to pack all client assets into one file and send everything through together in one go if possible.-->
@@ -22,7 +22,7 @@
 
 <!--However SocketStream allows you to load additional code modules from the server asynchronously using the built-in `ss.load.code()` command. Once all the code you've requested has been loaded, we execute a callback, allowing you to `require()` the new modules as normal without any fancy syntax.-->
 
-하지만 소켓스트림에서는 `ss.load.code()` 명령어를 사용해서, 비동기적으로 서버에서 추가적인 코드 모듈을 로드할 수 있습니다. 일단 여러분이 요청하신 코드가 다 로드되면, 소켓스트림에서는(??) 콜백을 수행합니다. 그래서 특별한 구문을 쓰지 않아도, `require()`를 사용해서 새로운 모듈을 로드할 수 있습니다.
+하지만 소켓스트림에서는 `ss.load.code()` 명령어를 사용해서, 비동기적으로 서버에서 추가적인 코드 모듈을 로드할 수 있습니다. 일단 여러분이 요청하신 코드가 다 로드되면, 소켓스트림에서는 콜백을 수행합니다. 그래서 특별한 구문을 쓰지 않아도, `require()`를 사용해서 새로운 모듈을 로드할 수 있습니다.
 
 <!--To try this out, create a new directory of application modules in `/client/code`. For the sake of this example, let's call our new directory `/client/code/mail`. We'll also assume this directory has a module in it called `search.js`.-->
 직접 해보세요. 어플리케이션 모듈에 사용할 새로운 폴더를 `/client/code` 하위에 만드세요. 그리고 새로운 폴더에 `/client/code/mail`이라고 이름을 붙이세요. 이 폴더 안에는 `search.js`라는 모듈이 있다고 가정하겠습니다.
@@ -45,11 +45,11 @@ ss.load.code('/mail', function(){
 
 <!--Note: Regardless of the directory you load, the modules inside will always be loaded into the root (/) namespace by default. If you want to mount the new modules in a different namespace, just create one or more sub-directories in the folder you're loading.-->
 
-주의하세요: 여러분이 로드하는 폴더와 상관없이, 폴더 안에 있는 모듈은 별도의 설졍이 없으면 항상 루트 (/) 안에 로드될 것입니다. 새로운 모듈을 다른 네임스페이스 안에 마운트(??)하시려면 로드하시려는 폴더를 하나 만들거나, 로드하는 폴더 안에 하위 폴더를 하나 만드세요.
+주의하세요: 여러분이 로드하는 폴더와 상관없이, 폴더 안에 있는 모듈은 별도의 설정이 없으면 항상 루트 (/) 안에 로드될 것입니다. 새로운 모듈을 다른 네임스페이스 안에 마운트하시려면 로드하시려는 폴더를 하나 만들거나, 로드하는 폴더 안에 하위 폴더를 하나 만드세요.
 
 
 <!---### Automatic Caching-->
-### 자동(??) 캐싱
+### 자동 캐싱
 
 <!--Modules are only ever retrieved from the server once. Subsequent requests for the same directory will be returned instantly without contacting the server.-->
-모듈은 서버로부터 한 번만 retrieve(??) 됩니다. 동일한 폴더에 대해 그 이후에 이루어지는 요청은 서버와 접속하지 않고 바로 (??).
+모듈은 서버로부터 한 번만 가져옵니다. 동일한 폴더에 대해 그 이후에 이루어지는 요청은 서버와 접속하지 않고 바로 반환됩니다.
