@@ -1,6 +1,5 @@
-<!--# Loading Assets On Demand-->
-
-# 요청이 왔을 때, asset(??)을 불러오기.  
+<!---# Loading Assets On Demand-->
+# 요청이 왔을 때, asset(??)을 불러오기.
 
 
 <!--If you're writing a small app you can safely ignore this section, as it's always better to pack all client assets into one file and send everything through together in one go if possible.-->
@@ -14,8 +13,7 @@
 소켓스트림에서는 요청이 있을 때마다 비동기적인 방식으로 코드를 앱에다가 로드할 수 있습니다. 나중에는 다른 에셋도 이렇게 할 수 있을 것입니다.
 
 
-<!--### Loading Code-->
-
+<!---### Loading Code-->
 ### 코드를 로드하기
 
 <!--Sadly it's not possible to directly `require()` modules which haven't been loaded as the blocking nature of the `require` function means the browser would freeze until the module has been retrieved from the server - not good.-->
@@ -29,19 +27,19 @@
 <!--To try this out, create a new directory of application modules in `/client/code`. For the sake of this example, let's call our new directory `/client/code/mail`. We'll also assume this directory has a module in it called `search.js`.-->
 직접 해보세요. 어플리케이션 모듈에 사용할 새로운 폴더를 `/client/code` 하위에 만드세요. 그리고 새로운 폴더에 `/client/code/mail`이라고 이름을 붙이세요. 이 폴더 안에는 `search.js`라는 모듈이 있다고 가정하겠습니다.
 ```javascript
-<!--// in any client-side module-->
 //클라이언트쪽의 모듈
 ss.load.code('/mail', function(){
-  
-<!--  // all modules in /client/code/mail have now been loaded into-->
-	// /client/code/mail 안에 들어있는 모듈이 모두 로드되었습니다.
-<!--  // the root namespace (/) and can be required in the normal way-->
-	// 루트의 네임스페이스인 (/)(??)는 보통의 방법으로 요청할 수 있습니다.
+
+  // /client/code/mail 안에 들어있는 모듈이 모두 로드되었습니다.
+  // 루트의 네임스페이스인 (/)(??)는 보통의 방법으로 요청할 수 있습니다.
 
   var search = require('/search');
 
 });
 ```
+<!--  // all modules in /client/code/mail have now been loaded into-->
+<!--  // the root namespace (/) and can be required in the normal way-->
+<!--// in any client-side module-->
 
 
 
@@ -50,9 +48,8 @@ ss.load.code('/mail', function(){
 주의하세요: 여러분이 로드하는 폴더와 상관없이, 폴더 안에 있는 모듈은 별도의 설졍이 없으면 항상 루트 (/) 안에 로드될 것입니다. 새로운 모듈을 다른 네임스페이스 안에 마운트(??)하시려면 로드하시려는 폴더를 하나 만들거나, 로드하는 폴더 안에 하위 폴더를 하나 만드세요.
 
 
-<!--### Automatic Caching-->
+<!---### Automatic Caching-->
 ### 자동(??) 캐싱
 
 <!--Modules are only ever retrieved from the server once. Subsequent requests for the same directory will be returned instantly without contacting the server.-->
-
 모듈은 서버로부터 한 번만 retrieve(??) 됩니다. 동일한 폴더에 대해 그 이후에 이루어지는 요청은 서버와 접속하지 않고 바로 (??).
