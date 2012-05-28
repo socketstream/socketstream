@@ -12,8 +12,6 @@ IRC channel: [#socketstream](http://webchat.freenode.net/?channels=socketstream)
 
 Take a tour of all the new features at http://www.socketstream.org/tour
 
-Note: I will be talking about SocketStream 0.3 at [LNUG](http://lnug.org) on Wednesday 23rd May.
-
 
 ### Introduction
 
@@ -188,7 +186,7 @@ More examples coming soon!
 
 Please start with http://www.socketstream.org/tour which walks you through the key features and shows you the code.
 
-Documentation is constantly expanding and can be found in `/doc/guide/en`.
+Documentation is constantly expanding and currently available in [English](https://github.com/socketstream/socketstream/tree/master/doc/guide/en) and [Korean](https://github.com/socketstream/socketstream/tree/master/doc/guide/ko).
 
 ##### Developing (Client-side)
 
