@@ -21,7 +21,12 @@ class exports.Router
     else
       if url == '/'
         return false
-      sr = url.split('/')
+
+      if url.indexOf('?') >= 0
+        sr = url.split('?')
+      else
+        sr = url.split('/')
+
       sr.pop()
       newUrl = sr.join('/')
       newUrl = '/' unless newUrl.length > 0
