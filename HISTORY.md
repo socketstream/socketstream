@@ -1,3 +1,11 @@
+0.3.0 / 2012-XX-XX
+==================
+
+* Added documentation in Korean (thanks EngForDev)
+* Enable proper handling of question marks and params when routing HTTP requests (thanks matthiasg)
+
+
+
 0.3 RC2 / 2012-05-04
 ====================
 
@@ -10,7 +18,6 @@
 * Minor refactoring
 * Updated README with video link
 
-Note: SocketStream 0.3.0 will be officially launched later in May, along with example apps, screencasts, more documentation and improvements to [www.socketstream.org](http://www.socketstream.org). Read announcement [here](https://groups.google.com/forum/?fromgroups#!topic/socketstream/Y6OIOrJRX7w).
 
 
 0.3 RC1 / 2012-04-22
@@ -35,8 +42,6 @@ Note: SocketStream 0.3.0 will be officially launched later in May, along with ex
 * Changed a lot of `exports.init` to `module.exports` in line with Node best practice
 * Removed code to check for previous versions of 0.3
 * Updated `package.json` with names of significant/regular contributors. Thanks guys!
-
-Note: SocketStream 0.3.0 will be officially launched in May, along with example apps, screencasts, more documentation and improvements to [www.socketstream.org](http://www.socketstream.org). Read announcement [here](https://groups.google.com/forum/?fromgroups#!topic/socketstream/Y6OIOrJRX7w).
 
 
 

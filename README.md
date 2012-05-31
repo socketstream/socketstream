@@ -41,7 +41,7 @@ While it is still early days, our end goal is to ensure SocketStream can be used
 
 SocketStream is in full-time development, rapidly progressing thanks to frequent contributions from a [growing community](http://groups.google.com/group/socketstream) of developers.
 
-SocketStream 0.3.0 will be officially launched in May, along with example apps, screencasts, more documentation and improvements to [www.socketstream.org](http://www.socketstream.org). Read announcement [here](https://groups.google.com/forum/?fromgroups#!topic/socketstream/Y6OIOrJRX7w).
+SocketStream 0.3.0 will be launched shortly, along with example apps, screencasts, more documentation and improvements to [www.socketstream.org](http://www.socketstream.org).
 
 
 ## Features
