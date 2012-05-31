@@ -26,7 +26,7 @@ module.exports = (ss, options) ->
   watcher.on 'add', (path) -> onChange(path, 'added')
   watcher.on 'change', (path) -> onChange(path, 'changed')
   watcher.on 'unlink', (path) -> onChange(path, 'removed')
-  watcher.on 'error', (path) -> console.log('✎'.red, "Error: #{error}".red)
+  watcher.on 'error', (error) -> console.log('✎'.red, "Error: #{error}".red)
     
   onChange = (path, event) ->
     action = if pathlib.extname(path) in cssExtensions then 'updateCSS' else 'reload'
