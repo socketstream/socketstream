@@ -10,7 +10,7 @@ Twitter: [@socketstream](http://twitter.com/#!/socketstream)
 Google Group: http://groups.google.com/group/socketstream  
 IRC channel: [#socketstream](http://webchat.freenode.net/?channels=socketstream) on freenode
 
-Take a tour of all the new features at http://www.socketstream.org/tour and watch the [introductory video](http://vimeo.com/43027679) (recorded at LNUG.com, May 2012).
+Take a tour of all the new features at http://www.socketstream.org/tour and watch the [introductory video](http://vimeo.com/43027679) (recorded May 2012).
 
 
 ### Introduction
@@ -294,8 +294,8 @@ Back end scaling has yet to be properly documented, but we're keen to continue l
 ### Videos
 
 
-* November 2011 - [Presentation to KrtConf.com, Portland](http://2011.krtconf.com/videos/owen_barnes)
-* May 2012 - [Presentation to LNUG.org, London](http://vimeo.com/43027679) (most recent)
+* November 2011 - [Presentation to KrtConf.com](http://2011.krtconf.com/videos/owen_barnes), Portland
+* May 2012 - [Presentation to LNUG.org](http://vimeo.com/43027679), London (most recent)
 
 
 ### Developing on the SocketStream core
