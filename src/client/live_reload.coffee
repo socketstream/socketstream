@@ -31,7 +31,6 @@ module.exports = (ss, options) ->
   onChange = (path, event) ->
     action = if pathlib.extname(path) in cssExtensions then 'updateCSS' else 'reload'
     if (Date.now() - lastRun[action]) > 1000  # Reload browser max once per second
-      console.log('✎'.green, "File #{event}: #{path}".grey);
       console.log('✎'.green, consoleMessage[action].grey)
       ss.publish.all('__ss:' + action)
       lastRun[action] = Date.now()

@@ -15,6 +15,15 @@ As you typically would in `production` mode.
 
 ### Known issues
 
+#### VIM
+
+VIM creates a temporary file before replacing the real file. To prevent problems with Live Reload, change the write mode with:
+
+    :set nowritebackup
+
+
+#### Too many files
+
 Live Reload is built on Node's `fs.watch()` API which works differently on each operating system. For example, on Linux you'll get an `EMFILE` error if you have many files in your `client` directory. Change this limit with:
 
     sudo vi /etc/sysctl.conf 

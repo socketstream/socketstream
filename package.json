@@ -15,7 +15,8 @@
     "nponeccop",
     "Gilbert B Garza",
     "Craig Jordan Muir",
-    "David Rosen"
+    "David Rosen",
+    "Michael Lawson"
   ],
   "dependencies": {
     "colors":           "= 0.6.0-1",
