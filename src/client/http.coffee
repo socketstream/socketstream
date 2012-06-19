@@ -35,7 +35,7 @@ module.exports = (ss, clients, options) ->
     throw new Error('Unable to find single-page client: ' + name) unless client?
 
     # Load packed HTML file
-    if client.pack
+    if options.packedAssets
 
       # Return from in-memory cache if possible
       unless cache[name]

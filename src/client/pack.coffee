@@ -56,7 +56,7 @@ module.exports = (ss, client, options) ->
   # Prepare folder
   mkdir(containerDir)
   mkdir(clientDir)
-  deleteOldFiles(clientDir) unless options.packAssets && options.packAssets.keepOldFiles
+  deleteOldFiles(clientDir) unless options.packedAssets && options.packedAssets.keepOldFiles
 
   # Output CSS
   packAssetSet 'css', client.paths.css, options.dirs.css, (files) ->

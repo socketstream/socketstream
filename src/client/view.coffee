@@ -18,7 +18,7 @@ module.exports = (ss, client, options, cb) ->
   includes = includes.concat( templates(ss.root, client, options) )
 
   # Output HTML
-  htmlOptions = {headers: includes.join(''), compress: client.pack, filename: client.paths.view}
+  htmlOptions = {headers: includes.join(''), compress: options.packedAssets, filename: client.paths.view}
   asset.html(client.paths.view, htmlOptions, cb)
 
 
@@ -47,10 +47,10 @@ headers = (root, client, options) ->
   output = []
 
   # If assets are packed, we only need one CSS and one JS file
-  if client.pack
+  if options.packedAssets
     
-    output.push tag.css(options.packAssets?.cdn?.css || "/assets/#{client.name}/#{client.id}.css")
-    output.push tag.js(options.packAssets?.cdn?.js || "/assets/#{client.name}/#{client.id}.js")
+    output.push tag.css(options.packedAssets?.cdn?.css || "/assets/#{client.name}/#{client.id}.css")
+    output.push tag.js(options.packedAssets?.cdn?.js || "/assets/#{client.name}/#{client.id}.js")
 
   # Otherwise, in development, list all files individually so debugging is easier
   else

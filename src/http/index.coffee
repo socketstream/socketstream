@@ -15,7 +15,7 @@ staticFiles = []
 
 # User-configurable settings with sensible defaults
 settings = 
-  static: {maxAge: 30 * 1000}  # cache static assets in the browser for 30 seconds
+  static: {maxAge: 30 * 24 * 60 * 60 * 1000}  # cache static assets in the browser for 30 days
 
 # Create new Connect app instance which can be accessed from your app.js file with ss.http.middleware
 app = connect()

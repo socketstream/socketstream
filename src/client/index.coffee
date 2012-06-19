@@ -5,30 +5,46 @@
 # of synchronous code. This is because all operations only ever run once on startup (when packing the assets)
 # unless you are running in dev mode
 
-log = console.log
+fs = require('fs')
+path = require('path')
 systemAssets = require('./system')
 templateEngine = require('./template_engine')
 formatters = require('./formatters')
 
+# Determine if assets should be (re)packed on startup
+packAssets = process.env['SS_PACK']
+
 # Set defaults
-packAssets = false
-options = 
-  packAssets: {}
-  liveReload: ['code', 'css', 'static', 'templates', 'views']
+options =
+  packedAssets:     false
+  liveReload:       ['code', 'css', 'static', 'templates', 'views']
   dirs:
-    code:       '/client/code'
-    css:        '/client/css'
-    static:     '/client/static'
-    assets:     '/client/static/assets'
-    templates:  '/client/templates'
-    views:      '/client/views'
-    workers:    '/client/workers'
+    code:           '/client/code'
+    css:            '/client/css'
+    static:         '/client/static'
+    assets:         '/client/static/assets'
+    templates:      '/client/templates'
+    views:          '/client/views'
+    workers:        '/client/workers'
 
 
 # Store each client as an object
 clients = {}
 
 module.exports = (ss, router) ->
+
+  # Very basic check to see if we can find pre-packed assets
+  # TODO: Improve to test for complete set
+  determineLatestId = (client) ->
+    try
+      files = fs.readdirSync(path.join(ss.root, options.dirs.assets, client.name))
+      latestId = files.sort().pop()
+      id = latestId.split('.')[0]
+      throw ('Invalid Client ID length') unless id.length == 13
+      id
+    catch e
+      false
+
 
   http = require('./http')(ss, clients, options)
   
@@ -39,7 +55,7 @@ module.exports = (ss, router) ->
   templateEngine: templateEngine.init(ss, options)
   assets:         systemAssets
   options:        options
-  
+
   # Merge optional options
   set: (newOption) ->
     throw new Error('ss.client.set() takes an object e.g. {liveReload: false}') unless typeof(newOption) == 'object'
@@ -49,11 +65,10 @@ module.exports = (ss, router) ->
       else
         options[k] = v
 
-
   # Tell the asset manager to pack and minimise all assets
   packAssets: (opts) ->
-    packAssets = true
-    options.packAssets = opts
+    throw new Error('Options passed to ss.client.packAssets() must be an object') if opts and typeof(opts) != 'object'    
+    options.packedAssets = opts || true
 
   # Define a new Single Page Client
   define: (name, paths) ->
@@ -69,19 +84,37 @@ module.exports = (ss, router) ->
       paths[assetType] = [paths[assetType]] unless paths[assetType] instanceof Array
 
     # Define new client object
-    clients[name] = {id: Number(Date.now()), name: name, paths: paths}
+    clients[name] =
+      id:      Number(Date.now())
+      name:    name
+      paths:   paths
+      headers: []
   
   # Listen and serve incoming asset requests
-  load: (ss) ->
-    formatters.load()
+  load: ->
+    ss.client.formatters = formatters.load()
 
     # Code to execute once everything is loaded
     systemAssets.send('code', 'init', "require('/entry');")
-     
-    # Bundle initial assets if we're running in production mode
-    if packAssets
-      pack = require('./pack')
-      pack(ss, client, options) for name, client of clients
+
+    if options.packedAssets
+   
+      # Attempt to find and serve existing pre-packed assets
+      # If unsuccessful, assets will be re-packed automatically
+      unless packAssets
+        ss.log 'i'.green, "Attempting to find pre-packed assets... (force repack with SS_PACK=1)".grey
+        for name, client of clients
+          if id = options.packedAssets.id || determineLatestId(client)
+            client.id = id
+            ss.log '✓'.green, "Serving client '#{client.name}' from pre-packed assets ID #{client.id}".grey
+          else
+            ss.log '!'.red, "Unable to find pre-packed assets for '#{client.name}'. All assets will be repacked".grey
+            packAssets = true
+          
+      # Pack Assets
+      if packAssets
+        pack = require('./pack')
+        pack(ss, client, options) for name, client of clients
     
     # Else serve files and watch for changes to files in development
     else

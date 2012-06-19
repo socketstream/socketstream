@@ -1,6 +1,18 @@
 0.3.0 / 2012-XX-XX
 ==================
 
+Not yet released. These are the changes so far...
+
+
+##### Improvements for Production Hosting
+
+* IMPORTANT: `ss.client.packAssets()` now tries to use existing pre-packed assets if present
+* If no assets are found, or you pass the env var `SS_PACK=1`, assets will (re)packed
+* Static assets now have a cache expiry header of 30 days by default. Configurable with `ss.client.set({static: {maxAge: newValue}})` as before
+
+
+##### Other
+
 * Added documentation in Korean (thanks EngForDev)
 * Enable proper handling of question marks and params when routing HTTP requests (thanks matthiasg)
 
