@@ -5,6 +5,7 @@
 
 fs = require('fs')
 pathlib = require('path')
+existslib = process.version.split('.')[1] == '6' && require('path') || require('fs')
 connect = require('connect')
 
 fileUtils = require('../utils/file')
@@ -104,7 +105,7 @@ transformURL = (url) ->
 
 
 loadStaticDirs = (path) ->
-  if pathlib.existsSync(path)
+  if existslib.existsSync(path)
 
     # Get a list of top-level static directories (used by the router)
     staticDirs = fs.readdirSync(path)

@@ -13,6 +13,8 @@ Not yet released. These are the changes so far...
 
 ##### Other
 
+* Updated many package dependencies
+* Removed restriction on testing with Node 0.7/0.8. [Discuss here](https://github.com/socketstream/socketstream/issues/250)
 * Added documentation in Korean (thanks EngForDev)
 * Enable proper handling of question marks and params when routing HTTP requests (thanks matthiasg)
 

@@ -8,6 +8,7 @@ require('colors')
 
 fs = require('fs')
 pathlib = require('path')
+existslib = process.version.split('.')[1] == '6' && require('path') || require('fs')
 cleanCSS = require('clean-css')
 
 system = require('./system')
@@ -82,7 +83,7 @@ formatKb = (size) ->
   "#{Math.round((size / 1024) * 1000) / 1000} KB"
 
 mkdir = (dir) ->
-  fs.mkdirSync(dir) unless pathlib.existsSync(dir)
+  fs.mkdirSync(dir) unless existslib.existsSync(dir)
 
 deleteOldFiles = (clientDir) ->
   numFilesDeleted = 0

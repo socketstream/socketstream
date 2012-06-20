@@ -3,7 +3,9 @@
 # Allows incoming requests to be pre-processed, transformed, or sent elsewhere
 
 pathlib = require('path')
+existslib = process.version.split('.')[1] == '6' && require('path') || require('fs')
 apiTree = require('apitree')
+
 
 module.exports = (ss, config) ->
 
@@ -15,7 +17,7 @@ module.exports = (ss, config) ->
   # Return API
   load: ->
     # Load custom middleware
-    stack = pathlib.existsSync(customDir) && apiTree.createApiTree(customDir) || {}
+    stack = existslib.existsSync(customDir) && apiTree.createApiTree(customDir) || {}
     # Append internal/default middleware
     stack[k] = v for k, v of internal        
     stack

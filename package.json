@@ -20,17 +20,17 @@
   ],
   "dependencies": {
     "colors":           "= 0.6.0-1",
-    "commander":        "= 0.5.2",
+    "commander":        "= 0.6.1",
     "eventemitter2":    "= 0.4.9",
     "apitree":          "= 1.0.0",
-    "uglify-js":        "= 1.2.6",
-    "clean-css":        "= 0.3.2",
-    "semver":           "= 1.0.13",  
+    "uglify-js":        "= 1.3.1",
+    "clean-css":        "= 0.4.1",
+    "semver":           "= 1.0.14",  
     "socket.io":        "= 0.9.6",
-    "redis":            "= 0.7.1",
-    "connect":          "= 2.0.3",
-    "connect-redis":    "= 1.3.0",
-    "chokidar":         "= 0.2.3"
+    "redis":            "= 0.7.2",
+    "connect":          "= 2.3.3",
+    "connect-redis":    "= 1.4.0",
+    "chokidar":         "= 0.2.6"
   },
   "devDependencies": {
     "coffee-script":    "= 1.2.0",
@@ -42,6 +42,6 @@
   },
   "directories":  { "lib": "./lib", "doc": "./doc" },
   "main":         "./index.js",
-  "engines":      { "node": ">= 0.6.0 < 0.7.0" },
+  "engines":      { "node": ">= 0.6.0" },
   "bin":          { "socketstream": "./bin/socketstream" }
 }
