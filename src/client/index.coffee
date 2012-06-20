@@ -16,7 +16,7 @@ packAssets = process.env['SS_PACK']
 
 # Set defaults
 options =
-  packedAssets:     false
+  packedAssets:     packAssets || false
   liveReload:       ['code', 'css', 'static', 'templates', 'views']
   dirs:
     code:           '/client/code'
