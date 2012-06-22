@@ -88,7 +88,6 @@ module.exports = (ss, router) ->
       id:      Number(Date.now())
       name:    name
       paths:   paths
-      headers: []
   
   # Listen and serve incoming asset requests
   load: ->

@@ -9,7 +9,7 @@ fs = require('fs')
 path = require('path')
 util = require('util')
 
-dir_mode = 0755
+dir_mode = '0755'
 
 exports.generate = (program) ->
   name = program.args[1]

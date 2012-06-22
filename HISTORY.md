@@ -9,6 +9,7 @@ Not yet released. These are the changes so far...
 * IMPORTANT: `ss.client.packAssets()` now tries to use existing pre-packed assets if present
 * If no assets are found, or you pass the env var `SS_PACK=1`, assets will (re)packed
 * Static assets now have a cache expiry header of 30 days by default. Configurable with `ss.client.set({static: {maxAge: newValue}})` as before
+* NEW: CDN paths can now be functions. E.g. `ss.client.packAssets({cdn: {js: function(file){ return "http://mycdn.com" + file.path; } }})` 
 
 
 ##### Other
