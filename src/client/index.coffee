@@ -52,7 +52,7 @@ module.exports = (ss, router) ->
 
   # Return API
   formatters:     formatters.init(ss.root)
-  templateEngine: templateEngine.init(ss, options)
+  templateEngine: templateEngine(ss)
   assets:         systemAssets
   options:        options
 

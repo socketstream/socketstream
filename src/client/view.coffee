@@ -4,10 +4,11 @@
 
 pathlib = require('path')
 magicPath = require('./magic_path')
-engine = require('./template_engine')
 wrap = require('./wrap')
 
 module.exports = (ss, client, options, cb) ->
+
+  templateEngine = require('./template_engine')(ss)
 
   # When packing assets the default path to the CSS or JS file can be overridden 
   # either with a string or a function, typically pointing to an resource on a CDN
@@ -39,7 +40,7 @@ module.exports = (ss, client, options, cb) ->
       client.paths.tmpl.forEach (tmpl) ->
         files = files.concat(magicPath.files(dir, tmpl))
       
-      engine.generate dir, files, (templateHTML) ->
+      templateEngine.generate dir, files, (templateHTML) ->
         output.push(templateHTML)
 
     output
@@ -67,12 +68,12 @@ module.exports = (ss, client, options, cb) ->
 
       # Send all CSS
       client.paths.css.forEach (path) ->
-        magicPath.files(pathlib.join(root, options.dirs.css), path).forEach (file) ->
+        magicPath.files(pathlib.join(ss.root, options.dirs.css), path).forEach (file) ->
           output.push wrap.htmlTag.css("/_serveDev/css/#{file}?ts=#{client.id}")
 
       # Send Application Code
       client.paths.code.forEach (path) ->
-        magicPath.files(pathlib.join(root, options.dirs.code), path).forEach (file) ->
+        magicPath.files(pathlib.join(ss.root, options.dirs.code), path).forEach (file) ->
           output.push wrap.htmlTag.js("/_serveDev/code/#{file}?ts=#{client.id}&pathPrefix=#{path}")
 
       # Start your app and connect to SocketStream

@@ -4,9 +4,6 @@
 
 mods = []
 
-# Keep a list of all loaded code formatters by file extension
-exports.byExtension = {}
-
 exports.init = (root) ->
 
   add = (nameOrModule, config = {}) ->
@@ -32,6 +29,8 @@ exports.init = (root) ->
 
 
 exports.load = ->
+  byExtension = {}
   mods.forEach (mod) ->
     mod.extensions.forEach (extension) ->
-      exports.byExtension[extension] = mod
+      byExtension[extension] = mod
+  byExtension
