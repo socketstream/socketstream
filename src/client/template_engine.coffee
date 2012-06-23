@@ -11,11 +11,10 @@ pathlib = require('path')
 formatters = require('./formatters')
 client = require('./system')
 
-templateEngines = {}
-defaultEngine = null
-
 # Allow Template Engine to be configured
 module.exports = (ss) ->
+
+  mods = []
 
   # Set the Default Engine - simply wraps each template in a <script> tag
   defaultEngine = require('./template_engines/default').init(ss.root)
@@ -33,13 +32,18 @@ module.exports = (ss) ->
       else
         throw new Error("The #{nameOrModule} template engine is not supported by SocketStream internally. Please pass a compatible module instead")
 
-    engine = mod.init(ss, config)
-
     dirs = [dirs] unless dirs instanceof Array
-    dirs.forEach (dir) ->
-      unless dir.substring(0,1) == '/'
-        throw new Error("Directory name '#{dir}' passed to second argument of ss.client.templateEngine.use() command must start with /")
-      templateEngines[dir] = engine
+    engine = mod.init(ss, config)
+    mods.push({engine: engine, dirs: dirs})
+
+  load: ->
+    templateEngines = {}
+    mods.forEach (mod) ->
+      mod.dirs.forEach (dir) ->
+        unless dir.substring(0,1) == '/'
+          throw new Error("Directory name '#{dir}' passed to second argument of ss.client.templateEngine.use() command must start with /")
+        templateEngines[dir] = mod.engine
+    templateEngines
 
 
   # Generate output (as a string) from Template Engines
@@ -54,7 +58,7 @@ module.exports = (ss) ->
       fullPath = pathlib.join(dir, path)
 
       # Work out which template engine to use, based upon the path
-      engine = selectEngine(templateEngines, path.split('/')) || defaultEngine
+      engine = selectEngine(ss.client.templateEngines, path.split('/')) || defaultEngine
 
       # Try and guess the correct formatter to use BEFORE the content is sent to the template engine
       extension = pathlib.extname(path)

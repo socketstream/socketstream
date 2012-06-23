@@ -8,8 +8,6 @@
 fs = require('fs')
 path = require('path')
 systemAssets = require('./system')
-templateEngine = require('./template_engine')
-formatters = require('./formatters')
 
 # Determine if assets should be (re)packed on startup
 packAssets = process.env['SS_PACK']
@@ -33,6 +31,16 @@ clients = {}
 
 module.exports = (ss, router) ->
 
+  # Require sub modules
+  templateEngine = require('./template_engine')(ss)
+  formatters = require('./formatters')(ss)
+  http = require('./http')(ss, clients, options)
+
+  # Load default code formatters
+  formatters.add('javascript')
+  formatters.add('css')
+  formatters.add('html')
+
   # Very basic check to see if we can find pre-packed assets
   # TODO: Improve to test for complete set
   determineLatestId = (client) ->
@@ -45,14 +53,12 @@ module.exports = (ss, router) ->
     catch e
       false
 
-
-  http = require('./http')(ss, clients, options)
   
   systemAssets.load()
 
   # Return API
-  formatters:     formatters.init(ss.root)
-  templateEngine: templateEngine(ss)
+  formatters:     formatters
+  templateEngine: templateEngine
   assets:         systemAssets
   options:        options
 
@@ -91,7 +97,13 @@ module.exports = (ss, router) ->
   
   # Listen and serve incoming asset requests
   load: ->
+
+    # Cache instances of code formatters and template engines here
+    # This may change in the future as I don't like hanging system objects
+    # on the 'ss' internal API object, but for now it solves a problem 
+    # we were having when repl.start() would erase vars cached inside a module
     ss.client.formatters = formatters.load()
+    ss.client.templateEngines = templateEngine.load()
 
     # Code to execute once everything is loaded
     systemAssets.send('code', 'init', "require('/entry');")
