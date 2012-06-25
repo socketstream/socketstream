@@ -7,15 +7,16 @@ Not yet released. These are the changes so far...
 ##### Improvements for Production Hosting
 
 * IMPORTANT: `ss.client.packAssets()` now tries to use existing pre-packed assets if present
-* If no assets are found, or you pass the env var `SS_PACK=1`, assets will (re)packed
+* If no assets are found, or you pass the env var `SS_PACK=1`, assets will always be (re)packed
 * Static assets now have a cache expiry header of 30 days by default. Configurable with `ss.client.set({static: {maxAge: newValue}})` as before
 * NEW: CDN paths can now be functions. E.g. `ss.client.packAssets({cdn: {js: function(file){ return "http://mycdn.com" + file.path; } }})` 
 
 
 ##### Other
 
+* Updated to work on Node 0.8 [Discuss any issues here](https://github.com/socketstream/socketstream/issues/250)
+* Live Reload now uses `chokidar` for better performance on Windows and when creating new files. Big thanks to CyberWalrus
 * Updated many package dependencies
-* Removed restriction on testing with Node 0.7/0.8. [Discuss here](https://github.com/socketstream/socketstream/issues/250)
 * Added documentation in Korean (thanks EngForDev)
 * Enable proper handling of question marks and params when routing HTTP requests (thanks matthiasg)
 

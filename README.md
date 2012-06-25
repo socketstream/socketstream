@@ -99,6 +99,12 @@ Ready to give it a whirl? Install [Node 0.6.X](http://nodejs.org/#download) then
 
     [sudo] npm install -g socketstream
 
+**NOTE** To use SocketStream with Node 0.8.X, checkout the latest code from master instead:
+
+    git clone https://github.com/socketstream/socketstream.git
+    cd socketstream
+    [sudo] npm link
+
 To generate a new empty SocketStream project type:
 
     socketstream new <name_of_your_project>
