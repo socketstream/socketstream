@@ -19,7 +19,8 @@ Not yet released. These are the changes so far...
 * Updated many package dependencies
 * Added documentation in Korean (thanks EngForDev)
 * Enable proper handling of question marks and params when routing HTTP requests (thanks matthiasg)
-
+* In newly generated projects `ss.define.client()` now lists client libs explicitly to avoid confusion over load order
+* Updated bundled jQuery to 1.7.2
 
 
 0.3 RC2 / 2012-05-04

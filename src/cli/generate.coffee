@@ -91,8 +91,8 @@ var http = require('http')
 // Define a single-page client
 ss.client.define('main', {
   view: 'app.#{viewExtension}',
-  css:  ['libs', 'app.styl'],
-  code: ['libs', 'app'],
+  css:  ['libs/reset.css', 'app.styl'],
+  code: ['libs/jquery.min.js', 'app'],
   tmpl: '*'
 });
 
