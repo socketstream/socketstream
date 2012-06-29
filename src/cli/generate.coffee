@@ -13,6 +13,7 @@ dir_mode = '0755'
 
 exports.generate = (program) ->
   name = program.args[1]
+  clientFiles = {css: [], code: []}
   return console.log "Please provide a name for your application: $> socketstream new <MyAppName>" if name is undefined
   if makeRootDirectory(name)
 
@@ -64,12 +65,15 @@ exports.generate = (program) ->
     cp('/client/static/favicon.ico')
     cp('/client/code/libs/jquery.min.js')
     cp("/client/code/app/entry.#{codeExtension}")
+    clientFiles.code.push('libs/jquery.min.js')
+    clientFiles.code.push('app')
 
     # Install chat demo files
     if program.minimal
       cp("/client/views/app.minimal.#{viewExtension}", "/client/views/app.#{viewExtension}")
       cp("/client/code/app/app.minimal.#{codeExtension}", "/client/code/app/app.#{codeExtension}")
       cp("/client/css/app.minimal.styl", "/client/css/app.styl")
+      clientFiles.css.push('app.styl')
     else
       cp('/client/static/images/logo.png')
       cp("/client/code/app/app.demo.#{codeExtension}", "/client/code/app/app.#{codeExtension}")
@@ -80,6 +84,8 @@ exports.generate = (program) ->
       mkdir('/client/templates/chat')
       cp("/client/templates/chat/message.#{viewExtension}")
       cp("/client/views/app.demo.#{viewExtension}", "/client/views/app.#{viewExtension}")
+      clientFiles.css.push('libs/reset.css')
+      clientFiles.css.push('app.styl')
 
     # Generate app.js
     appjs = """
@@ -91,8 +97,8 @@ var http = require('http')
 // Define a single-page client
 ss.client.define('main', {
   view: 'app.#{viewExtension}',
-  css:  ['libs/reset.css', 'app.styl'],
-  code: ['libs/jquery.min.js', 'app'],
+  css:  ['#{clientFiles.css.join("', '")}'],
+  code: ['#{clientFiles.code.join("', '")}'],
   tmpl: '*'
 });
 
