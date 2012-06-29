@@ -95,15 +95,9 @@ All this means no more connection latency, HTTP header overhead, polling, or clu
 
 ### Getting Started
 
-Ready to give it a whirl? Install [Node 0.6.X](http://nodejs.org/#download) then install SocketStream from NPM:
+Ready to give it a whirl? Install [Node 0.8.X](http://nodejs.org/#download) and checkout the latest code from master:
 
-    [sudo] npm install -g socketstream
-
-**NOTE** To use SocketStream with Node 0.8.X, checkout the latest code from master instead:
-
-    git clone https://github.com/socketstream/socketstream.git
-    cd socketstream
-    [sudo] npm link
+    [sudo] npm install git://github.com/socketstream/socketstream.git
 
 To generate a new empty SocketStream project type:
 
@@ -114,7 +108,8 @@ __Tip: Type `socketstream -h` to view all available options__
 Install the bundled (optional) dependencies:
 
     cd <name_of_your_project>
-    npm install
+    [sudo] npm link socketstream
+    [sudo] npm install
 
 To start your app simply type:
 
