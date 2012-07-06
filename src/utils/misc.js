@@ -9,6 +9,7 @@ exports.randomString = function (len) {
 
 // Parse incoming websocket messages into message type and contents
 exports.parseWsMessage = function (msg) {
+  var i;
   if ((i = msg.indexOf('|')) > 0) {
     return [msg.substr(0, i), msg.substr(i+1)];
   } else {
