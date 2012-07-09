@@ -79,7 +79,7 @@ processSession = (socket) ->
     rawCookie = socket.handshake.headers.cookie
     cookie = qs.parse(rawCookie, '; ')
     sessionId = cookie['connect.sid'].split('.')[0]
-    unsignedSessionId = sessionId.split(':')[1]
+    unsignedSessionId = sessionId.split(':')[1].replace(/\s/g, '+') # convert spaces to + 
     socket.sessionId = unsignedSessionId
   catch e
     console.log('Warning: connect.sid session cookie not detected. User may have cookies disabled or session cookie has expired')
