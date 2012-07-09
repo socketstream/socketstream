@@ -19,16 +19,16 @@ module.exports = (ss, emitter, httpServer, config = {}) ->
 
   # Set default log level. Can be overwritten using app config
   io.set 'log level', 1
-  
+
   # Allow app to configure Socket.IO using the syntax below
   # ss.ws.transport.use('socketio', {io: function(io){
-  #   io.set('log_level', 4) 
+  #   io.set('log_level', 4)
   # }})
   config.io(io) if config.io
 
   # Listen out for new connections
   io.sockets.on 'connection', (socket) ->
- 
+
     if processSession(socket)
 
       socket.on 'message', (msg) ->
@@ -40,7 +40,7 @@ module.exports = (ss, emitter, httpServer, config = {}) ->
             socket.send(responderId + '|' + data)
         catch e
           console.log('Invalid websocket message received:'.red, msg)
-      
+
       socket.emit('ready')
 
   # Send Socket.IO Client to browser
@@ -57,7 +57,7 @@ module.exports = (ss, emitter, httpServer, config = {}) ->
 
   # Export API
   event: ->
-    
+
     all: (msg) ->
       io.sockets.emit('message', '0|' + msg)
 
@@ -79,7 +79,8 @@ processSession = (socket) ->
     rawCookie = socket.handshake.headers.cookie
     cookie = qs.parse(rawCookie, '; ')
     sessionId = cookie['connect.sid'].split('.')[0]
-    socket.sessionId = sessionId
+    unsignedSessionId = sessionId.split(':')[1]
+    socket.sessionId = unsignedSessionId
   catch e
     console.log('Warning: connect.sid session cookie not detected. User may have cookies disabled or session cookie has expired')
     false
