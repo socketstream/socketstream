@@ -89,10 +89,10 @@ exports.generate = (program) ->
 
     # Generate app.js
     appjs = """
-// My SocketStream app
+// My SocketStream 0.3 app
 
-var http = require('http')
-  , ss = require('socketstream');
+var http = require('http'),
+    ss = require('socketstream');
 
 // Define a single-page client
 ss.client.define('main', {
@@ -105,7 +105,7 @@ ss.client.define('main', {
 // Serve this client on the root URL
 ss.http.route('/', function(req, res){
   res.serveClient('main');
-})
+});
 
 """
 
