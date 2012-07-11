@@ -84,7 +84,7 @@ ss.publish.socketId('254987654324567', 'justForMe', 'Just for one tab');
 ```
 You can find the socketId by calling `req.socketId` in your server-side code. Note, this attribute may not always be present (e.g. if you invoke the RPC method via `ss-console`), so plan accordingly.
 
-Please be aware that `req.socketId` will change if you refresh the page, so it's much better to assign clients to private channels and use those wherever possible.
+**Warning!**  `req.socketId` will change every time you refresh the page, so in almost all cases it is **much** better to assign clients to Private Channels (which persist between browser reloads) and use these wherever possible. Only send an event to a specific socketId if there is no other way to achieve your goal.
 
 
 
