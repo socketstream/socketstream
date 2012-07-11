@@ -1,8 +1,8 @@
 # RPC Server-side Request Handler
 # -------------------------------
 # The RPC handler is only interested in receiving a req object and calling back the res function with (err, response)
-# It does not care HOW this request handler can be accessed, how to serialize incoming/outgoing messages,
-# or how that interface should deal with errors - that's the job of the interface
+# It does not care HOW this request handler is accessed, how to serialize incoming/outgoing messages,
+# or how to report errors - that's the job of the interface
 
 pathlib = require('path')
 apiTree = require('apitree')
@@ -55,7 +55,7 @@ module.exports = (ss, middleware) ->
     actions = file.actions(req, cb, ss)
 
     # Execute method at the end of the stack
-    main = (request, response, next) ->
+    main = ->
       # Find the action we're calling
       method = actions[methodName]
 
@@ -64,7 +64,7 @@ module.exports = (ss, middleware) ->
       throw new Error("The '#{req.method}' method in exports.actions must be a function") unless typeof(method) == 'function'
 
       # Execute action
-      method.apply(method, request.params)
+      method.apply(method, req.params)
 
     # Add RPC call to bottom of middleware stack
     stack.push(main)
