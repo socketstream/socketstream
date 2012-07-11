@@ -3,7 +3,8 @@
 module.exports = (serverStatus, message, config = {}) ->
 
   connect: ->
-    conn = io.connect(undefined, config)
+    # If no config.url supplied Socket.IO will use default settings
+    conn = io.connect(config.url, config)
 
     conn.on 'message', (msg, meta) ->
       if (i = msg.indexOf('|')) > 0
