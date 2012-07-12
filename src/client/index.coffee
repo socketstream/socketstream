@@ -5,6 +5,7 @@
 # of synchronous code. This is because all operations only ever run once on startup (when packing the assets)
 # unless you are running in dev mode
 
+require('colors')
 fs = require('fs')
 path = require('path')
 systemAssets = require('./system')
@@ -52,7 +53,6 @@ module.exports = (ss, router) ->
       id
     catch e
       false
-
   
   systemAssets.load()
 
@@ -75,6 +75,13 @@ module.exports = (ss, router) ->
   packAssets: (opts) ->
     throw new Error('Options passed to ss.client.packAssets() must be an object') if opts and typeof(opts) != 'object'    
     options.packedAssets = opts || true
+
+    # As it's safe to assume we're running in production mode at this point, if your app is not catching uncaught
+    # errors with its own custom error handling code, step in and prevent any exceptions from taking the server down
+    if options.packedAssets && process.listeners('uncaughtException').length == 0
+      process.on 'uncaughtException', (err) ->
+        console.log('Uncaught Exception!'.red)
+        console.error(err.stack)
 
   # Define a new Single Page Client
   define: (name, paths) ->

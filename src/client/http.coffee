@@ -5,6 +5,7 @@
 # Note: Even though this is exactly what Express.js does, it's not best practice to extend Node's native
 # objects so I may change this in the future
 
+require('colors')
 fs = require('fs')
 pathlib = require('path')
 http = require('http')
@@ -24,30 +25,38 @@ module.exports = (ss, clients, options) ->
 
     self = this
 
-    sendHTML = (html) ->
-      self.writeHead(200, {
+    sendHTML = (html, code = 200) ->
+      self.writeHead(code, {
         'Content-Length': Buffer.byteLength(html),
         'Content-Type': 'text/html'
       })
       self.end(html)
 
-    client = typeof(name) == 'string' && clients[name]
-    throw new Error('Unable to find single-page client: ' + name) unless client?
+    try
 
-    # Load packed HTML file
-    if options.packedAssets
+      client = typeof(name) == 'string' && clients[name]
+      throw new Error('Unable to find single-page client: ' + name) unless client?
 
-      # Return from in-memory cache if possible
-      unless cache[name]
-        fileName = pathlib.join(ss.root, options.dirs.assets, client.name, client.id + '.html')
-        cache[name] = fs.readFileSync(fileName, 'utf8')
-      
-      # Send to browser   
-      sendHTML(cache[name])
+      # Load packed HTML file
+      if options.packedAssets
 
-    # Generate View from scratch in development 
-    else
-      view(ss, client, options, sendHTML)
+        # Return from in-memory cache if possible
+        unless cache[name]
+          fileName = pathlib.join(ss.root, options.dirs.assets, client.name, client.id + '.html')
+          cache[name] = fs.readFileSync(fileName, 'utf8')
+        
+        # Send to browser   
+        sendHTML(cache[name])
+
+      # Generate View from scratch in development 
+      else
+        view(ss, client, options, sendHTML)
+
+    # Never send stack trace to the browser, log it to the terminal instad
+    catch e
+      sendHTML('Internal Server Error', 500)
+      ss.log('Error: Unable to serve HTML!'.red)
+      ss.log(e)
 
   # Alias res.serveClient to keep compatibility with existing apps
   res.serve = res.serveClient
