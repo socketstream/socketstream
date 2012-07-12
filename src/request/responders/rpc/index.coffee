@@ -43,21 +43,24 @@ module.exports = (responderId, config, ss) ->
       # Log incoming request
       ss.log('↪'.cyan, msgLogName, req.method)
 
-      # Process request
-      try
-        request req, (err, response) ->
-          obj = {id: req.id, p: response, e: req.error}
-          timeTaken = Date.now() - req.receivedAt
-          ss.log('↩'.green, msgLogName, req.method, "(#{timeTaken}ms)".grey)
-          send(JSON.stringify(obj))
-
       # Send any error stack traces back to the client if the request is local
-      catch e
+      handleError = (e) ->
         message = (meta.clientIp == '127.0.0.1') && e.stack || 'See server-side logs'
         obj = {id: req.id, e: {message: message}}
         ss.log('↩'.red, msgLogName, req.method, e.message.red)
         ss.log(e.stack.split("\n").splice(1).join("\n")) if e.stack
         send(JSON.stringify(obj))
+
+      # Process request
+      try
+        request req, (err, response) ->
+          return handleError(err) if err
+          obj = {id: req.id, p: response, e: req.error}
+          timeTaken = Date.now() - req.receivedAt
+          ss.log('↩'.green, msgLogName, req.method, "(#{timeTaken}ms)".grey)
+          send(JSON.stringify(obj))
+      catch e
+        handleError(e)       
 
 
     # Experimental interface used by ss-console and server-side testing

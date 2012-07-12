@@ -60,8 +60,8 @@ module.exports = (ss, middleware) ->
       method = actions[methodName]
 
       # Warn if this action doesn't exist
-      throw new Error("Unable to find '#{req.method}' method in exports.actions") unless method?
-      throw new Error("The '#{req.method}' method in exports.actions must be a function") unless typeof(method) == 'function'
+      return res(new Error("Unable to find '#{req.method}' method in exports.actions")) unless method?
+      return res(new Error("The '#{req.method}' method in exports.actions must be a function")) unless typeof(method) == 'function'
 
       # Execute action
       method.apply(method, req.params)
