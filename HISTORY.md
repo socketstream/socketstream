@@ -9,12 +9,14 @@ Not yet released. These are the changes so far...
 * IMPORTANT: `ss.client.packAssets()` now tries to use existing pre-packed assets if present
 * If no assets are found, or you pass the env var `SS_PACK=1`, assets will always be (re)packed
 * Static assets now have a cache expiry header of 30 days by default. Configurable with `ss.client.set({static: {maxAge: newValue}})` as before
-* NEW: CDN paths can now be functions. E.g. `ss.client.packAssets({cdn: {js: function(file){ return "http://mycdn.com" + file.path; } }})` 
+* NEW: CDN paths can now be functions. E.g. `ss.client.packAssets({cdn: {js: function(file){ return "http://mycdn.com" + file.path; } }})`
+* In the absence of `process.on('uncaughtException')` in your app code, uncaught exceptions are now sent to the console and will no longer kill the server. This 'safety net' is automatically activated when you call `ss.packAssets()` as you typically would in production
+* Any errors encountered serving the HTML view are now sent to the console, not the browser
 
 
 ##### Other
 
-* Updated to work on Node 0.8 [Discuss any issues here](https://github.com/socketstream/socketstream/issues/250)
+* Updated to work on Node 0.8
 * Live Reload now uses `chokidar` for better performance on Windows and when creating new files. Big thanks to CyberWalrus
 * Updated many package dependencies
 * Added documentation in Korean (thanks EngForDev)
