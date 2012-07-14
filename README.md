@@ -97,7 +97,7 @@ All this means no more connection latency, HTTP header overhead, polling, or clu
 
 Ready to give it a whirl? Install [Node 0.8.X](http://nodejs.org/#download) and checkout the latest code from master:
 
-    [sudo] npm install git://github.com/socketstream/socketstream.git
+    [sudo] npm install -g git://github.com/socketstream/socketstream.git
 
 To generate a new empty SocketStream project type:
 
