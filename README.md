@@ -299,6 +299,11 @@ Back end scaling has yet to be properly documented, but we're keen to continue l
 * May 2012 - [Presentation to LNUG.org](http://vimeo.com/43027679), London (most recent)
 
 
+### Upcoming Speaking Events
+
+* [LXJS - Lisbon - 28+29 September 2012](http://2012.lxjs.org)
+
+
 ### Developing on the SocketStream core
 
 SocketStream is primarily written in CoffeeScript which is 'pre-compiled' into JavaScript using `make build`. If you're actively developing on the code make sure you install the dev dependencies first (just clone the project and type `sudo npm link`).

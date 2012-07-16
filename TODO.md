@@ -1,23 +1,10 @@
 TODO
 ====
 
-#### WORK TO DO ONCE 0.3.0 IS RELEASED
+Further updates to 0.3.X will include minor new features and bug fixes only.
 
-* Finish and release HTTP API module
-* Finish and release Users Online module
-* Finish and release Pusher Pipe transport module
-* Finish converting SocketRacer to 0.3 and demo new telemetry websocket responder module
-* Move to Engine.IO instead of Socket.IO once it's ready
-* Look into ways we can use multi-core cluster features of Node 0.6, if at all (maybe best at app level?)
+All major new development work is now going into SocketStream 0.4.
 
-
-#### DECISIONS TO MAKE
-
-* Sort out how we're going to do logging
-* Should we show a 404 if a request is invalid? (i.e. not a file or cannot be routed to a client)
-# Should we use Connect Router or Director (from flatiron) instead of a simple EventEmitter for HTTP routing?
-
-Any thoughts on the above are most welcome
 
 
 #### SOCKETSTREAM.ORG WEBSITE
