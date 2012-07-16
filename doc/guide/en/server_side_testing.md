@@ -54,17 +54,29 @@ describe('app.square', function(){
 
 Run all your tests in `/test` with:
 
-    mocha
+    mocha -r should
 
 And you'll see the following output:
 
     ✔ 1 test complete (1ms)
 
 
+Note: If you're using any CoffeeScript in your app, start `mocha` with:
+
+    mocha -r should -r coffee-script
+
+
 A few things to note about RPC tests:
 
 * All `ss.rpc()` commands return an array of params (e.g. `[16]` in the example above). As two `array`s cannot be directly compared in Javascript, it is necessary to convert the response to a `string` before calling `should.equal()`
 * Create as many test files as you like. Subsequent calls to `var ss = require('socketstream').start();` will return the same server instance from memory
+
+* Tip: Rather than typing `mocha -r should` each time, add the following lines to `package.json` so you can run your tests with `npm test`:
+
+    "scripts": {
+      "test": "mocha -r should"
+     }
+
 
 
 ### Sessions
