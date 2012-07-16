@@ -28,13 +28,6 @@ exports.send = (responderId) ->
   (msg) -> transport.send(responderId + '|' + msg)
 
 
-# Experimental and undocumented for now
-exports.template = (name) ->
-  if name && name.length > 0
-    key = name.replace(/\./g,'-')
-    exports.tmpl[key] || console.error('Template not found', key)
-
-
 ### ON DEMAND LOADING ###
 
 async = {loaded: {}, loading: new EventEmitter2}
