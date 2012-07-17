@@ -2,9 +2,10 @@
 
 Life as a front-end web developer used to be a continuous cycle of 'change file', 'reload browser', 'change file', etc etc until you got the result you were looking for.
 
-SocketStream breaks this cycle by automatically refreshing the browser whenever you make a change to any file in the `client` directory.
+SocketStream breaks this cycle by automatically refreshing the browser whenever you make a change to any file in the `/client` directory. What's more, if you're just tweaking the stylesheets, the CSS will be reloaded in place so your app doesn't lose state.
 
-This feature is especially useful when tweaking CSS and HTML. Just open up your text editor on one side of the screen, put the browser on the other, and watch your productivity soar.
+**Tip**: Open up your text editor on one side of the screen, put the browser on the other, and watch your productivity soar!
+
 
 Live Reload is automatically enabled unless you call:
 
