@@ -5,12 +5,11 @@
 # or how to report errors - that's the job of the interface
 
 pathlib = require('path')
-apiTree = require('apitree')
+loadApiTree = require('../../../utils/apiTree').loadApiTree
 
 module.exports = (ss, middleware) ->
-  
-  dir = pathlib.join(ss.root, 'server/rpc')
-  api = apiTree.createApiTree(dir)
+
+  api = loadApiTree(pathlib.join(ss.root, 'server/rpc'))
 
   request = (req, res) ->
 
