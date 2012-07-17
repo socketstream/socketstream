@@ -12,7 +12,7 @@ var version = exports.version = require('./utils/file').loadPackageJSON().versio
 var root = exports.root = process.cwd().replace(/\\/g, '/'); // replace '\' with '/' to support Windows
 
 // Warn if attempting to start without a cwd (e.g. through upstart script)
-if (root == '/') throw new Error("You must change into the project directory before starting your SocketStream app")
+if (root == '/') throw new Error("You must change into the project directory before starting your SocketStream app");
 
 // Set environment
 var env = exports.env = (process.env['SS_ENV'] || 'development').toLowerCase();
@@ -32,16 +32,17 @@ var api = exports.api = {
   // Call ss.api.add('name_of_api', value_or_function) from your app to safely extend the 'ss' internal API object passed through to your /server code
   add: function(name, fn) {
     var exists = false;
-    if (exists = api[name]) {
+    if (exists == api[name]) {
       throw new Error("Unable to register internal API extension '" + name + "' as this name has already been taken");
     } else {
       api[name] = fn;
       return true;
     }
   }
-}
+};
 
 // Create internal Events bus
+// Note: only used by the ss-console module for now. This idea will be expended upon in SocketStream 0.4
 var events = exports.events = new EventEmitter2();
 
 // Publish Events
@@ -87,7 +88,7 @@ var start = function(httpServer) {
     ws.load(httpServer, server.responders, server.eventTransport);
 
     // Append SocketStream middleware to stack
-    http.load(client.options.dirs.static, server.sessionStore, session.options);
+    http.load(client.options.dirs['static'], server.sessionStore, session.options);
 
     // Load Client Asset Manager
     client.load(api);
@@ -96,11 +97,11 @@ var start = function(httpServer) {
     events.emit('server:start', server);
 
   // If no HTTP server is passed return an API to allow for server-side testing
-  // Note this feature is currently considered 'experiemntal' and the implementation
-  // may change in the future to ensure any type of Request Responder can be tested
+  // Note this feature is currently considered 'experimental' and the implementation will
+  // be changed in SocketStream 0.4 to ensure any type of Request Responder can be tested
   } else {
 
-    var sessionID = session.create();
+    var id, sessionID = session.create();
 
     for (id in server.responders) {
 
@@ -110,8 +111,8 @@ var start = function(httpServer) {
         var fn = function(){
           var args = Array.prototype.slice.call(arguments);
           var cb = args.pop();
-          return responder.interfaces.internal(args, {sessionId: sessionID, transport: 'test'}, function(err, params){ cb(params) });
-        }
+          return responder.interfaces.internal(args, {sessionId: sessionID, transport: 'test'}, function(err, params){ cb(params); });
+        };
         api.add(responder.name, fn);
       }
     }
@@ -119,9 +120,9 @@ var start = function(httpServer) {
   }
 
   return api;
-}
+};
 
 // Ensure server can only be started once
 exports.start = function(httpServer) {
   return serverInstance || (serverInstance = start(httpServer));
-}
+};

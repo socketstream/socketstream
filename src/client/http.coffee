@@ -3,7 +3,7 @@
 # Extend Node's HTTP http.ServerResponse object to serve views either from a cache (in production)
 # or by generating them on-the-fly (in development)
 # Note: Even though this is exactly what Express.js does, it's not best practice to extend Node's native
-# objects so I may change this in the future
+# objects and we don't be doing this in SocketStream 0.4
 
 require('colors')
 fs = require('fs')
@@ -52,7 +52,7 @@ module.exports = (ss, clients, options) ->
       else
         view(ss, client, options, sendHTML)
 
-    # Never send stack trace to the browser, log it to the terminal instad
+    # Never send stack trace to the browser, log it to the terminal instead
     catch e
       sendHTML('Internal Server Error', 500)
       ss.log('Error: Unable to serve HTML!'.red)

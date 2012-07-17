@@ -1,5 +1,5 @@
 # SocketIO Websocket Transport
-# Alot of this code will be cleaned up and may change in the future
+# A lot of this code will be cleaned up and may change in the future
 
 fs = require('fs')
 qs = require('querystring')
@@ -74,7 +74,7 @@ module.exports = (ss, emitter, httpServer, config = {}) ->
 processSession = (socket) ->
   return true if socket.sessionId
 
-  # Parse session ID from initial hankshake data
+  # Parse session ID from initial handshake data
   try
     rawCookie = socket.handshake.headers.cookie
     cookie = qs.parse(rawCookie, '; ')

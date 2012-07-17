@@ -31,7 +31,7 @@ module.exports = (ss) ->
       responders[id] = mod(id, config, ss)
     catch e
       responderName = responders[id] && responders[id].name || ''
-      err = Error("Unable to initalize Request Responder '#{responderName}'")
+      err = Error("Unable to initialize Request Responder '#{responderName}'")
       err.stack = e.stack
       throw e
     

@@ -10,7 +10,7 @@ exports.readDirSync = function(start) {
     function isHidden(path){ return path.match(/(^_|^\.|~$)/); }
     function isDir(abspath) {
       var stat = fs.statSync(abspath);
-      var abspathAry = abspath.split('/')
+      var abspathAry = abspath.split('/');
       if(stat.isDirectory() && !isHidden(abspathAry[abspathAry.length -1])) {
         found.dirs.push(abspath);
         // If we found a directory, recurse!
@@ -19,7 +19,7 @@ exports.readDirSync = function(start) {
         found.files = found.files.concat(data.files);
         if(++processed == total) return found;
       } else {
-        var abspathAry = abspath.split('/')
+        abspathAry = abspath.split('/');
         var file_name = abspathAry[abspathAry.length-1];
         if (!isHidden(file_name)) found.files.push(abspath);
         if(++processed == total) return found;
@@ -40,7 +40,7 @@ exports.readDirSync = function(start) {
   } catch(e) {
     if(e.code != 'ENOENT') throw(e); // Ignore if optional dirs are missing
     return false;
-  };
+  }
 };
 
 // Load package JSON file
@@ -49,8 +49,8 @@ exports.loadPackageJSON = function () {
     return JSON.parse(fs.readFileSync(__dirname + '/../../package.json'));
   } catch (e) {
     throw('Error: Unable to find or parse SocketStream\'s package.json file');
-  };
-}
+  }
+};
 
 exports.isDir = function (filePath) { return fs.statSync(filePath).isDirectory(); };
 

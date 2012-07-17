@@ -14,7 +14,7 @@ dir_mode = '0755'
 exports.generate = (program) ->
   name = program.args[1]
   clientFiles = {css: [], code: []}
-  return console.log "Please provide a name for your application: $> socketstream new <MyAppName>" if name is undefined
+  return log "Please provide a name for your application: $> socketstream new <MyAppName>" if name is undefined
   if makeRootDirectory(name)
 
     # Force stylus for now
