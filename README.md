@@ -208,6 +208,10 @@ Documentation is constantly expanding and currently available in [English](https
 * [Authentication](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/authentication.md)
 * [Testing Your App](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/server_side_testing.md)
 
+##### Best Practices
+
+* [Hosting in Production](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/production_hosting.md) - Packing assets, CDNs, handling exceptions
+
 ##### Extending SocketStream
 
 * [Writing Template Engine Wrappers](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/template_engine_wrappers.md) - support any of the gazillion template formats out there

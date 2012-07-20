@@ -1,6 +1,6 @@
 # Writing your own Request Responder
 
-Note: This documentation is aimed at developers who are comfortable creating Node.js modules and wish to extend the core functionally of SocketStream.
+Note: This documentation is aimed at developers who are comfortable creating Node.js modules and wish to extend the core functionally of SocketStream. Writing Request Responders is going to become a lot easier in SocketStream 0.4.
 
 
 ### Introduction

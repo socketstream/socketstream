@@ -12,6 +12,7 @@ Not yet released. These are the changes so far...
 * NEW: CDN paths can now be functions. E.g. `ss.client.packAssets({cdn: {js: function(file){ return "http://mycdn.com" + file.path; } }})`
 * In the absence of `process.on('uncaughtException')` in your app code, uncaught exceptions are now sent to the console and will no longer kill the server. This 'safety net' is automatically activated when you call `ss.packAssets()` as you typically would in production
 * Any errors encountered serving the HTML view are now sent to the console, not the browser
+* Added new 'Best Practices' doc section and new doc file: [Hosting in Production](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/production_hosting.md)
 
 
 ##### Other
