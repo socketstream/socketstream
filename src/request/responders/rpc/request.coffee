@@ -13,6 +13,10 @@ module.exports = (ss, middleware) ->
   api = apiTree.createApiTree(dir)
 
   request = (req, res) ->
+    
+    # Initial error checking
+    throw new Error("No action provided. Action names must be a string separated by dots/periods (e.g. 'message.send')") unless req.method && typeof(req.method) == 'string' && req.method.indexOf('.') > 0
+    throw new Error("Params must be supplied as an Array") unless req.params && req.params instanceof Array
 
     # Init request stack
     stack = []
