@@ -124,7 +124,7 @@ module.exports = (ss, router) ->
         for name, client of clients
           if id = options.packedAssets.id || determineLatestId(client)
             client.id = id
-            ss.log '✓'.green, "Serving client '#{client.name}' from pre-packed assets ID #{client.id}".grey
+            ss.log '✓'.green, "Serving client '#{client.name}' using pre-packed assets (ID #{client.id})".grey
           else
             ss.log '!'.red, "Unable to find pre-packed assets for '#{client.name}'. All assets will be repacked".grey
             packAssets = true
