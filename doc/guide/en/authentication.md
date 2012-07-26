@@ -30,7 +30,11 @@ exports.actions = function(req, res, ss){
         res('Access denied!');
       }
 
-  	}
+  	},
+
+    logout: function(){
+      req.session.setUserId(null);
+    }
   }
 }
 

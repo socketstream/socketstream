@@ -23,6 +23,7 @@ Not yet released. These are the changes so far...
 * Added documentation in Korean (thanks EngForDev)
 * Enable proper handling of question marks and params when routing HTTP requests (thanks matthiasg)
 * In newly generated projects `ss.define.client()` now lists client libs explicitly to avoid confusion over load order
+* Added ability to call `req.session.setUserId(null, cb)` when a user signs out
 * Updated bundled jQuery to 1.7.2
 
 

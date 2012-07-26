@@ -51,8 +51,12 @@ exports.find = (sessionId, socketId, cb) ->
     session.channel = channels(session, socketId)
 
     session.setUserId = (userId, cb = ->) ->
-      @userId = userId
-      @_bindToSocket()
+      if userId
+        @userId = userId
+        @_bindToSocket()
+      else if @userId # if null (i.e. user has signed out)
+        subscriptions.user.remove(@userId, socketId)
+        delete @userId
       @save(cb)
 
     session._bindToSocket = ->

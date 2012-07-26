@@ -70,6 +70,8 @@ Once a user has been [authenticated](https://github.com/socketstream/socketstrea
 ss.publish.user('fred', 'specialOffer', 'Here is a special offer just for you!');
 ```
 
+Important: When a user signs out of your app, you should call `req.session.setUserId(null, cb)` to prevent the browser from receiving future events addressed to that `userId`. Note: This command only affects the current session. If the user is logged in via other devices/sessions these will be unaffected.
+
 
 
 ### 4. Sending to Individual Clients (browser tabs)
