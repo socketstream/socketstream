@@ -3,7 +3,7 @@
 class exports.UniqueSet
 
   constructor: ->
-    @data = []
+    @data = {}
 
   add: (key, value) ->
     return false unless key? and value?
