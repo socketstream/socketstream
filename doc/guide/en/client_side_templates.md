@@ -26,7 +26,7 @@ However, not only does this solution scale poorly for larger templates, but mixi
 SocketStream supports two types of client-side template engines out-of-the-box:
 
 ##### default
-Simply wraps each template in a DIV tag with an ID prefix of 'tmpl-'. Suitable for use with many template engines, including jQuery Templates (as used by SocketStream 0.2). Used by default if no template engine is specified.
+Simply wraps each template in a DIV tag with an ID prefix of 'tmpl-'. Suitable for use with many template engines, including jQuery Templates (as used by SocketStream 0.2).
 
 ##### ember
 Outputs templates in the correct format for Ember.js. No prefix is added.
@@ -37,7 +37,7 @@ To use a built-in template engine, pass the name as a string:
 ss.client.templateEngine.use('ember');
 ```
 
-As built-in template engines are only simple wrappers, most of the time you'll want to use one of the several template languages supported via optional modules on NPM:
+As built-in template engines are only simple wrappers, most of the time you'll want to use one of the several template languages supported via optional modules on npm:
 
 * [ss-hogan](https://github.com/socketstream/ss-hogan) Mustache templates (compiled on the server, requires small client-side lib). This is our recommended template engine.
 * [ss-coffeekup](https://github.com/socketstream/ss-coffeekup) CoffeeKup templates (compiled on the server, no client-side code required)
