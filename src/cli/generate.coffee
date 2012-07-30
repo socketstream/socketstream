@@ -94,7 +94,7 @@ exports.generate = (program) ->
 var http = require('http'),
     ss = require('socketstream');
 
-// Define a single-page client
+// Define a single-page client called 'main'
 ss.client.define('main', {
   view: 'app.#{viewExtension}',
   css:  ['#{clientFiles.css.join("', '")}'],

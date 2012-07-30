@@ -2,6 +2,7 @@
 # ----------------------
 # Serves assets to browsers on demand, caching responses in production mode
 
+require('colors')
 pathlib = require('path')
 magicPath = require('../magic_path')
 utils = require('./utils')
@@ -30,10 +31,15 @@ module.exports = (ss, router, options) ->
     dir = pathlib.join(ss.root, options.dirs.code)
     files = magicPath.files(dir, [path])
     files.forEach (file) ->
-      asset.js file, {pathPrefix: path, compress: options.packAssets}, (js) ->
-        output.push(js)
-        if output.length == files.length # last file
-          cb(output.join("\n"))
+      try
+        asset.js file, {pathPrefix: path, compress: options.packAssets}, (js) ->
+          output.push(js)
+          if output.length == files.length # last file
+            cb(output.join("\n"))
+      catch e
+        description = e.stack && e.stack.split("\n")[0] || 'Unknown Error'
+        ss.log("! Unable to load #{file} on demand:".red, description)
+        
 
   # Web Workers
   worker = (request, response, path, cb) ->
