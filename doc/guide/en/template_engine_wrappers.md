@@ -1,8 +1,10 @@
 # Template Engine Wrappers
 
-Writing your own template engine wrapper is easy. For this quick tutorial we'll be looking at a [ss-hogan](https://github.com/socketstream/ss-hogan), a wrapper for Twitter's [Hogan library](http://twitter.github.com/hogan.js/).
+SocketStream supports a wide variety of client-side template engines through the use of third party modules.
 
-You can see the file structure for a template engine wrapper in the [ss-hogan repository]([ss-hogan](https://github.com/socketstream/ss-hogan)). Let's look at the key file, `engine.js`:
+If you can't find a module for your preferred templating language, it's easy to create your own. This page guides you through the process, using the [ss-hogan](https://github.com/socketstream/ss-hogan) module (a wrapper for Twitter's [Hogan library](http://twitter.github.com/hogan.js/)), as a reference.
+
+Let's look at the key file in this module, `engine.js`:
 
 ```javascript
 /* engine.js */

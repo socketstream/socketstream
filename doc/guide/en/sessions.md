@@ -84,5 +84,5 @@ Any Redis configuration can be passed to the second argument (e.g `{port: 1234}`
 
 By default sessions will expire within 30 days, unless the session is terminated beforehand (e.g. the user closes the browser). To set a different expiry time put the following in your `app.js` file:
 
-    ss.session.options.maxAge = 8640000;  // one day in miliseconds
+    ss.session.options.maxAge = 8640000;  // one day in milliseconds
 

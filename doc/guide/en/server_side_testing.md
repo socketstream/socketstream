@@ -86,7 +86,7 @@ A new Session (with a unique ID) is automatically created for you the first time
 
 ### What can I test?
 
-Right now you can only test `ss.rpc()` commands. Once we finalize the API, you'll soon be able to test all third-party Request Responders (e.g. models) in a similar way.
+Right now you can only test `ss.rpc()` commands. A major goal of SocketStream 0.4 is to allow any Request Responders to be tested in a similar way.
 
 We are also considering implementing a mock Publish Transport, to allow you to test `ss.publish()` commands.
 

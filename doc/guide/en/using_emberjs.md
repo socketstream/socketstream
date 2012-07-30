@@ -1,4 +1,7 @@
-# Use Ember MVC JS lib with SocketStream
+# Use Ember JS
+
+**Note: This doc file has been kindly contributed and is in need of a little editing. More info on using SocketStream with Ember can be found on our Google Group. Pull requests to improve this page would be appreciated.**
+
 
 Socketstream already support Ember MVC in the core and it is really easy to integrate your ember MVC end point into SocketStream framework.
 Following are steps to create an end-point with Ember view in SocketStream.

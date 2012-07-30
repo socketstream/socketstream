@@ -32,7 +32,7 @@ exports.actions = function(req, res, ss){
 
 ### Sending Arguments
 
-The RPC Responder can take and pass unlimited arguments intuitively. For example let's write another action on the server:
+The RPC Responder can take and return unlimited arguments intuitively. For example let's write another action on the server:
 
 ``` javascript
 // server/rpc/products.js
@@ -62,7 +62,16 @@ ss.rpc('products.topSelling', '2012-01-01', '2012-01-31', productType, function(
   console.log('The top selling products in ' + productType + ' were:', products);
   console.log('And the best salesperson was:', bestSalesperson);
 })
+```
 
+The ability to pass multiple arguments also means you can choose to follow the 'error first' idiom typically used in Node:
+
+``` javascript
+// client/code/main/products.js
+ss.rpc('products.add', 123, function(err, data){
+  if (err) return alert("Error adding product!");
+  $('#products').append( ss.tmpl['product.details'].render(data) );
+});
 ```
 
 You may pass as many arguments as you want - just remember the last argument should always be the callback if you're expecting a response from the server.

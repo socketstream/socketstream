@@ -1,6 +1,6 @@
 # Writing your own Request Responder
 
-Note: This documentation is aimed at developers who are comfortable creating Node.js modules and wish to extend the core functionally of SocketStream. Writing Request Responders is going to become a lot easier in SocketStream 0.4.
+Note: This documentation is aimed at developers who are comfortable creating Node.js modules and wish to extend the core functionally of SocketStream. Writing Request Responders is going to become **a lot** easier in SocketStream 0.4.
 
 
 ### Introduction
@@ -101,13 +101,9 @@ We recommend you use the `apitree` NPM module for namespacing (as we do with the
 
 ### API Status
 
-The 'websocket' interface should now be stable. We're currently working on finalizing additional interfaces to allow your responder to be called over the REPL (using `ss-console`), as part of a server-side test suite, or even over HTTP requests.
-
-Additional interfaces will be documented shortly once they are stable - however you are not obliged to add them to your responder.
-
-We welcome feedback from developers and will use this to improve the API design in future releases. We will do our best to ensure any changes do not break the existing API, but getting this right for the long-term is of primary importance.
+The Request Responder API in 0.3 is now stable. SocketStream 0.4 will build upon the ideas in 0.3, allowing you to define additional 'interfaces' so your responder can be invoked over the REPL (using `ss-console`), as part of a server-side test suite, or even over HTTP requests.
 
 
 ### Support available!
 
-Please do not hesitate to get in touch if you need help at any stage of the process. Please log a Github issue or find us on IRC.
+Please do not hesitate to get in touch if you need help at any stage of the process. Please log a Github issue or find us on IRC (#socketstream channel on Freenode).

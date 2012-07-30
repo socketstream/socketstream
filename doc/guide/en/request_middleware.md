@@ -1,6 +1,6 @@
 # Request Middleware
 
-One of the most powerful and exiting features introduced in SocketStream 0.3 is Request Middleware. This has the power to inspect, transform, redirect or drop incoming requests over the websocket, HTTP API, or console.
+Request Middleware allows you to inspect, transform, redirect or drop incoming requests over the websocket, HTTP API, or REPL (using ss-console).
 
 If you've used Connect HTTP middleware before the concept and API will be instantly familiar. Essentially incoming requests can be processed through a chain of middleware BEFORE they arrive at their final destination - typically the RPC command you are requesting.
 
@@ -66,7 +66,7 @@ Simply pass the module/function directly. E.g:
 
 Creating custom middleware in your application is easy.
 
-Let's start by creating a function which multiplies incoming numbers (the first param).
+Let's start by creating an RPC action which multiplies incoming numbers (the first param).
 
 ```javascript
 // server/rpc/app.js
