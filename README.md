@@ -11,7 +11,7 @@ It provides the structure and basic building blocks you need to create rich soci
 Learn more by [taking a tour](http://www.socketstream.org/tour) of the features, or watching the [introductory video](http://vimeo.com/43027679) (recorded May 2012).
 
 
-# Why SocketStream?
+### Why SocketStream?
 
 Building a simple chat app that uses websockets is easy.
 Building a rich, non-trivial, responsive realtime UI without ending up with a mess of code is hard.
@@ -33,7 +33,7 @@ SocketStream is MIT licensed.
 
 SocketStream 0.3 is now stable enough for production use internally (behind a firewall). Several pioneering users are successfully hosting external apps in production, though we ask you to use caution and appreciate that SocketStream is new software which has yet to be battle hardened.
 
-SocketStream 0.3 will continue to be updated with bug fixes and minor feature enhancements. All major development work is now going into SocketStream 0.4 ([read announcement](https://groups.google.com/forum/?fromgroups#!topic/socketstream/gUqMba0dUJg)) which incrementally builds upon the features and ideas in 0.3.
+SocketStream 0.3 will continue to be updated with bug fixes and minor feature enhancements. All major development work is now going into SocketStream 0.4 ([read announcement](https://groups.google.com/forum/?fromgroups#!topic/socketstream/gUqMba0dUJg)) which builds upon the features and ideas in 0.3.
 
 
 ### Contact
