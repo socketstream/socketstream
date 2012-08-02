@@ -12,7 +12,7 @@ module.exports = (ss, emitter, httpServer, config = {}) ->
   config.client = config.client || {}
 
   # Alias config.io to config.server to ensure we don't break apps using the old API
-  config.server = config.io
+  config.io = config.server
 
   # Bind Socket.IO to the HTTP server
   io = socketio.listen(httpServer)
@@ -25,7 +25,7 @@ module.exports = (ss, emitter, httpServer, config = {}) ->
   #   io.set('log_level', 4)
   # }})
   config.io(io) if config.io
-
+  
   # Listen out for new connections
   io.sockets.on 'connection', (socket) ->
 
