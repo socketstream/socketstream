@@ -2,72 +2,68 @@
 
 # SocketStream
 
-Latest release: 0.3.0 RC2  ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))
+_Latest release: 0.3.0 ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))_
 
-[![build status](https://secure.travis-ci.org/socketstream/socketstream.png)](http://travis-ci.org/socketstream/socketstream)
+SocketStream is a modular Node.js web framework for building fast, responsive **single-page realtime apps**.
+
+It provides the structure and basic building blocks you need to create rich social/chat apps, multiplayer games, trading platforms, sales dashboards, or any other kind of web app that needs to display realtime streaming data.
+
+Learn more by [taking a tour](http://www.socketstream.org/tour) of the features, or watching the [introductory video](http://vimeo.com/43027679) (recorded May 2012).
+
+
+# Why SocketStream?
+
+Building a simple chat app that uses websockets is easy.
+Building a rich, non-trivial, responsive realtime UI without ending up with a mess of code is hard.
+
+SocketStream eases the pain by:
+
+* Integrating best-of-breed modules to increase productivity
+* Providing a sensible place to put everything
+* Accelerating development with Live Reload and (optional) support for Stylus, Jade, etc
+* Accelerating deployment with integrated asset packing and CDN support
+* Organizing spaghetti client-side code into modules you can `require()`
+* Working well with all major client-side frameworks (e.g. Backbone, Ember, Angular)
+* Allowing easy integration with other npm modules
+
+SocketStream is MIT licensed.
+
+
+### Status
+
+SocketStream 0.3 is now stable enough for production use internally (behind a firewall). Several pioneering users are successfully hosting external apps in production, though we ask you to use caution and appreciate that SocketStream is new software which has yet to be battle hardened.
+
+SocketStream 0.3 will continue to be updated with bug fixes and minor feature enhancements. All major development work is now going into SocketStream 0.4 ([read announcement](https://groups.google.com/forum/?fromgroups#!topic/socketstream/gUqMba0dUJg)) which incrementally builds upon the features and ideas in 0.3.
+
+
+### Contact
 
 Twitter: [@socketstream](http://twitter.com/#!/socketstream)  
 Google Group: http://groups.google.com/group/socketstream  
 IRC channel: [#socketstream](http://webchat.freenode.net/?channels=socketstream) on freenode
 
-Take a tour of all the new features at http://www.socketstream.org/tour and watch the [introductory video](http://vimeo.com/43027679) (recorded May 2012).
-
-
-### Introduction
-
-SocketStream is an open source Node.js web framework dedicated to building **single-page realtime apps**.
-
-Whether you're building a group chat app, multiplayer game, trading platform, sales dashboard, or any other realtime web app, SocketStream gets you up and running quickly by providing essential functionality and a rapid development environment.
-
-Rather than attempting to do everything, SocketStream is just a regular Node.js module designed to work well alongside other great NPM modules such as Express.js, MongoDb, Redis, Everyauth and many more. On the client-side, you're free to use all the technologies you already know and love - such as jQuery, Mustache, Backbone.js, Ember.js, Angular.js, or just plain vanilla JS.
-
-Whilst we have chosen not to support models or reactive templating in the core, we offer a [powerful API](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/writing_request_responders.md) that allows developers to build optional modules to experiment with different approaches. The best third-party modules will be featured on our website in the near future.
-
-SocketStream apps can easily be deployed to [Nodejitsu](http://nodejitsu.com), [EC2 servers](http://aws.amazon.com/ec2) or any other hosting platform supporting websockets (sadly that excludes [Heroku](http://www.heroku.com) for the moment).
-
-While it is still early days, our end goal is to ensure SocketStream can be used to power large-scale 'serious' web apps where scalability, flexibility and high availability are key.
-
-
-#### Quick Facts
-
-* A lean, lightweight core, optionally extended using standard NPM modules
-* Excellent code organization, modularity and extensibility
-* Prioritizes integration with third-party NPM modules
-* Write all client & server code in JavaScript (or [CoffeeScript](http://jashkenas.github.com/coffee-script) if you prefer)
-* MIT Licensed. Use SocketStream commercially without restriction
-
-
-### Status
-
-SocketStream is in full-time development, rapidly progressing thanks to frequent contributions from a [growing community](http://groups.google.com/group/socketstream) of developers.
-
-SocketStream 0.3.0 will be pushed to npm in the next few days. The features and API are now frozen.
-
 
 ## Features
 
 #### Client Side
-
-* Works great with Chrome, Safari, Firefox 6 (and above) using native websockets
-* Compatible with older versions of Firefox and IE thanks to configurable fallback transports
+ 
 * Use `require()` and `exports` in your client-side code as you would on the server
 * Define multiple single-page clients by choosing the CSS, JS and client-side templates you wish to serve
-* Integrated asset manager - automatically packages and [minifies](https://github.com/mishoo/UglifyJS) all client-side assets
+* Integrated asset manager - packages and [minifies](https://github.com/mishoo/UglifyJS) all client-side assets. Includes CDN support
 * Live Reload - automatically reloads the browser when a HTML, CSS or JS client file changes
-* Works with iPads and iPhones using Mobile Safari (iOS 4.2 and above), even over 3G. Send a smaller, lighter client if desired
+* Comprehensive support for client-side templates - use Hogan/Mustache/CoffeeKup/jQuery or write your own wrapper
 * Use optional code formatters (e.g. CoffeeScript, Jade, Stylus, Less, etc) by easily installing wrapper modules
 * Multiple clients work seamlessly with HTML Push State 'mock routing' so you can use [Backbone Router](http://documentcloud.github.com/backbone/#Router), [Davis JS](http://davisjs.com) and more
-* Supports many client-side template languages (Hogan/Mustache/CoffeeKup/jQuery), pre-compiling them for speed
 * Works great with [Ember.js](http://emberjs.com) for 'reactive templates' which automatically update when data changes
 * Bundled with jQuery - though not dependent on it. Will work great with Zepto and other libraries
-* Easily add additional client libraries such as [Underscore.js](http://documentcloud.github.com/underscore/)
-
-
+* Easily use additional client libraries such as [Underscore.js](http://documentcloud.github.com/underscore/)
+ 
+ 
 #### Server Side
-
+ 
 * True bi-directional communication using websockets (or websocket fallbacks). No more slow, messy AJAX!
 * Modular Websocket Transports - switch between [Socket.IO](http://socket.io) (bundled by default) or [SockJS](https://github.com/socketstream/ss-sockjs) without changing your app code
-* Easily share code between the client and server. Ideal for business logic and model validation (see Questions below)
+* Easily share code between the client and server. Ideal for business logic and model validation (see FAQs below)
 * Request Middleware - enabling session access, authentication, logging, distributed requests and more
 * Effortless, scalable, pub/sub baked right in - including Private Channels
 * Easy authentication - use a backend database or authenticate against Facebook Connect, Twitter, etc using [Everyauth](https://github.com/bnoguchi/everyauth)
@@ -86,18 +82,19 @@ SocketStream 0.3.0 will be pushed to npm in the next few days. The features and 
 
 ### How does it work?
 
-SocketStream automatically compresses and minifies the static HTML, CSS and client-side code your app needs and sends this through the first time a user visits your site.
+SocketStream sends all the static HTML, CSS and client-side code your app needs the first time a user visits your site (all automatically compressed in `production` mode).
 
-From then on all application data is sent and received via the websocket (or websocket fallbacks), instantly established when the client connects and automatically re-established if broken. Normally this will be in [JSON RPC](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/rpc_responder.md) format, but SocketStream 0.3 allows you to use different Request Responders depending upon the task at hand.
+From then on all application data is sent and received via the websocket (or websocket fallbacks), instantly established when the client connects and automatically re-established if broken. Normally this will be in [JSON RPC](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/rpc_responder.md) format, but SocketStream 0.3 allows you to use different Request Responders (message handlers) depending upon the task at hand.
 
 All this means no more connection latency, HTTP header overhead, polling, or clunky AJAX. Just true bi-directional, asynchronous, 'streaming' communication between client and server.
 
 
+
 ### Getting Started
 
-Ready to give it a whirl? Install [Node 0.8.X](http://nodejs.org/#download) and checkout the latest code from master:
+Ready to give it a whirl? Install [Node 0.8.X](http://nodejs.org/#download) then get SocketStream from npm:
 
-    [sudo] npm install -g git://github.com/socketstream/socketstream.git
+    [sudo] npm install -g socketstream
 
 To generate a new empty SocketStream project type:
 
@@ -108,7 +105,6 @@ __Tip: Type `socketstream -h` to view all available options__
 Install the bundled (optional) dependencies:
 
     cd <name_of_your_project>
-    [sudo] npm link socketstream
     [sudo] npm install
 
 To start your app simply type:
@@ -124,12 +120,14 @@ If all goes well you'll see the SocketStream banner coming up, then you're ready
 
 SocketStream is a perfect fit for all manner of modern applications which require realtime data (chat, stock trading, location monitoring, analytics, etc). It's also a great platform for building realtime HTML5 games. 
 
-However, right now it would make a poor choice for a blog or other content-rich site which requires unique URLs for search engine optimization.
+However, it would make a poor choice for a blog or other content-rich site which requires unique URLs for search engine optimization.
 
 
 ### Demo Apps
 
-SocketStream 0.3 example apps coming soon!
+0.3 apps in production: [Dashku.com](https://dashku.com)
+
+More code examples to follow.
 
 
 ### Example 1: Basic RPC
@@ -139,7 +137,7 @@ SocketStream 0.3 supports multiple ways to send messages to and from the server.
 For example, let's write a simple server-side function which squares a number:
 
 ``` javascript
-// server/rpc/app.js
+// in /server/rpc/app.js
 exports.actions = function(req, res, ss){
 
   // return list of actions which can be called publicly
@@ -161,7 +159,7 @@ ss.rpc('app.square', 25)
 
 You'll see the answer `625` logged to the console by default. The eagle-eyed among you will notice `ss.rpc('app.square', 25)` actually returned `undefined`. That's fine. We're only interested in the asynchronous response sent from the server once it has processed your request.
 
-You may be wondering why `app.square`? Because we're invoking the `square` action/function in the `app.js` file. If you had written a `resize` action in `/server/rpc/image/processor.js` you'd call it with `ss.rpc('image.processor.resize')`. Create as many sub-directories as you wish to organize your code.
+You may be wondering why `app.square`? Because we're invoking the `square` action/function in the `app.js` file. If you had written a `resize` action in `/server/rpc/image/processor.js` you'd call it with `ss.rpc('image.processor.resize')`. This naming convention allows you to create as many sub-directories as you wish to organize your code.
 
 Now let's write some code in the client to do more with this response:
 
@@ -224,7 +222,13 @@ Documentation is constantly expanding and currently available in [English](https
 ***
 
 
-### Questions?
+### FAQs?
+
+
+##### What browsers will SocketStream work with?
+
+SocketStream works best with Chrome, Safari, Firefox 6 (and above) which all support native websockets. It is also compatible with older versions of Firefox and IE thanks to Socket.IO fallback transports. In addition, iPads and iPhones using Mobile Safari (iOS 4.2 and above) are fully supported, even over 3G.
+
 
 ##### How can I make my app auto-restart when /server code changes?
 
@@ -258,7 +262,7 @@ Tip: If you're deploying to Nodejitsu add the following dependency to your `pack
 
 ##### Will it run on Windows?
 
-Yes. We have several users running SocketStream on Windows without problems. Please see the Windows installation instructions in INSTALL.md
+Yes. We have many users running SocketStream on Windows without problems.
 
 
 ##### How can I share code between client and server?
@@ -268,9 +272,13 @@ Simply `require()` one of your client-side modules in your server-side code.
 
 ##### Does SocketStream support models?
 
-Rather than cluttering-up the core with opinionated choices around models, persistent storage engines, security, reactive templates and more, we offer a [powerful API](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/writing_request_responders.md) to allow developers to experiment with different approaches to model synching, client-side APIs (e.g. simulating MongoDB in the browser), and much more.
+No. Not in the core.
 
-The best third-party Request Responders will be featured on our website in the near future, giving you the ability to pick the best tools for your particular use-case.
+Instead we offer a [powerful API](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/writing_request_responders.md) to allow developers to experiment with opinionated approaches to model synching, client-side APIs (e.g. simulating MongoDB in the browser), serialization protocols, and much more.
+
+Several third-party add-on modules (for Backbone, Angular and more) are now in active development by the community. Please search our [Google Group](http://groups.google.com/group/socketstream) for details.
+
+Ideally we'd like to end up with one great, well-maintained module for each major client-side framework which allows for seamless high-speed model syncing to your choice of persistent store. The best modules will be featured on our website in the near future, giving you the ability to pick the best tools for your particular use-case.
 
 
 ##### Should I use Redis?
@@ -310,13 +318,15 @@ Back end scaling has yet to be properly documented, but we're keen to continue l
 
 ### Developing on the SocketStream core
 
-SocketStream is primarily written in CoffeeScript which is 'pre-compiled' into JavaScript using `make build`. If you're actively developing on the code make sure you install the dev dependencies first (just clone the project and type `sudo npm link`).
+SocketStream 0.3 is primarily written in CoffeeScript which is 'pre-compiled' into JavaScript using `make build`. If you're actively developing on the code make sure you install the dev dependencies first (just clone the project and type `sudo npm link`).
 
 To avoid having to continually type `make build` every time you make a change, pass the `SS_DEV=1` environment variable when running your SocketStream app:
 
     $ SS_DEV=1 node app.js
 
 This instructs your app to run the CoffeeScript code in `<socketstream_root>/src` directly, so you only need to restart the server to see your changes.
+
+**Note: SocketStream 0.4 will be written in vanilla JavaScript.** Follow @socketstream to be the first to know when it's available on Github
 
 
 ### Recommended alternatives to SocketStream
@@ -339,7 +349,7 @@ More tests coming soon. Contributions very much appreciated.
 
 Creator and lead developer: Owen Barnes.
 
-Special thanks to Paul Jensen for contributing code, ideas and testing early prototypes. Big thanks also to Addy Osmani for help with everything JavaScript related, Alan Milford for the excellent SocketRacer.com demo (which will be running on SocketStream 0.3 soon!), and Craig Jordan Muir for designing the awesome new SocketStream logo.
+Special thanks to Paul Jensen for contributing code, ideas and testing early prototypes. Big thanks also to Addy Osmani for help with everything JavaScript related, Alan Milford for providing initial demos, and Craig Jordan Muir for designing the awesome new SocketStream logo.
 
 Thanks also to the many who have contributed code and ideas. We plan to properly feature contributors on our website in the near future.
 
@@ -357,4 +367,3 @@ SocketStream is kindly sponsored by AOL.
 ### License
 
 SocketStream is released under the MIT license.
-

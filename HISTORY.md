@@ -1,8 +1,5 @@
-0.3.0 / 2012-XX-XX
+0.3.0 / 2012-08-02
 ==================
-
-Not yet released. These are the changes so far...
-
 
 ##### Improvements for Production Hosting
 

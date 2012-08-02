@@ -200,7 +200,6 @@ ss.start(server);
 
     log "Next, run the following commands:".yellow
     log "   cd " + name
-    log "   [sudo] npm link socketstream"
     log "   [sudo] npm install"
     log "To start your app:".yellow
     log "   node app.js"
