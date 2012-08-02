@@ -13,8 +13,8 @@ exports.init = ->
     input = fs.readFileSync(path, 'utf8')
 
     # If passing optional headers for main view
-	if options && options.headers
-		input = input.replace('<SocketStream>', options.headers)
-		input = input.replace('<SocketStream/>', options.headers)
+    if options && options.headers
+      input = input.replace('<SocketStream>', options.headers)
+      input = input.replace('<SocketStream/>', options.headers)
 
     cb(input)
