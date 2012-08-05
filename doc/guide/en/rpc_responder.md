@@ -77,6 +77,22 @@ ss.rpc('products.add', 123, function(err, data){
 You may pass as many arguments as you want - just remember the last argument should always be the callback if you're expecting a response from the server.
 
 
+### How can I call a Mongoose/Redis/DB/REST API from my RPC actions?
+
+Require the module you need in your main `/app.js` file then add it to the 'internal API':
+
+```javascript
+// in /app.js
+
+var db = require('mydb');
+var conn = db.createConnection();
+
+ss.api.add('db', conn);
+```
+
+You may now access this DB connection in your `/server/rpc` methods with `ss.db`.
+
+
 ### How does it work under the hood?
 
 The RPC Responder serializes messages in both directions using JSON. Thus the actual message sent over the wire is a string which looks like this:
