@@ -255,10 +255,6 @@ ss.ws.transport.use('socketio', {
 
 SocketStream works great with [Nodejitsu.com](http://www.nodejitsu.com), as well as custom EC2 / cloud servers. Sadly [Heroku.com](http://www.heroku.com) does not currently support websockets.
 
-Tip: If you're deploying to Nodejitsu add the following dependency to your `package.json`:
-
-    "socketstream": "git://github.com/socketstream/socketstream.git#master"
-
 
 ##### Will it run on Windows?
 
