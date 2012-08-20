@@ -25,11 +25,15 @@ However, not only does this solution scale poorly for larger templates, but mixi
 
 SocketStream supports two types of client-side template engines out-of-the-box:
 
+##### ember
+Outputs inline templates in the correct format for Ember.js.
+
+##### angular
+Outputs inline templates in the correct format for Angular.js.
+
 ##### default
 Simply wraps each template in a DIV tag with an ID prefix of 'tmpl-'. Suitable for use with many template engines, including jQuery Templates (as used by SocketStream 0.2).
 
-##### ember
-Outputs templates in the correct format for Ember.js. No prefix is added.
 
 To use a built-in template engine, pass the name as a string:
 

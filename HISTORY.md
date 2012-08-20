@@ -1,3 +1,16 @@
+0.3.1 / 2012-08-20
+==================
+
+* Added support for inline Angular JS templates. Works in exactly the same way as existing support for Ember JS templates: `ss.client.templateEngine.use('angular');`
+* Updated jQuery to 1.8.0
+
+##### Bug fixes
+
+* Configuring Socket.IO using the 'server' param now works as documented (thanks cjm)
+* `<SocketStream>` HTML tag is now XML complient: `<SocketStream/>` (thanks orefalo) 
+
+
+
 0.3.0 / 2012-08-02
 ==================
 
@@ -22,6 +35,7 @@
 * In newly generated projects `ss.define.client()` now lists client libs explicitly to avoid confusion over load order
 * Added ability to call `req.session.setUserId(null, cb)` when a user signs out
 * Updated bundled jQuery to 1.7.2
+
 
 
 0.3 RC2 / 2012-05-04
