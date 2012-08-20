@@ -2,7 +2,7 @@
 
 # SocketStream
 
-_Latest release: 0.3.0 ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))_
+_Latest release: 0.3.1 ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))_
 
 SocketStream is a modular Node.js web framework for building fast, responsive **single-page realtime apps**.
 
