@@ -10,7 +10,7 @@ module.exports = () ->
 
   use: (nameOrModule, cfg = {}) ->
     config = cfg
-    transport = if typeof(nameOrModule) == 'object'
+    transport = if typeof(nameOrModule) == 'function'
       nameOrModule
     else
       modPath = "./transports/#{nameOrModule}"
