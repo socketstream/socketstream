@@ -309,7 +309,11 @@ Back end scaling has yet to be properly documented, but we're keen to continue l
 
 ### Upcoming Speaking Events
 
-* [LXJS - Lisbon - 28+29 September 2012](http://2012.lxjs.org)
+* [Oslo Node Meetup Group, 19 September 2012](http://www.meetup.com/NodeJSOslo/events/78674102)
+* [LXJS, Lisbon, 28-29 September 2012](http://2012.lxjs.org)
+* [Node Dublin, 18-19 October 2012](http://www.nodedublin.com)
+* [KrtConf, Portland, 23-24 October 2012](http://krtconf.com)
+* [QCon, San Francisco, 7-9 November 2012](http://qconsf.com)
 
 
 ### Developing on the SocketStream core
