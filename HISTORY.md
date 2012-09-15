@@ -1,3 +1,10 @@
+0.3.2 / 2012-09-15
+==================
+
+* Updated redis to 0.8.1 and connect-redis to 1.4.4 to resolve issues deploying to Nodejitsu (thanks sberryman)
+
+
+
 0.3.1 / 2012-08-20
 ==================
 

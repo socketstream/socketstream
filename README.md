@@ -2,13 +2,18 @@
 
 # SocketStream
 
-_Latest release: 0.3.1 ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))_
+_Latest release: 0.3.2 ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))_
 
-SocketStream is a modular Node.js web framework for building fast, responsive **single-page realtime apps**.
+A fast, modular Node.js web framework dedicated to building single-page realtime apps
 
-It provides the structure and basic building blocks you need to create rich social/chat apps, multiplayer games, trading platforms, sales dashboards, or any other kind of web app that needs to display realtime streaming data.
 
-Learn more by [taking a tour](http://www.socketstream.org/tour) of the features, or watching the [introductory video](http://vimeo.com/43027679) (recorded May 2012).
+### Introduction
+
+SocketStream is a new breed of web framework that uses websockets to push data to the browser in 'realtime'. It makes it easy to create blazing-fast, rich interfaces which behave more like desktop apps than traditional web apps of the past.
+
+By taking care of the basics, SocketStream frees you up to focus on building your social/chat app, multiplayer game, trading platform, sales dashboard, or any kind of web app that needs to display realtime streaming data. All personal tastes (e.g. Vanilla JS vs CoffeeScript, Stylus vs Less) are catered for with optional npm modules that integrate perfectly in seconds, without bloating the core.
+
+Learn more by [taking a tour](http://www.socketstream.org/tour) of the features, or watching the [introductory video](http://vimeo.com/43027679) (recorded May 2012). 
 
 
 ### Why SocketStream?
@@ -24,7 +29,10 @@ SocketStream eases the pain by:
 * Accelerating deployment with integrated asset packing and CDN support
 * Organizing spaghetti client-side code into modules you can `require()`
 * Working well with all major client-side frameworks (e.g. Backbone, Ember, Angular)
-* Allowing easy integration with other npm modules
+* Making it easy to hookup Redis, MongoDB, CouchDB or other storage engines
+* Providing an active community to answer your question 
+
+No other realtime framework plays as well with the entire Node.js ecosystem, or gives you the flexibility to swap-out code pre-processors, template engines or even websocket transports until you have the very best custom stack for your app.
 
 SocketStream is MIT licensed.
 
