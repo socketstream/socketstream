@@ -35,6 +35,9 @@ module.exports = (ss, emitter, httpServer, config = {}) ->
         try
           [responderId, content] = utils.parseWsMessage(msg)
           clientIp = socket.manager.handshaken[socket.id].address.address
+          if socket.manager.handshaken[socket.id].headers['x-forwarded-for']
+            clientIp = socket.manager.handshaken[socket.id].headers['x-forwarded-for'].split(',')[0]
+            
           meta = {socketId: socket.id, sessionId: socket.sessionId, clientIp: clientIp, transport: 'socketio'}
           emitter.emit responderId, content, meta, (data) ->
             socket.send(responderId + '|' + data)
