@@ -13,7 +13,7 @@ SocketStream is a new breed of web framework that uses websockets to push data t
 
 By taking care of the basics, SocketStream frees you up to focus on building your social/chat app, multiplayer game, trading platform, sales dashboard, or any kind of web app that needs to display realtime streaming data. All personal tastes (e.g. Vanilla JS vs CoffeeScript, Stylus vs Less) are catered for with optional npm modules that integrate perfectly in seconds, without bloating the core.
 
-Learn more by [taking a tour](http://www.socketstream.org/tour) of the features, or watching the [introductory video](http://vimeo.com/43027679) (recorded May 2012). 
+Learn more by [taking a tour](http://www.socketstream.org/tour) of the features, or watching [a recent talk](http://www.youtube.com/watch?v=LOS1lpWXphs) (recorded September 2012). 
 
 
 ### Why SocketStream?
@@ -310,15 +310,15 @@ Back end scaling has yet to be properly documented, but we're keen to continue l
 
 ### Videos
 
+(most recent at end)
 
-* November 2011 - [Presentation to KrtConf.com](http://2011.krtconf.com/videos/owen_barnes), Portland
-* May 2012 - [Presentation to LNUG.org](http://vimeo.com/43027679), London (most recent)
+* [November 2011 - KrtConf.com](http://2011.krtconf.com/videos/owen_barnes), Portland
+* [May 2012 - LNUG.org](http://vimeo.com/43027679), London
+* [September 2012 - LXJS](http://www.youtube.com/watch?v=LOS1lpWXphs), Lisbon
 
 
 ### Upcoming Speaking Events
 
-* [Oslo Node Meetup Group, 19 September 2012](http://www.meetup.com/NodeJSOslo/events/78674102)
-* [LXJS, Lisbon, 28-29 September 2012](http://2012.lxjs.org)
 * [Node Dublin, 18-19 October 2012](http://www.nodedublin.com)
 * [KrtConf, Portland, 23-24 October 2012](http://krtconf.com)
 * [QCon, San Francisco, 7-9 November 2012](http://qconsf.com)
