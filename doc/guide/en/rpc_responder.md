@@ -98,3 +98,46 @@ You may now access this DB connection in your `/server/rpc` methods with `ss.db`
 The RPC Responder serializes messages in both directions using JSON. Thus the actual message sent over the wire is a string which looks like this:
 
     {id: 1, m: 'method.to.call', p: [param1, param2, ...]}
+
+
+### How can I call an RPC action from a server-side file?
+
+RPC actions are strictly called via the client-side.
+
+If you have business logic that you'd like to share between both the client and server sides, we recommend you create a new `node_module` as so:
+
+```javascript
+// in /node_modules/myModule/myModule.js
+
+myModule = function() {
+
+  sharedFunction: function() {
+  return "shared function called"
+  }
+
+}
+
+exports.myModule = myModule()
+```
+
+```javascript
+// in /app.js
+
+myModule = require('myModule').myModule()
+
+myModule.sharedFunction() // returns "shared function called"
+```
+
+```javascript
+// in /rpc/demo.js
+
+myModule = require('myModule').myModule()
+
+exports.actions = function(req, res, ss) {
+
+    callSharedFunction: function() {
+      myModule.sharedFunction() // returns "shared function called"
+    }
+
+};
+```
