@@ -75,7 +75,9 @@ The in-memory Connect Session Store is used by default to allow you to start dev
 
 We have bundled the `connect-redis` store as standard as this makes an excellent choice. To use it, add the following line to your `app.js` file:
 
+``` javascript
     ss.session.store.use('redis');
+```
 
 Any Redis configuration can be passed to the second argument (e.g `{port: 1234}`).
 
@@ -84,10 +86,14 @@ Any Redis configuration can be passed to the second argument (e.g `{port: 1234}`
 
 By default sessions will expire within 30 days, unless the session is terminated beforehand (e.g. the user closes the browser). To set a different expiry time put the following in your `app.js` file:
 
+``` javascript
     ss.session.options.maxAge = 8640000;  // one day in milliseconds
+```
 
 ### Custom Session Cookie Name
 
 By default a session cookie is saved as `connect.sid` on the client's browser. To set a custom cookie name put the following in your `app.js` file:
 
+``` javascript
     ss.session.options.key = "MyCustomApp";
+```
