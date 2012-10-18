@@ -41,7 +41,7 @@ SocketStream is MIT licensed.
 
 SocketStream 0.3 is now stable enough for production use internally (behind a firewall). Several pioneering users are successfully hosting external apps in production, though we ask you to use caution and appreciate that SocketStream is new software which has yet to be battle hardened.
 
-SocketStream 0.3 will continue to be updated with bug fixes and minor feature enhancements. All major development work is now going into SocketStream 0.4 ([read announcement](https://groups.google.com/forum/?fromgroups#!topic/socketstream/gUqMba0dUJg)) which builds upon the features and ideas in 0.3.
+SocketStream 0.3 will continue to be updated with bug fixes and minor feature enhancements. All major development work and mad science experimentation (particularly around Node Streams) is going on in [SocketStream 0.4](https://github.com/socketstream/socketstream-0.4) which will build upon the features and ideas in 0.3.
 
 
 ### Contact
