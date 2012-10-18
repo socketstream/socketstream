@@ -86,3 +86,8 @@ By default sessions will expire within 30 days, unless the session is terminated
 
     ss.session.options.maxAge = 8640000;  // one day in milliseconds
 
+### Custom Session Cookie Name
+
+By default a session cookie is saved as `connect.sid` on the client's browser. To set a custom cookie name put the following in your `app.js` file:
+
+    ss.session.options.key = "MyCustomApp";
