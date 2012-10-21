@@ -148,7 +148,7 @@ ss.start(server);
 
 
     # Generate package.json
-    pacakgejs = """
+    packagejs = """
 {
   "name": "#{name}",
   "description": "An awesome real time application",
@@ -159,15 +159,15 @@ ss.start(server);
   "dependencies": {
 
 """
-    pacakgejs += "    \"socketstream\": \"0.3.x\""
+    packagejs += "    \"socketstream\": \"0.3.x\""
     mods = selectedFormatters.concat(['hogan'])
     mods.push('console') if program.repl
     mods.forEach (name, i) ->
-      pacakgejs += ",\n    \"ss-#{name}\": \"0.1.x\""
+      packagejs += ",\n    \"ss-#{name}\": \"0.1.x\""
 
-    pacakgejs += "\n  }\n}"
+    packagejs += "\n  }\n}"
 
-    write('/package.json', pacakgejs) 
+    write('/package.json', packagejs) 
 
     # Show finish text
     log "Success! Created app '#{name}' with:".yellow
