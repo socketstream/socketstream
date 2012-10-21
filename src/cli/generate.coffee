@@ -17,12 +17,15 @@ exports.generate = (program) ->
   return log "Please provide a name for your application: $> socketstream new <MyAppName>" if name is undefined
   if makeRootDirectory(name)
 
-    # Force stylus for now
-    program.stylus = true
-
     source = path.join(__dirname, '/../../new_project')
     codeExtension = program.coffee && 'coffee' || 'js'
     viewExtension = program.jade && 'jade' || 'html'
+
+    cssExtension = 'css'
+    if program.stylus
+      cssExtension = 'styl'
+    else if program.less
+      cssExtension = 'less'
 
     selectedFormatters = []
     ['coffee', 'jade', 'less', 'stylus'].forEach (formatter) ->
@@ -72,20 +75,20 @@ exports.generate = (program) ->
     if program.minimal
       cp("/client/views/app.minimal.#{viewExtension}", "/client/views/app.#{viewExtension}")
       cp("/client/code/app/app.minimal.#{codeExtension}", "/client/code/app/app.#{codeExtension}")
-      cp("/client/css/app.minimal.styl", "/client/css/app.styl")
-      clientFiles.css.push('app.styl')
+      cp("/client/css/app.minimal.#{cssExtension}", "/client/css/app.#{cssExtension}")
+      clientFiles.css.push("app.#{cssExtension}")
     else
       cp('/client/static/images/logo.png')
       cp("/client/code/app/app.demo.#{codeExtension}", "/client/code/app/app.#{codeExtension}")
       cp("/server/middleware/example.#{codeExtension}")
       cp("/server/rpc/demo.#{codeExtension}")
       cp('/client/css/libs/reset.css')
-      cp("/client/css/app.demo.styl", "/client/css/app.styl")
+      cp("/client/css/app.demo.#{cssExtension}", "/client/css/app.#{cssExtension}")
       mkdir('/client/templates/chat')
       cp("/client/templates/chat/message.#{viewExtension}")
       cp("/client/views/app.demo.#{viewExtension}", "/client/views/app.#{viewExtension}")
       clientFiles.css.push('libs/reset.css')
-      clientFiles.css.push('app.styl')
+      clientFiles.css.push("app.#{cssExtension}")
 
     # Generate app.js
     appjs = """
@@ -94,56 +97,84 @@ exports.generate = (program) ->
 var http = require('http'),
     ss = require('socketstream');
 
-// Define a single-page client called 'main'
-ss.client.define('main', {
-  view: 'app.#{viewExtension}',
-  css:  ['#{clientFiles.css.join("', '")}'],
-  code: ['#{clientFiles.code.join("', '")}'],
-  tmpl: '*'
-});
+function defaultHandler(err, port) {
+  console.log('Listening on port ' + port);
+}
 
-// Serve this client on the root URL
-ss.http.route('/', function(req, res){
-  res.serveClient('main');
-});
+exports.main = function(cb) {
+  if (!cb)
+    cb = defaultHandler;
+
+  // Define a single-page client called 'main'
+  ss.client.define('main', {
+    view: 'app.#{viewExtension}',
+    css:  ['#{clientFiles.css.join("', '")}'],
+    code: ['#{clientFiles.code.join("', '")}'],
+    tmpl: '*'
+  });
+
+  // Serve this client on the root URL
+  ss.http.route('/', function(req, res){
+    res.serveClient('main');
+  });
 
 """
 
     # List any selected formatters
-    appjs += "\n// Code Formatters\n" if selectedFormatters.length > 0
+    appjs += "\n  // Code Formatters\n" if selectedFormatters.length > 0
     selectedFormatters.forEach (name) ->
-      appjs += "ss.client.formatters.add(require('ss-#{name}'));\n"
-
+      appjs += "  ss.client.formatters.add(require('ss-#{name}'));\n"
+    if program.hogan
+      appjs += "\n  // Use server-side compiled Hogan (Mustache) templates. Others engines available"
+      appjs += "  ss.client.templateEngine.use(require('ss-hogan'));"
     appjs += """
+REMOVEME
 
-// Use server-side compiled Hogan (Mustache) templates. Others engines available
-ss.client.templateEngine.use(require('ss-hogan'));
+  // Minimize and pack assets if you type: SS_ENV=production node app.js
+  if (ss.env === 'production') ss.client.packAssets();
 
-// Minimize and pack assets if you type: SS_ENV=production node app.js
-if (ss.env === 'production') ss.client.packAssets();
-
-// Start web server
-var server = http.Server(ss.http.middleware);
-server.listen(3000);
+  // Start web server
+  var server = http.Server(ss.http.middleware);
+  server.listen(0);
 
 """
     # Add the REPL if selected
     if program.repl
       appjs += """
-
-// Start Console Server (REPL)
-// To install client: sudo npm install -g ss-console
-// To connect: ss-console <optional_host_or_port>
-var consoleServer = require('ss-console')(ss);
-consoleServer.listen(5000);
+REMOVEME
+  // Start Console Server (REPL)
+  // To install client: sudo npm install -g ss-console
+  // To connect: ss-console <optional_host_or_port>
+  var consoleServer = require('ss-console')(ss);
+  consoleServer.listen(server.address().port + 1);
 
 """
 
     appjs += """
+REMOVEME
+  // Start SocketStream
+  ss.start(server);
 
-// Start SocketStream
-ss.start(server);
+  // optionally notify parent if this is a forked process
+  if (process.send) {
+    process.send({
+      'ss-server-port': server.address().port,
+      'ss-console-port': server.address().port + 1
+    });
+  }
+
+  // callback with port
+  cb(null, server.address().port);
+}
+
+if (require.main === module) {
+  exports.main();
+}
+
 """
+    # proper tabulation requires alignment marker
+    # because Coffeescript strips leading whitespaces
+    appjs = appjs.replace(/REMOVEME/g, '')
     write('/app.js', appjs)
 
 
@@ -167,7 +198,7 @@ ss.start(server);
 
     pacakgejs += "\n  }\n}"
 
-    write('/package.json', pacakgejs) 
+    write('/package.json', pacakgejs)
 
     # Show finish text
     log "Success! Created app '#{name}' with:".yellow
@@ -187,13 +218,17 @@ ss.start(server);
     else
       success("Plain HTML for views", "(-j if you prefer Jade)")
 
-    # To be implemented in the future. Contributions welcome
-    # if program.stylus
-    #   success("Stylus for CSS")
-    # else if program.less
-    #   success("Less for CSS")
-    # else
-    #   success("Plain CSS", "(-s if you prefer Stylus, -l for Less)")
+     if program.stylus
+       success("Stylus for CSS")
+     else if program.less
+       success("Less for CSS")
+     else
+       success("Plain CSS", "(-s if you prefer Stylus, -l for Less)")
+
+    if program.hogan
+      success("Hogan template engine")
+    else
+      success("No template engine (-h if you prefer Hogan)")
 
     if program.repl
       success("Console Server / REPL")
