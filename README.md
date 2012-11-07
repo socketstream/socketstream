@@ -312,15 +312,14 @@ Back end scaling has yet to be properly documented, but we're keen to continue l
 
 (most recent at end)
 
-* [November 2011 - KrtConf.com](http://2011.krtconf.com/videos/owen_barnes), Portland
-* [May 2012 - LNUG.org](http://vimeo.com/43027679), London
-* [September 2012 - LXJS](http://www.youtube.com/watch?v=LOS1lpWXphs), Lisbon
+* [KrtConf.com, Portland, November 2011](http://2011.krtconf.com/videos/owen_barnes)
+* [LNUG.org, London, May 2012](http://vimeo.com/43027679)
+* [LXJS, Lisbon, September 2012](http://www.youtube.com/watch?v=LOS1lpWXphs)
+* [RealtimeConf, Portland, October 2012](http://2012.realtimeconf.com/video/owen-barnes)
 
 
 ### Upcoming Speaking Events
 
-* [Node Dublin, 18-19 October 2012](http://www.nodedublin.com)
-* [KrtConf, Portland, 23-24 October 2012](http://krtconf.com)
 * [QCon, San Francisco, 7-9 November 2012](http://qconsf.com)
 
 
