@@ -5,5 +5,7 @@ exports.init = (root, config) ->
 
   name: 'Angular.js'
 
+  idSeparator: '/'
+
   process: (template, path, id) ->
     '<script type="text/ng-template" id="' + id + '.html">' + template + '</script>'
