@@ -13,6 +13,7 @@ class exports.UniqueSet
       @data[key] = [value]
 
   remove: (key, value) ->
+    return if @data[key] is undefined
     if (i = @data[key].indexOf(value)) >= 0
       @data[key].splice(i, 1)
       delete @data[key] if @data[key].length == 0
