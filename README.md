@@ -266,8 +266,7 @@ SocketStream works great with [Nodejitsu.com](http://www.nodejitsu.com), as well
 
 ##### Will it run on Windows?
 
-Yes. We have many users running SocketStream on Windows without problems.
-
+Yes. We have many users running SocketStream on Windows without problems. Make sure that you have [Make for Windows](http://gnuwin32.sourceforge.net/packages/make.htm) installed beforehand.
 
 ##### How can I share code between client and server?
 
