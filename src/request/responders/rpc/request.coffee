@@ -68,7 +68,7 @@ module.exports = (ss, middleware) ->
       return res(new Error("The '#{req.method}' method in exports.actions must be a function")) unless typeof(method) == 'function'
 
       # Execute action
-      method.apply(method, req.params)
+      method.apply(actions, req.params)
 
     # Add RPC call to bottom of middleware stack
     stack.push(main)
