@@ -1,7 +1,7 @@
 {
   "name":         "socketstream",
   "description":  "A fast, modular Node.js framework dedicated to building realtime single-page apps",
-  "version":      "0.3.3",
+  "version":      "0.3.2",
   "homepage":     "http://www.socketstream.org",
   "author":       "Owen Barnes <owen@socketstream.org>",
   "repository": {
@@ -29,7 +29,8 @@
     "redis":            "= 0.8.1",
     "connect":          "= 2.4.5",
     "connect-redis":    "= 1.4.4",
-    "chokidar":         "= 0.4.0"
+    "chokidar":         "= 0.4.0",
+    "engine.io":        "= 0.3.10"
   },
   "devDependencies": {
     "coffee-script":    "= 1.3.3",
