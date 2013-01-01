@@ -102,7 +102,7 @@ wrapTemplate = (template, path, fullPath, engine, prevEngine) ->
 
   # Add main template output and return
   prevEngine = engine
-  output.push engine.process(template.toString(), fullPath, suggestedId(path))
+  output.push engine.process(template.toString(), fullPath, suggestedId(path, engine.idSeparator))
   output.join('')
 
 selectEngine = (templateEngines, pathAry) ->
@@ -116,7 +116,7 @@ selectEngine = (templateEngines, pathAry) ->
 
 # Suggest an ID for this template based upon its path
 # 3rd party Template Engine modules are free to use their own naming conventions but we recommend using this where possible
-suggestedId = (path) ->
+suggestedId = (path, separator) ->
   sp = path.split('.')
   sp.pop() if path.indexOf('.') > 0
-  sp.join('.').replace(/\//g, '-')
+  sp.join('.').replace(/\//g, separator or '-')
