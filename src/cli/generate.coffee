@@ -165,8 +165,8 @@ ss.start(server);
     mods.forEach (name, i) ->
       packagejs += ",\n    \"ss-#{name}\": \"0.1.x\""
 
-    packagejs += "\n  }\n}"
-
+    packagejs += "\n  },\n  \"scripts\":{\n    \"start\":\"node app.js\"\n  }\n}"
+    
     write('/package.json', packagejs) 
 
     # Show finish text
