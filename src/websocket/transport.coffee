@@ -1,7 +1,7 @@
 # Websocket Transport
 # -------------------
 # Define the transport to carry all realtime requests
-# Uses 'socketio' by default. See README to see how to configure it
+# Uses 'engineio' by default. See README to see how to configure it
 
 module.exports = (ss, emitter) ->
   
@@ -20,5 +20,5 @@ module.exports = (ss, emitter) ->
         throw new Error("Unable to find the '#{nameOrModule}' websocket transport internally")
 
   load: (httpServer) ->
-    @use('socketio') unless transport?
+    @use('engineio') unless transport?
     transport(ss, emitter, httpServer, config)
