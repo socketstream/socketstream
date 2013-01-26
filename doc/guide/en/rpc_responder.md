@@ -18,7 +18,7 @@ The `products.js` file should contain the available actions as so:
 
 ``` javascript
 // server/rpc/products.js
-exports.actions = function(req, res, ss){
+exports.actions = function(req, res, ss) {
 
   return {
 
@@ -27,7 +27,7 @@ exports.actions = function(req, res, ss){
     }
 
   }
-}
+};
 ```
 
 ### Sending Arguments
@@ -36,7 +36,7 @@ The RPC Responder can take and return unlimited arguments intuitively. For examp
 
 ``` javascript
 // server/rpc/products.js
-exports.actions = function(req, res, ss){
+exports.actions = function(req, res, ss) {
 
   return {
 
@@ -50,7 +50,7 @@ exports.actions = function(req, res, ss){
     }
 
   }
-}
+};
 ```
 
 To call this from the browser we'd use:
@@ -61,15 +61,17 @@ var productType = 'electronics';
 ss.rpc('products.topSelling', '2012-01-01', '2012-01-31', productType, function(products, bestSalesperson) {
   console.log('The top selling products in ' + productType + ' were:', products);
   console.log('And the best salesperson was:', bestSalesperson);
-})
+});
 ```
 
 The ability to pass multiple arguments also means you can choose to follow the 'error first' idiom typically used in Node:
 
 ``` javascript
 // client/code/main/products.js
-ss.rpc('products.add', 123, function(err, data){
-  if (err) return alert("Error adding product!");
+ss.rpc('products.add', 123, function(err, data) {
+  if (err) {
+    return alert("Error adding product!");
+  }
   $('#products').append( ss.tmpl['product.details'].render(data) );
 });
 ```
@@ -112,31 +114,31 @@ If you have business logic that you'd like to share between both the client and 
 myModule = function() {
 
   sharedFunction: function() {
-  return "shared function called"
+    return "shared function called";
   }
 
-}
+};
 
-exports.myModule = myModule()
+exports.myModule = myModule();
 ```
 
 ```javascript
 // in /app.js
 
-myModule = require('myModule').myModule()
+myModule = require('myModule').myModule();
 
-myModule.sharedFunction() // returns "shared function called"
+myModule.sharedFunction(); // returns "shared function called"
 ```
 
 ```javascript
 // in /rpc/demo.js
 
-myModule = require('myModule').myModule()
+myModule = require('myModule').myModule();
 
 exports.actions = function(req, res, ss) {
 
     callSharedFunction: function() {
-      myModule.sharedFunction() // returns "shared function called"
+        myModule.sharedFunction(); // returns "shared function called"
     }
 
 };
