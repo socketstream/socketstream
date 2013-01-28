@@ -319,9 +319,9 @@ Back end scaling has yet to be properly documented, but we're keen to continue l
 
 ### Upcoming Speaking Events
 
-* [BathCamp, Bath, Febrary 2013](http://bathcamp.org/events/an-introduction-to-node-js)
-* [Realtime Meetup, London, Febrary 2013](http://www.meetup.com/XMPP-UK-Meetup/events/92855262)
-* [RealtimeConf EU, Leon, April 22nd-23rd 2013](http://realtimeconf.eu)
+* [BathCamp, Bath, 6th Febrary 2013](http://bathcamp.org/events/an-introduction-to-node-js)
+* [Realtime Meetup, London, 13th March 2013](http://www.meetup.com/XMPP-UK-Meetup/events/92855262)
+* [RealtimeConf EU, Leon, 22nd-23rd April 2013](http://realtimeconf.eu)
 
 
 ### Developing on the SocketStream core
