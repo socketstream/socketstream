@@ -315,11 +315,13 @@ Back end scaling has yet to be properly documented, but we're keen to continue l
 * [LNUG.org, London, May 2012](http://vimeo.com/43027679)
 * [LXJS, Lisbon, September 2012](http://www.youtube.com/watch?v=LOS1lpWXphs)
 * [RealtimeConf, Portland, October 2012](http://2012.realtimeconf.com/video/owen-barnes)
-
+* [QCon, San Francisco, November 2012](http://www.infoq.com/presentations/SocketStream)
 
 ### Upcoming Speaking Events
 
-* [QCon, San Francisco, 7-9 November 2012](http://qconsf.com)
+* [BathCamp, Bath, Febrary 2013](http://bathcamp.org/events/an-introduction-to-node-js)
+* [Realtime Meetup, London, Febrary 2013](http://www.meetup.com/XMPP-UK-Meetup/events/92855262)
+* [RealtimeConf EU, Leon, April 22nd-23rd 2013](http://realtimeconf.eu)
 
 
 ### Developing on the SocketStream core
