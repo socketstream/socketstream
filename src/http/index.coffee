@@ -55,7 +55,7 @@ module.exports = (root) ->
     .use(connect.cookieParser('SocketStream'))
     .use(connect.favicon(staticPath + '/favicon.ico'))
     .use(connect.session(
-      cookie: { path: '/', httpOnly: false, maxAge: sessionOptions.maxAge },
+      cookie: { path: '/', httpOnly: false, maxAge: sessionOptions.maxAge , secure: sessionOptions.secure},
       store: sessionStore
     ))
     

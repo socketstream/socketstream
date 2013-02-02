@@ -12,7 +12,8 @@ sessionStore = new connect.session.MemoryStore
 
 # Expose options which can be changed in your app
 exports.options =
-  maxAge: null # by default session exists for duration of user agent (e.g. until browser is closed)
+  maxAge: null    # by default session exists for duration of user agent (e.g. until browser is closed)
+  secure: false   # enable this to ensure that cookies cannot be tampered with across protocols aka MITM attacks
 
 # Allow use of any Connect Session Store
 exports.store =
