@@ -17,12 +17,12 @@ module.exports = (ss, router, options) ->
 
   serve = (processor) ->
     (request, response) ->
-      if options.packAssets && queryCache[request.url]
-        utils.serve.js(queryCache[request.url], response)
+      path = utils.parseUrl(request.url)
+      if options.packAssets && queryCache[path]
+        utils.serve.js(queryCache[path], response)
       else
-        path = utils.parseUrl(request.url)
         processor request, response, path, (output) ->
-          queryCache[request.url] = output
+          queryCache[path] = output
           utils.serve.js(output, response)
 
   # Async Code Loading
