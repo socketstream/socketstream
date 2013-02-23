@@ -1,3 +1,16 @@
+0.3.3 / 2013-02-21
+==================
+
+* Major change: Now bundled with Engine.IO instead of Socket.IO. This improves support for non-websocket connections and is generally more efficient (big thanks to paulbjensen). Note: If you want to stick with Socket.IO, please avoid this upgrade - the rest of the changes are minor. 
+
+##### Bug fixes
+
+* Improved caching of assets when loading client code on demand (thanks kraz)
+* Added `npm start` command to newly generated apps (thanks paulbjensen)
+* Report correct client IP address when using a proxy (thanks sveisvei)
+
+
+
 0.3.2 / 2012-09-15
 ==================
 
