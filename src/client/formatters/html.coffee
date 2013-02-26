@@ -16,5 +16,9 @@ exports.init = ->
     if options && options.headers
       input = input.replace('<SocketStream>', options.headers)
       input = input.replace('<SocketStream/>', options.headers)
+      input = input.replace('<SocketStreamCss>', options.cssHeaders)
+      input = input.replace('<SocketStreamCss/>', options.cssHeaders)
+      input = input.replace('<SocketStreamJs>', options.jsHeaders)
+      input = input.replace('<SocketStreamJs/>', options.jsHeaders)
 
     cb(input)
