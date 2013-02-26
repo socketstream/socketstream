@@ -46,7 +46,7 @@ module.exports = (ss, client, options, cb) ->
     output
 
 
-  headers = ->
+  cssHeaders = ->
 
     # Return an array of headers. Order is important!
     output = []
@@ -55,9 +55,29 @@ module.exports = (ss, client, options, cb) ->
     if options.packedAssets
       
       css = resolveAssetLink('css')
-      js  = resolveAssetLink('js')
               
       output.push(wrap.htmlTag.css(css))
+
+    # Otherwise, in development, list all files individually so debugging is easier
+    else
+
+      # Send all CSS
+      client.paths.css.forEach (path) ->
+        magicPath.files(pathlib.join(ss.root, options.dirs.css), path).forEach (file) ->
+          output.push wrap.htmlTag.css("/_serveDev/css/#{file}?ts=#{client.id}")
+
+    output
+
+  jsHeaders = ->
+
+    # Return an array of headers. Order is important!
+    output = []
+
+    # If assets are packed, we only need one CSS and one JS file
+    if options.packedAssets
+      
+      js  = resolveAssetLink('js')
+              
       output.push(wrap.htmlTag.js(js))
 
     # Otherwise, in development, list all files individually so debugging is easier
@@ -65,11 +85,6 @@ module.exports = (ss, client, options, cb) ->
 
       # SocketStream system libs and modules
       output.push wrap.htmlTag.js("/_serveDev/system?ts=#{client.id}")
-
-      # Send all CSS
-      client.paths.css.forEach (path) ->
-        magicPath.files(pathlib.join(ss.root, options.dirs.css), path).forEach (file) ->
-          output.push wrap.htmlTag.css("/_serveDev/css/#{file}?ts=#{client.id}")
 
       # Send Application Code
       client.paths.code.forEach (path) ->
@@ -81,19 +96,21 @@ module.exports = (ss, client, options, cb) ->
 
     output
 
-
   # Init
 
   asset = require('./asset')(ss, options)
 
+  # Create Includes
+  cssIncludes = cssHeaders();
+  jsIncludes = jsHeaders();
+  jsIncludes = jsIncludes.concat( templates() )
+  
   # Add links to CSS and JS files
-  includes = headers()
-
-  # Add any Client-side Templates
-  includes = includes.concat( templates() )
+  includes = cssIncludes.slice();
+  includes = includes.concat( jsIncludes )
 
   # Output HTML
-  htmlOptions = {headers: includes.join(''), compress: options.packedAssets, filename: client.paths.view}
+  htmlOptions = {headers: includes.join(''), cssHeaders: cssIncludes.join(''), jsHeaders: jsIncludes.join(''), compress: options.packedAssets, filename: client.paths.view}
   asset.html(client.paths.view, htmlOptions, cb)
 
 
