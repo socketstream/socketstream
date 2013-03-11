@@ -132,7 +132,7 @@ module.exports = function(ss, messageEmitter, httpServer, config){
           // Invoke the relevant Request Responder, passing a callback function which
           // will automatically direct any response back to the correct client-side code
           messageEmitter.emit(responderId, content, meta, function(data){
-            socket.send(responderId + '|' + data);
+            return socket.send(responderId + '|' + data);
           });
         
         }
