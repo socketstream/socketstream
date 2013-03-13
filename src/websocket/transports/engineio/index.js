@@ -97,13 +97,14 @@ module.exports = function(ss, messageEmitter, httpServer, config){
   ws.on('connection', function(socket) {
 
     if (processSession(socket)) {
+    // Store this here before it gets cleaned up after the websocket upgrade
+    socket.remoteAddress = socket.request.connection.remoteAddress;
 
-      // Allow this connection to be addressed by the socket ID
-      openSocketsById[socket.id] = socket;
-
-      ss.session.find(socket.sessionId, socket.id, function(session){ 
-        socket.send('X|OK');
-      });
+    // Allow this connection to be addressed by the socket ID
+    openSocketsById[socket.id] = socket;
+    ss.session.find(socket.sessionId, socket.id, function(session){ 
+      socket.send('X|OK');
+    });
 
       // changed from data
       socket.on('message', function(msg) {
