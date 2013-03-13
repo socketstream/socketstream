@@ -1,3 +1,12 @@
+0.3.4 / 2013-03-13
+==================
+
+* Fixed bug preventing Request Responders (e.g. ss-angular) from working
+* Push `req.clientIp` from Engine.io to RPC requests as before
+* Confirmed working in Node 0.10.0. Be sure to report any bugs if found
+
+
+
 0.3.3 / 2013-02-21
 ==================
 
