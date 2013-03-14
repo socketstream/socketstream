@@ -2,7 +2,7 @@
 
 # SocketStream
 
-_Latest release: 0.3.2 ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))_
+_Latest release: 0.3.4 ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))_
 
 A fast, modular Node.js web framework dedicated to building single-page realtime apps
 
@@ -100,7 +100,7 @@ All this means no more connection latency, HTTP header overhead, polling, or clu
 
 ### Getting Started
 
-Ready to give it a whirl? Install [Node 0.8.X](http://nodejs.org/#download) then get SocketStream from npm:
+Ready to give it a whirl? Install [Node 0.10.X](http://nodejs.org/#download) then get SocketStream from npm:
 
     [sudo] npm install -g socketstream
 
@@ -315,11 +315,12 @@ Back end scaling has yet to be properly documented, but we're keen to continue l
 * [LNUG.org, London, May 2012](http://vimeo.com/43027679)
 * [LXJS, Lisbon, September 2012](http://www.youtube.com/watch?v=LOS1lpWXphs)
 * [RealtimeConf, Portland, October 2012](http://2012.realtimeconf.com/video/owen-barnes)
-
+* [QCon, San Francisco, November 2012](http://www.infoq.com/presentations/SocketStream)
 
 ### Upcoming Speaking Events
 
-* [QCon, San Francisco, 7-9 November 2012](http://qconsf.com)
+* [Realtime Meetup, London, 13th March 2013](http://www.meetup.com/XMPP-UK-Meetup/events/92855262)
+* [RealtimeConf EU, Lyon, 22nd-23rd April 2013](http://realtimeconf.eu)
 
 
 ### Developing on the SocketStream core

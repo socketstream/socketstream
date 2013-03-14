@@ -95,6 +95,9 @@ module.exports = function(ss, messageEmitter, httpServer, config){
   // Handle incoming connections
   ws.on('connection', function(socket) {
 
+    // Store this here before it gets cleaned up after the websocket upgrade
+    socket.remoteAddress = socket.request.connection.remoteAddress;
+
     // Allow this connection to be addressed by the socket ID
     openSocketsById[socket.id] = socket;
 
@@ -132,7 +135,7 @@ module.exports = function(ss, messageEmitter, httpServer, config){
           // Invoke the relevant Request Responder, passing a callback function which
           // will automatically direct any response back to the correct client-side code
           messageEmitter.emit(responderId, content, meta, function(data){
-            socket.send(responderId + '|' + data);
+            return socket.send(responderId + '|' + data);
           });
         
         }
