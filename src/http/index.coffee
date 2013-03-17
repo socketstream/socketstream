@@ -17,6 +17,7 @@ staticFiles = []
 # User-configurable settings with sensible defaults
 settings = 
   static: {maxAge: 30 * 24 * 60 * 60 * 1000}  # cache static assets in the browser for 30 days
+  secure: false  # allow setting of the 'secure' cookie attribute when using SSL - see https://github.com/socketstream/socketstream/issues/349
 
 # Create new Connect app instance which can be accessed from your app.js file with ss.http.middleware
 app = connect()
@@ -55,7 +56,7 @@ module.exports = (root) ->
     .use(connect.cookieParser('SocketStream'))
     .use(connect.favicon(staticPath + '/favicon.ico'))
     .use(connect.session(
-      cookie: { path: '/', httpOnly: false, maxAge: sessionOptions.maxAge },
+      cookie: { path: '/', httpOnly: false, maxAge: sessionOptions.maxAge, secure: settings.secure },
       store: sessionStore
     ))
     
