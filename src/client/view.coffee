@@ -94,6 +94,10 @@ module.exports = (ss, client, options, cb) ->
 
   # Output HTML
   htmlOptions = {headers: includes.join(''), compress: options.packedAssets, filename: client.paths.view}
+
+  if options.locals
+    htmlOptions.locals = options.locals
+    
   asset.html(client.paths.view, htmlOptions, cb)
 
 

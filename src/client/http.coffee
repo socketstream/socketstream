@@ -21,7 +21,7 @@ res = http.ServerResponse.prototype
 module.exports = (ss, clients, options) ->
 
   # Append the 'serveClient' method to the HTTP Response object
-  res.serveClient = (name) ->
+  res.serveClient = (name, locals) ->
 
     self = this
 
@@ -32,6 +32,9 @@ module.exports = (ss, clients, options) ->
       })
       self.end(html)
 
+    if typeof(locals) == 'object'
+      options.locals = locals  
+    
     try
 
       client = typeof(name) == 'string' && clients[name]
