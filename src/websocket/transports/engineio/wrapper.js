@@ -8,7 +8,7 @@ module.exports = function(serverStatus, message, config){
     config = { 
         secure  : document.location.protocol === "https:"
       , host    : document.location.hostname
-      , port    : document.location.protocol === "https:" ? 443 : document.location.port
+      , port    : document.location.port
     };
   }
 

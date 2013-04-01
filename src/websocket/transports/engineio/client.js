@@ -449,7 +449,7 @@ function Socket (opts) {
   opts = opts || {};
   this.secure = null != opts.secure ? opts.secure : (global.location && 'https:' == location.protocol);
   this.host = opts.host || opts.hostname || (global.location ? location.hostname : 'localhost');
-  this.port = opts.port || (global.location && location.port ? location.port : (this.secure ? 443 : 80));
+  this.port = opts.port || (global.location && location.port ? location.port : '');
   this.query = opts.query || {};
   this.query.uid = rnd();
   this.upgrade = false !== opts.upgrade;
