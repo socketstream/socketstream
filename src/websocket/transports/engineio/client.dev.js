@@ -581,7 +581,7 @@ function Socket (opts) {
   this.timestampParam = opts.timestampParam || 't';
   this.timestampRequests = !!opts.timestampRequests;
   this.flashPath = opts.flashPath || '';
-  this.transports = opts.transports || ['polling', 'websocket', 'flashsocket'];
+  this.transports = opts.transports || ['polling', 'websocket'];
   this.readyState = '';
   this.writeBuffer = [];
   this.policyPort = opts.policyPort || 843;
