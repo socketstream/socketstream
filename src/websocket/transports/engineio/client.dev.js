@@ -434,7 +434,7 @@ exports.encodePacket = function (packet) {
 exports.decodePacket = function (data) {
   var type = data.charAt(0);
 
-  if (Number(type) !== type || !packetslist[type]) {
+  if (isNaN(Number(type)) || !packetslist[type]) {
     return err;
   }
 
