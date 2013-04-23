@@ -73,6 +73,9 @@ exports.generate = (program) ->
       cp("/client/views/app.minimal.#{viewExtension}", "/client/views/app.#{viewExtension}")
       cp("/client/code/app/app.minimal.#{codeExtension}", "/client/code/app/app.#{codeExtension}")
       cp("/client/css/app.minimal.styl", "/client/css/app.styl")
+      cp("/server/rpc/.gitkeep")
+      cp("/server/middleware/.gitkeep")
+      cp("/client/templates/.gitkeep")
       clientFiles.css.push('app.styl')
     else
       cp('/client/static/images/logo.png')
