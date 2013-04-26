@@ -39,9 +39,9 @@ SocketStream is MIT licensed.
 
 ### Status
 
-SocketStream 0.3 is now stable enough for production use internally (behind a firewall). Several pioneering users are successfully hosting external apps in production, though we ask you to use caution and appreciate that SocketStream is new software which has yet to be battle hardened.
+SocketStream 0.3 is now stable enough for production use internally (behind a firewall). Several pioneering users are successfully hosting external apps in production, though we ask you to use caution and appreciate that SocketStream is new software which has yet to be battle hardened. SocketStream 0.3 will continue to be updated with bug fixes and minor feature enhancements.
 
-SocketStream 0.3 will continue to be updated with bug fixes and minor feature enhancements. All major development work and mad science experimentation (particularly around Node Streams) is going on in [SocketStream 0.4](https://github.com/socketstream/socketstream-0.4) which will build upon the features and ideas in 0.3.
+All major development work is going on in [SocketStream 0.4](https://github.com/socketstream/socketstream-0.4) which builds upon the features and ideas in 0.3. Thanks to a new modular approach, SocketStream 0.4 will provide the initial ease of an integrated web framework with the flexibility of small modules that do one thing well. [Read more](https://gist.github.com/socketstream/5461356).
 
 
 ### Contact
@@ -316,11 +316,6 @@ Back end scaling has yet to be properly documented, but we're keen to continue l
 * [LXJS, Lisbon, September 2012](http://www.youtube.com/watch?v=LOS1lpWXphs)
 * [RealtimeConf, Portland, October 2012](http://2012.realtimeconf.com/video/owen-barnes)
 * [QCon, San Francisco, November 2012](http://www.infoq.com/presentations/SocketStream)
-
-### Upcoming Speaking Events
-
-* [Realtime Meetup, London, 13th March 2013](http://www.meetup.com/XMPP-UK-Meetup/events/92855262)
-* [RealtimeConf EU, Lyon, 22nd-23rd April 2013](http://realtimeconf.eu)
 
 
 ### Developing on the SocketStream core
