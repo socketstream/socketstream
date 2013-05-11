@@ -33,7 +33,7 @@ module.exports = (ss, options) ->
 
   js: (path, opts, cb) ->
     loadFile options.dirs.code, path, 'js', opts, (output) ->
-      output = opts.nomodule ? output : wrapCode(output, path, opts.pathPrefix)
+      output = if options.nomodule then output else wrapCode(output, path, opts.pathPrefix)
       output = minifyJSFile(output, path) if opts.compress && !path.indexOf('.min') >= 0
       cb(output)
 
