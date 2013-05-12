@@ -59,7 +59,7 @@ You don't necessarily have to send all modules to the browser at once, you can a
 
 To disable automatically packaging client side code into modules, put the following in your `app.js` code:
 
-	ss.client.set({nomodule: true})
+	ss.client.set({module: false})
 
 ### Background info
 
