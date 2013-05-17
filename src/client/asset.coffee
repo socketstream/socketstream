@@ -34,7 +34,7 @@ module.exports = (ss, options) ->
   js: (path, opts, cb) ->
     loadFile options.dirs.code, path, 'js', opts, (output) ->
       pathAry = path.split('/')	
-      output = if options.module is false and 'entry.js' not in pathAry and 'system' not in pathAry then output else wrapCode(output, pathAry, opts.pathPrefix)
+      output = if options.module is false and 'entry.js' not in pathAry and 'system' not in pathAry and 'shared' not in pathAry then output else wrapCode(output, pathAry, opts.pathPrefix)
       output = minifyJSFile(output, path) if opts.compress && !path.indexOf('.min') >= 0
       cb(output)
 
