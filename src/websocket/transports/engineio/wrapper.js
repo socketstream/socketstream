@@ -76,6 +76,7 @@ module.exports = function(serverStatus, message, config){
 
       var attemptReconnect = function(time){
         setTimeout(function(){
+          var ss = require('socketstream');
           ss.assignTransport(config);
           if (ss.server.event != "reconnect") {
             reconnectionTimeout *= 1.5;
