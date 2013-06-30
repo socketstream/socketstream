@@ -30,8 +30,7 @@
     "connect":          "= 2.4.5",
     "connect-redis":    "= 1.4.4",
     "chokidar":         "= 0.4.0",
-    "engine.io":        "= 0.3.10",
-    "connect-gzip":     "= 0.1.6"
+    "engine.io":        "= 0.3.10"
   },
   "devDependencies": {
     "coffee-script":    "= 1.3.3",

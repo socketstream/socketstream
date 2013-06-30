@@ -7,7 +7,6 @@ fs = require('fs')
 pathlib = require('path')
 existslib = process.version.split('.')[1] == '6' && require('path') || require('fs')
 connect = require('connect')
-gzip    = require('connect-gzip')
 
 fileUtils = require('../utils/file')
 router = new (require('./router').Router)
@@ -67,7 +66,8 @@ module.exports = (root) ->
     # Finally ensure static asset serving is last
     app
     .use(eventMiddleware)
-    .use(gzip.staticGzip(staticPath, settings.static))
+    .use(connect.static(staticPath, settings.static))
+    .use(connect.compress)
 
     app
 
