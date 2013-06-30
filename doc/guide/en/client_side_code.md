@@ -11,7 +11,6 @@ Client-side code lives in `/client/code`. Create as many subdirectories as you w
 
 Top tip: Type `require.modules` in the browser console to see a list of all modules you can `require()` in your app
 
-
 ### Special Exceptions
 
 While we try to keep the experience between browser and server as similar as possible, there are a few special cases to be aware of:
@@ -56,6 +55,11 @@ You'll see an error in the browser's console. In the future SocketStream will be
 
 You don't necessarily have to send all modules to the browser at once, you can also [load them on demand](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/loading_assets_on_demand.md).
 
+### Options
+
+To disable automatically packaging client side code into modules, put the following in your `app.js` code:
+
+	ss.client.set({module: false})
 
 ### Background info
 

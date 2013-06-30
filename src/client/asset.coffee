@@ -33,7 +33,8 @@ module.exports = (ss, options) ->
 
   js: (path, opts, cb) ->
     loadFile options.dirs.code, path, 'js', opts, (output) ->
-      output = wrapCode(output, path, opts.pathPrefix)
+      pathAry = path.split('/')	
+      output = if options.module is false and 'entry.js' not in pathAry and 'system' not in pathAry and 'shared' not in pathAry then output else wrapCode(output, pathAry, opts.pathPrefix)
       output = minifyJSFile(output, path) if opts.compress && !path.indexOf('.min') >= 0
       cb(output)
 
@@ -65,9 +66,7 @@ minifyJSFile = (originalCode, fileName) ->
 # Before client-side code is sent to the browser any file which is NOT a library (e.g. /client/code/libs)
 # is wrapped in a module wrapper (to keep vars local and allow you to require() one file in another).
 # The 'system' directory is a special case - any module placed in this dir will not have a leading slash
-wrapCode = (code, path, pathPrefix) ->
-  pathAry = path.split('/')
-  
+wrapCode = (code, pathAry, pathPrefix) ->
   # Don't touch the code if it's in a 'libs' directory
   return code if 'libs' in pathAry
 
@@ -85,5 +84,5 @@ wrapCode = (code, path, pathPrefix) ->
       if pathPrefix.indexOf('.') > 0
         sp = pathPrefix.split('/'); sp.pop();
         pathPrefix = sp.join('/')
-      modPath = path.substr(pathPrefix.length+1)
+      modPath = pathAry.join('/').substr(pathPrefix.length+1)
     wrap.module('/' + modPath, code)
