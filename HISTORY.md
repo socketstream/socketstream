@@ -1,3 +1,6 @@
+* Added GZIP compression of static assets
+
+
 0.3.4 / 2013-03-13
 ==================
 
