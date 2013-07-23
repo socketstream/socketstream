@@ -66,6 +66,7 @@ module.exports = (root) ->
     # Finally ensure static asset serving is last
     app
     .use(eventMiddleware)
+    .use(connect.compress())
     .use(connect.static(staticPath, settings.static))
 
     app
