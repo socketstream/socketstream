@@ -1,6 +1,7 @@
 // Engine.IO server-side wrapper
 
 var fs = require('fs'),
+    qs = require('querystring'),
     engine = require('engine.io');
 
 var openSocketsById = {};
@@ -95,6 +96,7 @@ module.exports = function(ss, messageEmitter, httpServer, config){
   // Handle incoming connections
   ws.on('connection', function(socket) {
 
+    if (processSession(socket)) {
     // Store this here before it gets cleaned up after the websocket upgrade
     socket.remoteAddress = socket.request.connection.remoteAddress;
 
@@ -104,35 +106,18 @@ module.exports = function(ss, messageEmitter, httpServer, config){
 
     // Allow this connection to be addressed by the socket ID
     openSocketsById[socket.id] = socket;
+    ss.session.find(socket.sessionId, socket.id, function(session){ 
+      socket.send('X|OK');
+    });
 
-    // changed from data
-    socket.on('message', function(msg) {
-
-      var i;
-
-      try {
-        
-        // First parse raw incoming message to get responderId
-        if ( (i = msg.indexOf('|')) > 0) {
-
-          var responderId = msg.substr(0, i),
-                  content = msg.substr(i+1);
-        
-        } else { throw('Message does not contain a responderId');}
-
-        // If this responderId is 'X', assume this is a system message
-        if (responderId === 'X') {
-
-          // Set the sessionId against this socket and tell the client we're ready for requests
-          var rawSessionId = content.split('.')[0];
-          socket.sessionId = rawSessionId.split(':')[1].replace(/\s/g, '+');
-          
-          ss.session.find(socket.sessionId, socket.id, function(session){
-            socket.send('X|OK');
-          });
-
-        // Otherwise go ahead and process a regular incoming message
-        } else if (socket.sessionId) {
+      // changed from data
+      socket.on('message', function(msg) {
+        try {
+          var i,responderId,content;
+          if ( (i = msg.indexOf('|')) > 0) {
+            responderId = msg.substr(0, i);
+            content = msg.substr(i+1);
+          } else { throw('Message does not contain a responderId');}
 
           var meta = {socketId: socket.id, sessionId: socket.sessionId, clientIp: socket.remoteAddress, transport: 'engineio'}
 
@@ -141,20 +126,17 @@ module.exports = function(ss, messageEmitter, httpServer, config){
           messageEmitter.emit(responderId, content, meta, function(data){
             return socket.send(responderId + '|' + data);
           });
-        
         }
+        catch (e) {
+          console.log('Invalid websocket message received:', msg);
+        }
+      });
 
-      } catch (e) {
-        console.log('Invalid websocket message received:', msg);
-      }
-
-    });
-
-    // If the browser disconnects, remove this connection from openSocketsById
-    socket.on('close', function() {
-      if(openSocketsById[socket.id]) delete openSocketsById[socket.id];
-    });
-
+      // If the browser disconnects, remove this connection from openSocketsById
+      socket.on('close', function() {
+        if(openSocketsById[socket.id]) delete openSocketsById[socket.id];
+      });
+    }
   });
 
   // Return API for sending events
@@ -186,3 +168,24 @@ module.exports = function(ss, messageEmitter, httpServer, config){
     }
   }
 }
+
+var processSession = function(socket) {
+  try {
+    var rawCookie;
+    if(socket.upgraded) {
+      rawCookie = socket.transport.socket.upgradeReq.cookie;
+    }
+    else {
+      rawCookie = socket.transport.request.headers.cookie;
+    }
+    var cookie = qs.parse(rawCookie, "; ");
+    var sessionId = cookie['connect.sid'].split('.')[0];
+    var unsignedSessionId = sessionId.split(':')[1].replace(/\s/g, "+");
+    socket.sessionId = unsignedSessionId;
+    return true;
+  }
+  catch(e) {
+    console.log('Warning: connect.sid session cookie not detected. User may have cookies disabled or session cookie has expired');
+    return false;
+  }
+};
