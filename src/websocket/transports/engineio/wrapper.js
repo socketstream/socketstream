@@ -4,7 +4,7 @@ var reconnectionTimeout = 1000;
 
 module.exports = function(serverStatus, message, config){
 
-  if (Object.keys(config).length === 0) {
+  if (JSON.stringify(config) === '{}') {
     config = { 
         secure  : document.location.protocol === "https:"
       , host    : document.location.hostname
