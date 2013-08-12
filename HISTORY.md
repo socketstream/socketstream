@@ -1,4 +1,15 @@
+0.3.5 / 2013-08-13
+==================
+
+* Fixed a bug with the Websocket transport wrapper working in Internet Explorer 8
+* Fixed a bug where Symlinked directories in client/static/ were not resolved correctly (thanks wrouesnel)
 * Added GZIP compression of static assets
+* Fixed a bug where client-side socket reconnect prints an error if there is no window.ss (thanks krsch)
+* Improved getting x-forwarded-for from socket (Owen Barnes)
+* Fixed a bug with the app generator not including some required directories (thanks burninggramma)
+* Allow setting of "secure" cookie attribute when using HTTPS
+* Set correct clientIp when XFF header is present (thanks SkareCrow)
+
 
 
 0.3.4 / 2013-03-13
