@@ -320,16 +320,12 @@ Back end scaling has yet to be properly documented, but we're keen to continue l
 
 ### Developing on the SocketStream core
 
-SocketStream 0.3 is primarily written in CoffeeScript which is 'pre-compiled' into JavaScript using `make build`. If you're actively developing on the code make sure you install the dev dependencies first (just clone the project and type `sudo npm link`).
+SocketStream (up to 0.3.5) was primarily written in CoffeeScript, and was 'pre-compiled' into JavaScript using `make build`. From 0.3.6, SocketStream is now written in Javascript.
 
-To avoid having to continually type `make build` every time you make a change, pass the `SS_DEV=1` environment variable when running your SocketStream app:
+We are moving towards linting all of the code in the lib directory with JSHint. There is a Grunt task to help with this process. First, install the grunt-cli module (based on instructions here: http://gruntjs.com/getting-started), and then you can run the following commands:
 
-    $ SS_DEV=1 node app.js
-
-This instructs your app to run the CoffeeScript code in `<socketstream_root>/src` directly, so you only need to restart the server to see your changes.
-
-**Note: SocketStream 0.4 will be written in vanilla JavaScript.** Follow @socketstream to be the first to know when it's available on Github
-
+    grunt jshint:server
+    grunt jshint:client
 
 ### Recommended alternatives to SocketStream
 
