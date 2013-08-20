@@ -20,12 +20,6 @@ Before you can contribute to SocketStream, you need to install or configure the 
 * Git - control version system ([GitHub istalling guide](http://help.github.com/mac-git-installation))
 * [Node.js](http://nodejs.org/), usually we use latest version of Node.js, but it's alwas better to check the current version in the [package.json](https://github.com/socketstream/socketstream/blob/master/package.json).
 
-* [Grunt](http://gruntjs.com/), we use Grunt as our linting and testing system. Please, install the grunt command-line tool globally with:
-```
-sudo npm install -g grunt-cli
-```
-
-
 ### Working with source code
 
 * [Fork](http://help.github.com/forking) the main [SocketStream repository](https://github.com/socketstream/socketstream.git)
