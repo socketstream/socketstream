@@ -21,42 +21,41 @@ Before you can contribute to SocketStream, you need to install or configure the 
 * [Node.js](http://nodejs.org/), usually we use latest version of Node.js, but it's alwas better to check the current version in the [package.json](https://github.com/socketstream/socketstream/blob/master/package.json).
 
 * [Grunt](http://gruntjs.com/), we use Grunt as our linting and testing system. Please, install the grunt command-line tool globally with:
-
 ```
 sudo npm install -g grunt-cli
 ```
 
 
 ### Working with source code
-* [Fork](http://help.github.com/forking) the main [SocketStream repository](https://github.com/socketstream/socketstream.git)
-* Clone your (forked) Github repository:
 
+* [Fork](http://help.github.com/forking) the main [SocketStream repository](https://github.com/socketstream/socketstream.git)
+
+* Clone your (forked) Github repository:
 ```
 git clone git@github.com:<github username>/socketstream.git
 ```
-* Go to project repository
 
+* Go to project repository
 ```
 cd socketstream
 ```
-* Add the main SocketStream repository as an upstream remote to your repository
 
+* Add the main SocketStream repository as an upstream remote to your repository
 ```
  git remote add upstream https://github.com/socketstream/socketstream.git
 ```
 
 * Install ```npm``` dependencies
-
 ```
 npm install
 ```
+
 * Make some code changes and run Grunt tasks to make sure your code passed required tests:
 ```
 grunt
 ```
 
 * You can also run specific tasks separately, to see all available tasks run:
-
 ```
 grunt --help
 ...
@@ -70,26 +69,22 @@ Available tasks
 ### Submitting Your Changes
 
 * Create and checkout a new branch off the master branch for your changes:
-
 ```
 git checkout -b new-stuff-branch master
 ```
 
 * Make sure your changes passed the tests:
-
 ```
 grunt
 ```
 
 * Commit your changes with descriptive commit message, please describe what you have done as detailed as possible
-
 ```
 git add -A
 git commit
 ```
 
 * Push your branch to Github:
-
 ```
 git push origin new-stuff-branch
 ```
@@ -97,11 +92,11 @@ git push origin new-stuff-branch
 * Create a [pull request](https://help.github.com/articles/creating-a-pull-request)
 
 * Once your patch is reviewed and merged, please delete your branch and pull yours and master changes from the main (upstream - [SocketStream](https://github.com/socketstream/socketstream.git)) repository:
-
 ```
 git push origin :new-stuff-branch
 git checkout master
 git branch -D new-stuff-branch
 git pull --ff upstream master
 ```
+
 You are all set! Thank you for your contribution!
