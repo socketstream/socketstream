@@ -3,8 +3,8 @@
 module.exports = function(grunt) {
     "use strict";
 
-    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-mocha-test');
 
     // Project configuration.
     grunt.initConfig({
@@ -32,6 +32,7 @@ module.exports = function(grunt) {
                 files: {
                     src: [
                         'Gruntfile.js',
+                        'test/**/*.js',
                         'lib/**/*.js'
                     ]
                 }
@@ -47,13 +48,19 @@ module.exports = function(grunt) {
                         'lib/client/system/**/*.js'
                     ]
                 }
+            },
+            test: {
+                files: {
+                    src: [
+                        'test/**/*.js'
+                    ]
+                }
             }
         },
         mochaTest: {
             server: {
                 src: [
-                    'test/server/config.test.js',
-                    'test/server/server.test.js'
+                    'test/unit/**/*.test.js',
                 ],
                 options: {
                 }
@@ -61,5 +68,6 @@ module.exports = function(grunt) {
         }
     });
 
-    grunt.registerTask('default', 'Perform ./lib directory linting', ['jshint']);
-};
+    grunt.registerTask('default', 'Default task which runs all the required subtasks', ['jshint', 'test']);
+    grunt.registerTask('test', 'Test everything', ['mochaTest']);
+}
