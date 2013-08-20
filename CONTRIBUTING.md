@@ -88,7 +88,15 @@ git add -A
 git commit
 ```
 
-* Once the patch is reviewed and merged, please delete your branch and pull yours and master changes from the main (upstream - [SocketStream](https://github.com/socketstream/socketstream.git)) repository:
+* Push your branch to Github:
+
+```
+git push origin new-stuff-branch
+```
+
+* Create a [pull request](https://help.github.com/articles/creating-a-pull-request)
+
+* Once your patch is reviewed and merged, please delete your branch and pull yours and master changes from the main (upstream - [SocketStream](https://github.com/socketstream/socketstream.git)) repository:
 
 ```
 git push origin :new-stuff-branch
