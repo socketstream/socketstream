@@ -4,7 +4,7 @@ var path = require('path'),
     UniqueSet = require( path.join(process.env.PWD, 'lib/utils/unique_set') ).UniqueSet,
     set;
 
-describe('Unqiue Set', function() {
+describe('Unique Set', function() {
   beforeEach(function(done) {
     set = new UniqueSet;
     done();
