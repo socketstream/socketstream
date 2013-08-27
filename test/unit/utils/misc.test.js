@@ -3,53 +3,72 @@
 var path = require('path'),
     misc = require(path.join(process.env.PWD, 'lib/utils/misc'));
 
-describe('Extend', function() {
+exports.Extend ={
+    'should do nothing with a single argument': function(test) {
+      var one = { a: 1, b: 2, c: 3 };
 
-  it('should do nothing with a single argument', function() {
-    var one = { a: 1, b: 2, c: 3 };
+      misc.extend(one);
 
-    misc.extend(one);
-    one.a.should.equal(1);
-    one.b.should.equal(2);
-    one.c.should.equal(3);
-  });
+      test.expect(3);
+      test.strictEqual( one.a, 1 );
+      test.strictEqual( one.b, 2 );
+      test.strictEqual( one.c, 3 );
 
-  it('should merge two objects', function() {
-    var one = {a: 1, b: 2, c: 3},
-        two = {b: 22};
+      test.done();
+    },
 
-    misc.extend(one, two);
-    one.b.should.equal(22);
-  });
+    'should merge two objects': function(test) {
+      var one = {a: 1, b: 2, c: 3},
+          two = {b: 22};
 
-  it('should merge three objects', function() {
-    var one   = {a: 1, b: 2, c: 3},
-        two   = {b: 22},
-        three = {c: 33};
+      misc.extend(one, two);
 
-    misc.extend(one, two, three);
-    one.b.should.equal(22);
-    one.c.should.equal(33);
-  });
+      test.expect(1);
+      test.strictEqual( one.b, 22 );
 
-  it('should give priority to the last argument', function() {
-    var one   = {a: 1, b: 2, c: 3},
-        two   = {b: 22, c: 33},
-        three = {c: 333};
+      test.done();
+    },
 
-    misc.extend(one, two, three);
-    one.b.should.equal(22);
-    one.c.should.equal(333);
-  });
-});
+    'should merge three objects': function(test) {
+      var one   = {a: 1, b: 2, c: 3},
+          two   = {b: 22},
+          three = {c: 33};
 
-describe('Defaults', function() {
-  it('should only be used for undeclared parameters', function() {
+      misc.extend(one, two, three);
+
+      test.expect(2);
+      test.strictEqual( one.b, 22 );
+      test.strictEqual( one.c, 33 );
+
+      test.done();
+    },
+
+    'should give priority to the last argument': function(test) {
+      var one   = {a: 1, b: 2, c: 3},
+          two   = {b: 22, c: 33},
+          three = {c: 333};
+
+      misc.extend(one, two, three);
+
+      test.expect(2);
+      test.strictEqual( one.b, 22 );
+      test.strictEqual( one.c, 333 );
+
+      test.done();
+    }
+}
+
+
+exports.Defaults = {
+  'should only be used for undeclared parameters': function(test) {
     var args    = {a: 1},
         newArgs = misc.defaults(args, {a: 11, b: 22, c: 33});
 
-    newArgs.a.should.equal(1);
-    newArgs.b.should.equal(22);
-    newArgs.c.should.equal(33);
-  });
-});
+    test.expect(3);
+    test.strictEqual( newArgs.a, 1 );
+    test.strictEqual( newArgs.b, 22 );
+    test.strictEqual( newArgs.c, 33 );
+
+    test.done();
+  }
+}
