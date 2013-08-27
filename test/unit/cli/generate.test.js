@@ -1,13 +1,15 @@
 'use strict';
 
-var exec          = require('child_process').exec,
-    fs            = require('fs'),
-    path          = require('path'),
-    generate      = require(path.join(process.env.PWD, 'lib/cli/generate')),
-    demoAppEndDir = 'test/results/waaa',
-    demoAppPath   = path.join(process.env.PWD, demoAppEndDir),
-    program       = {},
-    logs          = [];
+    var exec                             = require('child_process').exec,
+    fs                                   = require('fs'),
+    path                                 = require('path'),
+    async                                = require('async'),
+    generate                             = require(path.join(process.env.PWD, 'lib/cli/generate')),
+    demoAppEndDir                        = 'test/results/waaa',
+    demoAppPath                          = path.join(process.env.PWD, demoAppEndDir),
+    program                              = {},
+    logs                                 = [],
+    newProjectDirectoriesThatShouldExist = [];
 
 /**
  * Executes a child process to forcefully remove
@@ -62,10 +64,27 @@ function hookLog() {
 
 exports.generate = {
   setUp: function(done) {
-    logs = [];
+    logs    = [];
     program = {
       args: ['new', demoAppEndDir]
     };
+    newProjectDirectoriesThatShouldExist = [
+      demoAppEndDir,
+      path.join(demoAppPath, '/client'),
+      path.join(demoAppPath, '/client/code'),
+      path.join(demoAppPath, '/client/code/app'),
+      path.join(demoAppPath, '/client/code/libs'),
+      path.join(demoAppPath, '/client/views'),
+      path.join(demoAppPath, '/client/css'),
+      path.join(demoAppPath, '/client/css/libs'),
+      path.join(demoAppPath, '/client/templates'),
+      path.join(demoAppPath, '/client/static'),
+      path.join(demoAppPath, '/client/static/images'),
+      path.join(demoAppPath, '/server'),
+      path.join(demoAppPath, '/server/rpc'),
+      path.join(demoAppPath, '/server/middleware')
+    ];
+
     removeDirectoryIfExists(demoAppPath, done);
 
   },
@@ -78,9 +97,10 @@ exports.generate = {
     test.expect(1);
     generate.generate(program);
 
+    /* Using 'async' library to check if all the required project's folders are exist */
+    async.reject(newProjectDirectoriesThatShouldExist, fs.exists, function(result){
+      test.strictEqual( result.length, 0, 'Next required folders are not exist: "' + result.join('", "') + '"');
 
-    fs.exists(demoAppPath, function(exist){
-      test.ok(exist, "A directory that should exist does not.");
       test.done();
     });
   },

@@ -38,7 +38,8 @@
     "grunt":                  "= 0.4.1",
     "grunt-cli":              "= 0.1.9",
     "grunt-contrib-jshint":   "= 0.6.3",
-    "grunt-contrib-nodeunit": "=0.2.0"
+    "grunt-contrib-nodeunit": "= 0.2.0",
+    "async":                  "= 0.2.9"
   },
   "scripts": {
     "test": "grunt test"
