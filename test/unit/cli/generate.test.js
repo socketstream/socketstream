@@ -90,7 +90,7 @@ exports.generate = {
 
     fs.mkdir(demoAppPath, function(err) {
 
-      var unHookLog = hookLog(); // creating un hook function for console.log
+      var unHookLog = hookLog(); // creating a hook function for console.log
       generate.generate(program);
       unHookLog();
 
