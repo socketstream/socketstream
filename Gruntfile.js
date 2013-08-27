@@ -4,9 +4,9 @@ module.exports = function(grunt) {
     "use strict";
 
     grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-mocha-test');
+    grunt.loadNpmTasks('grunt-contrib-nodeunit');
 
-    // Project configuration.
+    /* Project configuration */
     grunt.initConfig({
         jshint: {
             options: {
@@ -50,24 +50,25 @@ module.exports = function(grunt) {
                 }
             },
             test: {
+                options: {
+                    ignores: ['test/fixtures']
+                },
                 files: {
                     src: [
-                        'test/**/*.js'
+                        'test/unit/**/*.js'
                     ]
                 }
             }
         },
-        mochaTest: {
-            server: {
-                src: [
-                    'test/unit/**/*.test.js',
-                ],
-                options: {
-                }
+        nodeunit: {
+            src: [
+                'test/unit/**/*.test.js',
+            ],
+            options: {
             }
         }
     });
 
     grunt.registerTask('default', 'Default task which runs all the required subtasks', ['jshint', 'test']);
-    grunt.registerTask('test', 'Test everything', ['mochaTest']);
+    grunt.registerTask('test', 'Test everything', ['nodeunit']);
 }
