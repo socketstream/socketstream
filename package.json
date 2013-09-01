@@ -30,7 +30,7 @@
     "connect":              "= 2.4.5",
     "connect-redis":        "= 1.4.4",
     "chokidar":             "= 0.4.0",
-    "engine.io":            "= 0.3.10"
+    "engine.io":            "= 0.7.9"
   },
   "devDependencies": {
     "mocha":                "= 1.2.1",
