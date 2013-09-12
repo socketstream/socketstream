@@ -1,0 +1,38 @@
+{
+    "bitwise"  : true,
+    "curly"    : true,
+    "eqeqeq"   : true,
+    "forin"    : true,
+    "immed"    : true,
+    "latedef"  : true,
+    "newcap"   : true,
+    "noarg"    : true,
+    "noempty"  : true,
+    "nonew"    : true,
+    "regexp"   : true,
+    "undef"    : true,
+    "strict"   : true,
+    "trailing" : true,
+    "asi"      : true,
+    "laxcomma" : true,
+    "loopfunc" : false,
+    "sub"      : true,
+    "supernew" : true,
+    "node"     : true,
+    "onevar"   : true,
+    "unused"   : true,
+    "multistr" : true,
+    "smarttabs": true,
+    "globals"  :
+    {
+        "it"         : false,
+        "xit"        : false,
+        "describe"   : false,
+        "xdescribe"  : false,
+        "before"     : false,
+        "after"      : false,
+        "afterEach"  : false,
+        "beforeEach" : false,
+        "spyOn"      : false
+    }
+}

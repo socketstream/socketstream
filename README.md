@@ -2,7 +2,7 @@
 
 # SocketStream
 
-_Latest release: 0.3.4 ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))_
+_Latest release: 0.3.5 ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))_
 
 A fast, modular Node.js web framework dedicated to building single-page realtime apps
 
@@ -39,9 +39,9 @@ SocketStream is MIT licensed.
 
 ### Status
 
-SocketStream 0.3 is now stable enough for production use internally (behind a firewall). Several pioneering users are successfully hosting external apps in production, though we ask you to use caution and appreciate that SocketStream is new software which has yet to be battle hardened.
+SocketStream 0.3 is now stable enough for production use internally (behind a firewall). Several pioneering users are successfully hosting external apps in production, though we ask you to use caution and appreciate that SocketStream is new software which has yet to be battle hardened. SocketStream 0.3 will continue to be updated with bug fixes and minor feature enhancements.
 
-SocketStream 0.3 will continue to be updated with bug fixes and minor feature enhancements. All major development work and mad science experimentation (particularly around Node Streams) is going on in [SocketStream 0.4](https://github.com/socketstream/socketstream-0.4) which will build upon the features and ideas in 0.3.
+All major development work is going on in [SocketStream 0.4](https://github.com/socketstream/socketstream-0.4) which builds upon the features and ideas in 0.3. Thanks to a new modular approach, SocketStream 0.4 will provide the initial ease of an integrated web framework with the flexibility of small modules that do one thing well. [Read more](https://gist.github.com/socketstream/5461356).
 
 
 ### Contact
@@ -317,24 +317,15 @@ Back end scaling has yet to be properly documented, but we're keen to continue l
 * [RealtimeConf, Portland, October 2012](http://2012.realtimeconf.com/video/owen-barnes)
 * [QCon, San Francisco, November 2012](http://www.infoq.com/presentations/SocketStream)
 
-### Upcoming Speaking Events
-
-* [Realtime Meetup, London, 13th March 2013](http://www.meetup.com/XMPP-UK-Meetup/events/92855262)
-* [RealtimeConf EU, Lyon, 22nd-23rd April 2013](http://realtimeconf.eu)
-
 
 ### Developing on the SocketStream core
 
-SocketStream 0.3 is primarily written in CoffeeScript which is 'pre-compiled' into JavaScript using `make build`. If you're actively developing on the code make sure you install the dev dependencies first (just clone the project and type `sudo npm link`).
+SocketStream (up to 0.3.5) was primarily written in CoffeeScript, and was 'pre-compiled' into JavaScript using `make build`. From 0.3.6, SocketStream is now written in Javascript.
 
-To avoid having to continually type `make build` every time you make a change, pass the `SS_DEV=1` environment variable when running your SocketStream app:
+We are moving towards linting all of the code in the lib directory with JSHint. There is a Grunt task to help with this process. First, install the grunt-cli module (based on instructions here: http://gruntjs.com/getting-started), and then you can run the following commands:
 
-    $ SS_DEV=1 node app.js
-
-This instructs your app to run the CoffeeScript code in `<socketstream_root>/src` directly, so you only need to restart the server to see your changes.
-
-**Note: SocketStream 0.4 will be written in vanilla JavaScript.** Follow @socketstream to be the first to know when it's available on Github
-
+    grunt jshint:server
+    grunt jshint:client
 
 ### Recommended alternatives to SocketStream
 
