@@ -1,11 +1,12 @@
 ![SocketStream!](https://github.com/socketstream/socketstream/raw/master/new_project/client/static/images/logo.png)
 
-# SocketStream
+# SocketStream [![Build Status](https://api.travis-ci.org/socketstream/socketstream.png?branch=master)](https://travis-ci.org/socketstream/socketstream)
 
 _Latest release: 0.3.5 ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))_
 
 A fast, modular Node.js web framework dedicated to building single-page realtime apps
 
+[Live demo](http://demo.socketstream.org)
 
 ### Introduction
 
