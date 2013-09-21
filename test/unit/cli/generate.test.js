@@ -159,15 +159,120 @@ describe('generate', function () {
 
 
 
-    it('should generate an app with coffeescript files if coffeescript was requested');
+    it('should generate an app with coffeescript files if coffeescript was requested', function (done) {
 
-    it('should raise an error if no name is provided for the app');
+        ac.expect(1);
 
-    it('should generate an app with jade templates if jade was requested');
+        var newProjectFilesThatShouldExistWhenUsingCoffeeScript = [
+            path.join(demoAppPath, '/client/code/app/app.coffee'),
+            path.join(demoAppPath, '/client/code/app/entry.coffee'),
+            path.join(demoAppPath, '/server/middleware/example.coffee'),          
+            path.join(demoAppPath, '/server/rpc/demo.coffee')
+        ];
 
-    it('should generate an app with no demo code, if a minimal app was requested');
+        program.coffee = true;
 
-    it('should generate an app with the repl library, if the repl library was requested');
+        generate.generate(program);
+
+        /* Using 'async' library to check if all the required project's coffeescript files exist */
+        async.reject(newProjectFilesThatShouldExistWhenUsingCoffeeScript, fs.exists, function (result) {
+            result.length.should.equal(0).andCheck();
+            ac.check(done);
+        });
+
+    });
+
+
+
+    it('should raise an error if no name is provided for the app', function (done) {
+
+        ac.expect(2);
+
+        program.args = ['new'];
+
+        var unHookLog = hookLog(); // creating a hook function for console.log
+        generate.generate(program);
+        unHookLog();
+
+        logs.length.should.equal(1).andCheck();
+        logs[0].toString().should.equal('Please provide a name for your application: $> socketstream new <MyAppName>')
+        .andCheck();
+
+        ac.check(done);
+
+    });
+
+
+
+    it('should generate an app with jade templates if jade was requested', function (done) {
+
+        ac.expect(1);
+
+        var newProjectFilesThatShouldExistWhenUsingJade = [
+            path.join(demoAppPath, '/client/templates/chat/message.jade'),
+            path.join(demoAppPath, '/client/views/app.jade')
+        ];
+
+        program.jade = true;
+
+        generate.generate(program);
+
+        /* Using 'async' library to check if all the required project's coffeescript files exist */
+        async.reject(newProjectFilesThatShouldExistWhenUsingJade, fs.exists, function (result) {
+            result.length.should.equal(0).andCheck();
+            ac.check(done);
+        });        
+
+    });
+
+
+
+    it('should generate an app with no demo code, if a minimal app was requested', function (done) {
+        
+        ac.expect(1);
+
+        var newProjectFilesThatBelongToDemo = [
+            path.join(demoAppPath, '/client/static/images/logo.png'),
+            path.join(demoAppPath, '/server/middleware/example.js'),
+            path.join(demoAppPath, '/server/rpc/demo.js'),
+            path.join(demoAppPath, '/client/css/libs/reset.css'),
+            path.join(demoAppPath, '/client/templates/chat/message.html')
+        ];
+
+        program.minimal = true;
+
+        generate.generate(program);
+
+        /* Using 'async' library to check if all the required project's coffeescript files exist */
+        async.reject(newProjectFilesThatBelongToDemo, fs.exists, function (result) {
+            result.length.should.equal(newProjectFilesThatBelongToDemo.length).andCheck();
+            ac.check(done);
+        });
+
+    });
+
+
+
+    it('should generate an app with the ss-console library, if the repl library was requested', function (done) {
+
+        ac.expect(5);
+
+        program.repl = true;
+
+        generate.generate(program);
+
+        fs.readFile(path.join(demoAppPath,'/app.js'), 'utf-8', function (err, appJsContents) {
+
+            appJsContents.indexOf('// Start Console Server (REPL)').should.not.equal(-1).andCheck();
+            appJsContents.indexOf('// To install client: sudo npm install -g ss-console').should.not.equal(-1).andCheck();
+            appJsContents.indexOf('// To connect: ss-console <optional_host_or_port>').should.not.equal(-1).andCheck();
+            appJsContents.indexOf('var consoleServer = require(\'ss-console\')(ss);').should.not.equal(-1).andCheck();
+            appJsContents.indexOf('consoleServer.listen(5000);').should.not.equal(-1).andCheck();
+            ac.check(done);
+
+        });
+
+    });
 
 
 
