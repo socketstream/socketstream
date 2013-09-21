@@ -1,6 +1,8 @@
 ![SocketStream!](https://github.com/socketstream/socketstream/raw/master/new_project/client/static/images/logo.png)
 
-# SocketStream [![Build Status](https://api.travis-ci.org/socketstream/socketstream.png?branch=master)](https://travis-ci.org/socketstream/socketstream)
+# SocketStream [![Build Status](https://api.travis-ci.org/socketstream/socketstream.png?branch=master)](https://travis-ci.org/socketstream/socketstream) [![Dependency Status](https://david-dm.org/socketstream/socketstream.png)](https://david-dm.org/socketstream/socketstream#info=dependencies) [![devDependency Status](https://david-dm.org/socketstream/socketstream/dev-status.png)](https://david-dm.org/socketstream/socketstream#info=devDependencies)
+
+
 
 _Latest release: 0.3.5 ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))_
 
