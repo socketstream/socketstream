@@ -30,7 +30,7 @@
     "connect":                "= 2.4.5",
     "connect-redis":          "= 1.4.4",
     "chokidar":               "= 0.4.0",
-    "engine.io":              "= 0.3.10"
+    "engine.io":              "= 0.7.9"
   },
   "devDependencies": {
     "mocha":                  "= 1.2.1",
@@ -38,7 +38,7 @@
     "grunt":                  "= 0.4.1",
     "grunt-cli":              "= 0.1.9",
     "grunt-contrib-jshint":   "= 0.6.3",
-    "grunt-contrib-nodeunit": "= 0.2.0",
+    "grunt-mocha-test":       "= 0.2.0",
     "async":                  "= 0.2.9"
   },
   "scripts": {
