@@ -1,3 +1,17 @@
+0.3.6 / 2013-09-27
+==================
+
+* Updated Chokidar to 0.6.3 (fixes #365)
+* Fixed a bug where files were not being copied correctly when running the new app generator (#400)
+* Added some initial tests for the framework
+* Added dependency tracking for Node.js modules (thanks RomanMinkin)
+* Added back the build status via Travis-CI (thanks RomanMinkin)
+* Added fixes for Websockets (thanks polidore)
+* Updated engine.io to 0.7.9 (thanks kkoopa)
+* Added Grunt for running tests and linting (thanks RomanMinkin)
+
+
+
 0.3.5 / 2013-08-13
 ==================
 
