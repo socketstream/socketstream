@@ -166,7 +166,7 @@ describe('generate', function () {
         var newProjectFilesThatShouldExistWhenUsingCoffeeScript = [
             path.join(demoAppPath, '/client/code/app/app.coffee'),
             path.join(demoAppPath, '/client/code/app/entry.coffee'),
-            path.join(demoAppPath, '/server/middleware/example.coffee'),          
+            path.join(demoAppPath, '/server/middleware/example.coffee'),
             path.join(demoAppPath, '/server/rpc/demo.coffee')
         ];
 
@@ -221,7 +221,7 @@ describe('generate', function () {
         async.reject(newProjectFilesThatShouldExistWhenUsingJade, fs.exists, function (result) {
             result.length.should.equal(0).andCheck();
             ac.check(done);
-        });        
+        });
 
     });
 
