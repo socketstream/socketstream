@@ -1,3 +1,9 @@
+0.3.9 / 2013-10-04
+==================
+
+* Attempting to resolve an issue with missing new_project files in the npm published modules #401.
+
+
 0.3.8 / 2013-10-04
 ==================
 
