@@ -1,3 +1,9 @@
+0.3.7 / 2013-10-04
+==================
+
+* Attempting to resolve an issue with missing new_project files in the npm published modules #401.
+* Added some emtyp tests to be completed. 
+
 0.3.6 / 2013-09-27
 ==================
 
