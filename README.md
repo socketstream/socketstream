@@ -4,7 +4,7 @@
 
 
 
-_Latest release: 0.3.9 ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))_
+_Latest release: 0.3.10 ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))_
 
 A fast, modular Node.js web framework dedicated to building single-page realtime apps
 
