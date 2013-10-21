@@ -1,29 +1,18 @@
 'use strict';
 
-
-
-// Dependencies
-//
-var path        = require('path'),
-    ac          = require('../../helpers/assertionCounter'),
-    UniqueSet   = require( path.join(process.env.PWD, 'lib/utils/unique_set') ).UniqueSet,
+var path      = require('path'),
+    ac        = require('../../helpers/assertionCounter'),
+    UniqueSet = require( path.join(process.env.PWD, 'lib/utils/unique_set') ).UniqueSet,
     set;
 
-
-
-describe('Unique Set', function () {
-
-
+describe('lib/utils/unique_set', function () {
 
     beforeEach(function (done) {
 
         ac.reset();
         set = new UniqueSet;
         done();
-
     });
-
-
 
     it('should add elements', function (done) {
 
@@ -36,10 +25,7 @@ describe('Unique Set', function () {
         set.add('tom', null);
         set.members('tom').toString().should.equal('12345').andCheck();
         ac.check(done);
-
     });
-
-
 
     it('should remove an element', function (done) {
 
@@ -58,10 +44,7 @@ describe('Unique Set', function () {
         set.members('tom').length.should.equal(0).andCheck();
 
         ac.check(done);
-
     });
-
-
 
     it('should list keys in a set', function (done) {
 
@@ -76,10 +59,7 @@ describe('Unique Set', function () {
         set.keys().join(',').should.equal('tom,john,paul').andCheck();
 
         ac.check(done);
-
     });
-
-
 
     it('should remove a value across all keys', function (done) {
 
@@ -101,7 +81,5 @@ describe('Unique Set', function () {
         set.members('channel5').join(',').should.equal('').andCheck();
 
         ac.check(done);
-
     });
-
 });
