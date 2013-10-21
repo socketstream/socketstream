@@ -56,6 +56,18 @@ You'll see an error in the browser's console. In the future SocketStream will be
 
 You don't necessarily have to send all modules to the browser at once, you can also [load them on demand](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/loading_assets_on_demand.md).
 
+### Options
+- **browserifyExcludePaths {Array} ** - to disable automatically packaging client side code into modules for certain paths, for example `client/code/app/controllers/**/*.js` and `client/code/app/directives/**/*.js` put the following in your server-side `app.js` code:
+```JavaScript
+ss.client.set({ browserifyExcludePaths: ['app/controllers', 'app/directives'] });
+```
+
+**Note**, that paths for excluding should be relative to `client/code/` and that file `client/code/app/entry.js` could not be excluded in any cases.
+
+If you need to exclude from automatically packaging certain file, just specify the file's relative path:
+```JavaScript
+ss.client.set({ browserifyExcludePaths: ['app/routes.js'] });
+```
 
 ### Background info
 
