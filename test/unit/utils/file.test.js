@@ -116,6 +116,31 @@ describe('lib/utils/file', function () {
 
     });
 
+    describe('.loadPackageJSON()', function () {
+
+        // Used to reset the counters before each test
+        beforeEach(ac.reset);
+
+        it("should SocketStream's package.json file from the root directory", function (done) {
+            var pkg;
+
+            // Used to reset the counters before each test
+            beforeEach(ac.reset);
+
+            ac.expect(2);
+
+            (function() {
+                pkg = fileUtils.loadPackageJSON(testReadDirSync);
+
+            }).should.not.throw();
+
+            pkg.should.be.an.instanceOf(Object).andCheck();
+            pkg.should.have.property('name').equal('socketstream').andCheck();
+
+            ac.check(done);
+        });
+    });
+
     describe('.findExtForBasePath()', function () {
 
         // Used to reset the counters before each test
