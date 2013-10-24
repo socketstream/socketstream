@@ -1,9 +1,8 @@
 'use strict';
 
-
-
 var exec                                  = require('child_process').exec,
     ac                                    = require('../../helpers/assertionCounter'),
+    logHook                               = require('../../helpers/logHook.js'),
     fs                                    = require('fs'),
     path                                  = require('path'),
     async                                 = require('async'),
@@ -13,8 +12,6 @@ var exec                                  = require('child_process').exec,
     program                               = {},
     logs                                  = [],
     newProjectDirectoriesThatShouldExist  = [];
-
-
 
 /**
  * Executes a child process to forcefully remove
@@ -29,8 +26,6 @@ function removeForcefully (dirPath, cb) {
         cb(err);
     });
 }
-
-
 
 /**
  * Executes a child process to forcefully remove
@@ -50,44 +45,18 @@ function removeDirectoryIfExists (dirPath, cb) {
     });
 }
 
-
-
-/**
- * Hooking function for console.log interception
- *
- * @return {function}
- */
-function hookLog () {
-    var _stream   = process.stdout,
-        old_write = _stream.write; // Reference default write method
-
-    /* _stream now write with our shiny function */
-    _stream.write = function(string) {
-        logs.push(string.replace(/\n$/, ''));
-    };
-
-    return function() {
-        /* reset to the default write method */
-        _stream.write = old_write;
-    };
-}
-
-
-
-describe('generate', function () {
-
-
+describe('lib/cli/generate', function () {
 
     beforeEach(function (done) {
 
         ac.reset();
 
         logs    = [];
-        
+
         program = {
           args: ['new', demoAppEndDir]
         };
-        
+
         newProjectDirectoriesThatShouldExist = [
           demoAppEndDir,
           path.join(demoAppPath, '/client'),
@@ -109,19 +78,18 @@ describe('generate', function () {
 
     });
 
-
-
     afterEach(function (done) {
         removeDirectoryIfExists(demoAppPath, done);
     });
-
-
 
     it('should generate an app inside of a folder with a unique name', function (done) {
 
         ac.expect(1);
 
+        /* hide console.log output to make Mocha output clear */
+        logHook.on();
         generate.generate(program);
+        logs = logHook.off();
 
         /* Using 'async' library to check if all the required project's folders exist */
         async.reject(newProjectDirectoriesThatShouldExist, fs.exists, function (result) {
@@ -132,16 +100,16 @@ describe('generate', function () {
     });
 
 
-
     it('should raise an error if the name of the app matches the name of an existing folder', function (done) {
 
         ac.expect(2);
 
         fs.mkdir(demoAppPath, function(err) {
 
-            var unHookLog = hookLog(); // creating a hook function for console.log
+            // Call for hook function for console.log
+            logHook.on();
             generate.generate(program);
-            unHookLog();
+            logs = logHook.off();
 
             logs.length.should.equal(1).andCheck();
             logs[0].toString().should.equal('Sorry the \'' + demoAppEndDir + '\' directory already exists. Please choose another name for your app.')
@@ -152,11 +120,8 @@ describe('generate', function () {
             } else {
                 ac.check(done);
             }
-
         });
-
     });
-
 
 
     it('should generate an app with coffeescript files if coffeescript was requested', function (done) {
@@ -172,17 +137,17 @@ describe('generate', function () {
 
         program.coffee = true;
 
+        /* hide console.log output to make Mocha output clear */
+        logHook.on();
         generate.generate(program);
+        logs = logHook.off();
 
         /* Using 'async' library to check if all the required project's coffeescript files exist */
         async.reject(newProjectFilesThatShouldExistWhenUsingCoffeeScript, fs.exists, function (result) {
             result.length.should.equal(0).andCheck();
             ac.check(done);
         });
-
     });
-
-
 
     it('should raise an error if no name is provided for the app', function (done) {
 
@@ -190,19 +155,17 @@ describe('generate', function () {
 
         program.args = ['new'];
 
-        var unHookLog = hookLog(); // creating a hook function for console.log
+        // Call for hook function for console.log
+        logHook.on();
         generate.generate(program);
-        unHookLog();
+        logs = logHook.off();
 
         logs.length.should.equal(1).andCheck();
         logs[0].toString().should.equal('Please provide a name for your application: $> socketstream new <MyAppName>')
         .andCheck();
 
         ac.check(done);
-
     });
-
-
 
     it('should generate an app with jade templates if jade was requested', function (done) {
 
@@ -215,7 +178,10 @@ describe('generate', function () {
 
         program.jade = true;
 
+        // Call for hook function for console.log
+        logHook.on();
         generate.generate(program);
+        logs = logHook.off();
 
         /* Using 'async' library to check if all the required project's coffeescript files exist */
         async.reject(newProjectFilesThatShouldExistWhenUsingJade, fs.exists, function (result) {
@@ -225,10 +191,8 @@ describe('generate', function () {
 
     });
 
-
-
     it('should generate an app with no demo code, if a minimal app was requested', function (done) {
-        
+
         ac.expect(1);
 
         var newProjectFilesThatBelongToDemo = [
@@ -241,17 +205,17 @@ describe('generate', function () {
 
         program.minimal = true;
 
+        // Call for hook function for console.log
+        logHook.on();
         generate.generate(program);
+        logs = logHook.off();
 
         /* Using 'async' library to check if all the required project's coffeescript files exist */
         async.reject(newProjectFilesThatBelongToDemo, fs.exists, function (result) {
             result.length.should.equal(newProjectFilesThatBelongToDemo.length).andCheck();
             ac.check(done);
         });
-
     });
-
-
 
     it('should generate an app with the ss-console library, if the repl library was requested', function (done) {
 
@@ -259,7 +223,10 @@ describe('generate', function () {
 
         program.repl = true;
 
+        // Call for hook function for console.log
+        logHook.on();
         generate.generate(program);
+        logs = logHook.off();
 
         fs.readFile(path.join(demoAppPath,'/app.js'), 'utf-8', function (err, appJsContents) {
 
@@ -271,9 +238,5 @@ describe('generate', function () {
             ac.check(done);
 
         });
-
     });
-
-
-
 });
