@@ -2,7 +2,7 @@
 
 
 
-describe('index', function () {
+describe('lib/cli/index.js', function () {
 
 
 
