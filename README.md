@@ -330,6 +330,15 @@ We are moving towards linting all of the code in the lib directory with JSHint. 
     grunt jshint:server
     grunt jshint:client
 
+If you run these grunt tasks (at time of writing), you will encounter the following feedback:
+
+    Warning: Task "jshint:server" failed. Use --force to continue.
+
+    Aborted due to warnings.
+
+When SocketStream was written the codebase was not linted. We've decided to use Linting from now in order to enhance the quality of the codebase, but this means that you will see this message shown above, until we've managed to lint the codebase. The warning indicates that there is a lot of work to do.
+
+
 ### Recommended alternatives to SocketStream
 
 We hope you'll find SocketStream is a great fit for your app, but if it's not exactly what you're looking for, consider these alternatives:
