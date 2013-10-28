@@ -6,13 +6,19 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-mocha-test');
 
-    /* Project configuration */
+    /*
+        Project configuration
+        According to https://github.com/gruntjs/grunt-contrib-jshint/pull/24#issuecomment-14976842
+        jshint options could not be merged with .jshintrc
+        so we need to use
+
+        options: grunt.util._.merge({}, grunt.file.readJSON('.jshintrc')),
+
+        to merge the required options
+
+    */
     grunt.initConfig({
         jshint: {
-            options: {
-                jshintrc    : '.jshintrc',
-                jshintignore: '.jshintignore'
-            },
             server: {
                 /*
                    TODO add option "devel: true" for production linting
@@ -24,25 +30,32 @@ module.exports = function(grunt) {
 
                    http://www.jshint.com/docs/options/#devel
                  */
-                options: {
+                options: grunt.util._.merge({
                     ignores: [
-                        'lib/client/system'
+                        'lib/client/system/libs/*',
+                        'lib/client/system/modules/*',
+                        'lib/websocket/transports/engineio/*',
+                        'test/fixtures/project/client/code/libs/*'
                     ]
-                },
+                }, grunt.file.readJSON('.jshintrc')),
                 files: {
                     src: [
                         'Gruntfile.js',
                         'test/**/*.js',
-                        'lib/**/*.js'
+                        'lib/**/*.js',
+                        'lib/websocket/transports/engineio/index.js'
                     ]
                 }
             },
             client: {
-                options: {
+                options: grunt.util._.merge({
                     browser: true,
                     node   : false,
-                    ignores: []
-                },
+                    ignores: [
+                        'lib/client/system/libs/*',
+                        'lib/client/system/index.js'
+                    ]
+                }, grunt.file.readJSON('.jshintrc')),
                 files: {
                     src: [
                         'lib/client/system/**/*.js'
