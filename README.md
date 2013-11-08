@@ -358,11 +358,14 @@ More tests coming soon. Contributions very much appreciated.
 
 ### Contributors
 
-Creator and lead developer: Owen Barnes.
+Original Creator: Owen Barnes
+Lead Developer: Paul Jensen
 
-Special thanks to Paul Jensen for contributing code, ideas and testing early prototypes. Big thanks also to Addy Osmani for help with everything JavaScript related, Alan Milford for providing initial demos, and Craig Jordan Muir for designing the awesome new SocketStream logo.
+Big thanks to those who have contributed in the past: Addy Osmani for his help with everything JavaScript related, Alan Milford for providing initial demos, and Craig Jordan Muir for designing the SocketStream logo that has become synomymous with SocketStream's identity.
 
-Thanks also to the many who have contributed code and ideas. We plan to properly feature contributors on our website in the near future.
+Thanks to those who have recently been helping to improve SocketStream in recent months: Robert Hall for his work on the new documentation for SocketStream, Roman Minkin for his bug fixes, feature contributions and improvements to the framework, and others who are passionate about SocketStream and wish to see it grow. 
+
+Thanks also to the many who have contributed code and ideas. We plan to properly feature contributors on our website in the near future, as derived from analysing SocketStream's git commit history, as well as honoouring plugin authors.
 
 
 ### Credits
