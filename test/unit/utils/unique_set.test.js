@@ -40,7 +40,7 @@ describe('lib/utils/unique_set', function () {
         set.members('tom').join(',').should.equal('1112').andCheck();
 
         set.remove('tom', 1112);
-        (typeof set.members('tom')).should.equal('object').andCheck();
+        set.members('tom').should.be.type('object').andCheck();
         set.members('tom').length.should.equal(0).andCheck();
 
         ac.check(done);

@@ -27,7 +27,7 @@
     "clean-css":              "= 0.4.2",
     "semver":                 "= 1.0.14",
     "redis":                  "= 0.8.1",
-    "connect":                "= 2.4.5",
+    "connect":                "= 2.11.1",
     "connect-redis":          "= 1.4.4",
     "chokidar":               "= 0.6.3",
     "engine.io":              "= 0.7.9"
