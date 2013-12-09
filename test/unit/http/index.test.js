@@ -1,3 +1,5 @@
+/*jshint immed: false */
+
 'use strict';
 
 /**
@@ -77,7 +79,34 @@ describe('lib/http/index', function () {
     });
 
     describe('.set()', function () {
-        it('should set newSettings into private settings object');
+        beforeEach(function (done) {
+          http = httpFunc(root);
+          done();
+        });
+
+        it('should set newSettings into the private settings object', function (done) {
+            var newSettings = {
+                secure: true
+            };
+
+            ac.expect(0);
+            /* Should now throw an error */
+            http.set(newSettings);
+            ac.check(done);
+        });
+
+        it('should throw an error if passed argument is not an object', function (done) {
+            var newSettings = '';
+
+            ac.expect(0);
+
+            /* Should throw an error */
+            (function() {
+                http.set(newSettings);
+            }).should.throw('ss.http.set() takes an object e.g. {static: {maxAge: 60000}}');
+
+            ac.check(done);
+        });
     });
 
     describe('.route()', function () {
