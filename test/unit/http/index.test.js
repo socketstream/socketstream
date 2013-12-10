@@ -19,11 +19,12 @@ require('../../helpers/connect');
 
 var path           = require('path'),
     connect        = require('connect'),
+    util          = require('util'),
     httpFunc       = require( path.join(process.env.PWD, 'lib/http/index') ),
     http           = null,
     app            = null,
     ac             = require('../../helpers/assertionCounter'),
-    utils          = require('../../helpers/utils.js'),
+    utils   = require('../../helpers/utils.js'),
     sessionStore   = new connect.session.MemoryStore,
     settings       = {        // User-configurable settings with sensible defaults
       "static": {
@@ -35,16 +36,6 @@ var path           = require('path'),
         maxAge: 2592000000
     },
     root           = path.join(process.cwd(), 'test/fixtures/project'); // replace '\' with '/' to support Windows
-
-function testPrependMiddleware(req, res, next) {
-    next();
-}
-
-function testAppendMiddleware(req, res, next) {
-    if (req) {
-        next();
-    }
-}
 
 describe('lib/http/index', function () {
 
@@ -110,7 +101,70 @@ describe('lib/http/index', function () {
     });
 
     describe('.route()', function () {
-        it('should add event listener for the url');
+        var obj;
+
+        beforeEach(function(done) {
+            obj  = null;
+            http = httpFunc(root);
+            done();
+        });
+
+        it('should add event listener for the url', function (done) {
+            function callback(req, res) {
+                res.serve('main');
+            }
+
+            ac.expect(6);
+
+            obj = http.route('/', callback);
+
+            obj.should.be.an.instanceOf(Object).andCheck();
+            obj._events.should.be.an.instanceOf(Object).andCheck();
+            obj.listenerTree.should.be.an.instanceOf(Object).andCheck();
+            obj.listenerTree['/'].should.be.an.instanceOf(Object).andCheck();
+            obj.listenerTree['/']._listeners.should.be.an.instanceOf(Object).andCheck();
+            obj.listenerTree['/']._listeners.toString().should.include(callback.toString()).andCheck();
+
+            ac.check(done);
+        });
+
+        it('should add default event listener for the url with out callback', function (done) {
+            var router,
+                url,
+                callback = function(name) {
+                    return router.on(url, function(req, res) {
+                        return res.serveClient(name);
+                    });
+                }
+
+            ac.expect(3);
+
+            obj = http.route('/');
+
+            obj.should.be.an.instanceOf(Object).andCheck();
+            obj.serveClient.should.be.an.instanceOf(Object).andCheck();
+            obj.serveClient.toString().replace(/(\s+|\n)/g, ' ').should.include(callback.toString().replace(/(\s+|\n)/g, ' ')).andCheck();
+
+            ac.check(done);
+        });
+
+        it('should throw an error if does not start with \'/\'', function (done) {
+            var url = 'some_url_wwith_no_slash_at_the_start';
+
+            function callback(req, res) {
+                res.serve('main');
+            }
+
+            ac.expect(0);
+
+            (function() {
+                http.route(url, callback);
+
+            }).should.throw( util.format('%s is not a valid URL. Valid URLs must start with /', url) );
+
+
+            ac.check(done);
+        });
     });
 
     describe('.load()', function () {
@@ -130,6 +184,16 @@ describe('lib/http/index', function () {
             app = http.load(staticPath, sessionStore, sessionOptions);
 
             done();
+        }
+
+        function testPrependMiddleware(req, res, next) {
+            next();
+        }
+
+        function testAppendMiddleware(req, res, next) {
+            if (req) {
+                next();
+            }
         }
 
         describe('itself', function () {
@@ -216,10 +280,10 @@ describe('lib/http/index', function () {
             });
         })
 
-        describe('return object', function () {
+        describe('return app/http object', function () {
             beforeEach(setUp);
 
-            it('should an instance Object', function (done) {
+            it('should be an instance of Object', function (done) {
                 ac.expect(1);
                 http.should.be.an.instanceOf(Object).andCheck();
                 ac.check(done);
@@ -234,6 +298,5 @@ describe('lib/http/index', function () {
                 });
             });
         });
-
     });
 });
