@@ -15,18 +15,18 @@
  *     });
  *
  */
-require('../../helpers/connect');
 
-var path           = require('path'),
-    connect        = require('connect'),
-    util          = require('util'),
-    httpFunc       = require( path.join(process.env.PWD, 'lib/http/index') ),
-    http           = null,
-    app            = null,
-    ac             = require('../../helpers/assertionCounter'),
-    utils   = require('../../helpers/utils.js'),
-    sessionStore   = new connect.session.MemoryStore,
-    settings       = {        // User-configurable settings with sensible defaults
+var request      = require('supertest'),
+    ac           = require('../../helpers/assertionCounter'),
+    path         = require('path'),
+    connect      = require('connect'),
+    util         = require('util'),
+    httpFunc     = require( path.join(process.env.PWD, 'lib/http/index') ),
+    http         = null,
+    app          = null,
+    utils        = require('../../helpers/utils.js'),
+    sessionStore = new connect.session.MemoryStore,
+    settings     = {        // User-configurable settings with sensible defaults
       "static": {
         maxAge: 2592000000    // (30 * 24 * 60 * 60 * 1000) cache static assets in the browser for 30 days
       },
@@ -41,8 +41,7 @@ describe('lib/http/index', function () {
 
     beforeEach(function (done) {
         ac.reset();
-        http = null;
-        app  = null;
+        http = httpFunc(root);
         done();
     });
 
@@ -58,9 +57,6 @@ describe('lib/http/index', function () {
     describe('module.exports()', function () {
         it('should return http {Object} instance', function (done) {
             ac.expect(3);
-
-            http = httpFunc(root);
-
             http.set.should.be.type('function').andCheck();
             http.load.should.be.type('function').andCheck();
             http.route.should.be.type('function').andCheck();
@@ -285,14 +281,14 @@ describe('lib/http/index', function () {
 
             it('should be an instance of Object', function (done) {
                 ac.expect(1);
-                http.should.be.an.instanceOf(Object).andCheck();
+                app.should.be.an.instanceOf(Object).andCheck();
                 ac.check(done);
             });
 
-            it('should respond for \'/favicon.ico\' request', function (done) {
+            it('should respond with status 200 for /favicon.ico request', function (done) {
                 ac.expect(1);
 
-                http.middleware.request().get('/favicon.ico').end(function(res) {
+                request(app).get('/favicon.ico').end(function(err, res) {
                     res.statusCode.should.equal(200).andCheck();
                     ac.check(done);
                 });

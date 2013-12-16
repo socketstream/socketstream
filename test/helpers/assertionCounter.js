@@ -47,11 +47,15 @@ function check (next) {
 /**
  * @return {Void}         [description]
  */
-Object.prototype.andCheck = function () {
-  actual++;
+function andCheck () {
+    actual++;
 }
 
-
+/*
+    Do not use 'Object.prototype = andCheck',
+    it will cause error in cases of using 'for (.. in...)'' loop for objects
+*/
+Object.defineProperty(Object.prototype, "andCheck", {value: andCheck, enumerable: false})
 
 /**
  * Expose the Public API
