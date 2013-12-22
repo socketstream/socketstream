@@ -54,6 +54,7 @@ function andCheck () {
 /*
     Do not use 'Object.prototype = andCheck',
     it will cause error in cases of using 'for (.. in...)'' loop for objects
+    So we assign `andCheck` as a not-enumerable value
 */
 Object.defineProperty(Object.prototype, "andCheck", {value: andCheck, enumerable: false})
 

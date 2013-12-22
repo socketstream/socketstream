@@ -105,7 +105,7 @@ describe('lib/http/index', function () {
             done();
         });
 
-        it('should add event listener for the url', function (done) {
+        it('should add event listener for given url', function (done) {
             function callback(req, res) {
                 res.serve('main');
             }
@@ -276,7 +276,7 @@ describe('lib/http/index', function () {
             });
         })
 
-        describe('return app/http object', function () {
+        describe('returned app/http object', function () {
             beforeEach(setUp);
 
             it('should be an instance of Object', function (done) {
