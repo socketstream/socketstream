@@ -30,15 +30,18 @@ module.exports = function(grunt) {
 
                    http://www.jshint.com/docs/options/#devel
                  */
-                options: grunt.util._.merge({
-                    ignores: [
-                        'lib/client/system/libs/*',
-                        'lib/client/system/modules/*',
-                        'lib/websocket/transports/engineio/*',
-                        'test/helpers/connect.js',
-                        'test/fixtures/**'
-                    ]
-                }, grunt.file.readJSON('.jshintrc')),
+                options: grunt.util._.merge(
+                    grunt.file.readJSON('.jshintrc'),
+                    {
+                        ignores: [
+                            'lib/client/system/libs/*',
+                            'lib/client/system/modules/*',
+                            'lib/websocket/transports/engineio/*',
+                            'test/helpers/connect.js',
+                            'test/fixtures/**'
+                        ]
+                    }
+                ),
                 files: {
                     src: [
                         'Gruntfile.js',
@@ -49,14 +52,17 @@ module.exports = function(grunt) {
                 }
             },
             client: {
-                options: grunt.util._.merge({
-                    browser: true,
-                    node   : false,
-                    ignores: [
-                        'lib/client/system/libs/*',
-                        'lib/client/system/index.js'
-                    ]
-                }, grunt.file.readJSON('.jshintrc')),
+                options: grunt.util._.merge(
+                    grunt.file.readJSON('.jshintrc'),
+                    {
+                        browser: true,
+                        node   : false,
+                        ignores: [
+                            'lib/client/system/libs/*',
+                            'lib/client/system/index.js'
+                        ]
+                    }
+                ),
                 files: {
                     src: [
                         'lib/client/system/**/*.js'
