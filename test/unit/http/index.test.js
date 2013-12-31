@@ -17,10 +17,10 @@
  */
 
 var request      = require('supertest'),
-    ac           = require('../../helpers/assertionCounter'),
     path         = require('path'),
     connect      = require('connect'),
     util         = require('util'),
+    ac           = require('../../helpers/assertionCounter'),
     httpFunc     = require( path.join(process.env.PWD, 'lib/http/index') ),
     http         = null,
     app          = null,
@@ -40,7 +40,6 @@ var request      = require('supertest'),
 describe('lib/http/index', function () {
 
     beforeEach(function (done) {
-        ac.reset();
         http = httpFunc(root);
         done();
     });
@@ -192,89 +191,87 @@ describe('lib/http/index', function () {
             }
         }
 
-        describe('itself', function () {
-            beforeEach(setUp);
+        beforeEach(setUp);
+
+        /**
+         * connect.compress() should be added to middleware stack on highest possible position
+         */
+        it('should build propper middleware stack', function (done) {
+            ac.expect(18);
+
+            /* testing correct length of http.middleware.stack */
+            http.middleware.stack.should.be.an.instanceOf(Array).andCheck();
+            http.middleware.stack.should.have.length(8).andCheck();
 
             /**
-             * connect.compress() should be added to middleware stack on highest possible position
+             * testing testPrependMiddleware
+             * lib/http/index.js:104
              */
-            it('should build propper middleware stack', function (done) {
-                ac.expect(18);
+            http.middleware.stack[0].handle.should.be.an.instanceOf(Function).andCheck();
+            http.middleware.stack[0].handle.toString().should.equal( testPrependMiddleware.toString() ).andCheck();
 
-                /* testing correct length of http.middleware.stack */
-                http.middleware.stack.should.be.an.instanceOf(Array).andCheck();
-                http.middleware.stack.should.have.length(8).andCheck();
+            /**
+             * testing connect.compress()
+             * It should be added to middleware stack on highest possible position
+             * lib/http/index.js:142
+             */
+            http.middleware.stack[1].handle.should.be.an.instanceOf(Function).andCheck();
+            http.middleware.stack[1].handle.toString().should.equal( connect.compress().toString() ).andCheck();
 
-                /**
-                 * testing testPrependMiddleware
-                 * lib/http/index.js:104
-                 */
-                http.middleware.stack[0].handle.should.be.an.instanceOf(Function).andCheck();
-                http.middleware.stack[0].handle.toString().should.equal( testPrependMiddleware.toString() ).andCheck();
+            /**
+             * testing connect.cookieParser('SocketStream')
+             * lib/http/index.js:145
+             */
+            http.middleware.stack[2].handle.should.be.an.instanceOf(Function).andCheck();
+            http.middleware.stack[2].handle.toString().should.equal( connect.cookieParser('SocketStream').toString() ).andCheck();
 
-                /**
-                 * testing connect.compress()
-                 * It should be added to middleware stack on highest possible position
-                 * lib/http/index.js:142
-                 */
-                http.middleware.stack[1].handle.should.be.an.instanceOf(Function).andCheck();
-                http.middleware.stack[1].handle.toString().should.equal( connect.compress().toString() ).andCheck();
+            /**
+             * testing connect.favicon()
+             * lib/http/index.js:145
+             */
+            http.middleware.stack[3].handle.should.be.an.instanceOf(Function).andCheck();
+            http.middleware.stack[3].handle.toString().should.equal( connect.favicon( staticPath + '/favicon.ico').toString() ).andCheck();
 
-                /**
-                 * testing connect.cookieParser('SocketStream')
-                 * lib/http/index.js:145
-                 */
-                http.middleware.stack[2].handle.should.be.an.instanceOf(Function).andCheck();
-                http.middleware.stack[2].handle.toString().should.equal( connect.cookieParser('SocketStream').toString() ).andCheck();
+            /**
+             * testing connect.session()
+             * lib/http/index.js:145
+             */
+            http.middleware.stack[4].handle.should.be.an.instanceOf(Function).andCheck();
+            http.middleware.stack[4].handle.toString().should.equal( connect.session({
+                cookie: {
+                    path: '/',
+                    httpOnly: false,
+                    maxAge: sessionOptions.maxAge,
+                    secure: settings.secure
+                },
+                store: sessionStore
+            }).toString() ).andCheck();
 
-                /**
-                 * testing connect.favicon()
-                 * lib/http/index.js:145
-                 */
-                http.middleware.stack[3].handle.should.be.an.instanceOf(Function).andCheck();
-                http.middleware.stack[3].handle.toString().should.equal( connect.favicon( staticPath + '/favicon.ico').toString() ).andCheck();
+            /**
+             * testing testAppendMiddleware
+             * lib/http/index.js:156
+             */
+            http.middleware.stack[5].handle.should.be.an.instanceOf(Function).andCheck();
+            http.middleware.stack[5].handle.toString().should.equal( testAppendMiddleware.toString() ).andCheck();
 
-                /**
-                 * testing connect.session()
-                 * lib/http/index.js:145
-                 */
-                http.middleware.stack[4].handle.should.be.an.instanceOf(Function).andCheck();
-                http.middleware.stack[4].handle.toString().should.equal( connect.session({
-                    cookie: {
-                        path: '/',
-                        httpOnly: false,
-                        maxAge: sessionOptions.maxAge,
-                        secure: settings.secure
-                    },
-                    store: sessionStore
-                }).toString() ).andCheck();
+            /**
+             * testing eventMiddleware
+             * since there ra no way to get the instance of eventMiddleware function,
+             * just compare the functions names
+             * lib/http/index.js:161
+             */
+            http.middleware.stack[6].handle.should.be.an.instanceOf(Function).andCheck();
+            utils.getfunctionName( http.middleware.stack[6].handle ).should.equal( 'eventMiddleware' ).andCheck();
 
-                /**
-                 * testing testAppendMiddleware
-                 * lib/http/index.js:156
-                 */
-                http.middleware.stack[5].handle.should.be.an.instanceOf(Function).andCheck();
-                http.middleware.stack[5].handle.toString().should.equal( testAppendMiddleware.toString() ).andCheck();
+            /**
+             * testing connect["static"]()
+             * lib/http/index.js:161
+             */
+            http.middleware.stack[7].handle.should.be.an.instanceOf(Function).andCheck();
+            http.middleware.stack[7].handle.toString().should.equal( connect["static"](staticPath, settings["static"]).toString() ).andCheck();
 
-                /**
-                 * testing eventMiddleware
-                 * since there ra no way to get the instance of eventMiddleware function,
-                 * just compare the functions names
-                 * lib/http/index.js:161
-                 */
-                http.middleware.stack[6].handle.should.be.an.instanceOf(Function).andCheck();
-                utils.getfunctionName( http.middleware.stack[6].handle ).should.equal( 'eventMiddleware' ).andCheck();
-
-                /**
-                 * testing connect["static"]()
-                 * lib/http/index.js:161
-                 */
-                http.middleware.stack[7].handle.should.be.an.instanceOf(Function).andCheck();
-                http.middleware.stack[7].handle.toString().should.equal( connect["static"](staticPath, settings["static"]).toString() ).andCheck();
-
-                ac.check(done);
-            });
-        })
+            ac.check(done);
+        });
 
         describe('returned app/http object', function () {
             beforeEach(setUp);

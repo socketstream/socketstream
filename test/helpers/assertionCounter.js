@@ -17,9 +17,16 @@ function expect (n) {
 /**
  * Used to reset the counters
  */
-function reset () {
+function reset (cb) {
     actual   = 0;
     expected = 0;
+
+    if (cb && typeof cb === 'function') {
+        cb();
+
+    } else {
+        return;
+    }
 }
 
 
@@ -39,6 +46,7 @@ function check (next) {
               throw err;
             }
         } else {
+            reset();
             if (typeof next === 'function') { next() }
         }
     }, 1);
