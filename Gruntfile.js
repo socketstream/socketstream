@@ -37,7 +37,8 @@ module.exports = function(grunt) {
                             'lib/client/system/libs/*',
                             'lib/client/system/modules/*',
                             'lib/websocket/transports/engineio/*',
-                            'test/fixtures/project/client/code/libs/*'
+                            'test/helpers/connect.js',
+                            'test/fixtures/**'
                         ]
                     }
                 ),

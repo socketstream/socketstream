@@ -39,6 +39,7 @@
     "grunt-cli":              "= 0.1.9",
     "grunt-contrib-jshint":   "= 0.6.3",
     "grunt-mocha-test":       "= 0.7.0",
+    "supertest":              "= 0.8.2",
     "async":                  "= 0.2.9"
   },
   "scripts": {
