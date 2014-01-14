@@ -5,6 +5,10 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-mocha-test');
+    grunt.loadNpmTasks('grunt-contrib-connect');
+    grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-ngdocs');
 
     /*
         Project configuration
@@ -18,6 +22,14 @@ module.exports = function(grunt) {
 
     */
     grunt.initConfig({
+        docsSever: {
+            port      : 9000,
+        },
+        clean: {
+            docs: {
+                src: ['docs']
+            }
+        },
         jshint: {
             server: {
                 /*
@@ -80,6 +92,76 @@ module.exports = function(grunt) {
                 }
             }
         },
+        ngdocs: {
+            options: {
+                title: 'SocketStream',
+                scripts: [
+                    'angular.js',
+                ],
+                navTemplate: 'src/docs/header.html',
+                html5Mode: false,
+                bestMatch: false
+            },
+            tutorials: {
+                src: ['src/**/*.ngdoc'],
+                title: 'Tutorials'
+            },
+            api: {
+                src: ['src/**/*.js'],
+                title: 'API Documentation'
+            },
+        },
+        watch: {
+            docs: {
+                files: ['docs'],
+                options: {
+                    // livereload: '<%= docsSever.livereload %>',
+                    livereload: true,
+                    interrupt: true,
+                    debounceDelay: 1000,
+                }
+            },
+            docsSrc: {
+                options: {
+                    atBegin: true
+                },
+                files: [
+                    'src/docs/**'
+                ],
+                tasks: ['clean', 'ngdocs']
+            }
+        },
+        connect: {
+            options: {
+            },
+            docsSite: {
+                options: {
+                    port      : '<%= docsSever.port %>',
+                    keepalive : true,
+                    base      : 'docs',
+                    // livereload: '<%= docsSever.livereload %>',
+                    livereload: true,
+                    middleware: function(connect, options) {
+                        var middlewares = [],
+                            directory;
+
+                        middlewares.push(require('connect-livereload')());
+
+                        if (!Array.isArray(options.base)) {
+                            options.base = [options.base];
+                        }
+                        directory = options.directory || options.base[options.base.length - 1];
+                        options.base.forEach(function(base) {
+                            // Serve static files.
+                            middlewares.push(connect.static(base));
+                        });
+                        // Make directory browse-able.
+                        middlewares.push(connect.directory(directory));
+                        return middlewares;
+                    }
+                }
+            }
+        },
         mochaTest: {
             src: [
                 'test/unit/**/*.test.js',
@@ -92,4 +174,5 @@ module.exports = function(grunt) {
 
     grunt.registerTask('default', 'Default task which runs all the required subtasks', ['jshint', 'test']);
     grunt.registerTask('test', 'Test everything', ['mochaTest']);
+    grunt.registerTask('build:docs', 'Build documentation', ['clean', 'ngdocs', 'connect', 'watch:docs']);
 }
