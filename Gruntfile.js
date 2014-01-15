@@ -8,6 +8,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-concurrent');
     grunt.loadNpmTasks('grunt-ngdocs');
 
     /*
@@ -23,7 +24,7 @@ module.exports = function(grunt) {
     */
     grunt.initConfig({
         docsSever: {
-            port      : 9000,
+            port      : 9001,
         },
         clean: {
             docs: {
@@ -98,35 +99,41 @@ module.exports = function(grunt) {
                 scripts: [
                     'angular.js',
                 ],
-                navTemplate: 'src/docs/header.html',
+                styles: [
+                    // 'src/docs/site/css/main.css'
+                ],
+                // navTemplate: 'src/docs/site/header.html',
                 html5Mode: false,
                 bestMatch: false
             },
             tutorials: {
-                src: ['src/**/*.ngdoc'],
+                src: ['src/docs/tutorials/**/*.ngdoc'],
                 title: 'Tutorials'
             },
             api: {
-                src: ['src/**/*.js'],
+                src: ['lib/**/*.js'],
                 title: 'API Documentation'
             },
-        },
-        watch: {
-            docs: {
-                files: ['docs'],
-                options: {
-                    // livereload: '<%= docsSever.livereload %>',
-                    livereload: true,
-                    interrupt: true,
-                    debounceDelay: 1000,
-                }
+            demos: {
+                src: ['src/docs/demos/**/*.ngdoc'],
+                title: 'Demos'
             },
-            docsSrc: {
+        },
+        concurrent: {
+            options: {
+                logConcurrentOutput: true
+            },
+            docsSite: ['delta:docs', 'connect:docsSite']
+        },
+        delta: {
+            docs: {
                 options: {
+                    interrupt: true,
                     atBegin: true
                 },
                 files: [
-                    'src/docs/**'
+                    'lib/**',
+                    'src/**'
                 ],
                 tasks: ['clean', 'ngdocs']
             }
@@ -136,29 +143,9 @@ module.exports = function(grunt) {
             },
             docsSite: {
                 options: {
-                    port      : '<%= docsSever.port %>',
-                    keepalive : true,
-                    base      : 'docs',
-                    // livereload: '<%= docsSever.livereload %>',
-                    livereload: true,
-                    middleware: function(connect, options) {
-                        var middlewares = [],
-                            directory;
-
-                        middlewares.push(require('connect-livereload')());
-
-                        if (!Array.isArray(options.base)) {
-                            options.base = [options.base];
-                        }
-                        directory = options.directory || options.base[options.base.length - 1];
-                        options.base.forEach(function(base) {
-                            // Serve static files.
-                            middlewares.push(connect.static(base));
-                        });
-                        // Make directory browse-able.
-                        middlewares.push(connect.directory(directory));
-                        return middlewares;
-                    }
+                    port     : '<%= docsSever.port %>',
+                    keepalive: true,
+                    base     : 'docs',
                 }
             }
         },
@@ -172,7 +159,11 @@ module.exports = function(grunt) {
         }
     });
 
+    //Rename our watch task to 'delta', then make actual 'watch'
+    grunt.renameTask('watch', 'delta');
+
     grunt.registerTask('default', 'Default task which runs all the required subtasks', ['jshint', 'test']);
     grunt.registerTask('test', 'Test everything', ['mochaTest']);
-    grunt.registerTask('build:docs', 'Build documentation', ['clean', 'ngdocs', 'connect', 'watch:docs']);
+    grunt.registerTask('build:docs', 'Build documentation', ['clean', 'ngdocs', 'connect']);
+    grunt.registerTask('watch:docs', 'Tracks checnges and  re-building documentation', ['concurrent:docsSite']);
 }
