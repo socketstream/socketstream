@@ -105,7 +105,7 @@ module.exports = function(grunt) {
                 // navTemplate: 'src/docs/site/header.html',
                 discussions: {
                     shortName: 'socketstream',
-                    url: 'http://socketstream.org',
+                    url: 'http://romanminkin.github.io/socketstream/docs/',
                     dev: true
                 },
                 html5Mode: false,
