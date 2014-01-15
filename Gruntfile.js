@@ -103,6 +103,8 @@ module.exports = function(grunt) {
                     // 'src/docs/site/css/main.css'
                 ],
                 // navTemplate: 'src/docs/site/header.html',
+                startPage: 'tutorials',
+                titleLink: '#/tutorials',
                 discussions: {
                     shortName: 'socketstream',
                     url: 'http://romanminkin.github.io/socketstream/docs/',
