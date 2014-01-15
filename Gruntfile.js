@@ -103,6 +103,11 @@ module.exports = function(grunt) {
                     // 'src/docs/site/css/main.css'
                 ],
                 // navTemplate: 'src/docs/site/header.html',
+                discussions: {
+                    shortName: 'socketstream',
+                    url: 'http://socketstream.org',
+                    dev: true
+                },
                 html5Mode: false,
                 bestMatch: false
             },
