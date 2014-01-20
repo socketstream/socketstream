@@ -100,7 +100,7 @@ module.exports = function(grunt) {
                     'angular.js',
                 ],
                 styles: [
-                    // 'src/docs/site/css/main.css'
+                    'src/docs/site/css/main.css'
                 ],
                 // navTemplate: 'src/docs/site/header.html',
                 startPage: 'tutorials',
