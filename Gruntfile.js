@@ -111,7 +111,7 @@ module.exports = function(grunt) {
                     dev: true
                 },
                 html5Mode: false,
-                bestMatch: false
+                bestMatch: true
             },
             tutorials: {
                 src: ['src/docs/tutorials/**/*.ngdoc'],
@@ -171,6 +171,6 @@ module.exports = function(grunt) {
 
     grunt.registerTask('default', 'Default task which runs all the required subtasks', ['jshint', 'test']);
     grunt.registerTask('test', 'Test everything', ['mochaTest']);
-    grunt.registerTask('build:docs', 'Build documentation', ['clean', 'ngdocs', 'connect']);
-    grunt.registerTask('watch:docs', 'Tracks checnges and  re-building documentation', ['concurrent:docsSite']);
+    grunt.registerTask('build:docs', 'Build documentation', ['clean', 'ngdocs']);
+    grunt.registerTask('watch:docs', 'Watching for changes and re-building documentation', ['concurrent:docsSite']);
 }

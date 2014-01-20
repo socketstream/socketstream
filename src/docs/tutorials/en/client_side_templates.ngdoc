@@ -1,3 +1,7 @@
+@ngdoc overview
+@name Client-Side Templates
+
+@description
 # Client-Side Templates
 
 Client-side templates generate HTML in the browser, allowing SocketStream to send raw, layoutless data over the websocket. This not only dramatically reduces bandwidth, but also gives you flexibility to render the data into HTML in any number of ways.
@@ -7,16 +11,23 @@ Client-side templates generate HTML in the browser, allowing SocketStream to sen
 
 If your app is really simple, you might be happy manually building your HTML using jQuery functions:
 
-``` coffee-script
-# client/code/main/index.coffee
-people = [
-  { name:'Alice', major:'Astronomy' }
-  { name:'Bob',   major:'Biology' }
-]
-$(document).ready ->
-  for person in people
-    $('#people').append("<li>#{person.name} the student studies <strong>#{person.major}</strong></li>")
-```
+<pre>
+// client/code/main/index.js
+var people = [
+  { name: 'Alice', major: 'Astronomy'},
+  { name: 'Bob', major: 'Biology' }
+];
+
+$(document).ready(function() {
+  var i;
+
+  for (i = 0; i < people.length; i++) {
+    $('#people').append("<li>" + people[i].name + " the student studies <strong>" +
+      people[i].major + "</strong></li>"
+    );
+  }
+});
+</pre>
 
 However, not only does this solution scale poorly for larger templates, but mixing together display logic and HTML is bad practice. Enter client-side templates.
 
@@ -37,9 +48,9 @@ Simply wraps each template in a DIV tag with an ID prefix of 'tmpl-'. Suitable f
 
 To use a built-in template engine, pass the name as a string:
 
-```javascript
+<pre>
 ss.client.templateEngine.use('ember');
-```
+</pre>
 
 As built-in template engines are only simple wrappers, most of the time you'll want to use one of the several template languages supported via optional modules on npm:
 
@@ -49,9 +60,9 @@ As built-in template engines are only simple wrappers, most of the time you'll w
 
 To use an external optional template engine, pass the module as so:
 
-```javascript
+<pre>
 ss.client.templateEngine.use(require('ss-hogan'));
-```
+</pre>
 
 If you can't find a module for your favorite templating library it's easy to [create your own](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/template_engine_wrappers.md).
 
@@ -64,12 +75,12 @@ SocketStream allows you to mix and match different templates, perfect for trying
 
 You may limit the scope of a template engine by passing the name of a directory as the second argument.
 
-```javascript
+<pre>
 // serve all templates with ss-hogan
 ss.client.templateEngine.use(require('ss-hogan'));
 // apart from any in the /client/templates/em directory
 ss.client.templateEngine.use('ember', '/em');
-```
+</pre>
 
 
 ### Example
@@ -78,10 +89,10 @@ Here we're using the [Hogan](http://twitter.github.com/hogan.js/) templating lib
 
 In this folder, let's create a file called `person.html`:
 
-``` html
+<pre>
 <!-- client/templates/person.html -->
 <li>{{ name }} the student studies <strong>{{ major }}</strong></li>
-```
+</pre>
 
 **NOTE:** If you prefer, you may use a formatter to construct your HTML templates. For example, to use Jade, use `.jade` instead of `.html` for your template's file extension.
 
@@ -91,30 +102,35 @@ The `person.html` file in the `templates` folder is now accessible via `ss.tmpl[
 
 Now that we have a template, let's put it to good use by refactoring our code:
 
-``` coffee-script
-# in your client-side code
-people = [
-  { name:'Alice', major:'Astronomy' }
-  { name:'Bob',   major:'Biology' }
-]
-$(document).ready ->
-  for person in people
-    $('#people').append ss.tmpl['person'].render(person)
-```
+<pre>
+// in your client-side code
+var people = [
+  { name: 'Alice', major: 'Astronomy'},
+  { name: 'Bob', major: 'Biology' }
+];
+
+$(document).ready(function() {
+  var i;
+
+  for (i = 0; i < people.length; i++) {
+    $('#people').append(ss.tmpl['person'].render(people[i]));
+  }
+});
+</pre>
 
 
 ### Serving different templates to different clients
 
 By default all templates will be sent to all single-page clients you define with:
 
-``` javascript
+<pre>
 ss.client.define()
-```
+</pre>
 
 However, by organizing your templates into directories, you can specify which templates will be sent to each client as so:
 
 
-``` javascript
+<pre>
 // app.js
 ss.client.define('iphone', {
   view: 'app.jade',
@@ -122,7 +138,7 @@ ss.client.define('iphone', {
   code: ['libs', 'app'],
   tmpl: ['main', 'mobile']  // will only send templates in the 'main' and 'mobile' directories
 });
-```
+</pre>
 
 
 

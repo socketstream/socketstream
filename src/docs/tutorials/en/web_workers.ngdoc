@@ -1,3 +1,7 @@
+@ngdoc overview
+@name Web Workers
+
+@description
 # Web Workers
 
 Web Workers provide a great way for modern browsers to execute complex tasks and calculations without blocking the main thread.
@@ -19,7 +23,7 @@ Each worker should be written as a separate `.js` or `.coffee` file (if you have
 Let's create a worker which will calculate Pi using the [Leibniz Formula](http://en.wikipedia.org/wiki/Leibniz_formula_for_%CF%80):
 
 
-```javascript
+<pre>
 // in /client/workers/pi.js
 
 self.addEventListener('message', function(e) {
@@ -38,11 +42,11 @@ function calculatePi(cycles) {
   }
   return pi;
 }
-```
+</pre>
 
 Then, in any client-side code file, invoke the worker.
 
-```javascript
+<pre>
 // in any /client/code file
 var worker = ss.load.worker('/pi.js');
 
@@ -53,7 +57,7 @@ worker.addEventListener('message', function(e) {
 
 // start worker with 10000000 cycles
 worker.postMessage(10000000);
-```
+</pre>
 
 A few seconds after the task has run you should see the output in the browser's console:
 

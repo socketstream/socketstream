@@ -1,4 +1,8 @@
-# Loading Assets On Demand 
+@ngdoc overview
+@name Loading Assets On Demand
+
+@description
+# Loading Assets On Demand
 
 If you're writing a small app you can safely ignore this section, as it's always better to pack all client assets into one file and send everything through together in one go if possible.
 
@@ -15,16 +19,16 @@ However SocketStream allows you to load additional code modules from the server 
 
 To try this out, create a new directory of application modules in `/client/code`. For the sake of this example, let's call our new directory `/client/code/mail`. We'll also assume this directory has a module in it called `search.js`.
 
-```javascript
+<pre>
 // in any client-side module
 ss.load.code('/mail', function(){
-  
+
   // all modules in /client/code/mail have now been loaded into
   // the root namespace (/) and can be required in the normal way
   var search = require('/search');
 
 });
-```
+</pre>
 
 Note: Regardless of the directory you load, the modules inside will always be loaded into the root (/) namespace by default. If you want to mount the new modules in a different namespace, just create one or more sub-directories in the folder you're loading.
 
