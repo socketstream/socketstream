@@ -169,7 +169,7 @@ module.exports = function(grunt) {
             //We use %version% and evluate it at run-time, because <%= pkg.version %>
             //is only evaluated once
             'release-prepare': [
-                'grunt test',
+                'grunt before-test',
                 'grunt version', //remove "-SNAPSHOT"
                 'grunt changelog'
             ],
@@ -242,6 +242,13 @@ module.exports = function(grunt) {
         setVersion(this.args[0], this.args[1]);
     });
 
+    grunt.registerTask('enforce', 'Install commit message enforce script if it doesn\'t exist', function() {
+        if (!grunt.file.exists('.git/hooks/commit-msg')) {
+            grunt.file.copy('misc/validate-commit-msg.js', '.git/hooks/commit-msg');
+            require('fs').chmodSync('.git/hooks/commit-msg', '0755');
+        }
+    });
+
     grunt.registerMultiTask('shell', 'run shell commands', function() {
         var self = this,
             sh = require('shelljs');
@@ -257,13 +264,14 @@ module.exports = function(grunt) {
         });
     });
 
-    grunt.registerTask('default', 'Default task which runs all the required subtasks', ['jshint', 'test']);
+    grunt.registerTask('default', 'Default task which runs all the required subtasks', ['before-test', 'test']);
+    grunt.registerTask('before-test', ['enforce', 'jshint']);
     grunt.registerTask('test', 'Test everything', ['mochaTest']);
     grunt.registerTask('build:docs', 'Build documentation', ['clean:docs', 'ngdocs']);
     grunt.registerTask('watch:docs', 'Watching for changes and re-building docs', ['concurrent:docsSite']);
     grunt.registerTask('update:docs', 'Update gh-page branch by mergin from master', ['shell:update-gh-pages']);
 
-    grunt.registerTask('release:start', 'Increases patch version by 1 and add suffix "SNAPSHOT" as "major.minor.(patch+1)-SNAPSHOT" and commit package.json', ['shell:release-start']);
-    grunt.registerTask('release:prepare', 'Runs all the tests and and clean up version to "major.minor.(patch+1)-SNAPSHOT"', ['shell:release-prepare']);
-    grunt.registerTask('release:complete', 'Update gh-page branch by mergin from master', ['shell:update-gh-pages']);
+    grunt.registerTask('release:start', 'Increase patch version by 1 and add suffix "SNAPSHOT" as "major.minor.(patch+1)-SNAPSHOT" and commit package.json', ['shell:release-start']);
+    grunt.registerTask('release:prepare', 'Run all the tests, generates CHANGELOG.md since laste release and and clean up version to just "major.minor.patch"', ['shell:release-prepare']);
+    grunt.registerTask('release:complete', 'Complete the release and ', ['shell:update-gh-pages']);
 }
