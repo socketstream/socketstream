@@ -182,11 +182,11 @@ module.exports = function(grunt) {
             ],
             'pre-update-gh-pages': [
                 'git checkout gh-pages',
-                'git merge master'
+                'git merge feature/docs-generator'
             ],
             'post-update-gh-pages': [
                 'git commit docs -m "Updating docs: v%version%"',
-                'git checkout master'
+                'git checkout feature/docs-generator'
             ]
         },
     });
