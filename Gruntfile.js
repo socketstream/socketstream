@@ -3,6 +3,7 @@
 module.exports = function(grunt) {
     'use strict';
 
+    grunt.loadNpmTasks('grunt-conventional-changelog');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-mocha-test');
     grunt.loadNpmTasks('grunt-contrib-connect');
