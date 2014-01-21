@@ -186,6 +186,11 @@ module.exports = function(grunt) {
                 'grunt version:patch:"SNAPSHOT"',
                 'git commit package.json -m "chore(release): Starting v%version%"'
             ],
+            'release-push': [
+                'git push origin master',
+                'git push origin gh-pages',
+                'git push --tags',
+            ],
             'update-gh-pages': [
                 'git checkout gh-pages',
                 'git merge master',
@@ -306,4 +311,5 @@ module.exports = function(grunt) {
     grunt.registerTask('release:start', 'Increase patch version by 1 and add suffix "SNAPSHOT" as "major.minor.(patch+1)-SNAPSHOT" and commit package.json', ['shell:release-start']);
     grunt.registerTask('release:prepare', 'Run all the tests, generates CHANGELOG.md since laste release and and clean up version to just "major.minor.patch"', ['shell:release-prepare']);
     grunt.registerTask('release:complete', 'Complete the release and ', ['shell:release-complete', 'shell:update-gh-pages']);
+    grunt.registerTask('release:push', 'Push to origin tags, master and gh-pages branches', ['shell:release-push']);
 }
