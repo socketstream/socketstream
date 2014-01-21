@@ -47,7 +47,8 @@
     "grunt-contrib-watch": "~0.5.3",
     "connect-livereload": "~0.3.2",
     "grunt-concurrent": "~0.4.2",
-    "shelljs": "~0.2.6"
+    "shelljs": "~0.2.6",
+    "grunt-conventional-changelog": "~1.0.0"
   },
   "scripts": {
     "test": "grunt test"

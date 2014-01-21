@@ -168,7 +168,7 @@ module.exports = function(grunt) {
             //We use %version% and evluate it at run-time, because <%= pkg.version %>
             //is only evaluated once
             'release-prepare': [
-                'grunt before-test after-test',
+                'grunt test',
                 'grunt version', //remove "-SNAPSHOT"
                 'grunt changelog'
             ],
@@ -177,20 +177,33 @@ module.exports = function(grunt) {
                 'git tag %version%'
             ],
             'release-start': [
-                'grunt version:minor:"SNAPSHOT"',
+                'grunt version:patch:"SNAPSHOT"',
                 'git commit package.json -m "chore(release): Starting v%version%"'
             ],
             'update-gh-pages': [
                 'git checkout gh-pages',
-                'git merge feature/docs-generator',
-                'git checkout feature/docs-generator'
+                'git merge master',
+                'git checkout master'
             ]
+        },
+        changelog: {
+            options: {
+                dest: 'CHANGELOG.md',
+                templateFile: 'src/docs/changelog.tpl.md',
+                github: 'socketstream/socketstream'
+            }
         },
     });
 
     // Rename our watch task to 'delta', then make actual 'watch'
     grunt.renameTask('watch', 'delta');
 
+    /**
+     * Sets version in 'package.json' in http://semver.org friendly mode
+     *
+     * @param {String} type   Could be 'major', 'minor' or 'patch'
+     * @param {String} suffix Suffic string, example: 'alpha', 'pre-alpha', 'beta'
+     */
     function setVersion(type, suffix) {
         var file = 'package.json',
             VERSION_REGEX = /([\'|\"]version[\'|\"][ ]*:[ ]*[\'|\"])([\d|.]*)(-\w+)*([\'|\"])/,
@@ -212,6 +225,18 @@ module.exports = function(grunt) {
         return version;
     }
 
+    /**
+     * tasks for command line setting for project version according to http://semver.org
+     * @usage
+     *     grunt version:type:suffix
+     *
+     *     // suppose current version in package.json is "0.3.10"
+     *
+     *     grunt version:patch // will set version to "0.3.11"
+     *     grunt version:patch // one more call will increas version to "0.3.12"
+     *
+     *     grunt version:minor:"alpha" // this one will set up version to "0.4.0-alpha"
+     */
     grunt.registerTask('version', 'Set version. If no arguments, it just takes off suffix', function() {
         setVersion(this.args[0], this.args[1]);
     });
@@ -235,5 +260,9 @@ module.exports = function(grunt) {
     grunt.registerTask('test', 'Test everything', ['mochaTest']);
     grunt.registerTask('build:docs', 'Build documentation', ['clean:docs', 'ngdocs']);
     grunt.registerTask('watch:docs', 'Watching for changes and re-building docs', ['concurrent:docsSite']);
-    grunt.registerTask('update:docs', 'Update gh-page branch from master', ['shell:update-gh-pages']);
+    grunt.registerTask('update:docs', 'Update gh-page branch by mergin from master', ['shell:update-gh-pages']);
+
+    grunt.registerTask('release:start', 'Increases patch version by 1 and add suffix "SNAPSHOT" as "major.minor.(patch+1)-SNAPSHOT" and commit package.json', ['shell:release-start']);
+    grunt.registerTask('release:prepare', 'Runs all the tests and and clean up version to "major.minor.(patch+1)-SNAPSHOT"', ['shell:release-prepare']);
+    grunt.registerTask('release:complete', 'Update gh-page branch by mergin from master', ['shell:update-gh-pages']);
 }
