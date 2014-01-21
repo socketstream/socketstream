@@ -180,12 +180,9 @@ module.exports = function(grunt) {
                 'grunt version:minor:"SNAPSHOT"',
                 'git commit package.json -m "chore(release): Starting v%version%"'
             ],
-            'pre-update-gh-pages': [
+            'update-gh-pages': [
                 'git checkout gh-pages',
-                'git merge feature/docs-generator'
-            ],
-            'post-update-gh-pages': [
-                'git commit docs -m "Updating docs: v%version%"',
+                'git merge feature/docs-generator',
                 'git checkout feature/docs-generator'
             ]
         },
@@ -238,5 +235,5 @@ module.exports = function(grunt) {
     grunt.registerTask('test', 'Test everything', ['mochaTest']);
     grunt.registerTask('build:docs', 'Build documentation', ['clean:docs', 'ngdocs']);
     grunt.registerTask('watch:docs', 'Watching for changes and re-building docs', ['concurrent:docsSite']);
-    grunt.registerTask('update:docs', 'Update gh-page branch from master', ['clean:docs', 'shell:pre-update-gh-pages', 'build:docs', 'shell:post-update-gh-pages']);
+    grunt.registerTask('update:docs', 'Update gh-page branch from master', ['shell:update-gh-pages']);
 }
