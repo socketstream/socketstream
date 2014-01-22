@@ -173,6 +173,7 @@ module.exports = function(grunt) {
             'release-prepare': [
                 'grunt before-test',
                 'grunt test',
+                'grunt isGhPagesBranch',
                 'grunt build:docs',
                 'grunt isClean:master',
                 'grunt version',    //remove "-SNAPSHOT" from the project's version in package.json
@@ -283,6 +284,16 @@ module.exports = function(grunt) {
         if (result.output.trim() !== '') {
             grunt.log.error(result.output.trim());
             throw new Error('Working copy is dirty, aborting!');
+        }
+    });
+
+    grunt.registerTask('isGhPagesBranch', 'Check if gh-pages branch exists, if not create it', function() {
+        var result,
+            branch = this.args[0];
+
+        result = sh.exec('git branch | grep gh-pages', {silent: true});
+        if (result.output.trim() !==  '') {
+            sh.exec('git branch gh-pages origin/gh-pages' + branch, {silent: true})
         }
     });
 
