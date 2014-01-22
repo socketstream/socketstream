@@ -27,7 +27,7 @@ module.exports = function(grunt) {
     */
     grunt.initConfig({
         docsSever: {
-            port      : 9001,
+            port: 9001,
         },
         clean: {
             docs: {
