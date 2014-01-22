@@ -173,9 +173,9 @@ module.exports = function(grunt) {
             'release-prepare': [
                 'grunt before-test',
                 'grunt test',
-                'grunt isGhPagesBranch',
+                'grunt is-gh-pages-branch-exist',
                 'grunt build:docs',
-                'grunt isClean:master',
+                'grunt is-clean:master',
                 'grunt version',    //remove "-SNAPSHOT" from the project's version in package.json
                 'grunt changelog'
             ],
@@ -266,12 +266,12 @@ module.exports = function(grunt) {
     /**
      * Check is master(default) or specified branch is clean for commit
      *
-     *  grunt:isClean // checks 'master' branch
-     *  grunt:isClean:test // checks 'test' branch
+     *  grunt:is-clean // checks 'master' branch
+     *  grunt:is-clean:test // checks 'test' branch
      *
      * @param {String} Branch name to check
      */
-    grunt.registerTask('isClean', 'Install commit message enforce script if it doesn\'t exist', function() {
+    grunt.registerTask('is-clean', 'Install commit message enforce script if it doesn\'t exist', function() {
         var result,
             branch = this.args[0] ? this.args[0] : 'master';
 
@@ -287,12 +287,12 @@ module.exports = function(grunt) {
         }
     });
 
-    grunt.registerTask('isGhPagesBranch', 'Check if gh-pages branch exists, if not create it', function() {
+    grunt.registerTask('is-gh-pages-branch-exist', 'Check if gh-pages branch exists, if not create it', function() {
         var result,
             branch = this.args[0];
 
         result = sh.exec('git branch | grep gh-pages', {silent: true});
-        if (result.output.trim() !==  '') {
+        if (result.output.trim() ===  '') {
             sh.exec('git branch gh-pages origin/gh-pages' + branch, {silent: true})
         }
     });
