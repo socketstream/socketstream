@@ -319,8 +319,8 @@ module.exports = function(grunt) {
     grunt.registerTask('watch:docs', 'Watching for changes and re-building docs', ['concurrent:docsSite']);
     grunt.registerTask('update:docs', 'Update gh-page branch by mergin from master', ['shell:update-gh-pages']);
 
-    grunt.registerTask('release:start', 'Increase patch version by 1 and add suffix "SNAPSHOT" as "major.minor.(patch+1)-SNAPSHOT" and commit package.json', ['shell:release-start']);
+    grunt.registerTask('release:start', 'Increase patch version by 1, add suffix "SNAPSHOT" as "major.minor.(patch+1)-SNAPSHOT" and commit package.json', ['shell:release-start']);
     grunt.registerTask('release:prepare', 'Run all the tests, generates CHANGELOG.md since laste release and and clean up version to just "major.minor.patch"', ['shell:release-prepare']);
-    grunt.registerTask('release:complete', 'Complete the release and ', ['shell:release-complete', 'shell:update-gh-pages']);
+    grunt.registerTask('release:complete', 'Complete release by commiting CHANGELOG.md and package.json and adding version tag', ['shell:release-complete', 'shell:update-gh-pages']);
     grunt.registerTask('release:push', 'Push to origin tags, master and gh-pages branches', ['shell:release-push']);
 }
