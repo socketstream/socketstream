@@ -192,7 +192,7 @@ To build/re-build documentation run:
     grunt build:docs
 ```
 
-To runt documentation web site locally the way process will watch for changes and re-building docs on the fly run:
+To run documentation web site locally the way process will watch for changes and re-building docs on the fly run:
 ```
     grunt watch:docs
 ```
