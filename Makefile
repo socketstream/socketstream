@@ -1,8 +1,15 @@
 # SocketStream Makefile
 
 # Ignore files and directories prepended with 'testdata_'
-TEST_FILES=`find test/* | grep -v '^test/testdata_*'`
+TEST_FILES=`find test/unit/* | grep -v '^test/testdata_*'`
+REPORTER = spec
+
 test:
-	./node_modules/.bin/mocha --require should --require coffee-script $(TEST_FILES)
+	@NODE_ENV=test ./node_modules/.bin/mocha \
+		--require should \
+		--reporter $(REPORTER) \
+		--timeout 2000 \
+		--compilers coffee:coffee-script \
+		$(TEST_FILES)
 
 .PHONY: test
