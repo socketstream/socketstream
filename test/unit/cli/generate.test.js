@@ -238,7 +238,7 @@ describe('lib/cli/generate', function () {
         ac.expect(1);
 
         var newProjectFilesThatShouldExistWhenUsingStylus = [
-            path.join(demoAppPath, '/client/css/app.stylus'),
+            path.join(demoAppPath, '/client/css/app.styl'),
         ];
 
         program.stylus = true;
