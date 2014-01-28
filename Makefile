@@ -1,6 +1,5 @@
 # SocketStream Makefile
 
-# Ignore files and directories prepended with 'testdata_'
 TEST_FILES=`find test/unit/*`
 REPORTER = spec
 
