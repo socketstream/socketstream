@@ -99,7 +99,6 @@ describe('lib/cli/generate', function () {
 
     });
 
-
     it('should raise an error if the name of the app matches the name of an existing folder', function (done) {
 
         ac.expect(2);
@@ -122,7 +121,6 @@ describe('lib/cli/generate', function () {
             }
         });
     });
-
 
     it('should generate an app with coffeescript files if coffeescript was requested', function (done) {
 
@@ -183,8 +181,75 @@ describe('lib/cli/generate', function () {
         generate.generate(program);
         logs = logHook.off();
 
-        /* Using 'async' library to check if all the required project's coffeescript files exist */
+        /* Using 'async' library to check if all the required project's jade files exist */
         async.reject(newProjectFilesThatShouldExistWhenUsingJade, fs.exists, function (result) {
+            result.length.should.equal(0).andCheck();
+            ac.check(done);
+        });
+
+    });
+
+    it('should generate an app with css stylesheets if css was requested', function (done) {
+
+        ac.expect(1);
+
+        var newProjectFilesThatShouldExistWhenUsingCss = [
+            path.join(demoAppPath, '/client/css/app.css'),
+        ];
+
+        // Call for hook function for console.log
+        logHook.on();
+        generate.generate(program);
+        logs = logHook.off();
+
+        /* Using 'async' library to check if all the required project's css files exist */
+        async.reject(newProjectFilesThatShouldExistWhenUsingCss, fs.exists, function (result) {
+            result.length.should.equal(0).andCheck();
+            ac.check(done);
+        });
+
+    });
+
+    it('should generate an app with less stylesheets if less was requested', function (done) {
+
+        ac.expect(1);
+
+        var newProjectFilesThatShouldExistWhenUsingLess = [
+            path.join(demoAppPath, '/client/css/app.less'),
+        ];
+
+        program.less = true;
+
+        // Call for hook function for console.log
+        logHook.on();
+        generate.generate(program);
+        logs = logHook.off();
+
+        /* Using 'async' library to check if all the required project's less files exist */
+        async.reject(newProjectFilesThatShouldExistWhenUsingLess, fs.exists, function (result) {
+            result.length.should.equal(0).andCheck();
+            ac.check(done);
+        });
+
+    });
+
+    it('should generate an app with stylus stylesheets if stylus was requested', function (done) {
+
+        ac.expect(1);
+
+        var newProjectFilesThatShouldExistWhenUsingStylus = [
+            path.join(demoAppPath, '/client/css/app.styl'),
+        ];
+
+        program.stylus = true;
+
+        // Call for hook function for console.log
+        logHook.on();
+        generate.generate(program);
+        logs = logHook.off();
+
+        /* Using 'async' library to check if all the required project's less files exist */
+        async.reject(newProjectFilesThatShouldExistWhenUsingStylus, fs.exists, function (result) {
             result.length.should.equal(0).andCheck();
             ac.check(done);
         });
