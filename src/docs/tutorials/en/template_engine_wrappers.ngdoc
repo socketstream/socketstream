@@ -1,3 +1,7 @@
+@ngdoc overview
+@name Template Engine Wrappers
+
+@description
 # Template Engine Wrappers
 
 SocketStream supports a wide variety of client-side template engines through the use of third party modules.
@@ -6,7 +10,7 @@ If you can't find a module for your preferred templating language, it's easy to 
 
 Let's look at the key file in this module, `engine.js`:
 
-```javascript
+<pre>
 /* engine.js */
 
 // Hogan Template Engine wrapper for SocketStream 0.3
@@ -53,7 +57,7 @@ exports.init = function(ss, config) {
     }
   }
 }
-```
+</pre>
 
 Here `prefix` and `suffix` are called once each. In between those calls, `process` gets called for every file this template engine handles.
 
@@ -68,7 +72,7 @@ By default SocketStream selects a formatter based on the template file's extensi
 
 Simply add a `selectFormatter` function to your engine:
 
-```javascript
+<pre>
 /* lib/engine.js */
 
 exports.init = function (root, config) {
@@ -81,7 +85,7 @@ exports.init = function (root, config) {
     // ...
   }
 };
-```
+</pre>
 
 * `path` is the path of the template file relative to the `client/templates` folder
 * `formatters` is a map of formatters SocketStream already knows about:

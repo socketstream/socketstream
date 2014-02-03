@@ -1,3 +1,7 @@
+@ngdoc overview
+@name Client-Side Code
+
+@description
 # Client-Side Code
 
 SocketStream allows you to write and structure client-side Javascript in exactly the same way as server-side code, allowing you to easily share modules between both.
@@ -58,16 +62,16 @@ You don't necessarily have to send all modules to the browser at once, you can a
 
 ### Options
 - **browserifyExcludePaths {Array} ** - to disable automatically packaging client side code into modules for certain paths, for example `client/code/app/controllers/**/*.js` and `client/code/app/directives/**/*.js` put the following in your server-side `app.js` code:
-```JavaScript
+<pre>
 ss.client.set({ browserifyExcludePaths: ['app/controllers', 'app/directives'] });
-```
+</pre>
 
 **Note**, that paths for excluding should be relative to `client/code/` and that file `client/code/app/entry.js` could not be excluded in any cases.
 
 If you need to exclude from automatically packaging certain file, just specify the file's relative path:
-```JavaScript
+<pre>
 ss.client.set({ browserifyExcludePaths: ['app/routes.js'] });
-```
+</pre>
 
 ### Background info
 

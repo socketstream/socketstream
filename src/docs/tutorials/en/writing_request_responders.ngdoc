@@ -1,4 +1,8 @@
-# Writing your own Request Responder
+@ngdoc overview
+@name Custom Request Responder
+
+@description
+# Custom Request Responder
 
 Note: This documentation is aimed at developers who are comfortable creating Node.js modules and wish to extend the core functionally of SocketStream. Writing Request Responders is going to become **a lot** easier in SocketStream 0.4.
 
@@ -28,8 +32,9 @@ A Request Responder is basically a message handler.
 Think of the websocket as a pipe with many different types of messages continually flowing in both directions. Each Request Responder module used by SocketStream is assigned a unique ID (the `responderId`) which is automatically prepended to each incoming and outgoing message.
 
 For example, assuming the `rpc` responder was the first to be loaded (and hence assigned an ID of 1), a typical incoming message destined for this responder would look something like this:
-
+<pre>
     1|{id: 1, m: 'method.to.call', p: [param1, param2, ...]}
+</pre>
 
 Note the `responderId` is sent before the pipe (`|`) character.
 
@@ -45,10 +50,10 @@ Request Responders are simply regular Node.js modules which you can easily creat
 
 Request Responders are added to your application stack by passing a module to SocketStream, as so:
 
-```javascript
+<pre>
 // in /app.js
 ss.responders.add(require('ss-echo-responder'));
-```
+</pre>
 
 Any optional config can be passed directly to the responder by passing an object as the second argument.
 
@@ -89,7 +94,7 @@ Request Responders simply allow you to pass messages (as strings) from the clien
 
 Implementing non-blocking bi-directional async message responders is possible (and relatively simple) by appending an sequential ID to each outgoing message and implementing a simple callback stack. This is exactly what we do with the built-in `rpc` responder. Take a look at the annotated source code here for inspiration:
 
-https://github.com/socketstream/socketstream/blob/master/src/request/responders/rpc/client.coffee
+https://github.com/socketstream/socketstream/blob/master/lib/request/responders/rpc/client.js
 
 
 ### Namespacing Server-side Files
