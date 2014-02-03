@@ -9,7 +9,7 @@ _Latest release: 0.3.10 ([view changelog](https://github.com/socketstream/socket
 
 A fast, modular Node.js web framework dedicated to building single-page realtime apps
 
-[Live demo](http://demo.socketstream.org)
+[Live demo](http://demo.socketstream.org) | [Documentation](http://socketstream.github.io/socketstream/docs/)
 
 ### Introduction
 
