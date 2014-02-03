@@ -1,0 +1,115 @@
+<h1><code ng:non-bindable=""></code>
+<div><span class="hint"></span>
+</div>
+</h1>
+<div><div class="authentication-page"><h2 id="authentication">Authentication</h2>
+<p>Users can be authenticated in two ways: over the websocket or over HTTP.</p>
+<p>The first option is useful if you&#39;re authenticating against a backend database or other resource you control, the second if you&#39;re using a third-party service such as Facebook Connect.</p>
+<p>Either way, the goal is the same: to update <code>req.session.userId</code> with the user&#39;s unique ID.</p>
+<h4 id="authentication_authenticating-over-websockets">Authenticating over websockets</h4>
+<p>This is the best choice if you&#39;re authenticating against an internal database or LDAP server, etc.</p>
+<pre class="prettyprint linenums">
+// server/rpc/app.js
+exports.actions = function(req, res, ss){
+
+  // tell SocketStream to load session data
+  req.use('session');
+
+  return {
+    authenticate: function(username, password){
+      // lookup user in DB, LDAP, etc
+      if (user) {
+        req.session.setUserId(user.id);
+        res(true);
+      } else {
+        res('Access denied!');
+      }
+    },
+    logout: function(){
+      req.session.setUserId(null);
+    }
+  }
+}
+
+</pre>
+<p>Note: You could just set <code>req.session.userId</code> manually, but calling the <code>req.session.setUserId()</code> function saves the session and notifies SocketStream to immediately start sending events for this user (sent using <code>ss.publish.user()</code>) over the current websocket connection.</p>
+<h4 id="authentication_authenticating-using-http">Authenticating using HTTP</h4>
+<p>Since the same session object is also available over HTTP you may easily authenticate a user by updating <code>req.session.userId</code> whilst processing a HTTP request.</p>
+<p>Let&#39;s look at a very simple example by adding the following &#39;route&#39; to <code>app.js</code>:</p>
+<pre class="prettyprint linenums">
+// app.js
+ss.http.router.on('/authenticateMe', function(req, res) {
+  req.session.userId = 'john';
+  req.session.save(function(err){
+    res.serve('main');
+  });
+});
+</pre>
+<p>Next, add an RPC action which sends the contents of <code>req.session.userId</code> over the websocket:</p>
+<pre class="prettyprint linenums">
+// server/rpc/app.js
+exports.actions = function(req, res, ss){
+  // tell SocketStream to load session data
+  req.use('session');
+
+  return {
+    getCurrentUser: function(){
+      res('The current user is ' + req.session.userId);
+    }
+  }
+};
+</pre>
+<p>Now visit <code>http://localhost:3000/authenticateMe</code> then enter the following command in the browser&#39;s console:
+<pre class="prettyprint linenums">
+    ss.rpc('app.getCurrentUser')
+</pre>
+<p>And you&#39;ll see the following output:
+<pre class="prettyprint linenums">
+    The current user is john
+</pre>
+<h4 id="authentication_using-everyauth-for-facebook-connect,-twitter,-github-etc">Using Everyauth for Facebook Connect, Twitter, Github etc</h4>
+<p>SocketStream integrates well with popular authentication libraries such as <a href="https://github.com/bnoguchi/everyauth">Everyauth</a>.</p>
+<p>Tip: Don&#39;t be tempted to follow the docs on the Everyauth website too closely - they are mainly geared at multi-page apps and/or specific to Express.</p>
+<p>Here&#39;s an example of a full app which authenticates against Twitter&#39;s OAuth service.</p>
+<p>To get started, register your new app at <a href="https://dev.twitter.com/apps/new">https://dev.twitter.com/apps/new</a></p>
+<p>When testing your app supply <code>http://127.0.0.1:3000</code> as the Callback URL. Change this to the real URL when your app goes into production.</p>
+<pre class="prettyprint linenums">
+// app.js
+var http      = require('http'),
+    ss        = require('socketstream'),
+    everyauth = require('everyauth');
+
+ss.client.define('main', {
+  view: 'app.jade',
+  css:  ['libs', 'app.styl'],
+  code: ['libs', 'modules', 'main']
+});
+
+ss.http.router.on('/', function(req, res) {
+  res.serve('main');
+});
+
+everyauth.twitter
+  .consumerKey('YOUR CONSUMER ID HERE')
+  .consumerSecret('YOUR CONSUMER SECRET HERE')
+  .findOrCreateUser( function (session, accessToken, accessTokenSecret, twitterUserMetadata) {
+    var userName = twitterUserMetadata.screen_name;
+    console.log('Twitter Username is', userName);
+    session.userId = userName;
+    session.save();
+    return true;
+  })
+  .redirectPath('/');
+
+ss.http.middleware.prepend(ss.http.connect.bodyParser());
+ss.http.middleware.append(everyauth.middleware());
+
+var server = http.Server(ss.http.middleware);
+server.listen(3000);
+
+ss.start(server);
+
+// To authenticate visit http://local.host:3000/auth/twitter
+</pre>
+<p>Many more details on this and other examples coming soon.</p>
+</div></div>
