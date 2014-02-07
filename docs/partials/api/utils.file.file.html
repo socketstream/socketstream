@@ -1,0 +1,39 @@
+<h1><code ng:non-bindable="">file</code>
+<div><span class="hint">file in module <code ng:non-bindable="">utils</code>
+</span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="utils-file-page utils-file-file-page"><p>This is used to maintain lists of userIds to socketIds and channelIds to socketIds</p>
+</div></div>
+<div class="member method"><h2 id="methods">Methods</h2>
+<ul class="methods"><li><h3 id="methods_findextforbasepath">findExtForBasePath(basepath)</h3>
+<div class="findextforbasepath"><div class="utils-file-findextforbasepath-page"><p>Given a basename, find a matching file with an extension.</p>
+</div><h5 id="methods_findextforbasepath_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>basepath</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="utils-file-findextforbasepath-page"><p>Path to directory</p>
+</div></td></tr></tbody></table><h5 id="methods_findextforbasepath_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-array">Array|null</a></td><td><div class="utils-file-findextforbasepath-page"><p>Array of files or <code>null</code></p>
+</div></td></tr></table><h4 id="methods_findextforbasepath_example">Example</h4>
+<div class="example"><div class="utils-file-findextforbasepath-page"><pre class="prettyprint linenums">
+findExtForBase('views/main')       =&gt; '.jade'
+findExtForBase('css/i-dont-exist') =&gt; null
+</pre>
+</div></div>
+</div>
+</li>
+<li><h3 id="methods_isdir">isDir()</h3>
+<div class="isdir"><div class="utils-file-isdir-page"><p>In synchronous mode returns if givven <code>filePath</code> is directory or not</p>
+</div><h5 id="methods_isdir_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-boolean">Boolean</a></td><td><div class="utils-file-isdir-page"><p>TRUE if givven <code>filePath</code> is dorectory</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_loadpackagejson">loadPackageJSON()</h3>
+<div class="loadpackagejson"><div class="utils-file-loadpackagejson-page"><p>Loads SocketStream&#39;s package.json file from the root directory</p>
+</div><h5 id="methods_loadpackagejson_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">Object|Error</a></td><td><div class="utils-file-loadpackagejson-page"><p>JSON object or thorws an eror if unable to find or parse SocketStream&#39;s package.json file</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_readdirsync">readDirSync(start)</h3>
+<div class="readdirsync"><div class="utils-file-readdirsync-page"><p>Reads the contents of a dir. Adapted from <a href="https://gist.github.com/825583">https://gist.github.com/825583</a></p>
+</div><h5 id="methods_readdirsync_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>start</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="utils-file-readdirsync-page"><p>Directory absolute path to lookup</p>
+</div></td></tr></tbody></table></div>
+</li>
+</ul>
+</div>
+</div>

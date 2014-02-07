@@ -1,7 +1,7 @@
 ![SocketStream!](https://github.com/socketstream/socketstream/raw/master/new_project/client/static/images/logo.png)
 
 # SocketStream
-[![Build Status](https://api.travis-ci.org/socketstream/socketstream.png?branch=master)](https://travis-ci.org/socketstream/socketstream) [![Dependency Status](https://david-dm.org/socketstream/socketstream.png)](https://david-dm.org/socketstream/socketstream#info=dependencies) [![devDependency Status](https://david-dm.org/socketstream/socketstream/dev-status.png)](https://david-dm.org/socketstream/socketstream#info=devDependencies) [![Code Climate](https://codeclimate.com/github/socketstream/socketstream.png)](https://codeclimate.com/github/socketstream/socketstream)
+[![Build Status](https://api.travis-ci.org/socketstream/socketstream.png?branch=master)](https://travis-ci.org/socketstream/socketstream) [![Dependency Status](https://david-dm.org/socketstream/socketstream.png)](https://david-dm.org/socketstream/socketstream#info=dependencies) [![devDependency Status](https://david-dm.org/socketstream/socketstream/dev-status.png)](https://david-dm.org/socketstream/socketstream#info=devDependencies) [![Code Climate](https://codeclimate.com/github/socketstream/socketstream.png)](https://codeclimate.com/github/socketstream/socketstream) [![Gitter chat](https://badges.gitter.im/socketstream.png)](https://gitter.im/socketstream)
 
 
 
@@ -9,7 +9,7 @@ _Latest release: 0.3.10 ([view changelog](https://github.com/socketstream/socket
 
 A fast, modular Node.js web framework dedicated to building single-page realtime apps
 
-[Live demo](http://demo.socketstream.org)
+[Live demo](http://demo.socketstream.org) | [Documentation](http://socketstream.github.io/socketstream/docs/)
 
 ### Introduction
 
@@ -351,7 +351,7 @@ If SEO is important to you, take a look at [Derby](http://www.derbyjs.com). If y
 
 There are a number of [Mocha](http://visionmedia.github.com/mocha/) tests starting to appear for parts of the API which are unlikely to change. To run them type:
 
-    $ make test
+    $ grunt test
     
 More tests coming soon. Contributions very much appreciated.
 

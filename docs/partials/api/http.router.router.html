@@ -1,0 +1,27 @@
+<h1><code ng:non-bindable="">router</code>
+<div><span class="hint">router in module <code ng:non-bindable="">http</code>
+</span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="http-router-page http-router-router-page"><p>Right now the router is simply an EventEmitter. This may change in the future</p>
+</div></div>
+<div class="member method"><h2 id="methods">Methods</h2>
+<ul class="methods"><li><h3 id="methods_on">on(url, cb)</h3>
+<div class="on"><h5 id="methods_on_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>url</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="http-router-page http-router-router-on-page"><p>Url to route</p>
+</div></td></tr><tr><td>cb</td><td><a href="" class="label type-hint type-hint-function">Function</a></td><td><div class="http-router-page http-router-router-on-page"><p>Callback function for <code>url</code></p>
+</div></td></tr></tbody></table><h5 id="methods_on_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="http-router-page http-router-router-on-page"><p>this.ee instance</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_route">route(url, req, res)</h3>
+<div class="route"><div class="http-router-page http-router-router-route-page"><p>Try the original route first for speed. If none exists, recursively fall back until we find a route, if possible
+This allows us to fully support HTML5 pushState &#39;mock routing&#39; across multiple single-page clients</p>
+</div><h5 id="methods_route_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>url</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="http-router-page http-router-router-route-page"><p>Url to route</p>
+</div></td></tr><tr><td>req</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="http-router-page http-router-router-route-page"><p>Request object</p>
+</div></td></tr><tr><td>res</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="http-router-page http-router-router-route-page"><p>Respond object</p>
+</div></td></tr></tbody></table><h5 id="methods_route_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-boolean">Boolean</a></td><td><div class="http-router-page http-router-router-route-page"><p>Route state according to passed <code>url</code></p>
+</div></td></tr></table></div>
+</li>
+</ul>
+</div>
+</div>

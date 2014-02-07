@@ -1,0 +1,62 @@
+<h1><code ng:non-bindable=""></code>
+<div><span class="hint"></span>
+</div>
+</h1>
+<div><div class="custom-request-responder-page"><h2 id="custom-request-responder">Custom Request Responder</h2>
+<p>Note: This documentation is aimed at developers who are comfortable creating Node.js modules and wish to extend the core functionally of SocketStream. Writing Request Responders is going to become <strong>a lot</strong> easier in SocketStream 0.4.</p>
+<h4 id="custom-request-responder_introduction">Introduction</h4>
+<p>SocketStream is bundled with two Request Responder modules by default: <code>rpc</code> and <code>events</code>.</p>
+<p>For many applications these two responders maybe all you need; however, SocketStream gives you the flexibility to write your own responder as an external module.</p>
+<p>You may wish to write your own responder to:</p>
+<ul>
+<li>Experiment with new ways to access model data from the browser (e.g. implement a MongoDB-esq client-side API)</li>
+<li>Investigate the best way to implement model synching to a persistent store (for Backbone.js, Ember.js, or others)</li>
+<li>Develop an ultra low-bandwidth custom protocol for high-speed action gaming (no need to use JSON)</li>
+<li>Make the client send a regular heartbeat to the server (to obtain presence info or calculate users online)</li>
+<li>Log browser clicks, mouse movements, errors encountered, etc and send the data to the server in the most efficient way</li>
+<li>Explore streaming pub/sub event streams, &#39;ZeroMQ in the browser&#39;, or any other experimental concepts</li>
+</ul>
+<p>We will feature the best third-party Request Responders on our website, www.socketstream.org, in the near future.</p>
+<h4 id="custom-request-responder_what-exactly-is-a-request-responder">What exactly is a Request Responder?</h4>
+<p>A Request Responder is basically a message handler.</p>
+<p>Think of the websocket as a pipe with many different types of messages continually flowing in both directions. Each Request Responder module used by SocketStream is assigned a unique ID (the <code>responderId</code>) which is automatically prepended to each incoming and outgoing message.</p>
+<p>For example, assuming the <code>rpc</code> responder was the first to be loaded (and hence assigned an ID of 1), a typical incoming message destined for this responder would look something like this:
+<pre class="prettyprint linenums">
+    1|{id: 1, m: 'method.to.call', p: [param1, param2, ...]}
+</pre>
+<p>Note the <code>responderId</code> is sent before the pipe (<code>|</code>) character.</p>
+<h4 id="custom-request-responder_getting-started">Getting Started</h4>
+<p>Request Responders are simply regular Node.js modules which you can easily create and publish on NPM. To help you get started quickly, we&#39;ve made an ultra-simple example called <code>echo</code> which you can clone from Github and extend as you wish:</p>
+<pre><code>git clone https://github.com/socketstream/ss-echo-responder.git</code></pre>
+<h4 id="custom-request-responder_adding-a-new-responder-to-your-app">Adding a new responder to your app</h4>
+<p>Request Responders are added to your application stack by passing a module to SocketStream, as so:</p>
+<pre class="prettyprint linenums">
+// in /app.js
+ss.responders.add(require('ss-echo-responder'));
+</pre>
+<p>Any optional config can be passed directly to the responder by passing an object as the second argument.</p>
+<h4 id="custom-request-responder_message-serialization">Message Serialization</h4>
+<p>Each Request Responder sends and receives messages as a <code>string</code>; giving you, the developer, complete control over the message length and format.</p>
+<p>For complex messages (involving objects) you&#39;ll probably want to serialize each message using JSON, as we do with the <code>rpc</code> responder. However, if you&#39;re just sending basic numeric data (e.g. an ID + X/Y coordinate for a character moving around a virtual world), sending a few groups of digits separated by commas will result in fewer bytes over the wire and no JSON overhead.</p>
+<p>Note: Even if you choose not to use JSON, if you were to packet-sniff the websocket connection, you&#39;ll notice Socket.IO still uses JSON as part of it&#39;s own internal message protocol. In the future SocketStream will support additional Websocket Transports allowing you to pick and choose the best combination of transports and responders for your particular use case.</p>
+<h4 id="custom-request-responder_sending-code-to-the-client">Sending Code to the Client</h4>
+<p>The Request Responder API allows your module to send client-side JS libraries (e.g. <code>backbone.js</code>), custom modules, and arbitrary JavaScript code to the browser before any application code is sent.</p>
+<p>SocketStream automatically handles the packing/minification of any client-side code when the end user runs the app in <code>production</code> mode, but please be <strong>very</strong> conscious that every byte of client-side code you send will increase the load time of the app.</p>
+<h4 id="custom-request-responder_registering-a-client-api">Registering a Client API</h4>
+<p>Should you wish to register a function on the main <code>ss</code> object (in the same way we do with <code>ss.rpc()</code>), you may call <code>ss.registerApi()</code> in your client-side code (see the <code>ss-echo-responder</code> for an example). How you choose to implement the client-side API is left entirely up to you.</p>
+<p>For example, the <code>rpc</code> responder allows you to call <code>ss.rpc(&#39;my.function.name&#39;, param1, param2, ...)</code> which takes an unlimited number of incoming arguments and transforms them into a JSON-serialized message.</p>
+<p>You may view the source code of the <code>rpc</code> responder here: <a href="https://github.com/socketstream/socketstream/blob/master/src/request/responders/rpc">https://github.com/socketstream/socketstream/blob/master/src/request/responders/rpc</a></p>
+<h4 id="custom-request-responder_request-middleware">Request Middleware</h4>
+<p>Request Middleware defined in <code>/server/middleware</code> is passed through to all Request Responders and is available for use if you desire.</p>
+<h4 id="custom-request-responder_rpc-style-callbacks">RPC-style Callbacks</h4>
+<p>Request Responders simply allow you to pass messages (as strings) from the client to the server, and vice versa.</p>
+<p>Implementing non-blocking bi-directional async message responders is possible (and relatively simple) by appending an sequential ID to each outgoing message and implementing a simple callback stack. This is exactly what we do with the built-in <code>rpc</code> responder. Take a look at the annotated source code here for inspiration:</p>
+<p><a href="https://github.com/socketstream/socketstream/blob/master/lib/request/responders/rpc/client.js">https://github.com/socketstream/socketstream/blob/master/lib/request/responders/rpc/client.js</a></p>
+<h4 id="custom-request-responder_namespacing-server-side-files">Namespacing Server-side Files</h4>
+<p>If your Responder allow users to create server-side files, for example to define schema for models, put them in <code>/server/name_of_your_responder</code>.</p>
+<p>We recommend you use the <code>apitree</code> NPM module for namespacing (as we do with the <code>rpc</code> responder), but the ultimate choice is left up to you - the developer.</p>
+<h4 id="custom-request-responder_api-status">API Status</h4>
+<p>The Request Responder API in 0.3 is now stable. SocketStream 0.4 will build upon the ideas in 0.3, allowing you to define additional &#39;interfaces&#39; so your responder can be invoked over the REPL (using <code>ss-console</code>), as part of a server-side test suite, or even over HTTP requests.</p>
+<h4 id="custom-request-responder_support-available">Support available!</h4>
+<p>Please do not hesitate to get in touch if you need help at any stage of the process. Please log a Github issue or find us on IRC (#socketstream channel on Freenode).</p>
+</div></div>

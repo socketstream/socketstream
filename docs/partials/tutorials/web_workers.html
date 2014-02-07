@@ -1,0 +1,51 @@
+<h1><code ng:non-bindable=""></code>
+<div><span class="hint"></span>
+</div>
+</h1>
+<div><div class="web-workers-page"><h2 id="web-workers">Web Workers</h2>
+<p>Web Workers provide a great way for modern browsers to execute complex tasks and calculations without blocking the main thread.</p>
+<p>SocketStream makes it easy to work with Web Workers by providing transparent compilation (if you&#39;re using CoffeeScript) and automatic minification &amp; caching when you call <code>ss.client.packAssets()</code></p>
+<p>To read more about Web Workers in general, take a look at: <a href="http://www.html5rocks.com/en/tutorials/workers/basics">http://www.html5rocks.com/en/tutorials/workers/basics</a></p>
+<h4 id="web-workers_getting-started">Getting started</h4>
+<p>Web Workers live in <code>/client/workers</code>. We don&#39;t create this folder by default, so you&#39;ll need to do that first.</p>
+<p>Each worker should be written as a separate <code>.js</code> or <code>.coffee</code> file (if you have the <code>ss-coffee</code> module installed). For this tutorial we&#39;ll be using JavaScript.</p>
+<h4 id="web-workers_basic-example">Basic Example</h4>
+<p>Let&#39;s create a worker which will calculate Pi using the <a href="http://en.wikipedia.org/wiki/Leibniz_formula_for_%CF%80">Leibniz Formula</a>:</p>
+<pre class="prettyprint linenums">
+// in /client/workers/pi.js
+
+self.addEventListener('message', function(e) {
+  var cycles = e.data;
+  postMessage("Calculating Pi using " + cycles + " cycles");
+  var numbers = calculatePi(cycles);
+  postMessage("Result: " + numbers);
+}, false);
+
+function calculatePi(cycles) {
+  var pi = 0;
+  var n  = 1;
+  for (var i=0; i &lt;= cycles; i++) {
+    pi = pi + (4/n) - (4 / (n+2));
+    n  = n  + 4;
+  }
+  return pi;
+}
+</pre>
+<p>Then, in any client-side code file, invoke the worker.</p>
+<pre class="prettyprint linenums">
+// in any /client/code file
+var worker = ss.load.worker('/pi.js');
+
+// print output to console
+worker.addEventListener('message', function(e) {
+  console.log(e.data);
+});
+
+// start worker with 10000000 cycles
+worker.postMessage(10000000);
+</pre>
+<p>A few seconds after the task has run you should see the output in the browser&#39;s console:</p>
+<pre><code>Calculating Pi using 10000000 cycles
+Result: 3.1415926485894077</code></pre>
+<p>Experiment with running more cycles and passing different messages.</p>
+</div></div>

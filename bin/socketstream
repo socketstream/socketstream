@@ -9,9 +9,8 @@ program
   .option('-m, --minimal', 'minimal install (no chat demo)')
   .option('-c, --coffee', 'use CoffeeScript')
   .option('-j, --jade', 'use Jade for Views')
-  // To be implemented...
-  //.option('-s, --stylus', 'use Stylus for CSS')
-  //.option('-l, --less', 'use Less for CSS')
+  .option('-s, --stylus', 'use Stylus for CSS')
+  .option('-l, --less', 'use Less for CSS')
   .option('-r, --repl', 'include Console Server / REPL')
   .parse(process.argv);
 
