@@ -43,9 +43,9 @@ SocketStream is MIT licensed.
 
 ### Status
 
-SocketStream 0.3 is now stable enough for production use internally (behind a firewall). Several pioneering users are successfully hosting external apps in production, though we ask you to use caution and appreciate that SocketStream is new software which has yet to be battle hardened. SocketStream 0.3 will continue to be updated with bug fixes and minor feature enhancements.
+SocketStream 0.3 is the current stable branch. 
 
-All major development work is going on in [SocketStream 0.4](https://github.com/socketstream/socketstream-0.4) which builds upon the features and ideas in 0.3. Thanks to a new modular approach, SocketStream 0.4 will provide the initial ease of an integrated web framework with the flexibility of small modules that do one thing well. [Read more](https://gist.github.com/socketstream/5461356).
+Last year there was a separate 0.4 version of SocketStream, which was a rewrite of the framework to make it more modular. The 0.4 version was cancelled because it split development efforts too thinly, and because there was already a sizeable use of 0.3, and some were concerned that 0.3 would become abandonware. It was therefore decided that it would be better to focus on refactoring the 0.3 branch as a way of getting to the goals of 0.4, rather than trying to work on 2 separate codebases.
 
 
 ### Contact
