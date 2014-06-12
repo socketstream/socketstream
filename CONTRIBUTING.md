@@ -197,7 +197,7 @@ To run documentation web site locally the way process will watch for changes and
     grunt watch:docs
 ```
 
-To update local `gh-page` branch by mergin from `master` run:
+To update local `gh-page` branch by merging from `master` run:
 ```
     grunt update:docs
 ```

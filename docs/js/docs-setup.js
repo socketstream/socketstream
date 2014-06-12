@@ -209,7 +209,7 @@ NG_DOCS={
       "shortName": "log",
       "type": "service",
       "moduleName": "utils",
-      "shortDescription": "Contains method stubs for logging",
+      "shortDescription": "Contains method stubs for logging to console (by default) or",
       "keywords": "api assigning choose console debug default error fairly function happened info informed keeping level log logging method override parameters provider require service socketstream ss stubs sysadmin takes time trivial unexpected utils var wakeup warn winston"
     },
     {

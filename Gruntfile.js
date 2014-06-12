@@ -317,7 +317,7 @@ module.exports = function(grunt) {
     grunt.registerTask('test', 'Test everything', ['mochaTest']);
     grunt.registerTask('build:docs', 'Build documentation', ['clean:docs', 'ngdocs']);
     grunt.registerTask('watch:docs', 'Watching for changes and re-building docs', ['concurrent:docsSite']);
-    grunt.registerTask('update:docs', 'Update gh-page branch by mergin from master', ['shell:update-gh-pages']);
+    grunt.registerTask('update:docs', 'Update gh-page branch by merging from master', ['shell:update-gh-pages']);
 
     grunt.registerTask('release:start', 'Increase patch version by 1, add suffix "SNAPSHOT" as "major.minor.(patch+1)-SNAPSHOT" and commit package.json', ['shell:release-start']);
     grunt.registerTask('release:prepare', 'Run all the tests, generates CHANGELOG.md since laste release and and clean up version to just "major.minor.patch"', ['shell:release-prepare']);
