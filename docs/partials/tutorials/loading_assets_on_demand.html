@@ -1,0 +1,26 @@
+<h1><code ng:non-bindable=""></code>
+<div><span class="hint"></span>
+</div>
+</h1>
+<div><div class="loading-assets-on-demand-page"><h2 id="loading-assets-on-demand">Loading Assets On Demand</h2>
+<p>If you&#39;re writing a small app you can safely ignore this section, as it&#39;s always better to pack all client assets into one file and send everything through together in one go if possible.</p>
+<p>But what if you&#39;re writing a large app, or an app with multiple distinct sections like iCloud.com?</p>
+<p>SocketStream allows you to load code (and other assets in the future) into your app asynchronously on demand.</p>
+<h4 id="loading-assets-on-demand_loading-code">Loading Code</h4>
+<p>Sadly it&#39;s not possible to directly <code>require()</code> modules which haven&#39;t been loaded as the blocking nature of the <code>require</code> function means the browser would freeze until the module has been retrieved from the server - not good.</p>
+<p>However SocketStream allows you to load additional code modules from the server asynchronously using the built-in <code>ss.load.code()</code> command. Once all the code you&#39;ve requested has been loaded, we execute a callback, allowing you to <code>require()</code> the new modules as normal without any fancy syntax.</p>
+<p>To try this out, create a new directory of application modules in <code>/client/code</code>. For the sake of this example, let&#39;s call our new directory <code>/client/code/mail</code>. We&#39;ll also assume this directory has a module in it called <code>search.js</code>.</p>
+<pre class="prettyprint linenums">
+// in any client-side module
+ss.load.code('/mail', function(){
+
+  // all modules in /client/code/mail have now been loaded into
+  // the root namespace (/) and can be required in the normal way
+  var search = require('/search');
+
+});
+</pre>
+<p>Note: Regardless of the directory you load, the modules inside will always be loaded into the root (/) namespace by default. If you want to mount the new modules in a different namespace, just create one or more sub-directories in the folder you&#39;re loading.</p>
+<h4 id="loading-assets-on-demand_automatic-caching">Automatic Caching</h4>
+<p>Modules are only ever retrieved from the server once. Subsequent requests for the same directory will be returned instantly without contacting the server.</p>
+</div></div>

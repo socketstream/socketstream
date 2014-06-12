@@ -1,0 +1,83 @@
+<h1><code ng:non-bindable=""></code>
+<div><span class="hint"></span>
+</div>
+</h1>
+<div><div class="defining-multiple-clients-page"><h2 id="defining-multiple-single-page-clients">Defining Multiple Single-Page Clients</h2>
+<p>SocketStream is exclusively a single-page framework; however we make it easy to define multiple single-page clients to be sent to different devices (e.g. desktop browsers and iPhones), or to be served on different URLs (useful for providing an /admin interface).</p>
+<p>New clients are defined with the <code>ss.client.define()</code> function in your <code>app.js</code> file. You may define as many as you like, just be sure to give each one a unique name (passed to the first argument).</p>
+<h4 id="defining-multiple-single-page-clients_default-settings">Default settings</h4>
+<p>A single-page client consist of one HTML view and multiple CSS, client-side code and template files.</p>
+<p>When you create a new SocketStream project we define a client called <code>main</code> for you with the following options:</p>
+<pre class="prettyprint linenums">
+// in app.js
+ss.client.define('main', {
+  view: 'app.html',
+  css:  ['libs/reset.css', 'app.styl'],
+  code: ['libs/jquery.min.js', 'app'],
+  tmpl: '*'
+});
+</pre>
+<p>For each type of asset you may provide one or more file names or directory names. When passing directory names, the contents of the directory (including any sub-directories) will be served alphanumerically.</p>
+<p>Let&#39;s look more closely at each type of asset:</p>
+<h6 id="defining-multiple-single-page-clients_default-settings_view">view</h6>
+<p>A view is the initial HTML sent to the browser which provides layout and structure for your app. View files are stored in <code>/client/views</code>. Due to the nature of a single-page application, you may only specify one view for each client you define.</p>
+<h6 id="defining-multiple-single-page-clients_default-settings_css">css</h6>
+<p>CSS files live in <code>/client/css</code>. This option allows you to specify as many files or directories as you wish. As order is important when serving CSS, you&#39;ll need to make sure any CSS libraries (e.g. <code>reset.css</code>) are sent before your application stylesheets.</p>
+<p>Note: If you&#39;re using Stylus (highly recommended!), you&#39;ll only need to specify the first <code>.styl</code> file here as any additional files can be imported using the <code>@import</code> command. If you&#39;re using plain CSS, you&#39;ll need to list each <code>.css</code> file individually or pass the name of a directory instead.</p>
+<h6 id="defining-multiple-single-page-clients_default-settings_code">code</h6>
+<p>Client-side code lives in <code>/client/code</code>. This option allows you to specify as many files or directories as you wish to be sent to the client upon initial connection.</p>
+<p>Important: Modules are always mounted to the root (/) namespace, even if you specify nested directories.  Hence if you specify <code>code: [&#39;iphone/new_release&#39;]</code>, and have a module in here called <code>calendar.js</code> you will require this module as <code>require(&#39;/calendar&#39;)</code> in your app, not <code>require(&#39;/iphone/new_release/calendar&#39;)</code>. </p>
+<p>Not all code has to be sent upon initial connection - you may prefer to <a href="#/tutorials/loading_assets_on_demand">load modules on demand</a>.</p>
+<h6 id="defining-multiple-single-page-clients_default-settings_tmpl">tmpl</h6>
+<p>Client-side Templates live in <code>/client/templates</code>. This option allows you to specify multiple files or directories of templates to be sent to the client upon initial connection. Note the <code>*</code> means send everything.</p>
+<h4 id="defining-multiple-single-page-clients_defining-a-new-client">Defining a new client</h4>
+<p>For this example let&#39;s imagine we want to define a new single-page client to be sent to an iPhone:</p>
+<pre class="prettyprint linenums">
+ss.client.define('iphone', {
+  view: 'iphone.jade',
+  css : ['libs/reset.css', 'iphone.styl'],
+  code: ['libs/jquery.min.js', 'app'],
+  tmpl: 'iphone'
+});
+</pre>
+<p>Here we&#39;re not only specifying a different view (<code>/client/views/iphone.jade</code>) but we&#39;re also choosing to send different CSS and client-side templates, though in this example we&#39;ve not changed the client-side code we&#39;re sending.</p>
+<h4 id="defining-multiple-single-page-clients_serving-different-clients">Serving different clients</h4>
+<p>Once you&#39;ve defined a single-page client you can choose to serve it on a particular URL:</p>
+<pre class="prettyprint linenums">
+// short format
+ss.http.route('/').serveClient('main');
+
+// long format
+ss.http.route('/iphone', function(req, res) {
+  res.serveClient('iphone');
+});
+</pre>
+<p>or depending upon the browser&#39;s UserAgent:</p>
+<pre class="prettyprint linenums">
+ss.http.route('/', function(req, res) {
+  if (req.headers['user-agent'].match(/iPhone/))
+    res.serveClient('iphone');
+  else
+    res.serveClient('main');
+});
+</pre>
+<h4 id="defining-multiple-single-page-clients_sharing-common-code">Sharing common code</h4>
+<p>Typically you&#39;ll want to divide all your assets into three sections: Those to be served to desktop clients, those for to be served to mobile clients, and those to be shared by both.</p>
+<p>Hence a typical desktop/iPhone config may look something like this:</p>
+<pre class="prettyprint linenums">
+ss.client.define('desktop', {
+  view: 'desktop.jade',
+  css:  ['common/libs', 'desktop/libs', 'desktop.styl'],
+  code: ['common/libs', 'desktop/libs', 'common/app', 'desktop/app'],
+  tmpl: ['common', 'desktop']
+});
+
+ss.client.define('iphone', {
+  view: 'iphone.jade',
+  css:  ['common/libs', 'iphone/libs', 'iphone.styl'],
+  code: ['common/libs', 'iphone/libs', 'common/app', 'iphone/app'],
+  tmpl: ['common', 'iphone']
+});
+</pre>
+<p>As you can see, SocketStream gives you the flexibility and power to mix and match client-side assets for any possible combination of devices or pages without having to duplicate code.</p>
+</div></div>

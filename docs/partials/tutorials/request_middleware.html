@@ -1,0 +1,137 @@
+<h1><code ng:non-bindable=""></code>
+<div><span class="hint"></span>
+</div>
+</h1>
+<div><div class="request-middleware-page"><h2 id="request-middleware">Request Middleware</h2>
+<p>Request Middleware allows you to inspect, transform, redirect or drop incoming requests over the websocket, HTTP API, or REPL (using <code>ss-console</code>).</p>
+<p>If you&#39;ve used Connect HTTP middleware before the concept and API will be instantly familiar. Essentially incoming requests can be processed through a chain of middleware BEFORE they arrive at their final destination - typically the RPC command you are requesting.</p>
+<p>Middleware can be provided internally, via external modules, or custom-defined in your app.</p>
+<p>Regardless, all middleware is invoked using the <code>req.use()</code> command from within your <code>server/rpc</code> code.</p>
+<h4 id="request-middleware_internal-middleware">Internal Middleware</h4>
+<p>Right now SocketStream provides two simple internal middleware functions: <code>debug</code> and <code>session</code>.</p>
+<h5 id="request-middleware_internal-middleware_debug">debug</h5>
+<p>The <code>debug</code> middleware will output the contents of the <code>req</code> object to the terminal, useful when you&#39;re debugging problems. It takes an optional argument indicating which color to output the message in:</p>
+<pre class="prettyprint linenums">
+// server/rpc/app.js
+exports.actions = function(req, res, ss){
+
+  // output all incoming requests to the console in cyan
+  req.use('debug', 'cyan');
+
+  return {
+    square: function(n){
+      res(n * n);
+    }
+  }
+}
+</pre>
+<h5 id="request-middleware_internal-middleware_session">session</h5>
+<p>The <code>session</code> middleware instructs SocketStream to retrieve the user&#39;s session from the session store BEFORE executing the next action:</p>
+<pre class="prettyprint linenums">
+// server/rpc/app.js
+exports.actions = function(req, res, ss){
+
+  // load user's session into req.session
+  req.use('session');
+
+  return {
+    square: function(n){
+      res(n * n);
+    }
+  }
+}
+</pre>
+<p>Try adding <code>req.use(&#39;debug&#39;)</code> after <code>req.use(&#39;session&#39;)</code> to see how the session data has been loaded into <code>req.session</code>. Remember, the order you call middleware in is very important.</p>
+<h4 id="request-middleware_using-third-party-middleware">Using third-party middleware</h4>
+<p>Simply pass the module/function directly. E.g:
+<pre class="prettyprint linenums">
+    req.use(require('text-utils').sanitize, {anyConfig: 'can be passed here'});
+</pre>
+<h4 id="request-middleware_creating-your-own-middleware">Creating your own Middleware</h4>
+<p>Creating custom middleware in your application is easy.</p>
+<p>Let&#39;s start by creating an RPC action which multiplies incoming numbers (the first param).</p>
+<pre class="prettyprint linenums">
+// server/rpc/app.js
+exports.actions = function(req, res, ss){
+
+  // pass the multiplier to the second arg
+  req.use(multiplyNumber, 2);
+
+  return {
+    showResult: function(n){
+      res('The incoming number is ' + n);
+    }
+  }
+}
+
+// define my custom middleware function
+multiplyNumber = function(multiplier){
+
+  return function(req, res, next){
+    var = num = req.params[0];
+    if (num && typeof(num) == 'number')
+      req.params[0] = (num * multiplier);
+    next() // indicates middleware is finished processing
+  }
+
+}
+</pre>
+<p>Let&#39;s test this out in the browser:
+<pre class="prettyprint linenums">
+    ss.rpc('app.showResult', 80)   // outputs "The incoming number is 160" to the console
+</pre>
+<h5 id="request-middleware_creating-your-own-middleware_using-middleware-for-authorization">Using Middleware for Authorization</h5>
+<p>Request Middleware is the perfect way to check if a user is authorized before proceeding further:</p>
+<pre class="prettyprint linenums">
+// server/rpc/app.js
+exports.actions = function(req, res, ss){
+
+  // check user is logged in before proceeding
+  req.use(checkAuthenticated);
+
+  return {
+    topSecret: function(){
+      // this function will only be called if user is logged in
+      res(bankCodes);
+    }
+  }
+}
+
+// define custom middleware to ensure user is logged in
+checkAuthenticated = function(){
+
+  return function(req, res, next){
+    if (req.session && req.session.userId) return next();
+    res('Access denied'); // prevent request from continuing
+  }
+
+}
+</pre>
+<p>You could take this one step further and load the user&#39;s data from a database and attach it to <code>req.user</code>.</p>
+<h4 id="request-middleware_sharing-middleware-across-multiple-files">Sharing middleware across multiple files</h4>
+<p>Once you&#39;ve created your custom middleware you&#39;ll probably want to use it across multiple files. SocketStream makes this easy by allowing middleware to be placed in <code>server/middleware</code> and loaded into an API Tree.</p>
+<p>For example let&#39;s move the <code>checkAuthenticated</code> function above to its new home in <code>server/middleware/admin/user.js</code>:</p>
+<pre class="prettyprint linenums">
+// server/middleware/admin/user.js
+exports.checkAuthenticated = function(){
+
+  return function(req, res, next){
+    if (req.session && req.session.userId) return next();
+    res(false); // Access denied: prevent request from continuing
+  }
+
+}
+</pre>
+<p>You can now call this function from any <code>server/rpc</code> file with:
+<pre class="prettyprint linenums">
+    req.use('session');
+    req.use('admin.user.checkAuthenticated');
+</pre>
+<p>Note: <code>req.use(&#39;session&#39;)</code> must be called first as the <code>checkAuthenticated</code> middleware uses the <code>req.session</code> object.</p>
+<p>Although you strictly don&#39;t have to, we highly recommend creating at least one folder in <code>server/middleware</code> to store your custom middleware to prevent any future namespace conflicts.</p>
+<h4 id="request-middleware_food-for-thought">Food for thought</h4>
+<p>Request Middleware allows for many exciting new opportunities around models and scaling.</p>
+<p>For example you could write your own middleware which handles CRUD requests (create, update, delete, etc) and forwards them directly to MongoDB, or use <a href="https://github.com/hookio/hook.io">Hook.IO</a> to forward incoming requests to a different system altogether.</p>
+<p>Bear in mind there&#39;s no need to define any RPC actions at all if your middleware can respond to all incoming requests.</p>
+<p>We&#39;ll be exploring all these ideas in the future when time permits, but you don&#39;t have to wait for us. Start experimenting today and publish your middleware module on npm for everyone to use.</p>
+</div></div>

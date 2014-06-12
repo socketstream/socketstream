@@ -1,0 +1,43 @@
+<h1><code ng:non-bindable=""></code>
+<div><span class="hint"></span>
+</div>
+</h1>
+<div><div class="live-reloading-page"><h2 id="live-reloading-of-client-files">Live Reloading of Client Files</h2>
+<p>Life as a front-end web developer used to be a continuous cycle of &#39;change file&#39;, &#39;reload browser&#39;, &#39;change file&#39;, etc etc until you got the result you were looking for.</p>
+<p>SocketStream breaks this cycle by automatically refreshing the browser whenever you make a change to any file in the <code>/client</code> directory. What&#39;s more, if you&#39;re just tweaking the stylesheets, the CSS will be reloaded in place so your app doesn&#39;t lose state.</p>
+<p><strong>Tip</strong>: Open up your text editor on one side of the screen, put the browser on the other, and watch your productivity soar!</p>
+<p>Live Reload is automatically enabled unless you call:
+<pre class="prettyprint linenums">
+   ss.client.packAssets();
+</pre>
+As you typically would in <code>production</code> mode.</p>
+<h4 id="live-reloading-of-client-files_known-issues">Known issues</h4>
+<h5 id="live-reloading-of-client-files_known-issues_vim">VIM</h5>
+<p>VIM creates a temporary file before replacing the real file. To prevent problems with Live Reload, change the write mode with:
+<pre class="prettyprint linenums">
+    :set nowritebackup
+</pre>
+<h5 id="live-reloading-of-client-files_known-issues_too-many-files">Too many files</h5>
+<p>Live Reload is built on Node&#39;s <code>fs.watch()</code> API which works differently on each operating system. For example, on Linux you&#39;ll get an <code>EMFILE</code> error if you have many files in your <code>client</code> directory. Change this limit with:
+<pre class="prettyprint linenums">
+    sudo vi /etc/sysctl.conf
+</pre>
+add the following line
+<pre class="prettyprint linenums">
+    fs.inotify.max_user_instances = 200 # or higher if needed
+</pre>
+then run
+<pre class="prettyprint linenums">
+    sudo sysctl -p
+</pre>
+If things still don&#39;t work as expected, please log an issue and be sure to mention which OS you&#39;re using.</p>
+<h4 id="live-reloading-of-client-files_options">Options</h4>
+<p>To disable Live Reload, even in development mode, put the following in your <code>app.js</code> code:
+<pre class="prettyprint linenums">
+    ss.client.set({liveReload: false})
+</pre>
+Alternatively, you may specify the top-level directories within <code>/client</code> you wish Live Reload to observe. E.g.:
+<pre class="prettyprint linenums">
+    ss.client.set({liveReload: ['views', 'css'])
+</pre>
+</div></div>

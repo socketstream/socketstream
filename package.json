@@ -1,0 +1,67 @@
+{
+  "name": "socketstream",
+  "description": "A fast, modular Node.js framework dedicated to building realtime single-page apps",
+  "version": "0.3.11-SNAPSHOT",
+  "homepage": "http://www.socketstream.org",
+  "author": "Owen Barnes <owen@socketstream.org>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/socketstream/socketstream"
+  },
+  "contributors": [
+    "Paul Jensen",
+    "Alan Milford",
+    "Addy Osmani",
+    "nponeccop",
+    "Gilbert B Garza",
+    "Craig Jordan Muir",
+    "David Rosen",
+    "Michael Lawson"
+  ],
+  "dependencies": {
+    "colors": "= 0.6.0-1",
+    "commander": "= 0.6.1",
+    "eventemitter2": "= 0.4.9",
+    "apitree": "= 1.1.0",
+    "uglify-js": "= 1.3.3",
+    "clean-css": "= 0.4.2",
+    "semver": "= 1.0.14",
+    "redis": "= 0.8.1",
+    "connect": "= 2.4.5",
+    "connect-redis": "= 1.4.4",
+    "chokidar": "= 0.6.3",
+    "engine.io": "= 0.7.9"
+  },
+  "devDependencies": {
+    "mocha": "= 1.2.1",
+    "should": "= 2.0.1",
+    "grunt": "= 0.4.1",
+    "grunt-cli": "= 0.1.9",
+    "grunt-contrib-jshint": "= 0.6.3",
+    "grunt-mocha-test": "= 0.7.0",
+    "supertest": "= 0.8.2",
+    "async": "= 0.2.9",
+    "grunt-ngdocs": "~0.2.1",
+    "grunt-contrib-clean": "~0.5.0",
+    "grunt-contrib-connect": "~0.6.0",
+    "grunt-contrib-watch": "~0.5.3",
+    "connect-livereload": "~0.3.2",
+    "grunt-concurrent": "~0.4.2",
+    "shelljs": "~0.2.6",
+    "grunt-conventional-changelog": "~1.0.0"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "directories": {
+    "lib": "./lib",
+    "doc": "./doc"
+  },
+  "main": "./index.js",
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "bin": {
+    "socketstream": "./bin/socketstream"
+  }
+}

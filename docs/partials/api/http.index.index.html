@@ -1,0 +1,34 @@
+<h1><code ng:non-bindable="">index</code>
+<div><span class="hint">index in module <code ng:non-bindable="">http</code>
+</span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="http-index-page http-index-index-page"><h4 id="description_http-server">HTTP Server</h4>
+<p>SocketStream does not concern itself with web servers. It simply provides a stack of Connect Middleware
+which can be used by the application in any way it wishes.</p>
+</div></div>
+<div class="member method"><h2 id="methods">Methods</h2>
+<ul class="methods"><li><h3 id="methods_load">load(staticPath, sessionStore, sessionOptions)</h3>
+<div class="load"><div class="http-index-page http-index-index-load-page"><p>Attached Middleware, Session store, staticCache, etc, to the this.middleware (<code>var app = connect()</code>)</p>
+</div><h5 id="methods_load_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>staticPath</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="http-index-page http-index-index-load-page"><p>Static path for connect for serving static assets as <code>*.js</code>, <code>*.css</code>, etc.</p>
+</div></td></tr><tr><td>sessionStore</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="http-index-page http-index-index-load-page"><p>Session store instance object</p>
+</div></td></tr><tr><td>sessionOptions</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="http-index-page http-index-index-load-page"><p>Session store options</p>
+</div></td></tr></tbody></table><h5 id="methods_load_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="http-index-page http-index-index-load-page"><p>Updated, with attached Middleware, this.middleware(<code>var app = connect()</code>) instance</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_route">route(url, fn)</h3>
+<div class="route"><div class="http-index-page http-index-index-route-page"><p>Expose short-form routing API</p>
+</div><h5 id="methods_route_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>url</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="http-index-page http-index-index-route-page"><p>Url string for routing</p>
+</div></td></tr><tr><td>fn</td><td><a href="" class="label type-hint type-hint-function">Function</a></td><td><div class="http-index-page http-index-index-route-page"><p>Callback function for url</p>
+</div></td></tr></tbody></table><h5 id="methods_route_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="http-index-page http-index-index-route-page"><p>res.serveClient(name) object</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_set">set(newSettings)</h3>
+<div class="set"><div class="http-index-page http-index-index-set-page"><p>Merge optional settings</p>
+</div><h5 id="methods_set_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>newSettings</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="http-index-page http-index-index-set-page"><p>Object with settins, @link settings</p>
+</div></td></tr></tbody></table></div>
+</li>
+</ul>
+</div>
+</div>

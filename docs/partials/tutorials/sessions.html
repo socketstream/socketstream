@@ -1,0 +1,70 @@
+<h1><code ng:non-bindable=""></code>
+<div><span class="hint"></span>
+</div>
+</h1>
+<div><div class="sessions-page"><h2 id="sessions">Sessions</h2>
+<p>SocketStream uses the Connect Session Store to ensure sessions can be easily shared between HTTP and Websocket requests using a similar API.</p>
+<p>This means you&#39;re able to write data to a session from SocketStream and then use it in Express.js or any other page-based framework which uses Connect - especially useful when performing authentication.</p>
+<h4 id="sessions_using-sessions-over-websockets">Using Sessions over Websockets</h4>
+<p>For optimum speed and flexibility, session data is not retrieved by default when a websocket request is processed by the server. Before you do anything with sessions, you&#39;ll need to activate the internal <code>session</code> <a href="#/tutorials/request_middleware">Request Middleware</a> as shown below:</p>
+<pre class="prettyprint linenums">
+// server/rpc/app.js
+exports.actions = function(req, res, ss) {
+
+  // Load session data into req.session
+  req.use('session');
+
+  return {
+    testAction: function(){
+      console.log('This request now has session data:', req.session);
+    }
+  }
+}
+</pre>
+<h5 id="sessions_using-sessions-over-websockets_getting/setting-custom-session-data">Getting/Setting Custom Session Data</h5>
+<pre class="prettyprint linenums">
+// server/rpc/app.js
+exports.actions = function(req, res, ss) {
+
+  // Load session data into req.session
+  req.use('session');
+
+  return {
+    getSession: function() {
+      console.log('The contents of my session is', req.session);
+    },
+    updateSession: function(){
+      req.session.myVar = 1234;
+      req.session.cart = {items: 3, checkout: false};
+      req.session.save(function(err){
+        console.log('Session data has been saved:', req.session);
+      });
+    }
+  }
+}
+</pre>
+<h4 id="sessions_using-sessions-over-http">Using Sessions over HTTP</h4>
+<p>The same session data is automatically loaded into <code>req.session</code> when accessed over HTTP. For example, append this route to your <code>app.js</code> file:</p>
+<pre class="prettyprint linenums">
+// app.js
+ss.http.router.on('/updateSession', function(req, res) {
+  req.session.myVar = 4321;
+  res.end('req.session.myVar has been updated to', req.session.myVar);
+});
+</pre>
+<p>Note: There is no need to call <code>req.session.save()</code> if you&#39;re calling <code>res.end()</code>.</p>
+<h4 id="sessions_session-stores">Session Stores</h4>
+<p>The in-memory Connect Session Store is used by default to allow you to start developing easily. Before your app goes into production you <strong>must</strong> use a Connect Session Store with a persistent backend to avoid memory leaks.</p>
+<p>We have bundled the <code>connect-redis</code> store as standard as this makes an excellent choice. To use it, add the following line to your <code>app.js</code> file:
+<pre class="prettyprint linenums">
+    // in app.js
+    ss.session.store.use('redis');
+</pre>
+<p>Any Redis configuration can be passed to the second argument (e.g <code>{port: 1234}</code>).</p>
+<h4 id="sessions_auto-expiring-sessions">Auto-expiring Sessions</h4>
+<p>By default sessions will expire within 30 days, unless the session is terminated beforehand (e.g. the user closes the browser). To set a different expiry time put the following in your <code>app.js</code> file:
+<pre class="prettyprint linenums">
+    // in app.js
+    ss.session.options.maxAge = 8640000;  // one day in milliseconds
+</pre>
+</div></div>

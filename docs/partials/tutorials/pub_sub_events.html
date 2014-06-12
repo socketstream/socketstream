@@ -1,0 +1,87 @@
+<h1><code ng:non-bindable=""></code>
+<div><span class="hint"></span>
+</div>
+</h1>
+<div><div class="pub-sub-events-page"><h2 id="pub/sub-events">Pub/Sub Events</h2>
+<p>SocketStream includes an powerful pub/sub system allowing you to easily send messages to connected browsers over the websocket.</p>
+<h4 id="pub/sub-events_1-sending-to-everyone">1. Sending to Everyone</h4>
+<p>To send an event to every connected client (for example to let them know the server&#39;s going down for maintenance), use the <code>ss.publish.all</code> method:</p>
+<pre class="prettyprint linenums">
+// in a /server/rpc file
+ss.publish.all('flash', 'Notice: This service is going down in 10 minutes');
+</pre>
+<p>Receive the event in the browser with:</p>
+<pre class="prettyprint linenums">
+// in a /client/code file
+ss.event.on('flash', function(message){
+  alert(message);
+});
+</pre>
+<p>Note: The first argument specifies the event name. All subsequent arguments will be passed through to the event handler.</p>
+<h4 id="pub/sub-events_2-sending-to-private-channels">2. Sending to Private Channels</h4>
+<p>Sometimes you&#39;ll want to send events to a subset of connected clients. For example, you may have a chat app with multiple rooms.</p>
+<p>Each client session can be subscribed to an unlimited number of private channels using the following commands:</p>
+<pre class="prettyprint linenums">
+// in a /server/rpc file after calling req.use('session') middleware
+
+req.session.channel.subscribe('disney')   // note: multiple channel names can be passed as an array
+
+req.session.channel.unsubscribe('kids')   // note: multiple channel names can be passed as an array
+
+req.session.channel.reset()               // unsubscribes the session from every channel
+
+req.session.channel.list()                // shows which channels the session is currently subscribed to
+</pre>
+<p>Sending a message to a private channel is similar to broadcasting to all; however, note the first argument now specifies the channel name (or channels if you pass an array):</p>
+<pre class="prettyprint linenums">
+// in a /server/rpc file
+ss.publish.channel('disney', 'chatMessage', {from: 'jerry', message: 'Has anyone seen Tom?'});
+</pre>
+<p>Receive these events in the browser in the usual way. Note: If the event was sent to a channel, the channel name is passed as the final argument to the event handler:</p>
+<pre class="prettyprint linenums">
+// in a /client/code file
+ss.event.on('chatMessage', function(msg, channelName){
+  console.log('The following message was sent to the ' + channelName + ' channel:', msg);
+});
+</pre>
+<h4 id="pub/sub-events_3-sending-to-users">3. Sending to Users</h4>
+<p>Once a user has been <a href="#/tutorials/authentication">authenticated</a> (which basically means their session now includes a value for <code>req.session.userId</code>), you can message the user directly by passing the <code>userId</code> (or an array of IDs) to the first argument of <code>ss.publish.user</code> as so:</p>
+<pre class="prettyprint linenums">
+// in a /server/rpc file
+ss.publish.user('fred', 'specialOffer', 'Here is a special offer just for you!');
+</pre>
+<p>Important: When a user signs out of your app, you should call <code>req.session.setUserId(null, cb)</code> to prevent the browser from receiving future events addressed to that <code>userId</code>. Note: This command only affects the current session. If the user is logged in via other devices/sessions these will be unaffected.</p>
+<h4 id="pub/sub-events_4-sending-to-individual-clients">4. Sending to Individual Clients (browser tabs)</h4>
+<p>If a user opens multiple tabs in the browser, each will share the same <code>req.session.id</code> and private channel subscriptions (as channels are attached to sessions).</p>
+<p>Normally this is the desired behavior, but in rare cases you&#39;ll want to message a particular client (i.e. a individual browser tab):</p>
+<pre class="prettyprint linenums">
+// in a /server/rpc file
+ss.publish.socketId('254987654324567', 'justForMe', 'Just for one tab');
+</pre>
+You can find the socketId by calling <code>req.socketId</code> in your server-side code. Note, this attribute may not always be present (e.g. if you invoke the RPC method via <code>ss-console</code>), so plan accordingly.</p>
+<p><strong>Warning!</strong>  <code>req.socketId</code> will change every time you refresh the page, so in almost all cases it is <strong>much</strong> better to assign clients to Private Channels (which persist between browser reloads) and use these wherever possible. Only send an event to a specific socketId if there is no other way to achieve your goal.</p>
+<h4 id="pub/sub-events_publishing-events-via-appjs">Publishing Events via app.js</h4>
+<p>Sometimes you&#39;ll want to publish events from outside your <code>/server/rpc</code> files, such as your <code>app.js</code> file. The entire <code>ss</code> API available to actions in <code>/server/rpc</code> is also available in <code>app.js</code> via the <code>ss.api</code> object. Hence to publish an event to <code>all</code> you would call:</p>
+<pre class="prettyprint linenums">
+// in /app.js
+ss.api.publish.all()
+</pre>
+<h4 id="pub/sub-events_event-transports">Event Transports</h4>
+<p>By default SocketStream sends all published events over an internal event emitter. This works fine during development and under moderate load, however; once your app outgrows a single process, you&#39;ll need to switch to an external event transport to allow you to run multiple SocketStream processes/servers at once.</p>
+<p>Event transports are implemented in a modular way, so it&#39;s possible to write a simple driver to support any Message Queue.</p>
+<p>To use the in-built Redis transport (recommended), add the following line to your <code>app.js</code> file:</p>
+<pre class="prettyprint linenums">
+// in app.js
+ss.publish.transport.use('redis');  // any config can be passed to the second argument
+</pre>
+<p>Using an external event transport has an important added benefit: Now you can easily push events to connected browser from external (non Node.js) systems. Simply connect the external system (e.g. an Erlang service) to the same instance of Redis and publish messages using the same JSON message format.</p>
+<p><strong>Notes</strong></p>
+<ol>
+<li><p>If the channel name you specify does not exist it will be automatically created. Channel names can be any valid JavaScript object key. If the client gets disconnected and re-connects to another server instance they will automatically be re-subscribed to the same channels, providing they retain the same <code>sessionId</code>. Be sure to catch for any errors when using these commands.</p>
+</li>
+<li><p>The SocketStream Pub/Sub system has been designed from the ground up with horizontal scalability and high-throughput in mind. The <code>all</code> and <code>channel</code> commands will be automatically load-balanced across all SocketStream servers when an external event transport is used.</p>
+</li>
+<li><p>It is important to remember messages are never stored or logged. This means if a client/user is offline the message will be lost rather than queued. Hence, if you&#39;re implementing a real time chat app we recommend storing messages in a database (or messaging server) before publishing them.</p>
+</li>
+</ol>
+</div></div>
