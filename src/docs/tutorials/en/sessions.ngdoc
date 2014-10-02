@@ -88,3 +88,11 @@ By default sessions will expire within 30 days, unless the session is terminated
     ss.session.options.maxAge = 8640000;  // one day in milliseconds
 </pre>
 
+### Setting a Secret
+By default the cookie parser will use `'SocketStream'` as its secret. You
+*should* set your own secret in production:
+
+<pre>
+    // in app.js
+    ss.session.options.secret = crypto.randomBytes(32).toString();
+</pre>
