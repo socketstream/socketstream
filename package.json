@@ -38,7 +38,6 @@
     "grunt": "= 0.4.1",
     "grunt-cli": "= 0.1.9",
     "grunt-contrib-jshint": "= 0.6.3",
-    "grunt-mocha-test": "= 0.7.0",
     "supertest": "= 0.8.2",
     "async": "= 0.2.9",
     "grunt-ngdocs": "~0.2.1",
@@ -51,7 +50,7 @@
     "grunt-conventional-changelog": "~1.0.0"
   },
   "scripts": {
-    "test": "grunt test"
+    "test": "node_modules/.bin/mocha test/unit/**/* --reporter spec"
   },
   "directories": {
     "lib": "./lib",
@@ -59,7 +58,7 @@
   },
   "main": "./index.js",
   "engines": {
-    "node": ">= 0.8.0"
+    "node": ">= 0.10.0"
   },
   "bin": {
     "socketstream": "./bin/socketstream"

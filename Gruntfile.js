@@ -7,7 +7,6 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks('grunt-conventional-changelog');
     grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-mocha-test');
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-watch');
@@ -159,14 +158,6 @@ module.exports = function(grunt) {
                 }
             }
         },
-        mochaTest: {
-            src: [
-                'test/unit/**/*.test.js',
-            ],
-            options: {
-                reporter: 'spec'
-            }
-        },
         shell: {
             //We use %version% and evluate it at run-time, because <%= pkg.version %>
             //is only evaluated once
@@ -314,7 +305,6 @@ module.exports = function(grunt) {
 
     grunt.registerTask('default', 'Default task which runs all the required subtasks', ['before-test', 'test']);
     grunt.registerTask('before-test', ['enforce'/*, 'jshint'*/]); // 'jshint' should be uncommented after we linted all the source code
-    grunt.registerTask('test', 'Test everything', ['mochaTest']);
     grunt.registerTask('build:docs', 'Build documentation', ['clean:docs', 'ngdocs']);
     grunt.registerTask('watch:docs', 'Watching for changes and re-building docs', ['concurrent:docsSite']);
     grunt.registerTask('update:docs', 'Update gh-page branch by merging from master', ['shell:update-gh-pages']);
