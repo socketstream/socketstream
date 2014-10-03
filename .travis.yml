@@ -8,3 +8,7 @@ cache:
 
 before_install:
   - npm install --upgrade npm -g
+
+script:
+  - npm test
+  - npm run cover-test

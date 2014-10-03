@@ -35,6 +35,7 @@
   "devDependencies": {
     "async": "= 0.2.9",
     "connect-livereload": "~0.3.2",
+    "coveralls": "^2.11.2",
     "grunt": "= 0.4.1",
     "grunt-cli": "= 0.1.9",
     "grunt-concurrent": "~0.4.2",
@@ -53,7 +54,7 @@
     "supertest": "= 0.8.2"
   },
   "scripts": {
-    "cover-test": "node_modules/.bin/istanbul cover node_modules/.bin/_mocha test/unit/**/*",
+    "cover-test": "node_modules/.bin/istanbul cover node_modules/.bin/_mocha test/unit/**/* && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
     "checkDependencies": "node_modules/.bin/npm-dview",
     "lint": "node_modules/.bin/jshint .",
     "notes": "node_modules/.bin/notes",
