@@ -1,7 +1,6 @@
 'use strict';
 
 var exec                                  = require('child_process').exec,
-    ac                                    = require('../../helpers/assertionCounter'),
     logHook                               = require('../../helpers/logHook.js'),
     fs                                    = require('fs'),
     path                                  = require('path'),
@@ -49,7 +48,7 @@ describe('lib/cli/generate', function () {
 
     beforeEach(function (done) {
 
-        ac.reset();
+        
 
         logs    = [];
 
@@ -84,8 +83,6 @@ describe('lib/cli/generate', function () {
 
     it('should generate an app inside of a folder with a unique name', function (done) {
 
-        ac.expect(1);
-
         /* hide console.log output to make Mocha output clear */
         logHook.on();
         generate.generate(program);
@@ -93,15 +90,13 @@ describe('lib/cli/generate', function () {
 
         /* Using 'async' library to check if all the required project's folders exist */
         async.reject(newProjectDirectoriesThatShouldExist, fs.exists, function (result) {
-            result.length.should.equal(0).andCheck();
-            ac.check(done);
+            result.length.should.equal(0);
+            done();
         });
 
     });
 
     it('should raise an error if the name of the app matches the name of an existing folder', function (done) {
-
-        ac.expect(2);
 
         fs.mkdir(demoAppPath, function(err) {
 
@@ -110,21 +105,19 @@ describe('lib/cli/generate', function () {
             generate.generate(program);
             logs = logHook.off();
 
-            logs.length.should.equal(1).andCheck();
+            logs.length.should.equal(1);
             logs[0].toString().should.equal('Sorry the \'' + demoAppEndDir + '\' directory already exists. Please choose another name for your app.')
-            .andCheck();
+            ;
 
             if (err) {
                 done(err);
             } else {
-                ac.check(done);
+                done();
             }
         });
     });
 
     it('should generate an app with coffeescript files if coffeescript was requested', function (done) {
-
-        ac.expect(1);
 
         var newProjectFilesThatShouldExistWhenUsingCoffeeScript = [
             path.join(demoAppPath, '/client/code/app/app.coffee'),
@@ -142,14 +135,12 @@ describe('lib/cli/generate', function () {
 
         /* Using 'async' library to check if all the required project's coffeescript files exist */
         async.reject(newProjectFilesThatShouldExistWhenUsingCoffeeScript, fs.exists, function (result) {
-            result.length.should.equal(0).andCheck();
-            ac.check(done);
+            result.length.should.equal(0);
+            done();
         });
     });
 
     it('should raise an error if no name is provided for the app', function (done) {
-
-        ac.expect(2);
 
         program.args = ['new'];
 
@@ -158,16 +149,14 @@ describe('lib/cli/generate', function () {
         generate.generate(program);
         logs = logHook.off();
 
-        logs.length.should.equal(1).andCheck();
+        logs.length.should.equal(1);
         logs[0].toString().should.equal('Please provide a name for your application: $> socketstream new <MyAppName>')
-        .andCheck();
+        ;
 
-        ac.check(done);
+        done();
     });
 
     it('should generate an app with jade templates if jade was requested', function (done) {
-
-        ac.expect(1);
 
         var newProjectFilesThatShouldExistWhenUsingJade = [
             path.join(demoAppPath, '/client/templates/chat/message.jade'),
@@ -183,15 +172,13 @@ describe('lib/cli/generate', function () {
 
         /* Using 'async' library to check if all the required project's jade files exist */
         async.reject(newProjectFilesThatShouldExistWhenUsingJade, fs.exists, function (result) {
-            result.length.should.equal(0).andCheck();
-            ac.check(done);
+            result.length.should.equal(0);
+            done();
         });
 
     });
 
     it('should generate an app with css stylesheets if css was requested', function (done) {
-
-        ac.expect(1);
 
         var newProjectFilesThatShouldExistWhenUsingCss = [
             path.join(demoAppPath, '/client/css/app.css'),
@@ -204,15 +191,13 @@ describe('lib/cli/generate', function () {
 
         /* Using 'async' library to check if all the required project's css files exist */
         async.reject(newProjectFilesThatShouldExistWhenUsingCss, fs.exists, function (result) {
-            result.length.should.equal(0).andCheck();
-            ac.check(done);
+            result.length.should.equal(0);
+            done();
         });
 
     });
 
     it('should generate an app with less stylesheets if less was requested', function (done) {
-
-        ac.expect(1);
 
         var newProjectFilesThatShouldExistWhenUsingLess = [
             path.join(demoAppPath, '/client/css/app.less'),
@@ -227,15 +212,13 @@ describe('lib/cli/generate', function () {
 
         /* Using 'async' library to check if all the required project's less files exist */
         async.reject(newProjectFilesThatShouldExistWhenUsingLess, fs.exists, function (result) {
-            result.length.should.equal(0).andCheck();
-            ac.check(done);
+            result.length.should.equal(0);
+            done();
         });
 
     });
 
     it('should generate an app with stylus stylesheets if stylus was requested', function (done) {
-
-        ac.expect(1);
 
         var newProjectFilesThatShouldExistWhenUsingStylus = [
             path.join(demoAppPath, '/client/css/app.styl'),
@@ -250,15 +233,13 @@ describe('lib/cli/generate', function () {
 
         /* Using 'async' library to check if all the required project's less files exist */
         async.reject(newProjectFilesThatShouldExistWhenUsingStylus, fs.exists, function (result) {
-            result.length.should.equal(0).andCheck();
-            ac.check(done);
+            result.length.should.equal(0);
+            done();
         });
 
     });
 
     it('should generate an app with no demo code, if a minimal app was requested', function (done) {
-
-        ac.expect(1);
 
         var newProjectFilesThatBelongToDemo = [
             path.join(demoAppPath, '/client/static/images/logo.png'),
@@ -277,14 +258,12 @@ describe('lib/cli/generate', function () {
 
         /* Using 'async' library to check if all the required project's coffeescript files exist */
         async.reject(newProjectFilesThatBelongToDemo, fs.exists, function (result) {
-            result.length.should.equal(newProjectFilesThatBelongToDemo.length).andCheck();
-            ac.check(done);
+            result.length.should.equal(newProjectFilesThatBelongToDemo.length);
+            done();
         });
     });
 
     it('should generate an app with the ss-console library, if the repl library was requested', function (done) {
-
-        ac.expect(5);
 
         program.repl = true;
 
@@ -295,12 +274,12 @@ describe('lib/cli/generate', function () {
 
         fs.readFile(path.join(demoAppPath,'/app.js'), 'utf-8', function (err, appJsContents) {
 
-            appJsContents.indexOf('// Start Console Server (REPL)').should.not.equal(-1).andCheck();
-            appJsContents.indexOf('// To install client: sudo npm install -g ss-console').should.not.equal(-1).andCheck();
-            appJsContents.indexOf('// To connect: ss-console <optional_host_or_port>').should.not.equal(-1).andCheck();
-            appJsContents.indexOf('var consoleServer = require(\'ss-console\')(ss);').should.not.equal(-1).andCheck();
-            appJsContents.indexOf('consoleServer.listen(5000);').should.not.equal(-1).andCheck();
-            ac.check(done);
+            appJsContents.indexOf('// Start Console Server (REPL)').should.not.equal(-1);
+            appJsContents.indexOf('// To install client: sudo npm install -g ss-console').should.not.equal(-1);
+            appJsContents.indexOf('// To connect: ss-console <optional_host_or_port>').should.not.equal(-1);
+            appJsContents.indexOf('var consoleServer = require(\'ss-console\')(ss);').should.not.equal(-1);
+            appJsContents.indexOf('consoleServer.listen(5000);').should.not.equal(-1);
+            done();
 
         });
     });
