@@ -1,5 +1,5 @@
 ## Sources
-If you have questions about how to use SocketStream, here is a useful sources:
+If you have questions about how to use SocketStream, here are some useful sources:
 
 1. [SocketStream.org](socketstream.org)
 2. [Google Group](https://groups.google.com/d/forum/socketstream)
@@ -11,14 +11,14 @@ If you have questions about how to use SocketStream, here is a useful sources:
 To submit an issue please use [SocketStream issue tracker](https://github.com/socketstream/socketstream/issues).
 
 ## Contributing to Source Code
-We would love for you to contribute to SocketStream source code it even better.
-To disscuss Minor or Major changes please use [Google Group](https://groups.google.com/d/forum/socketstream) or [SocketStream issue tracker](https://github.com/socketstream/socketstream/issues)
+We would love for you to contribute to SocketStream to make it even better.
+To discuss changes please use the [SocketStream issue tracker](https://github.com/socketstream/socketstream/issues)
 
 ### Installation Dependencies
-Before you can contribute to SocketStream, you need to install or configure the following dependencies on your machine:
+Before you can contribute to SocketStream, you'll need to install or configure the following dependencies on your machine:
 
-* Git - control version system ([GitHub istalling guide](http://help.github.com/mac-git-installation))
-* [Node.js](http://nodejs.org/), usually we use latest version of Node.js, but it's alwas better to check the current version in the [package.json](https://github.com/socketstream/socketstream/blob/master/package.json).
+* Git - control version system ([GitHub installing guide](http://help.github.com/mac-git-installation))
+* [Node.js](http://nodejs.org/), usually we use the latest version of Node.js, but it's always better to check the current version in the [package.json](https://github.com/socketstream/socketstream/blob/master/package.json).
 
 ### Working with source code
 
@@ -44,20 +44,9 @@ cd socketstream
 npm install
 ```
 
-* Make some code changes and run Grunt tasks to make sure your code passed required tests:
+* Make some code changes and run the tests to make sure your code passed required tests:
 ```
-grunt
-```
-
-* You can also run specific tasks separately, to see all available tasks run:
-```
-grunt --help
-...
-Available tasks
-        jshint  Validate files with JSHint. *
-     mochaTest  Run node unit tests with Mocha *
-       default  Default task which runs all the required subtasks
-          test  Test everything
+npm test
 ```
 
 ### Submitting Your Changes
@@ -69,10 +58,11 @@ git checkout -b new-stuff-branch master
 
 * Make sure your changes passed the tests:
 ```
-grunt
+npm test
+npm cover-test
 ```
 
-* Commit your changes with descriptive commit message, please describe what you have done as detailed as possible
+* Commit your changes with a descriptive commit message, please describe what you have done as detailed as possible
 ```
 git add -A
 git commit
@@ -85,7 +75,7 @@ git push origin new-stuff-branch
 
 * Create a [pull request](https://help.github.com/articles/creating-a-pull-request)
 
-* Once your patch is reviewed and merged, please delete your branch and pull yours and master changes from the main (upstream - [SocketStream](https://github.com/socketstream/socketstream.git)) repository:
+* Once your patch is reviewed and merged, please delete your branch and pull both yours and master's changes from the main (upstream - [SocketStream](https://github.com/socketstream/socketstream.git)) repository:
 ```
 git push origin :new-stuff-branch
 git checkout master
@@ -97,9 +87,8 @@ git pull --ff upstream master
 
 These rules are adopted from the [AngularJS commit conventions][commit-message-format].
 
-We have very precise rules over how our git commit messages can be formatted.  This leads to **more
-readable messages** that are easy to follow when looking through the **project history**.  But also,
-we use the git commit messages to **generate the SocketStream change log**.
+Git commit messages will need to be formatted in a certain format.  This is so
+that we can generate a changelog from the git commit messages.
 
 ### Commit Message Format
 Each commit message consists of a **header**, a **body** and a **footer**.  The header has a special
@@ -157,11 +146,11 @@ Is recommended to be one of these (only **feat** and **fix** show up in the `CHA
   generation
 
 ### Scope
-The scope could be anything specifying place of the commit change. For example `cli`,
+The scope could be anything specifying the place of the commit change. For example `cli`,
 `http`, `publish`, `session`, `websocket`, `request` etc...
 
 ### Subject
-The subject contains succinct description of the change:
+The subject contains a succinct description of the change:
 
 * use the imperative, present tense: "change" not "changed" nor "changes"
 * don't capitalize first letter
@@ -203,7 +192,7 @@ To update local `gh-page` branch by merging from `master` run:
 ```
 
 ## Release
-#### This guide is only for developers who allowed to perform releases
+#### This guide is only for developers who perform releases
 
 There are helpful `grunt` tasks for overall version releasing process:
 
