@@ -113,19 +113,23 @@ describe('lib/http/index', function () {
             });
 
             it('should add default event listener for the url without a callback', function (done) {
-                var router,
-                    url,
-                    callback = function(name) {
-                        return router.on(url, function(req, res) {
-                            return res.serveClient(name);
-                        });
-                    }
+                // var router,
+                //     url;
+                    // callback = function(name) {
+                    //     return router.on(url, function(req, res) {
+                    //         return res.serveClient(name);
+                    //     });
+                    // }
 
                 obj = http.route('/');
 
                 obj.should.be.an.instanceOf(Object);
                 obj.serveClient.should.be.an.instanceOf(Object);
-                obj.serveClient.toString().replace(/(\s+|\n)/g, ' ').indexOf(callback.toString().replace(/(\s+|\n)/g, ' ')).should.not.eql(-1);
+
+                // NOTE - we need to do some less-specific matching, 
+                // as istanbul injects listeners - PBJENSEN
+                //
+                obj.serveClient.toString().replace(/(\s+|\n)/g, ' ').indexOf('return res.serveClient(name)').should.not.eql(-1);
                 done();
             });
 
