@@ -67,4 +67,11 @@ ss.http.router.on('/updateSession', function(req, res) {
     // in app.js
     ss.session.options.maxAge = 8640000;  // one day in milliseconds
 </pre>
+<h4 id="sessions_setting-a-secret">Setting a Secret</h4>
+<p>By default the cookie parser will use <code>&#39;SocketStream&#39;</code> as its secret. You
+<em>should</em> set your own secret in production:</p>
+<pre class="prettyprint linenums">
+    // in app.js
+    ss.session.options.secret = crypto.randomBytes(32).toString();
+</pre>
 </div></div>
