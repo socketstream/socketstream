@@ -11,7 +11,7 @@
  *
  *     http.middleware.request().get('/favicon.ico').end(function(res) {
  *         res.statusCode.should.equal(200);
- *         ac.check(done);
+ *         done();
  *     });
  *
  */
@@ -20,14 +20,13 @@ var request      = require('supertest'),
     path         = require('path'),
     connect      = require('connect'),
     util         = require('util'),
-    ac           = require('../../helpers/assertionCounter'),
     httpFunc     = require( path.join(process.env.PWD, 'lib/http/index') ),
     http         = null,
     app          = null,
     utils        = require('../../helpers/utils.js'),
     sessionStore = new connect.session.MemoryStore,
     settings     = {        // User-configurable settings with sensible defaults
-      "static": {
+      static: {
         maxAge: 2592000000    // (30 * 24 * 60 * 60 * 1000) cache static assets in the browser for 30 days
       },
       secure: false           // allow setting of the 'secure' cookie attribute when using SSL - see https://github.com/socketstream/socketstream/issues/349
@@ -46,22 +45,18 @@ describe('lib/http/index', function () {
 
     describe('module.exports', function () {
         it('should return a function instance', function (done) {
-            ac.expect(1);
-
-            httpFunc.should.be.type('function').andCheck();
-            ac.check(done);
+            httpFunc.should.be.type('function');
+            done();
         });
     });
 
     describe('module.exports()', function () {
         it('should return an http object instance', function (done) {
-            ac.expect(4);
-            http.should.be.type('object').with.properties('set', 'load', 'route').andCheck();
-            http.set.should.be.type('function').andCheck();
-            http.load.should.be.type('function').andCheck();
-            http.route.should.be.type('function').andCheck();
-
-            ac.check(done);
+            http.should.be.type('object').with.properties('set', 'load', 'route');
+            http.set.should.be.type('function');
+            http.load.should.be.type('function');
+            http.route.should.be.type('function');
+            done();
         });
 
         describe('#set()', function () {
@@ -75,23 +70,19 @@ describe('lib/http/index', function () {
                     secure: true
                 };
 
-                ac.expect(0);
                 /* Should now throw an error */
                 http.set(newSettings);
-                ac.check(done);
+                done();
             });
 
             it('should throw an error if passed argument is not an object', function (done) {
                 var newSettings = '';
 
-                ac.expect(0);
-
                 /* Should throw an error */
                 (function() {
                     http.set(newSettings);
                 }).should.throw('ss.http.set() takes an object e.g. {static: {maxAge: 60000}}');
-
-                ac.check(done);
+                done();
             });
         });
 
@@ -109,38 +100,37 @@ describe('lib/http/index', function () {
                     res.serve('main');
                 }
 
-                ac.expect(6);
-
                 obj = http.route('/', callback);
 
-                obj.should.be.an.instanceOf(Object).andCheck();
-                obj._events.should.be.an.instanceOf(Object).andCheck();
-                obj.listenerTree.should.be.an.instanceOf(Object).andCheck();
-                obj.listenerTree['/'].should.be.an.instanceOf(Object).andCheck();
-                obj.listenerTree['/']._listeners.should.be.an.instanceOf(Object).andCheck();
-                obj.listenerTree['/']._listeners.toString().should.include(callback.toString()).andCheck();
+                obj.should.be.an.instanceOf(Object);
+                obj._events.should.be.an.instanceOf(Object);
+                obj.listenerTree.should.be.an.instanceOf(Object);
+                obj.listenerTree['/'].should.be.an.instanceOf(Object);
+                obj.listenerTree['/']._listeners.should.be.an.instanceOf(Object);
+                obj.listenerTree['/']._listeners.toString().indexOf(callback.toString()).should.not.eql(-1);
 
-                ac.check(done);
+                done();
             });
 
-            it('should add default event listener for the url with out callback', function (done) {
-                var router,
-                    url,
-                    callback = function(name) {
-                        return router.on(url, function(req, res) {
-                            return res.serveClient(name);
-                        });
-                    }
-
-                ac.expect(3);
+            it('should add default event listener for the url without a callback', function (done) {
+                // var router,
+                //     url;
+                    // callback = function(name) {
+                    //     return router.on(url, function(req, res) {
+                    //         return res.serveClient(name);
+                    //     });
+                    // }
 
                 obj = http.route('/');
 
-                obj.should.be.an.instanceOf(Object).andCheck();
-                obj.serveClient.should.be.an.instanceOf(Object).andCheck();
-                obj.serveClient.toString().replace(/(\s+|\n)/g, ' ').should.include(callback.toString().replace(/(\s+|\n)/g, ' ')).andCheck();
+                obj.should.be.an.instanceOf(Object);
+                obj.serveClient.should.be.an.instanceOf(Object);
 
-                ac.check(done);
+                // NOTE - we need to do some less-specific matching, 
+                // as istanbul injects listeners - PBJENSEN
+                //
+                obj.serveClient.toString().replace(/(\s+|\n)/g, ' ').indexOf('return res.serveClient(name)').should.not.eql(-1);
+                done();
             });
 
             it('should throw an error if does not start with \'/\'', function (done) {
@@ -150,15 +140,11 @@ describe('lib/http/index', function () {
                     res.serve('main');
                 }
 
-                ac.expect(0);
-
                 (function() {
                     http.route(url, callback);
 
                 }).should.throw( util.format('%s is not a valid URL. Valid URLs must start with /', url) );
-
-
-                ac.check(done);
+                done();
             });
         });
 
@@ -197,46 +183,45 @@ describe('lib/http/index', function () {
              * connect.compress() should be added to middleware stack on highest possible position
              */
             it('should build propper middleware stack', function (done) {
-                ac.expect(18);
 
                 /* testing correct length of http.middleware.stack */
-                http.middleware.stack.should.be.an.instanceOf(Array).andCheck();
-                http.middleware.stack.should.have.length(8).andCheck();
+                http.middleware.stack.should.be.an.instanceOf(Array);
+                http.middleware.stack.should.have.length(8);
 
                 /**
                  * testing testPrependMiddleware
                  * lib/http/index.js:104
                  */
-                http.middleware.stack[0].handle.should.be.an.instanceOf(Function).andCheck();
-                http.middleware.stack[0].handle.toString().should.equal( testPrependMiddleware.toString() ).andCheck();
+                http.middleware.stack[0].handle.should.be.an.instanceOf(Function);
+                http.middleware.stack[0].handle.toString().should.equal( testPrependMiddleware.toString() );
 
                 /**
                  * testing connect.compress()
                  * It should be added to middleware stack on highest possible position
                  * lib/http/index.js:142
                  */
-                http.middleware.stack[1].handle.should.be.an.instanceOf(Function).andCheck();
-                http.middleware.stack[1].handle.toString().should.equal( connect.compress().toString() ).andCheck();
+                http.middleware.stack[1].handle.should.be.an.instanceOf(Function);
+                http.middleware.stack[1].handle.toString().should.equal( connect.compress().toString() );
 
                 /**
                  * testing connect.cookieParser('SocketStream')
                  * lib/http/index.js:145
                  */
-                http.middleware.stack[2].handle.should.be.an.instanceOf(Function).andCheck();
-                http.middleware.stack[2].handle.toString().should.equal( connect.cookieParser('SocketStream').toString() ).andCheck();
+                http.middleware.stack[2].handle.should.be.an.instanceOf(Function);
+                http.middleware.stack[2].handle.toString().should.equal( connect.cookieParser('SocketStream').toString() );
 
                 /**
                  * testing connect.favicon()
                  * lib/http/index.js:145
                  */
-                http.middleware.stack[3].handle.should.be.an.instanceOf(Function).andCheck();
-                http.middleware.stack[3].handle.toString().should.equal( connect.favicon( staticPath + '/favicon.ico').toString() ).andCheck();
+                http.middleware.stack[3].handle.should.be.an.instanceOf(Function);
+                http.middleware.stack[3].handle.toString().should.equal( connect.favicon( staticPath + '/favicon.ico').toString() );
 
                 /**
                  * testing connect.session()
                  * lib/http/index.js:145
                  */
-                http.middleware.stack[4].handle.should.be.an.instanceOf(Function).andCheck();
+                http.middleware.stack[4].handle.should.be.an.instanceOf(Function);
                 http.middleware.stack[4].handle.toString().should.equal( connect.session({
                     cookie: {
                         path: '/',
@@ -245,14 +230,14 @@ describe('lib/http/index', function () {
                         secure: settings.secure
                     },
                     store: sessionStore
-                }).toString() ).andCheck();
+                }).toString() );
 
                 /**
                  * testing testAppendMiddleware
                  * lib/http/index.js:156
                  */
-                http.middleware.stack[5].handle.should.be.an.instanceOf(Function).andCheck();
-                http.middleware.stack[5].handle.toString().should.equal( testAppendMiddleware.toString() ).andCheck();
+                http.middleware.stack[5].handle.should.be.an.instanceOf(Function);
+                http.middleware.stack[5].handle.toString().should.equal( testAppendMiddleware.toString() );
 
                 /**
                  * testing eventMiddleware
@@ -260,34 +245,31 @@ describe('lib/http/index', function () {
                  * just compare the functions names
                  * lib/http/index.js:161
                  */
-                http.middleware.stack[6].handle.should.be.an.instanceOf(Function).andCheck();
-                utils.getfunctionName( http.middleware.stack[6].handle ).should.equal( 'eventMiddleware' ).andCheck();
+                http.middleware.stack[6].handle.should.be.an.instanceOf(Function);
+                utils.getfunctionName( http.middleware.stack[6].handle ).should.equal( 'eventMiddleware' );
 
                 /**
                  * testing connect["static"]()
                  * lib/http/index.js:161
                  */
-                http.middleware.stack[7].handle.should.be.an.instanceOf(Function).andCheck();
-                http.middleware.stack[7].handle.toString().should.equal( connect["static"](staticPath, settings["static"]).toString() ).andCheck();
+                http.middleware.stack[7].handle.should.be.an.instanceOf(Function);
+                http.middleware.stack[7].handle.toString().should.equal( connect.static(staticPath, settings.static).toString() );
 
-                ac.check(done);
+                done();
             });
 
             describe('returned app/http object', function () {
                 beforeEach(setUp);
 
                 it('should be an instance of Object', function (done) {
-                    ac.expect(1);
-                    app.should.be.an.instanceOf(Object).andCheck();
-                    ac.check(done);
+                    app.should.be.an.instanceOf(Object);
+                    done();
                 });
 
                 it('should respond with status 200 for /favicon.ico request', function (done) {
-                    ac.expect(1);
-
                     request(app).get('/favicon.ico').end(function(err, res) {
-                        res.statusCode.should.equal(200).andCheck();
-                        ac.check(done);
+                        res.statusCode.should.equal(200);
+                        done();
                     });
                 });
             });

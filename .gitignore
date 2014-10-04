@@ -1,8 +1,8 @@
 .DS_Store
+coverage
 node_modules
 dump.rdb
 npm-debug.log
-*.tgz
 
 bin/**/*
 lib/**/*
