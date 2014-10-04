@@ -22,7 +22,7 @@
     "apitree": "= 1.1.0",
     "chokidar": "= 0.6.3",
     "clean-css": "= 0.4.2",
-    "colors": "= 0.6.0-1",
+    "colors": "= 1.0.2",
     "commander": "= 2.3.0",
     "connect": "= 2.4.5",
     "connect-redis": "= 1.4.4",
