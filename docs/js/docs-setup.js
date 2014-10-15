@@ -246,6 +246,7 @@ NG_DOCS={
     "demos": false
   },
   "html5Mode": false,
+  "editExample": true,
   "startPage": "tutorials",
   "discussions": {
     "shortName": "socketstream",

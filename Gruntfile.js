@@ -88,8 +88,6 @@ module.exports = function(grunt) {
             //We use %version% and evluate it at run-time, because <%= pkg.version %>
             //is only evaluated once
             'release-prepare': [
-                'grunt before-test',
-                'grunt test',
                 'grunt is-gh-pages-branch-exist',
                 'grunt build:docs',
                 'grunt is-clean:master',
