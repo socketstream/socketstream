@@ -21,7 +21,7 @@
   "dependencies": {
     "apitree": "= 1.2.0",
     "chokidar": "= 0.10.1",
-    "clean-css": "= 0.4.2",
+    "clean-css": "2.2.16",
     "colors": "= 1.0.3",
     "commander": "= 2.4.0",
     "connect": "2.26.5",
