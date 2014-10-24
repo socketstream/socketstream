@@ -23,7 +23,7 @@
     "chokidar": "= 0.10.2",
     "clean-css": "2.2.16",
     "colors": "= 1.0.3",
-    "commander": "= 2.4.0",
+    "commander": "2.5.0",
     "connect": "2.26.5",
     "connect-redis": "= 1.4.4",
     "engine.io": "= 0.7.9",
