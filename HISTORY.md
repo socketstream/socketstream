@@ -1,3 +1,15 @@
+0.3.11 / 2014-10-15
+===================
+
+* Add `ss.api.log` unified logging API
+* Users can now pass the NODE_ENV to set the environment
+* Updated jade templates
+* Fixes and updates
+* Allow setting your own cookie parser secret
+* Dropped support for 0.8
+* Replaced grunt tasks with npm run tasks
+
+
 0.3.10 / 2013-10-07
 ===================
 

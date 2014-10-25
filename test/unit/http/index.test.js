@@ -182,7 +182,7 @@ describe('lib/http/index', function () {
             /**
              * connect.compress() should be added to middleware stack on highest possible position
              */
-            it('should build propper middleware stack', function (done) {
+            it('should build the middleware stack', function (done) {
 
                 /* testing correct length of http.middleware.stack */
                 http.middleware.stack.should.be.an.instanceOf(Array);
@@ -215,7 +215,8 @@ describe('lib/http/index', function () {
                  * lib/http/index.js:145
                  */
                 http.middleware.stack[3].handle.should.be.an.instanceOf(Function);
-                http.middleware.stack[3].handle.toString().should.equal( connect.favicon( staticPath + '/favicon.ico').toString() );
+
+                http.middleware.stack[3].handle.toString().should.equal( connect.favicon( 'new_project/' + staticPath + '/favicon.ico').toString() );
 
                 /**
                  * testing connect.session()
