@@ -6,6 +6,40 @@ p .content code {
     border-radius: 3px;
 }
 
+.content {
+    border-radius: 3px;
+    padding: 5px 10px;
+    background-color: rgba(0,0,0,0.5);
+    margin-top: -5px; /* align content with top of nav box */
+}
+
+.content h1 {
+    display: none;
+}
+
+.content a {
+    color: #b1e5eb;
+}
+
+.match > a, .nav > .match > a:hover, .nav > li > a:hover, .nav > li > a:focus {
+    color: #fff;
+    background-color: rgba(255,255,255,0.3);
+}
+
+.content h2:first-child {
+    margin-top: 0px;
+}
+
+.nav-list > .active > a{
+     background-color: #00aebf;
+}
+
+
+ul.methods {
+    color: #000;
+    text-shadow: none;
+}
+
 body,
 html {
   height: 100%;
@@ -29,7 +63,7 @@ body {
   background: linear-gradient(45deg, #58d758 8%, #45ccda 91%);
 /* W3C */
   filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#58d758', endColorstr='#45ccda',GradientType=1)";
-  text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
   margin-top: 10px;
   background-position: center center;
   background-attachment: fixed;
@@ -68,8 +102,8 @@ a.navbar-brand {
   text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
 }
 pre {
-  margin-top: 3em;
-  margin-bottom: 3em;
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
   background: #222;
   color: #a7e4a7;
 }
@@ -178,7 +212,7 @@ ul.appStructure li {
 }
 
 ul.breadcrumb, .well {
-  background: rgba(255,255,255,0.2);
+  background: rgba(0,0,0,0.4);
   border-color: rgba(255,255,255,0.2);
 }
 
@@ -188,7 +222,7 @@ ul.breadcrumb > li, .nav-list > li > a, .nav-list .nav-header {
 
 
 textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
-  background-color: rgba(255,255,255,0.2);
+  background-color: rgba(0,0,0,0.4);
   color: white;
 }
 
