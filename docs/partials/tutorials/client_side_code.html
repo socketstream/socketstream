@@ -33,6 +33,8 @@
 <pre class="prettyprint linenums">
 ss.client.set({ browserifyExcludePaths: ['app/controllers', 'app/directives'] });
 </pre></li>
+<li><strong>entryModuleName {string} </strong> - to change or disable automatically execuring the client side
+code for the entry module. If null or a blank string is given no entry module is executed during load of the view in the browser. If for example your app is <code>my</code> and entryModuleName is <code>app</code> the view will execute <code>client/code/my/app.js</code>. Be aware that this name will apply to all views. </li>
 </ul>
 <p><strong>Note</strong>, that paths for excluding should be relative to <code>client/code/</code> and that file <code>client/code/app/entry.js</code> could not be excluded in any cases.</p>
 <p>If you need to exclude from automatically packaging certain file, just specify the file&#39;s relative path:
