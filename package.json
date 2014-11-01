@@ -1,6 +1,6 @@
 {
   "name": "socketstream",
-  "description": "A fast, modular Node.js framework dedicated to building realtime single-page apps",
+  "description": "A framework for Realtime Web Apps",
   "version": "0.3.11",
   "homepage": "http://www.socketstream.org",
   "author": "Owen Barnes <owen@socketstream.org>",
@@ -20,7 +20,7 @@
   ],
   "dependencies": {
     "apitree": "= 1.2.0",
-    "chokidar": "= 0.10.2",
+    "chokidar": "= 0.10.3",
     "clean-css": "2.2.16",
     "colors": "= 1.0.3",
     "commander": "2.5.0",
@@ -44,9 +44,9 @@
     "grunt-contrib-connect": "0.8.0",
     "grunt-contrib-watch": "0.6.1",
     "grunt-conventional-changelog": "1.1.0",
-    "grunt-ngdocs": "0.2.5",
+    "grunt-ngdocs": "0.2.6",
     "istanbul": "0.3.2",
-    "jshint": "2.5.6",
+    "jshint": "2.5.8",
     "mocha": "2.0.1",
     "notes": "0.0.4",
     "npm-dview": "1.1.1",
