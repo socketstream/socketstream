@@ -16,7 +16,8 @@
     "Gilbert B Garza",
     "Craig Jordan Muir",
     "David Rosen",
-    "Michael Lawson"
+    "Michael Lawson",
+    "Henrik Vendelbo"
   ],
   "dependencies": {
     "apitree": "= 1.2.0",
@@ -59,7 +60,8 @@
     "checkDependencies": "node_modules/.bin/npm-dview",
     "lint": "node_modules/.bin/jshint .",
     "notes": "node_modules/.bin/notes",
-    "test": "node_modules/.bin/mocha test/unit/**/* --reporter spec"
+    "test": "node_modules/.bin/mocha test/unit/**/* --reporter spec",
+    "testDebug": "node_modules/.bin/mocha --debug-brk test/unit/**/* --reporter spec"
   },
   "directories": {
     "lib": "./lib",

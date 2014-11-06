@@ -65,6 +65,15 @@ You don't necessarily have to send all modules to the browser at once, you can a
 <pre>
 ss.client.set({ browserifyExcludePaths: ['app/controllers', 'app/directives'] });
 </pre>
+- **entryModuleName {string} ** - to change or disable automatically execuring the client side
+code for the entry module. If null or a blank string is given no entry module is executed during load of the view in the browser. If for example your app is `my` and entryModuleName is `app` the view will execute `client/code/my/app.js`. Be aware that this name will apply to all views. 
+<pre>
+ss.client.set({ entryModuleName: null });
+</pre>
+- **globalModules {boolean} ** - set true to load client side modules using their full path relative to `client/code`. If for example your app is `my` the entry module can be accessed with `require('/my/entry')`.
+<pre>
+ss.client.set({ globalModules: true });
+</pre>
 
 **Note**, that paths for excluding should be relative to `client/code/` and that file `client/code/app/entry.js` could not be excluded in any cases.
 
