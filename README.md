@@ -9,17 +9,15 @@
 
 _Latest release: 0.3.11 ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))_
 
-A fast, modular Node.js web framework dedicated to building single-page realtime apps
+A framework for Realtime Web Apps
 
-[Live demo](http://demo.socketstream.org) | [Documentation](http://socketstream.github.io/socketstream/docs/)
+[Live demo](http://demo.socketstream.com) | [Documentation](http://socketstream.github.io/socketstream/docs/)
 
 ### Introduction
 
-SocketStream is a new breed of web framework that uses websockets to push data to the browser in 'realtime'. It makes it easy to create blazing-fast, rich interfaces which behave more like desktop apps than traditional web apps of the past.
+SocketStream is a framework for Realtime Web Apps, pushing data to the browser via WebSockets. It is an ideal server-side framework for building Single Page Applications.
 
 By taking care of the basics, SocketStream frees you up to focus on building your social/chat app, multiplayer game, trading platform, sales dashboard, or any kind of web app that needs to display realtime streaming data. All personal tastes (e.g. Vanilla JS vs CoffeeScript, Stylus vs Less) are catered for with optional npm modules that integrate perfectly in seconds, without bloating the core.
-
-Learn more by [taking a tour](http://www.socketstream.org/tour) of the features, or watching [a recent talk](http://www.youtube.com/watch?v=LOS1lpWXphs) (recorded September 2012). 
 
 
 ### Why SocketStream?
@@ -31,31 +29,20 @@ SocketStream eases the pain by:
 
 * Integrating best-of-breed modules to increase productivity
 * Providing a sensible place to put everything
-* Accelerating development with Live Reload and (optional) support for Stylus, Jade, etc
+* Accelerating development with Live Reload and (optional) support for Stylus, Jade, and other transpilers.
 * Accelerating deployment with integrated asset packing and CDN support
 * Organizing spaghetti client-side code into modules you can `require()`
 * Working well with all major client-side frameworks (e.g. Backbone, Ember, Angular)
 * Making it easy to hookup Redis, MongoDB, CouchDB or other storage engines
 * Providing an active community to answer your question 
 
-No other realtime framework plays as well with the entire Node.js ecosystem, or gives you the flexibility to swap-out code pre-processors, template engines or even websocket transports until you have the very best custom stack for your app.
-
 SocketStream is MIT licensed.
-
-
-### Status
-
-SocketStream 0.3 is the current stable branch. 
-
-Last year there was a separate 0.4 version of SocketStream, which was a rewrite of the framework to make it more modular. The 0.4 version was cancelled because it split development efforts too thinly, and because there was already a sizeable use of 0.3, and some were concerned that 0.3 would become abandonware. It was therefore decided that it would be better to focus on refactoring the 0.3 branch as a way of getting to the goals of 0.4, rather than trying to work on 2 separate codebases.
-
 
 ### Contact
 
 Twitter: [@socketstream](http://twitter.com/#!/socketstream)  
-Google Group: http://groups.google.com/group/socketstream  
-IRC channel: [#socketstream](http://webchat.freenode.net/?channels=socketstream) on freenode
-
+[Gitter](https://gitter.im/socketstream/socketstream)
+[Google Group](http://groups.google.com/group/socketstream)
 
 ## Features
 
@@ -76,18 +63,18 @@ IRC channel: [#socketstream](http://webchat.freenode.net/?channels=socketstream)
 #### Server Side
  
 * True bi-directional communication using websockets (or websocket fallbacks). No more slow, messy AJAX!
-* Modular Websocket Transports - switch between [Socket.IO](http://socket.io) (bundled by default) or [SockJS](https://github.com/socketstream/ss-sockjs) without changing your app code
+* Modular Websocket Transports - switch between [Engine.IO](http://socket.io) (bundled by default) or [SockJS](https://github.com/socketstream/ss-sockjs) without changing your app code
 * Easily share code between the client and server. Ideal for business logic and model validation (see FAQs below)
 * Request Middleware - enabling session access, authentication, logging, distributed requests and more
 * Effortless, scalable, pub/sub baked right in - including Private Channels
 * Easy authentication - use a backend database or authenticate against Facebook Connect, Twitter, etc using [Everyauth](https://github.com/bnoguchi/everyauth)
-* Uses [Connect 2.0](http://senchalabs.github.com/connect/) - Hook-in your own HTTP middleware, share sessions between HTTP/Connect/Express/SocketStream
-* Optionally use [Redis](http://www.redis.io) for fast session retrieval, pub/sub, list of users online, and any other data your app needs instantly
+* Uses [Connect](http://senchalabs.github.com/connect/) - Hook-in your own HTTP middleware, share sessions between HTTP/Connect/Express/SocketStream
+* Optionally use [Redis](http://redis.io) for fast session retrieval, pub/sub, list of users online, and any other data your app needs instantly
 
 
 #### Optional Modules (officially maintained and supported)
 
-* **[ss-sockjs](https://github.com/socketstream/ss-sockjs)** Use [SockJS](https://github.com/sockjs/sockjs-client) as the websocket transport instead of Socket.IO
+* **[ss-sockjs](https://github.com/socketstream/ss-sockjs)** Use [SockJS](https://github.com/sockjs/sockjs-client) as the websocket transport instead of Engine.IO
 * **[ss-console](https://github.com/socketstream/ss-console)** Connect to a live server and call RPC actions or publish events over the REPL / terminal
 * Code Formatters: **[ss-coffee](https://github.com/socketstream/ss-coffee)** (CoffeeScript), **[ss-jade](https://github.com/socketstream/ss-jade)** Jade (for HTML), **[ss-stylus](https://github.com/socketstream/ss-stylus)** Stylus (for CSS), **[ss-less](https://github.com/socketstream/ss-less)** Less (for CSS)
 * Client-side Template Engines: **[ss-hogan](https://github.com/socketstream/ss-hogan)** Hogan/Mustache, **[ss-coffeekup](https://github.com/socketstream/ss-coffeekup)** CoffeeKup
