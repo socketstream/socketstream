@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "async": "0.9.0",
-    "connect-livereload": "0.5.0",
+    "connect-livereload": "0.5.2",
     "coveralls": "2.11.2",
     "grunt": "0.4.5",
     "grunt-cli": "0.1.13",
@@ -46,13 +46,13 @@
     "grunt-contrib-watch": "0.6.1",
     "grunt-conventional-changelog": "1.1.0",
     "grunt-ngdocs": "0.2.6",
-    "istanbul": "0.3.2",
+    "istanbul": "0.3.5",
     "jshint": "2.5.10",
     "mocha": "2.0.1",
     "notes": "0.0.4",
     "npm-dview": "1.1.2",
     "shelljs": "0.3.0",
-    "should": "4.3.0",
+    "should": "4.4.1",
     "supertest": "0.15.0"
   },
   "scripts": {
