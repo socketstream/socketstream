@@ -32,7 +32,11 @@
     "redis": "= 0.12.1",
     "semver": "= 4.1.0",
     "uglify-js": "= 1.3.3",
-    "uid2": "0.0.3"
+    "uid2": "0.0.3",
+    "escape-html": "1.0.1",
+    "parseurl": "~1.3.0",
+    "send": "0.10.1",
+    "utils-merge": "1.0.0"
   },
   "devDependencies": {
     "async": "0.9.0",
