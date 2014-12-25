@@ -7,10 +7,10 @@
 <p>SocketStream allows you to test your app using Node&#39;s <code>assert</code> module, or any test framework of your choice. We recommend using <a href="http://gruntjs.com/getting-started">Grunt</a>, <a href="http://visionmedia.github.com/mocha">Mocha</a> with <a href="https://github.com/visionmedia/should.js">should.js</a>. This is the combination used in the example below.</p>
 <h4 id="testing-your-app_getting-started">Getting Started</h4>
 <p>First install <code>grunt-cli</code> globally:</p>
-<pre><code>[sudo] npm install -g grunt-cli</code></pre>
-<p>Create a directory for your tests:</p>
-<pre><code>mkdir test</code></pre>
-<p>For this example we&#39;re going to test the <code>ss.rpc(&#39;app.square&#39;)</code> function shown below:</p>
+<pre><code>[sudo] npm install -g grunt-cli
+</code></pre><p>Create a directory for your tests:</p>
+<pre><code>mkdir test
+</code></pre><p>For this example we&#39;re going to test the <code>ss.rpc(&#39;app.square&#39;)</code> function shown below:</p>
 <pre class="prettyprint linenums">
 // in/server/rpc/app.js
 exports.actions = function(req, res, ss) {
@@ -38,10 +38,10 @@ describe('app.square', function() {
 });
 </pre>
 <p>Run all your tests in <code>/test</code> with:</p>
-<pre><code>grunt test</code></pre>
-<p>And you&#39;ll see the following output:</p>
-<pre><code>✔ 1 test complete (1ms)</code></pre>
-<p>A few things to note about RPC tests:</p>
+<pre><code>grunt test
+</code></pre><p>And you&#39;ll see the following output:</p>
+<pre><code>✔ 1 test complete (1ms)
+</code></pre><p>A few things to note about RPC tests:</p>
 <ul>
 <li>All <code>ss.rpc()</code> commands return an array of params (e.g. <code>[16]</code> in the example above). As two <code>array</code>s cannot be directly compared in Javascript, it is necessary to convert the response to a <code>string</code> before calling <code>should.equal()</code></li>
 <li><p>Create as many test files as you like. Subsequent calls to <code>var ss = require(&#39;socketstream&#39;).start();</code> will return the same server instance from memory</p>

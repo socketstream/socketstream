@@ -68,6 +68,25 @@ Apart from determining where the middleware should be added, the <code>prepend()
 <li>static</li>
 <li>staticCache</li>
 <li>session (secure flag only)</li>
+<li>strategy</li>
 </ul>
 <p>We will find a way to make all of the middleware customisable in the near future.</p>
+<h3 id="http-middleware_changing-the-http-middleware-approach">Changing the HTTP middleware approach</h3>
+<p>Short of setting up your own middleware stack, you can pick a strategy other than the default.
+The minimal strategy will leave out session and compress middleware. So you will have to manage
+that yourself.</p>
+<pre class="prettyprint linenums">
+    ss.http.set({
+        strategy: 'minimal'
+    });
+</pre>
+<h3 id="http-middleware_setting-a-custom-http-middleware-strategy">Setting a custom HTTP middleware strategy</h3>
+<p>As an experimental feature you can set your own strategy. You can base it on the default strategy
+found in <a href="https://github.com/socketstream/socketstream/tree/master/lib/http">the source</a>.</p>
+<p>It can be configured by</p>
+<pre class="prettyprint linenums">
+    ss.http.set({
+        strategy: require('./my.own.strategy')
+    });
+</pre>
 </div></div>
