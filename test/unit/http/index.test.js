@@ -151,6 +151,33 @@ describe('lib/http/index', function () {
 
         describe('app setup without SS middleware',function() {
 
+            var staticPath = '',
+              assetsPath = '';
+
+            function setUp(done) {
+                staticPath = 'client/static';
+                assetsPath = 'client/static/assets';
+
+                /* Loading http function */
+                http = httpFunc(root);
+
+                /* loading http server assets */
+                app = http.load(staticPath, assetsPath, sessionStore, sessionOptions);
+
+                done();
+            }
+
+            beforeEach(setUp);
+
+            it('should not build the middleware stack', function (done) {
+
+                /* testing correct length of http.middleware.stack */
+                http.middleware.stack.should.be.an.instanceOf(Array);
+                http.middleware.stack.should.have.length(0);
+
+                done();
+            });
+
         });
 
         describe('minimal strategy',function() {
