@@ -267,14 +267,14 @@ describe('lib/http/index', function () {
                  * lib/http/index.js:161
                  */
                 http.middleware.stack[7].handle.should.be.an.instanceOf(Function);
-                http.middleware.stack[7].handle.toString().should.equal( serveStatic(assetsPath, settings.static).toString() );
+                http.middleware.stack[7].handle.toString().should.equal( serveStatic('/assets',assetsPath, settings.static).toString() );
 
                 /**
                  * testing static resource middleware
                  * lib/http/index.js:161
                  */
                 http.middleware.stack[8].handle.should.be.an.instanceOf(Function);
-                http.middleware.stack[8].handle.toString().should.equal( serveStatic(staticPath, settings.static).toString() );
+                http.middleware.stack[8].handle.toString().should.equal( serveStatic('',staticPath, settings.static).toString() );
 
                 done();
             });
