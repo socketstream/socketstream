@@ -59,7 +59,7 @@ git checkout -b new-stuff-branch master
 * Make sure your changes passed the tests:
 ```
 npm test
-npm cover-test
+npm run cover-test
 ```
 
 * Commit your changes with a descriptive commit message, please describe what you have done as detailed as possible

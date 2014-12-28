@@ -21,6 +21,7 @@ var request      = require('supertest'),
     connect      = require('connect'),
     util         = require('util'),
     httpFunc     = require( path.join(process.env.PWD, 'lib/http/index') ),
+    serveStatic  = require('../../../lib/utils/serve-static'),
     http         = null,
     app          = null,
     utils        = require('../../helpers/utils.js'),
@@ -148,11 +149,50 @@ describe('lib/http/index', function () {
             });
         });
 
-        describe('#load()', function () {
-            var staticPath = '';
+        describe('app setup without SS middleware',function() {
+
+            var staticPath = '',
+              assetsPath = '';
 
             function setUp(done) {
                 staticPath = 'client/static';
+                assetsPath = 'client/static/assets';
+
+                /* Loading http function */
+                http = httpFunc(root);
+
+                /* loading http server assets */
+                app = http.load(staticPath, assetsPath, sessionStore, sessionOptions);
+
+                done();
+            }
+
+            beforeEach(setUp);
+
+            it('should not build the middleware stack', function (done) {
+
+                /* testing correct length of http.middleware.stack */
+                http.middleware.stack.should.be.an.instanceOf(Array);
+                http.middleware.stack.should.have.length(0);
+
+                done();
+            });
+
+        });
+
+        describe('minimal strategy',function() {
+           it('should serve static files',function(){});
+           it('should serve assets',function(){});
+           it('should serve assets outside the static root',function(){});
+        });
+
+        describe('#load()', function () {
+            var staticPath = '',
+                assetsPath = '';
+
+            function setUp(done) {
+                staticPath = 'client/static';
+                assetsPath = 'client/static/assets';
 
                 /* Loading http function */
                 http = httpFunc(root);
@@ -162,7 +202,7 @@ describe('lib/http/index', function () {
                 http.middleware.append(testAppendMiddleware);
 
                 /* loading http server assets */
-                app = http.load(staticPath, sessionStore, sessionOptions);
+                app = http.load(staticPath, assetsPath, sessionStore, sessionOptions);
 
                 done();
             }
@@ -186,7 +226,7 @@ describe('lib/http/index', function () {
 
                 /* testing correct length of http.middleware.stack */
                 http.middleware.stack.should.be.an.instanceOf(Array);
-                http.middleware.stack.should.have.length(8);
+                http.middleware.stack.should.have.length(9);
 
                 /**
                  * testing testPrependMiddleware
@@ -250,11 +290,18 @@ describe('lib/http/index', function () {
                 utils.getfunctionName( http.middleware.stack[6].handle ).should.equal( 'eventMiddleware' );
 
                 /**
-                 * testing connect["static"]()
+                 * testing assets resource middleware
                  * lib/http/index.js:161
                  */
                 http.middleware.stack[7].handle.should.be.an.instanceOf(Function);
-                http.middleware.stack[7].handle.toString().should.equal( connect.static(staticPath, settings.static).toString() );
+                http.middleware.stack[7].handle.toString().should.equal( serveStatic('/assets',assetsPath, settings.static).toString() );
+
+                /**
+                 * testing static resource middleware
+                 * lib/http/index.js:161
+                 */
+                http.middleware.stack[8].handle.should.be.an.instanceOf(Function);
+                http.middleware.stack[8].handle.toString().should.equal( serveStatic('',staticPath, settings.static).toString() );
 
                 done();
             });

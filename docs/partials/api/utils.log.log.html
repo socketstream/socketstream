@@ -12,26 +12,26 @@ whatever logging provider you choose.</p>
 <div class="debug"><div class="utils-log-debug-page"><p>Debug level logging, uses console.log by default. Override by assigning a
 function that takes the same parameters as console.log:</p>
 <pre><code>var ss = require(&#39;socketstream&#39;);
-ss.api.log.debug = console.log;</code></pre>
-</div><h4 id="methods_debug_example">Example</h4>
-<div class="example"><div class="utils-log-debug-page"><pre><code>ss.api.log.debug(&quot;Something fairly trivial happened&quot;);</code></pre>
-</div></div>
+ss.api.log.debug = console.log;
+</code></pre></div><h4 id="methods_debug_example">Example</h4>
+<div class="example"><div class="utils-log-debug-page"><pre><code>ss.api.log.debug(&quot;Something fairly trivial happened&quot;);
+</code></pre></div></div>
 </div>
 </li>
 <li><h3 id="methods_error">error()</h3>
 <div class="error"><div class="utils-log-error-page"><p>Error level logging, uses console.error by default. Override by assigning a
 function that takes the same parameters as console.error.</p>
 </div><h4 id="methods_error_example">Example</h4>
-<div class="example"><div class="utils-log-error-page"><pre><code>ss.api.log.error(&quot;Time to wakeup the sysadmin&quot;);</code></pre>
-</div></div>
+<div class="example"><div class="utils-log-error-page"><pre><code>ss.api.log.error(&quot;Time to wakeup the sysadmin&quot;);
+</code></pre></div></div>
 </div>
 </li>
 <li><h3 id="methods_info">info()</h3>
 <div class="info"><div class="utils-log-info-page"><p>Info level logging, uses console.log by default. Override by assigning a
 function that takes the same parameters as console.log.</p>
 </div><h4 id="methods_info_example">Example</h4>
-<div class="example"><div class="utils-log-info-page"><pre><code>ss.api.log.info(&quot;Just keeping you informed&quot;);</code></pre>
-</div></div>
+<div class="example"><div class="utils-log-info-page"><pre><code>ss.api.log.info(&quot;Just keeping you informed&quot;);
+</code></pre></div></div>
 </div>
 </li>
 <li><h3 id="methods_warn">warn()</h3>
@@ -39,10 +39,10 @@ function that takes the same parameters as console.log.</p>
 function that takes the same parameters as console.log:</p>
 <pre><code>var ss = require(&#39;socketstream&#39;),
     winston = require(&#39;winston&#39;);
-ss.api.log.warn = winston.warn;</code></pre>
-</div><h4 id="methods_warn_example">Example</h4>
-<div class="example"><div class="utils-log-warn-page"><pre><code>ss.api.log.warn(&quot;Something unexpected happened!&quot;);</code></pre>
-</div></div>
+ss.api.log.warn = winston.warn;
+</code></pre></div><h4 id="methods_warn_example">Example</h4>
+<div class="example"><div class="utils-log-warn-page"><pre><code>ss.api.log.warn(&quot;Something unexpected happened!&quot;);
+</code></pre></div></div>
 </div>
 </li>
 </ul>
