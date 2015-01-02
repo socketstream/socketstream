@@ -58,7 +58,7 @@ describe('lib/http/router', function () {
 
             it('should have an empty object property #_events', function (done) {
                 router.ee.should.have.a.property('_events').with.a.type('object');
-                router.ee._events.should.be.empty;
+                router.ee._events.should.eql({});
                 done();
             });
 
@@ -74,56 +74,56 @@ describe('lib/http/router', function () {
 
             it('should have an empty object property #listenerTree', function (done) {
                 router.ee.should.have.a.property('listenerTree').with.a.type('object');
-                router.ee.listenerTree.should.be.empty;
+                router.ee.listenerTree.should.eql({});
                 done();
             });
         });
 
         describe('Router#route(url, req, res)', function () {
             it('should return false for `/` if there are no routes and no listners', function (done) {
-                router.route('/', req, res).should.be.false;
+                router.route('/', req, res).should.eql(false);
                 done();
             });
 
             it('should return true for `/` if there is a listner for `/`', function (done) {
                 router.on('/', cb);
-                router.route('/', req, res).should.be.true;
+                router.route('/', req, res).should.eql(true);
                 done();
             });
 
             it('should return false for `/` if there is a listner for `/404`', function (done) {
                 router.on('/404', cb);
-                router.route('/', req, res).should.be.false;
+                router.route('/', req, res).should.eql(false);
                 done();
             });
 
             it('should return false for `/200` if there is a listner for `/404`', function (done) {
                 router.on('/404', cb);
-                router.route('/200', req, res).should.be.false;
+                router.route('/200', req, res).should.eql(false);
                 done();
             });
 
             it('should return false for an empty url', function (done) {
                 router.on('/404', cb);
-                router.route('', req, res).should.be.false;
+                router.route('', req, res).should.eql(false);
                 done();
             });
 
             it('should support Push State Routing', function (done) {
                 router.on('/', cb);
 
-                router.route('/1', req, res).should.be.true;
-                router.route('/1/', req, res).should.be.true;
-                router.route('/1/2', req, res).should.be.true;
-                router.route('/1/2/3', req, res).should.be.true;
-                router.route('/1/2/3/4', req, res).should.be.true;
+                router.route('/1', req, res).should.eql(true);
+                router.route('/1/', req, res).should.eql(true);
+                router.route('/1/2', req, res).should.eql(true);
+                router.route('/1/2/3', req, res).should.eql(true);
+                router.route('/1/2/3/4', req, res).should.eql(true);
                 done();
             });
 
             it('should return true if the url request contains parameters', function (done) {
                 router.on('/some-url', cb);
-                router.route('/some-url?ts=12345', req, res).should.be.true;
-                router.route('/some-url/?ts=12345', req, res).should.be.true;
+                router.route('/some-url?ts=12345', req, res).should.eql(true);
+                router.route('/some-url/?ts=12345', req, res).should.eql(true);
                 done();
             });
 
@@ -134,11 +134,11 @@ describe('lib/http/router', function () {
             it('should return false for static file and true for Push State Routing', function (done) {
                 router.on('/', cb);
 
-                router.route('/content/uploads/345.jpg', req, res).should.be.false;
-                router.route('/content/uploads/', req, res).should.be.true;
-                router.route('/content', req, res).should.be.true;
-                router.route('/', req, res).should.be.true;
-                router.route('', req, res).should.be.true;
+                router.route('/content/uploads/345.jpg', req, res).should.eql(false);
+                router.route('/content/uploads/', req, res).should.eql(true);
+                router.route('/content', req, res).should.eql(true);
+                router.route('/', req, res).should.eql(true);
+                router.route('', req, res).should.eql(true);
                 done();
             });
         });

@@ -1,3 +1,4 @@
+'use strict';
 // Plain HTML Formatter
 
 var fs;
