@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+'use strict';
+
 /**
  * Git COMMIT-MSG hook for validating commit message
  * See https://docs.google.com/document/d/1rk04jEuGfk9kYzfqCuOlPTSJw3hEDZJTBN5E5f1SALo/edit
@@ -8,14 +10,17 @@
  * >> cd <angular-repo>
  * >> ln -s validate-commit-msg.js .git/hooks/commit-msg
  */
-var fs = require('fs');
-var util = require('util');
+
+var fs, util, MAX_LENGTH, PATTERN, IGNORED, TYPES, match, type;
+
+fs = require('fs');
+util = require('util');
 
 
-var MAX_LENGTH = 70;
-var PATTERN = /^(?:fixup!\s*)?(\w*)(\((\w+)\))?\: (.*)$/;
-var IGNORED = /^WIP\:/;
-var TYPES = {
+MAX_LENGTH = 70;
+PATTERN = /^(?:fixup!\s*)?(\w*)(\((\w+)\))?\: (.*)$/;
+IGNORED = /^WIP\:/;
+TYPES = {
   chore: true,
   demo: true,
   docs: true,
@@ -49,16 +54,16 @@ var validateMessage = function(message) {
     isValid = false;
   }
 
-  var match = PATTERN.exec(message);
+  match = PATTERN.exec(message);
 
   if (!match) {
     error('does not match "<type>(<scope>): <subject>" ! was: "' + message + '"\nNote: <scope> must be only letters.');
     return false;
   }
 
-  var type = match[1];
-  var scope = match[3];
-  var subject = match[4];
+  type    = match[1];
+  // scope   = match[3];
+  // subject = match[4];
 
   if (!TYPES.hasOwnProperty(type)) {
     error('"%s" is not allowed type !', type);

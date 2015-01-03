@@ -4,7 +4,7 @@
 
 // Dependencies
 
-var require               = require('../helpers/uncache');
+var uncachedRequire               = require('../helpers/uncache');
 
 
 
@@ -13,7 +13,7 @@ describe('lib/socketstream', function () {
 
 
     beforeEach(function (done) {
-        require.uncache('../../lib/socketstream.js');
+        uncachedRequire.uncache('../../lib/socketstream.js');
         delete process.env.SS_ENV;
         delete process.env.NODE_ENV;
         done();
@@ -35,7 +35,7 @@ describe('lib/socketstream', function () {
 
         it('should inherit the Node environment variable from NODE_ENV, if passed', function (done) {
             process.env.NODE_ENV = 'cucumber';
-            var ss = require('../../lib/socketstream.js');
+            var ss = uncachedRequire('../../lib/socketstream.js');
             ss.env.should.equal('cucumber');
             done();
         });
@@ -44,7 +44,7 @@ describe('lib/socketstream', function () {
 
         it('should inherit the Node environment variable from SS_ENV, if passed', function (done) {
             process.env.SS_ENV = 'staging';
-            var ss = require('../../lib/socketstream.js');
+            var ss = uncachedRequire('../../lib/socketstream.js');
             ss.env.should.equal('staging');
             done();
         });
@@ -52,7 +52,7 @@ describe('lib/socketstream', function () {
 
 
         it('should default to development, if neither NODE_ENV or SS_ENV are passed', function (done) {
-            var ss = require('../../lib/socketstream.js');
+            var ss = uncachedRequire('../../lib/socketstream.js');
             ss.env.should.equal('development');
             done();
         });

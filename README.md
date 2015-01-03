@@ -1,7 +1,7 @@
 ![SocketStream!](https://github.com/socketstream/socketstream/raw/master/new_project/client/static/images/logo.png)
 
 # SocketStream
-[![Build Status](https://api.travis-ci.org/socketstream/socketstream.svg?branch=master)](https://travis-ci.org/socketstream/socketstream) [![Dependency Status](https://david-dm.org/socketstream/socketstream.svg)](https://david-dm.org/socketstream/socketstream#info=dependencies) [![devDependency Status](https://david-dm.org/socketstream/socketstream/dev-status.svg)](https://david-dm.org/socketstream/socketstream#info=devDependencies) [![Code Climate](https://codeclimate.com/github/socketstream/socketstream.svg)](https://codeclimate.com/github/socketstream/socketstream) [![NPM version](https://badge.fury.io/js/socketstream.svg)](http://badge.fury.io/js/socketstream) [![Gitter chat](https://badges.gitter.im/socketstream.svg)](https://gitter.im/socketstream/socketstream)
+[![Build Status](https://api.travis-ci.org/socketstream/socketstream.svg?branch=master)](https://travis-ci.org/socketstream/socketstream) [![Dependency Status](https://david-dm.org/socketstream/socketstream.svg)](https://david-dm.org/socketstream/socketstream#info=dependencies) [![devDependency Status](https://david-dm.org/socketstream/socketstream/dev-status.svg)](https://david-dm.org/socketstream/socketstream#info=devDependencies) [![Code Climate](https://codeclimate.com/github/socketstream/socketstream.svg)](https://codeclimate.com/github/socketstream/socketstream) [![Codacy Badge](https://www.codacy.com/project/badge/802df47157c84beca4c3dbcda76bc553)](https://www.codacy.com/public/paulbjensen_2636/socketstream) [![NPM version](https://badge.fury.io/js/socketstream.svg)](http://badge.fury.io/js/socketstream) [![Gitter chat](https://badges.gitter.im/socketstream.svg)](https://gitter.im/socketstream/socketstream)
 [![Issue Stats](http://issuestats.com/github/socketstream/socketstream/badge/pr)](http://issuestats.com/github/socketstream/socketstream)
 [![Issue Stats](http://issuestats.com/github/socketstream/socketstream/badge/issue)](http://issuestats.com/github/socketstream/socketstream)
 [![Coverage Status](https://img.shields.io/coveralls/socketstream/socketstream.svg)](https://coveralls.io/r/socketstream/socketstream?branch=master)
@@ -190,35 +190,31 @@ Documentation is constantly expanding and currently available in [English](https
 
 ##### Developing (Client-side)
 
-* [Client-side Code](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/client_side_code.md)
-* [Client-side Templates](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/client_side_templates.md)
-* [Defining multiple Single-Page Clients](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/defining_multiple_clients.md)
-* [Loading Assets On Demand](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/loading_assets_on_demand.md)
-* [Live Reload](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/live_reload.md)
-* [Web Workers](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/web_workers.md)
+* [Client-side Code](http://socketstream.github.io/socketstream/docs/#/tutorials/client_side_code)
+* [Client-side Templates](http://socketstream.github.io/socketstream/docs/#/tutorials/client_side_templates)
+* [Defining multiple Single-Page Clients](http://socketstream.github.io/socketstream/docs/#/tutorials/defining_multiple_clients)
+* [Loading Assets On Demand](http://socketstream.github.io/socketstream/docs/#/tutorials/loading_assets_on_demand)
+* [Live Reload](http://socketstream.github.io/socketstream/docs/#/tutorials/live_reload)
+* [Web Workers](http://socketstream.github.io/socketstream/docs/#/tutorials/web_workers)
 
 ##### Developing (Server-side)
 
-* [RPC Responder](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/rpc_responder.md)
-* [Pub/Sub Events](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/pub_sub_events.md)
-* [Sessions](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/sessions.md)
-* [Request Middleware](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/request_middleware.md)
-* [HTTP Middleware](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/http_middleware.md)
-* [Authentication](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/authentication.md)
-* [Testing Your App](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/server_side_testing.md)
+* [RPC Responder](http://socketstream.github.io/socketstream/docs/#/tutorials/rpc_responder)
+* [Pub/Sub Events](http://socketstream.github.io/socketstream/docs/#/tutorials/pub_sub_events)
+* [Sessions](http://socketstream.github.io/socketstream/docs/#/tutorials/sessions)
+* [Request Middleware](http://socketstream.github.io/socketstream/docs/#/tutorials/request_middleware)
+* [HTTP Middleware](http://socketstream.github.io/socketstream/docs/#/tutorials/http_middleware)
+* [Authentication](http://socketstream.github.io/socketstream/docs/#/tutorials/authentication)
+* [Testing Your App](http://socketstream.github.io/socketstream/docs/#/tutorials/server_side_testing)
 
 ##### Best Practices
 
-* [Hosting in Production](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/production_hosting.md) - Packing assets, CDNs, handling exceptions
+* [Hosting in Production](http://socketstream.github.io/socketstream/docs/#/tutorials/production_hosting) - Packing assets, CDNs, handling exceptions
 
 ##### Extending SocketStream
 
-* [Writing Template Engine Wrappers](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/template_engine_wrappers.md) - support any of the gazillion template formats out there
-* [Writing Request Responders](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/writing_request_responders.md) - experiment with models and low-level message protocols
-
-##### Other
-
-* [Changes since 0.2](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/changes_since_0.2.md)
+* [Writing Template Engine Wrappers](http://socketstream.github.io/socketstream/docs/#/tutorials/template_engine_wrappers) - support any of the gazillion template formats out there
+* [Writing Request Responders](http://socketstream.github.io/socketstream/docs/#/tutorials/writing_request_responders) - experiment with models and low-level message protocols
 
 ***
 
@@ -351,11 +347,11 @@ Original Creator: Owen Barnes
 
 Lead Developer: Paul Jensen
 
-Big thanks to those who have contributed in the past: Addy Osmani for his help with everything JavaScript related, Alan Milford for providing initial demos, and Craig Jordan Muir for designing the SocketStream logo that has become synomymous with SocketStream's identity.
+Big thanks to those who have contributed in the past: Addy Osmani for his help with everything JavaScript related, Alan Milford for providing initial demos, and Craig Jordan Muir for designing the SocketStream logo that has become synonymous with SocketStream's identity.
 
 Thanks to those who have recently been helping to improve SocketStream in recent months: Robert Hall for his work on the new documentation for SocketStream, Roman Minkin for his bug fixes, feature contributions and improvements to the framework, and others who are passionate about SocketStream and wish to see it grow. 
 
-Thanks also to the many who have contributed code and ideas. We plan to properly feature contributors on our website in the near future, as derived from analysing SocketStream's git commit history, as well as honoouring plugin authors.
+Thanks also to the many who have contributed code and ideas. We plan to properly feature contributors on our website in the near future, as derived from analysing SocketStream's git commit history, as well as honouring plugin authors.
 
 
 ### Credits

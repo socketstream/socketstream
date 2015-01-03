@@ -33,6 +33,11 @@
         "after"      : false,
         "afterEach"  : false,
         "beforeEach" : false,
-        "spyOn"      : false
+        "spyOn"      : false,
+        "jQuery"     : false,
+        "$"          : false,
+        "Worker"     : false,
+        "window"     : false,
+        "document"   : false
     }
 }
