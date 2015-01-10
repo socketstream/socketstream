@@ -1,0 +1,43 @@
+<h1><code ng:non-bindable=""></code>
+<div><span class="hint"></span>
+</div>
+</h1>
+<div><div class="faq-page"><p>Frequently asked questions</p>
+<h2 id="faq">FAQ</h2>
+<h6 id="faq_what-browsers-will-socketstream-work-with">What browsers will SocketStream work with?</h6>
+<p>SocketStream works best with Chrome, Safari, Firefox 6 (and above) which all support native websockets. It is also compatible with older versions of Firefox and IE thanks to Socket.IO fallback transports. In addition, iPads and iPhones using Mobile Safari (iOS 4.2 and above) are fully supported, even over 3G.</p>
+<h6 id="faq_how-can-i-make-my-app-auto-restart-when-/server-code-changes">How can I make my app auto-restart when /server code changes?</h6>
+<p>Install the excellent &#39;nodemon&#39; module with <code>sudo npm install -g nodemon</code> then start your app with <code>nodemon app.js</code>. A <code>.nodemonignore</code> file has already been created for you with the optimal settings. This feature is very useful when developing your app.</p>
+<h6 id="faq_how-can-i-configure-socketio">How can I configure Socket.IO?</h6>
+<p>You may fully configure the Socket.IO server and client libraries like so:</p>
+<pre><code class="lang-javascript">ss.ws.transport.use(&#39;socketio&#39;, {
+  client: {
+    transports: [&#39;websocket&#39;, &#39;htmlfile&#39;, &#39;xhr-polling&#39;, &#39;jsonp-polling&#39;]
+  },
+  server: function(io){
+    io.set(&#39;log level&#39;, 4)
+  }
+});
+</code></pre>
+<h6 id="faq_where-can-i-deploy-my-apps-to">Where can I deploy my apps to?</h6>
+<p>SocketStream works great with <a href="http://www.nodejitsu.com">Nodejitsu.com</a>, as well as custom EC2 / cloud servers. Sadly <a href="http://www.heroku.com">Heroku.com</a> does not currently support websockets.</p>
+<h6 id="faq_will-it-run-on-windows">Will it run on Windows?</h6>
+<p>Yes. We have many users running SocketStream on Windows without problems. Make sure that you have <a href="http://gnuwin32.sourceforge.net/packages/make.htm">Make for Windows</a> installed beforehand.</p>
+<h6 id="faq_how-can-i-share-code-between-client-and-server">How can I share code between client and server?</h6>
+<p>Simply <code>require()</code> one of your client-side modules in your server-side code.</p>
+<h6 id="faq_does-socketstream-support-models">Does SocketStream support models?</h6>
+<p>No. Not in the core.</p>
+<p>Instead we offer a <a href="https://github.com/socketstream/socketstream/blob/master/doc/guide/en/writing_request_responders.md">powerful API</a> to allow developers to experiment with opinionated approaches to model synching, client-side APIs (e.g. simulating MongoDB in the browser), serialization protocols, and much more.</p>
+<p>Several third-party add-on modules (for Backbone, Angular and more) are now in active development by the community. Please search our <a href="http://groups.google.com/group/socketstream">Google Group</a> for details.</p>
+<p>Ideally we&#39;d like to end up with one great, well-maintained module for each major client-side framework which allows for seamless high-speed model syncing to your choice of persistent store. The best modules will be featured on our website in the near future, giving you the ability to pick the best tools for your particular use-case.</p>
+<h6 id="faq_should-i-use-redis">Should I use Redis?</h6>
+<p>Yes. SocketStream installs the Redis driver by default but does not require Redis to be running when developing your app (for convenience sake). However, as soon as you want to host your app for real, you need to be using Redis.</p>
+<p>Redis is used in two areas of SocketStream - session storage and internal pubsub (used by <code>ss.publish</code> commands). You can enable Redis in your app with the following commands in your app.js file:</p>
+<pre><code>ss.session.store.use(&#39;redis&#39;);
+ss.publish.transport.use(&#39;redis&#39;);
+</code></pre><p>Pass any config as the second argument to either of the above commands as so:</p>
+<pre><code>{host: &#39;localhost&#39;, port: 6379, pass: &#39;myOptionalPass&#39;, db: 3}
+</code></pre><h6 id="faq_how-about-scaling">How about scaling?</h6>
+<p>SocketStream 0.3 makes a big assumption in order to maximize speed and reduce code complexity: All incoming connections with the same session should be routed to the same server (also known as Sticky Sessions). The session details are stored in memory and then optionally saved to Redis to preserve the session should the node fail.</p>
+<p>Back end scaling has yet to be properly documented, but we&#39;re keen to continue looking into ways to use ZeroMQ and also Hook IO. We will make sure back end scaling is as easy and flexible as possible, but it will no longer be a feature of the framework itself.</p>
+</div></div>

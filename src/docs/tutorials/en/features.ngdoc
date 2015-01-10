@@ -1,0 +1,38 @@
+@ngdoc overview
+@name Features
+
+@description
+# Features
+
+#### Client Side
+ 
+* Use `require()` and `exports` in your client-side code as you would on the server
+* Define multiple single-page clients by choosing the CSS, JS and client-side templates you wish to serve
+* Integrated asset manager - packages and [minifies](https://github.com/mishoo/UglifyJS) all client-side assets. Includes CDN support
+* Live Reload - automatically reloads the browser when a HTML, CSS or JS client file changes
+* Comprehensive support for client-side templates - use Hogan/Mustache/CoffeeKup/jQuery or write your own wrapper
+* Use optional code formatters (e.g. CoffeeScript, Jade, Stylus, Less, etc) by easily installing wrapper modules
+* Multiple clients work seamlessly with HTML Push State 'mock routing' so you can use [Backbone Router](http://documentcloud.github.com/backbone/#Router), [Davis JS](http://davisjs.com) and more
+* Works great with [Ember.js](http://emberjs.com) for 'reactive templates' which automatically update when data changes
+* Bundled with jQuery - though not dependent on it. Will work great with Zepto and other libraries
+* Easily use additional client libraries such as [Underscore.js](http://documentcloud.github.com/underscore/)
+ 
+ 
+#### Server Side
+ 
+* True bi-directional communication using websockets (or websocket fallbacks). No more slow, messy AJAX!
+* Modular Websocket Transports - switch between [Engine.IO](http://socket.io) (bundled by default) or [SockJS](https://github.com/socketstream/ss-sockjs) without changing your app code
+* Easily share code between the client and server. Ideal for business logic and model validation (see FAQs below)
+* Request Middleware - enabling session access, authentication, logging, distributed requests and more
+* Effortless, scalable, pub/sub baked right in - including Private Channels
+* Easy authentication - use a backend database or authenticate against Facebook Connect, Twitter, etc using [Everyauth](https://github.com/bnoguchi/everyauth)
+* Uses [Connect](http://senchalabs.github.com/connect/) - Hook-in your own HTTP middleware, share sessions between HTTP/Connect/Express/SocketStream
+* Optionally use [Redis](http://redis.io) for fast session retrieval, pub/sub, list of users online, and any other data your app needs instantly
+
+
+#### Optional Modules (officially maintained and supported)
+
+* **[ss-sockjs](https://github.com/socketstream/ss-sockjs)** Use [SockJS](https://github.com/sockjs/sockjs-client) as the websocket transport instead of Engine.IO
+* **[ss-console](https://github.com/socketstream/ss-console)** Connect to a live server and call RPC actions or publish events over the REPL / terminal
+* Code Formatters: **[ss-coffee](https://github.com/socketstream/ss-coffee)** (CoffeeScript), **[ss-jade](https://github.com/socketstream/ss-jade)** Jade (for HTML), **[ss-stylus](https://github.com/socketstream/ss-stylus)** Stylus (for CSS), **[ss-less](https://github.com/socketstream/ss-less)** Less (for CSS)
+* Client-side Template Engines: **[ss-hogan](https://github.com/socketstream/ss-hogan)** Hogan/Mustache, **[ss-coffeekup](https://github.com/socketstream/ss-coffeekup)** CoffeeKup

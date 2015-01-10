@@ -1,0 +1,77 @@
+@ngdoc overview
+@name FAQ
+@description Frequently asked questions
+
+# FAQ
+
+
+##### What browsers will SocketStream work with?
+
+SocketStream works best with Chrome, Safari, Firefox 6 (and above) which all support native websockets. It is also compatible with older versions of Firefox and IE thanks to Socket.IO fallback transports. In addition, iPads and iPhones using Mobile Safari (iOS 4.2 and above) are fully supported, even over 3G.
+
+
+##### How can I make my app auto-restart when /server code changes?
+
+Install the excellent 'nodemon' module with `sudo npm install -g nodemon` then start your app with `nodemon app.js`. A `.nodemonignore` file has already been created for you with the optimal settings. This feature is very useful when developing your app.
+
+
+##### How can I configure Socket.IO?
+
+You may fully configure the Socket.IO server and client libraries like so:
+
+```javascript
+ss.ws.transport.use('socketio', {
+  client: {
+    transports: ['websocket', 'htmlfile', 'xhr-polling', 'jsonp-polling']
+  },
+  server: function(io){
+    io.set('log level', 4)
+  }
+});
+```
+
+
+##### Where can I deploy my apps to?
+
+SocketStream works great with [Nodejitsu.com](http://www.nodejitsu.com), as well as custom EC2 / cloud servers. Sadly [Heroku.com](http://www.heroku.com) does not currently support websockets.
+
+
+##### Will it run on Windows?
+
+Yes. We have many users running SocketStream on Windows without problems. Make sure that you have [Make for Windows](http://gnuwin32.sourceforge.net/packages/make.htm) installed beforehand.
+
+##### How can I share code between client and server?
+
+Simply `require()` one of your client-side modules in your server-side code.
+
+
+##### Does SocketStream support models?
+
+No. Not in the core.
+
+Instead we offer a [powerful API](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/writing_request_responders.md) to allow developers to experiment with opinionated approaches to model synching, client-side APIs (e.g. simulating MongoDB in the browser), serialization protocols, and much more.
+
+Several third-party add-on modules (for Backbone, Angular and more) are now in active development by the community. Please search our [Google Group](http://groups.google.com/group/socketstream) for details.
+
+Ideally we'd like to end up with one great, well-maintained module for each major client-side framework which allows for seamless high-speed model syncing to your choice of persistent store. The best modules will be featured on our website in the near future, giving you the ability to pick the best tools for your particular use-case.
+
+
+##### Should I use Redis?
+
+Yes. SocketStream installs the Redis driver by default but does not require Redis to be running when developing your app (for convenience sake). However, as soon as you want to host your app for real, you need to be using Redis.
+
+Redis is used in two areas of SocketStream - session storage and internal pubsub (used by `ss.publish` commands). You can enable Redis in your app with the following commands in your app.js file:
+
+    ss.session.store.use('redis');
+    ss.publish.transport.use('redis');
+
+Pass any config as the second argument to either of the above commands as so:
+
+    {host: 'localhost', port: 6379, pass: 'myOptionalPass', db: 3}
+
+
+##### How about scaling?
+
+SocketStream 0.3 makes a big assumption in order to maximize speed and reduce code complexity: All incoming connections with the same session should be routed to the same server (also known as Sticky Sessions). The session details are stored in memory and then optionally saved to Redis to preserve the session should the node fail.
+
+Back end scaling has yet to be properly documented, but we're keen to continue looking into ways to use ZeroMQ and also Hook IO. We will make sure back end scaling is as easy and flexible as possible, but it will no longer be a feature of the framework itself.
