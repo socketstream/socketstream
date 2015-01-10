@@ -1,0 +1,70 @@
+@ngdoc overview
+@name How it works
+
+@description
+# How does it work?
+
+SocketStream sends all the static HTML, CSS and client-side code your app needs the first time a user visits your site (all automatically compressed in `production` mode).
+
+From then on all application data is sent and received via the websocket (or websocket fallbacks), instantly established when the client connects and automatically re-established if broken. Normally this will be in [JSON RPC](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/rpc_responder.md) format, but SocketStream 0.3 allows you to use different Request Responders (message handlers) depending upon the task at hand.
+
+All this means no more connection latency, HTTP header overhead, polling, or clunky AJAX. Just true bi-directional, asynchronous, 'streaming' communication between client and server.
+
+### What can I create with it?
+
+SocketStream is a perfect fit for all manner of modern applications which require realtime data (chat, stock trading, location monitoring, analytics, etc). It's also a great platform for building realtime HTML5 games. 
+
+However, it would make a poor choice for a blog or other content-rich site which requires unique URLs for search engine optimization.
+
+More code examples to follow.
+
+
+### Example 1: Basic RPC
+
+SocketStream 0.3 supports multiple ways to send messages to and from the server. The most common of which, JSON-over-RPC, is included by default. An RPC call can be invoked on the server by calling `ss.rpc()` in the browser.
+
+For example, let's write a simple server-side function which squares a number:
+
+``` javascript
+// in /server/rpc/app.js
+exports.actions = function(req, res, ss){
+
+  // return list of actions which can be called publicly
+  return {
+
+    square: function(number){
+      res(number * number);
+    }
+
+  }
+}
+```
+
+Restart the server and then invoke this function from the browser's command line:
+
+``` javascript
+ss.rpc('app.square', 25)
+```
+
+You'll see the answer `625` logged to the console by default. The eagle-eyed among you will notice `ss.rpc('app.square', 25)` actually returned `undefined`. That's fine. We're only interested in the asynchronous response sent from the server once it has processed your request.
+
+You may be wondering why `app.square`? Because we're invoking the `square` action/function in the `app.js` file. If you had written a `resize` action in `/server/rpc/image/processor.js` you'd call it with `ss.rpc('image.processor.resize')`. This naming convention allows you to create as many sub-directories as you wish to organize your code.
+
+Now let's write some code in the client to do more with this response:
+
+``` javascript
+// client/code/app/demo.js
+
+// define the number to square (vars are local to this file by default)
+var number = 25;
+
+ss.rpc('app.square', number, function(response){
+  alert(number + ' squared is ' + response);
+});
+```
+
+Once you save the file, the browser will automatically reload and you'll see an alert box popup with the following:
+
+    25 squared is 625
+    
+More examples coming soon!
