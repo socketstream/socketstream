@@ -70,8 +70,10 @@ Checkout the [documentation here](http://socketstream.github.io/socketstream/doc
 
 ### Team
 
-Creator: Owen Barnes
-Core Contributors: 
+*Creator:* Owen Barnes
+
+
+*Core Contributors:* 
 
 - Paul Jensen
 - Roman Minkin
