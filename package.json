@@ -27,7 +27,7 @@
     "commander": "2.5.0",
     "connect": "2.27.6",
     "connect-redis": "= 1.4.4",
-    "engine.io": "= 1.4.3",
+    "engine.io": "= 1.5.1",
     "eventemitter2": "= 0.4.14",
     "redis": "= 0.12.1",
     "semver": "= 4.1.0",
