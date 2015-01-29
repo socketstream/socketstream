@@ -1,0 +1,18 @@
+{
+    "name": "components/rsvp.js",
+    "description": "RSVP.js provides simple tools for organizing asynchronous code.",
+    "type": "component",
+    "homepage": "http://github.com/components/rsvp.js",
+    "license": "MIT",
+    "extra": {
+        "component": {
+            "scripts": [
+                "rsvp.js"
+            ],
+            "files": [
+                "rsvp.min.js",
+                "rsvp.amd.js"
+            ]
+        }
+    }
+}

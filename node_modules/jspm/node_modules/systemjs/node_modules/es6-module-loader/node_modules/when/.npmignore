@@ -1,0 +1,10 @@
+test/
+benchmark/
+experiments/
+docs/
+build/
+*.md
+.*
+*~
+bower.json
+bower_components/

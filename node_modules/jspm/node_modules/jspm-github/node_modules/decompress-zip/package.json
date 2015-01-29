@@ -1,0 +1,105 @@
+{
+  "name": "decompress-zip",
+  "version": "0.1.0",
+  "description": "Extract files from a ZIP archive",
+  "main": "lib/decompress-zip.js",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "bin": {
+    "decompress-zip": "bin/decompress-zip"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bower/decompress-zip.git"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "keywords": [
+    "zip",
+    "unzip",
+    "tar",
+    "untar",
+    "compress",
+    "decompress",
+    "archive",
+    "extract",
+    "zlib"
+  ],
+  "author": {
+    "name": "Bower team"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/bower/bower/blob/master/LICENSE"
+    }
+  ],
+  "dependencies": {
+    "binary": "^0.3.0",
+    "graceful-fs": "^3.0.0",
+    "mkpath": "^0.1.0",
+    "nopt": "^3.0.1",
+    "q": "^1.1.2",
+    "readable-stream": "^1.1.8",
+    "touch": "0.0.3"
+  },
+  "devDependencies": {
+    "chai": "^1.10.0",
+    "glob": "^4.3.2",
+    "grunt": "^0.4.1",
+    "grunt-cli": "^0.1.13",
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-exec": "^0.4.2",
+    "grunt-simple-mocha": "^0.4.0",
+    "istanbul": "^0.3.5",
+    "mocha": "^2.1.0",
+    "request": "^2.51.0",
+    "tmp": "0.0.24"
+  },
+  "gitHead": "2280a68c81f0b9b5c159fa16988c891ff4bd2984",
+  "bugs": {
+    "url": "https://github.com/bower/decompress-zip/issues"
+  },
+  "homepage": "https://github.com/bower/decompress-zip",
+  "_id": "decompress-zip@0.1.0",
+  "_shasum": "bce60c11664f2d660fca4bcf634af6de5d6c14c7",
+  "_from": "decompress-zip@>=0.1.0 <0.2.0",
+  "_npmVersion": "2.1.16",
+  "_nodeVersion": "0.10.32",
+  "_npmUser": {
+    "name": "sindresorhus",
+    "email": "sindresorhus@gmail.com"
+  },
+  "maintainers": [
+    {
+      "name": "wibblymat",
+      "email": "mat@wibbly.org.uk"
+    },
+    {
+      "name": "paulirish",
+      "email": "paul.irish@gmail.com"
+    },
+    {
+      "name": "sheerun",
+      "email": "sheerun@sher.pl"
+    },
+    {
+      "name": "sindresorhus",
+      "email": "sindresorhus@gmail.com"
+    },
+    {
+      "name": "satazor",
+      "email": "andremiguelcruz@msn.com"
+    }
+  ],
+  "dist": {
+    "shasum": "bce60c11664f2d660fca4bcf634af6de5d6c14c7",
+    "tarball": "http://registry.npmjs.org/decompress-zip/-/decompress-zip-0.1.0.tgz"
+  },
+  "directories": {},
+  "_resolved": "https://registry.npmjs.org/decompress-zip/-/decompress-zip-0.1.0.tgz",
+  "readme": "ERROR: No README data found!"
+}
