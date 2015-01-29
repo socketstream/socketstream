@@ -20,6 +20,8 @@
     "Henrik Vendelbo"
   ],
   "dependencies": {
+    "jspm": "latest",
+    "jwt-simple":"latest",
     "apitree": "= 1.2.0",
     "chokidar": "= 0.12.2",
     "clean-css": "2.2.22",
