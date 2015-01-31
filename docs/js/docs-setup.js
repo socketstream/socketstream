@@ -43,6 +43,15 @@ NG_DOCS={
     },
     {
       "section": "tutorials",
+      "id": "client_side_xbundler",
+      "shortName": "Client-Side Bundler",
+      "type": "overview",
+      "moduleName": "Client-Side Bundler",
+      "shortDescription": "Client-Side Bundler",
+      "keywords": "action additional arguments asset assets aware based browserify bulk bundle bundler bundlers bundling callback called cb changes client client-side code complete completely config contents create css current custom default define definition described development directory discuss dropped early ensureassetfolder experimental features file files function future html implement implementation implemented implementing individual jade js jspm lacks load method methods minification move named newer next_arg object objective optimisations options opts overview pack pass passed production referenced responsibilities return saved scss separate served server ss starting step supported templates text tmpl tutorials types var view views webpack webpackbundler worker"
+    },
+    {
+      "section": "tutorials",
       "id": "defining_multiple_clients",
       "shortName": "Defining Multiple Clients",
       "type": "overview",
