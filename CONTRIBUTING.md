@@ -167,6 +167,20 @@ reference GitHub issues that this commit **Closes**.
 
 A detailed explanation can be found in this [AngularJS commit conventions document][commit-message-format].
 
+## Code conventions
+
+The codebase was converted from CoffeeScript, so there are certain notations that are a result of that and not
+a convention for the project. Use your best judgement when writing code and make it as readable as possible.
+Consistency with existing codebase is one of the best ways to make the code easier to understand, so you should
+take care not to diverge without a very good reason.
+
+1) Wherever possible functions should be declared in the classic way and not as variables.
+2) Variables should be declared where they are used and not at the top of the module except for module wide variables and imports.
+
+These guidelines should not be seen as religion, but rather as a default, and should in effect be seen in 90+% of the codebase.
+If you are finding yourself sticking to them only occasionally, you are doing something wrong.
+
+
 ## Documentation generation
 
 We use [ngdocs][ngdocs] module for generating documentation files.
