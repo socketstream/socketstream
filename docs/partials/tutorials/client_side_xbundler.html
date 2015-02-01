@@ -10,7 +10,7 @@ The default bundler will create the bundle based on the client definition as des
 features. The objective is to be able to move to bundling based on newer ones such as WebPack or JSPM. It should be possible
 to implement a bundler that completely changes how the client is implemented. Hence there will be additional responsibilities
 for bundlers in the future.</p>
-<h5 id="client-side-bundler_custom-bundler">Custom Bundler</h5>
+<h4 id="client-side-bundler_custom-bundler">Custom Bundler</h4>
 <p>You can define a custom bundler by implementing a bundler function that will be called for each client it is used on.</p>
 <pre><code>function webpackBundler(ss, options) {
     var bundler = {};
@@ -40,17 +40,30 @@ for bundlers in the future.</p>
   tmpl: &#39;./templates/discuss&#39;
 });
 </code></pre><p>The define method of the bundler will be called to complete <code>ss.client.define</code>.</p>
-<h5 id="client-side-bundler_bundler-define">Bundler Define <code>define(client,config,..)</code></h5>
+<h4 id="client-side-bundler_bundler-define">Bundler Define <code>define(client,config,..)</code></h4>
 <p>The define method will be called with a client object containing <code>id</code>, <code>name</code>,
 If you pass additional arguments to define they will be passed to <code>bundler.define</code>. This may be dropped in the future.</p>
-<h5 id="client-side-bundler_bundler-load">Bundler Load <code>load()</code></h5>
+<h4 id="client-side-bundler_bundler-load">Bundler Load <code>load()</code></h4>
 <p>The load method is called as the first step to load the client views. This is done as a bulk action as part of starting
 the server.</p>
-<h5 id="client-side-bundler_bundler-asset-methods">Bundler asset methods</h5>
+<h4 id="client-side-bundler_bundler-asset-methods">Bundler asset methods</h4>
 <p>For each of the asset types supported individual files can be served during development.
 A callback function is passed, and must be called with the text contents.</p>
-<h5 id="client-side-bundler_bundler-pack-methods">Bundler pack methods</h5>
+<h4 id="client-side-bundler_bundler-pack-methods">Bundler pack methods</h4>
 <p>Files are saved in the assets directory for production use. The HTML file is the same as the one used during development,
 so the <code>asset.html</code> method will be called. For JS and CSS the pack methods are called to do additional minification and
 other optimisations.</p>
-</div></div>
+<h4 id="client-side-bundler_bundler-shorthand">Bundler shorthand</h4>
+<p>A lot of functionality is built-in. When you write your own bundler you shouldn&#39;t have to do it all over again. So most
+of the existing behaviour can be called through <code>ss.bundler</code>.</p>
+<h6 id="client-side-bundler_bundler-shorthand"><code>ss.bundler.sourcePaths(ss,paths,options)</code></h6>
+<p>This returns a revised paths object. Paths should contain entries <code>code</code>, <code>css</code>, <code>tmpl</code>. They will be forced into an array.
+If a path starts with &quot;./&quot;, it is considered relative to &quot;/client&quot;. Otherwise it is considered relative to &quot;/client/code&quot;,
+&quot;/client/css&quot;, &quot;/client/templates&quot;. These directory options can be set using <code>ss.client.set</code>.</p>
+<pre><code>ss.client.set({
+    dirs: {
+        client: &#39;/client&#39;,
+        code: &#39;/client/code&#39;
+    }
+});
+</code></pre></div></div>

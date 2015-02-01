@@ -34,6 +34,15 @@ NG_DOCS={
     },
     {
       "section": "tutorials",
+      "id": "client_side_development",
+      "shortName": "Client-Side Development",
+      "type": "overview",
+      "moduleName": "Client-Side Development",
+      "shortDescription": "Client-Side Development",
+      "keywords": "asset assets break browser bundle bundler caching client client-side css determine development directory entry file fly html http injected js overview path pattern relative separate separately served timestamp tutorials type url view"
+    },
+    {
+      "section": "tutorials",
       "id": "client_side_templates",
       "shortName": "Client-Side Templates",
       "type": "overview",
@@ -48,7 +57,7 @@ NG_DOCS={
       "type": "overview",
       "moduleName": "Client-Side Bundler",
       "shortDescription": "Client-Side Bundler",
-      "keywords": "action additional arguments asset assets aware based browserify bulk bundle bundler bundlers bundling callback called cb changes client client-side code complete completely config contents create css current custom default define definition described destsfor development directory discuss dropped early experimental features file files function future html implement implementation implemented implementing individual jade js jspm lacks load method methods minification move named newer next_arg object objective optimisations options opts overview pack pass passed production referenced responsibilities return saved scss separate served server ss starting step supported templates text tmpl tutorials types var view views webpack webpackbundler worker"
+      "keywords": "action additional arguments array asset assets aware based behaviour browserify built-in bulk bundle bundler bundlers bundling callback called cb changes client client-side code complete completely config considered contents create css current custom default define definition described destsfor development directory dirs discuss dropped early entries existing experimental features file files forced function functionality future html implement implementation implemented implementing individual jade js jspm lacks load lot method methods minification move named newer next_arg object objective optimisations options opts overview pack pass passed path paths production referenced relative responsibilities return returns revised saved scss separate served server set shorthand shouldn sourcepaths ss starting starts step supported templates text tmpl tutorials types var view views webpack webpackbundler worker write"
     },
     {
       "section": "tutorials",

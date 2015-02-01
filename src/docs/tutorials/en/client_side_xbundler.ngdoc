@@ -14,7 +14,7 @@ features. The objective is to be able to move to bundling based on newer ones su
 to implement a bundler that completely changes how the client is implemented. Hence there will be additional responsibilities
 for bundlers in the future.
 
-#### Custom Bundler
+### Custom Bundler
 
 You can define a custom bundler by implementing a bundler function that will be called for each client it is used on.
 
@@ -50,24 +50,42 @@ You can use a custom bundler by for a client view by specifying it in the defini
 
 The define method of the bundler will be called to complete `ss.client.define`.
 
-#### Bundler Define `define(client,config,..)`
+### Bundler Define `define(client,config,..)`
 
 The define method will be called with a client object containing `id`, `name`,
 If you pass additional arguments to define they will be passed to `bundler.define`. This may be dropped in the future.
 
-#### Bundler Load `load()`
+### Bundler Load `load()`
 
 The load method is called as the first step to load the client views. This is done as a bulk action as part of starting
 the server.
 
-#### Bundler asset methods
+### Bundler asset methods
 
 For each of the asset types supported individual files can be served during development.
 A callback function is passed, and must be called with the text contents.
 
 
-#### Bundler pack methods
+### Bundler pack methods
 
 Files are saved in the assets directory for production use. The HTML file is the same as the one used during development,
 so the `asset.html` method will be called. For JS and CSS the pack methods are called to do additional minification and
 other optimisations.
+
+### Bundler shorthand
+
+A lot of functionality is built-in. When you write your own bundler you shouldn't have to do it all over again. So most
+of the existing behaviour can be called through `ss.bundler`.
+
+##### `ss.bundler.sourcePaths(ss,paths,options)`
+
+This returns a revised paths object. Paths should contain entries `code`, `css`, `tmpl`. They will be forced into an array.
+If a path starts with "./", it is considered relative to "/client". Otherwise it is considered relative to "/client/code",
+"/client/css", "/client/templates". These directory options can be set using `ss.client.set`.
+
+    ss.client.set({
+        dirs: {
+            client: '/client',
+            code: '/client/code'
+        }
+    });

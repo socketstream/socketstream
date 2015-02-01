@@ -1,0 +1,17 @@
+@ngdoc overview
+@name Client-Side Development
+
+@description
+# Client-Side Development
+
+Each view is served with a separate bundle of assets. A HTML, JS and CSS file makes up the view.
+
+Each entry is served separately to the browser injected in the HTML on the fly.
+
+* A relative path is given in the URL, relative to the "/client" directory.
+* The client is given in the URL to determine the bundler.
+* The asset type is specified in the URL to determine the bundler.
+* A timestamp is given in the URL to break any caching.
+
+The URL pattern is `http:///_serveDev/<type>/<relative path>?ts=<id>&client=<client>`.
+
