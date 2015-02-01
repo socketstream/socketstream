@@ -14,9 +14,11 @@ for bundlers in the future.</p>
 <p>You can define a custom bundler by implementing a bundler function that will be called for each client it is used on.</p>
 <pre><code>function webpackBundler(ss, options) {
     var bundler = {};
-    bundler.define = function(client,config,next_arg...) {};
+    bundler.define = function(client,config,next_arg...) {
+        // ...
+        return ss.bundler.destsFor(ss,client,options);
+    };
     bundler.load = function() {};
-    bundler.ensureAssetFolder = function() {}; // likely to be dropped
     bundler.asset = {
         html: function(path, opts, cb) { cb(output) },
         css: function(path, opts, cb) { cb(output) },
