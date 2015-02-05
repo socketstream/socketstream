@@ -70,10 +70,6 @@ code for the entry module. If null or a blank string is given no entry module is
 <pre>
 ss.client.set({ entryModuleName: null });
 </pre>
-- **globalModules {boolean} ** - set true to load client side modules using their full path relative to `client/code`. If for example your app is `my` the entry module can be accessed with `require('/my/entry')`.
-<pre>
-ss.client.set({ globalModules: true });
-</pre>
 
 **Note**, that paths for excluding should be relative to `client/code/` and that file `client/code/app/entry.js` could not be excluded in any cases.
 

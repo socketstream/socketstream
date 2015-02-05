@@ -38,10 +38,6 @@ code for the entry module. If null or a blank string is given no entry module is
 <pre class="prettyprint linenums">
 ss.client.set({ entryModuleName: null });
 </pre></li>
-<li><strong>globalModules {boolean} </strong> - set true to load client side modules using their full path relative to <code>client/code</code>. If for example your app is <code>my</code> the entry module can be accessed with <code>require(&#39;/my/entry&#39;)</code>.
-<pre class="prettyprint linenums">
-ss.client.set({ globalModules: true });
-</pre></li>
 </ul>
 <p><strong>Note</strong>, that paths for excluding should be relative to <code>client/code/</code> and that file <code>client/code/app/entry.js</code> could not be excluded in any cases.</p>
 <p>If you need to exclude from automatically packaging certain file, just specify the file&#39;s relative path:
