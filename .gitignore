@@ -1,3 +1,8 @@
+.DS_Store
 coverage
 node_modules
-
+e2e/app_library/**/node_modules
+!e2e/app_library/**
+dump.rdb
+npm-debug.log
+*.tgz
