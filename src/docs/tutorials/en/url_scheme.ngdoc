@@ -1,0 +1,37 @@
+@ngdoc overview
+@name URL Scheme
+
+@description
+# URL Scheme
+
+The common URL for a view is its name at the root level, but you can choose whatever you will calling `serveClient(..)`.
+
+## Assets
+
+The contents of the client assets directory will be served under `/assets`.
+
+
+When views are packed for production they are saved under the client assets directory. This will change in the future
+to make relative URLs work the same in development and production.
+
+## Middleware
+
+At development time middleware is added to serve HTML, JS and CSS on the fly.
+
+
+## Serving CSS
+
+CSS files are served under /assets/<view>/123.css in production. When served ad hoc in development, and on-demand in
+production all CSS must be served on the same level and ideally in an equivalent URL.
+
+## JS Module Paths
+
+
+## On Demand Loading
+
+The current on-demand fetching of JS is handled by middleware. It should be possible to do it using static files.
+
+In production it would make sense to support a path like `/assets/require/..`.
+
+We will have to consider whether all client code is considered completely open, or only partially. Should all client
+modules be exported in minified form, or only those in a whitelist.
