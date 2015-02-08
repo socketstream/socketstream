@@ -1,0 +1,3 @@
+[submodule "e2e_accept/appLib/laTrappe"]
+	path = e2e_accept/appLib/laTrappe
+	url = git@github.com:kulicuu/laTrappe.git
