@@ -187,6 +187,15 @@ NG_DOCS={
     },
     {
       "section": "tutorials",
+      "id": "url_scheme",
+      "shortName": "URL Scheme",
+      "type": "overview",
+      "moduleName": "URL Scheme",
+      "shortDescription": "URL Scheme",
+      "keywords": "ad assets calling change choose client code common completely consider considered contents css current demand development directory equivalent exported fetching files fly form future handled hoc html ideally js level loading middleware minified module modules on-demand open overview packed partially path paths production relative root saved scheme sense serve serveclient served serving static support time tutorials url urls view views whitelist work"
+    },
+    {
+      "section": "tutorials",
       "id": "using_emberjs",
       "shortName": "Use Ember JS",
       "type": "overview",
