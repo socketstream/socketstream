@@ -60,12 +60,15 @@
     "grunt-ngdocs": "0.2.6",
     "istanbul": "0.3.5",
     "jshint": "2.5.10",
-    "mocha": "2.0.1",
     "notes": "0.0.4",
     "npm-dview": "1.1.2",
     "shelljs": "0.3.0",
-    "should": "4.4.1",
-    "supertest": "0.15.0"
+    "protractor": "latest",
+    "chai": "latest",
+    "mocha": "latest",
+    "should": "latest",
+    "supertest": "latest",
+    "jasmine-core": "latest"
   },
   "scripts": {
     "cover-test": "node_modules/.bin/istanbul cover node_modules/.bin/_mocha test/unit/**/* && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
