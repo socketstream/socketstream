@@ -15,7 +15,7 @@
  *     });
  *
  */
-
+var expressSession = require('express-session');
 var request      = require('supertest'),
     path         = require('path'),
     connect      = require('connect'),
@@ -25,7 +25,7 @@ var request      = require('supertest'),
     http         = null,
     app          = null,
     utils        = require('../../helpers/utils.js'),
-    sessionStore = new connect.session.MemoryStore,
+    sessionStore = new expressSession.MemoryStore,
     settings     = {        // User-configurable settings with sensible defaults
       static: {
         maxAge: 2592000000    // (30 * 24 * 60 * 60 * 1000) cache static assets in the browser for 30 days
