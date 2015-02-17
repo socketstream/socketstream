@@ -18,6 +18,7 @@
 var compress = require('compression');
 var favicon = require('serve-favicon');
 var expressSession = require('express-session');
+var cookieParser = require('cookie-parser');
 
 var request      = require('supertest'),
     path         = require('path'),
@@ -223,7 +224,7 @@ describe('lib/http/index', function () {
             beforeEach(setUp);
 
             /**
-             * connect.compress() should be added to middleware stack on highest possible position
+             * compress() should be added to middleware stack on highest possible position
              */
             it('should build the middleware stack', function (done) {
 
@@ -239,7 +240,7 @@ describe('lib/http/index', function () {
                 http.middleware.stack[0].handle.toString().should.equal( testPrependMiddleware.toString() );
 
                 /**
-                 * testing connect.compress()
+                 * testing compress()
                  * It should be added to middleware stack on highest possible position
                  * lib/http/index.js:142
                  */
@@ -247,14 +248,14 @@ describe('lib/http/index', function () {
                 http.middleware.stack[1].handle.toString().should.equal( compress().toString() );
 
                 /**
-                 * testing connect.cookieParser('SocketStream')
+                 * testing cookieParser('SocketStream')
                  * lib/http/index.js:145
                  */
                 http.middleware.stack[2].handle.should.be.an.instanceOf(Function);
-                http.middleware.stack[2].handle.toString().should.equal( connect.cookieParser('SocketStream').toString() );
+                http.middleware.stack[2].handle.toString().should.equal( cookieParser('SocketStream').toString() );
 
                 /**
-                 * testing connect.favicon()
+                 * testing favicon()
                  * lib/http/index.js:145
                  */
                 http.middleware.stack[3].handle.should.be.an.instanceOf(Function);
@@ -262,11 +263,11 @@ describe('lib/http/index', function () {
                 http.middleware.stack[3].handle.toString().should.equal( favicon( 'new_project/' + staticPath + '/favicon.ico').toString() );
 
                 /**
-                 * testing connect.session()
+                 * testing expressSession()
                  * lib/http/index.js:145
                  */
                 http.middleware.stack[4].handle.should.be.an.instanceOf(Function);
-                http.middleware.stack[4].handle.toString().should.equal( connect.session({
+                http.middleware.stack[4].handle.toString().should.equal( expressSession({
                     cookie: {
                         path: '/',
                         httpOnly: false,
