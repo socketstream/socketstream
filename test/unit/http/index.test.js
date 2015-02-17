@@ -15,7 +15,10 @@
  *     });
  *
  */
+var compress = require('compression');
+var favicon = require('serve-favicon');
 var expressSession = require('express-session');
+
 var request      = require('supertest'),
     path         = require('path'),
     connect      = require('connect'),
@@ -241,7 +244,7 @@ describe('lib/http/index', function () {
                  * lib/http/index.js:142
                  */
                 http.middleware.stack[1].handle.should.be.an.instanceOf(Function);
-                http.middleware.stack[1].handle.toString().should.equal( connect.compress().toString() );
+                http.middleware.stack[1].handle.toString().should.equal( compress().toString() );
 
                 /**
                  * testing connect.cookieParser('SocketStream')
@@ -256,7 +259,7 @@ describe('lib/http/index', function () {
                  */
                 http.middleware.stack[3].handle.should.be.an.instanceOf(Function);
 
-                http.middleware.stack[3].handle.toString().should.equal( connect.favicon( 'new_project/' + staticPath + '/favicon.ico').toString() );
+                http.middleware.stack[3].handle.toString().should.equal( favicon( 'new_project/' + staticPath + '/favicon.ico').toString() );
 
                 /**
                  * testing connect.session()
