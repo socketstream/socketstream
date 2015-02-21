@@ -39,7 +39,7 @@ NG_DOCS={
       "type": "overview",
       "moduleName": "Client-Side Development",
       "shortDescription": "Client-Side Development",
-      "keywords": "asset assets break browser bundle bundler caching client client-side css determine development directory entry file fly html http injected js overview path pattern relative separate separately served timestamp tutorials type url view"
+      "keywords": "amount asset assets break browser bundle bundler bundlers caching client client-side css determine development directory entry file files fly generally html http injected js overview path pattern reduce relative separate separately served timestamp tutorials type url view watch work"
     },
     {
       "section": "tutorials",
@@ -223,6 +223,33 @@ NG_DOCS={
     },
     {
       "section": "api",
+      "id": "bundler",
+      "shortName": "bundler",
+      "type": "service",
+      "moduleName": "bundler",
+      "shortDescription": "Bundlers included.",
+      "keywords": "api bundler bundlers included service"
+    },
+    {
+      "section": "api",
+      "id": "bundler.default:default",
+      "shortName": "default",
+      "type": "service",
+      "moduleName": "bundler",
+      "shortDescription": "The default bundler of HTML, CSS &amp; JS",
+      "keywords": "api asset assetcss assethtml assetjs assetloader assetstart assettype assetworker bundler client code collection config css default define depending directory entries entry execution functions html implementation includes initcode js libs list load loader logical method module modules output pack registered registration relative require resource return script service start starting system systemassets systemmodule tominifiedcss tominifiedjs type view worker wrapcode"
+    },
+    {
+      "section": "api",
+      "id": "bundler.webpack:webpack",
+      "shortName": "webpack",
+      "type": "service",
+      "moduleName": "bundler",
+      "shortDescription": "The webpack bundler of HTML, CSS &amp; JS",
+      "keywords": "api asset assettype bundler client collection concept css custom demonstration directory entries functions html improved initcode js libs list method modules output pack purposes relative service systemassets type validate view webpack"
+    },
+    {
+      "section": "api",
       "id": "http.index:index",
       "shortName": "index",
       "type": "service",
@@ -241,6 +268,76 @@ NG_DOCS={
     },
     {
       "section": "api",
+      "id": "ss",
+      "shortName": "ss",
+      "type": "overview",
+      "moduleName": "ss",
+      "shortDescription": "Internal API object which is passed to sub-modules and can be used within your app",
+      "keywords": "access add api app env exports function internal log object overview passed require root session socketstream ss string sub-modules var"
+    },
+    {
+      "section": "api",
+      "id": "ss.add",
+      "shortName": "ss.add",
+      "type": "function",
+      "moduleName": "ss",
+      "shortDescription": "Call from your app to safely extend the &#39;ss&#39; internal API object passed through to your /server code",
+      "keywords": "add api app call code extend fn function internal key object passed safely ss"
+    },
+    {
+      "section": "api",
+      "id": "ss.bundler:bundler",
+      "shortName": "bundler",
+      "type": "service",
+      "moduleName": "ss",
+      "shortDescription": "Client bundling API",
+      "keywords": "api bundler bundling client content custom default define describe descriptor entry implementing libraries method module require return service single ss system systemlibs systemmodule true wrap wrapped"
+    },
+    {
+      "section": "api",
+      "id": "ss.client:client",
+      "shortName": "client",
+      "type": "service",
+      "moduleName": "ss",
+      "shortDescription": "Client serving, bundling, development, building.",
+      "keywords": "add allow allows api assets building bundling client clients code coffee compress content css defined development file flags format function html js lib library libs module options production require send served service serving single ss system type"
+    },
+    {
+      "section": "api",
+      "id": "ss.env",
+      "shortName": "ss.env",
+      "type": "property",
+      "moduleName": "ss",
+      "keywords": "api change default development env environment execution node_env property set ss ss_env type variable"
+    },
+    {
+      "section": "api",
+      "id": "ss.log:log",
+      "shortName": "log",
+      "type": "service",
+      "moduleName": "ss",
+      "shortDescription": "Contains method stubs for logging to console (by default) or",
+      "keywords": "api assigning choose console debug default error fairly function happened info informed keeping level log logging method override parameters provider require service socketstream ss stubs sysadmin takes time trivial unexpected var wakeup warn winston"
+    },
+    {
+      "section": "api",
+      "id": "ss.root",
+      "shortName": "ss.root",
+      "type": "property",
+      "moduleName": "ss",
+      "shortDescription": "By default the project root is the current working directory",
+      "keywords": "api current default directory project property root ss working"
+    },
+    {
+      "section": "api",
+      "id": "ss.version",
+      "shortName": "ss.version",
+      "type": "property",
+      "moduleName": "ss",
+      "keywords": "api major minor property ss version"
+    },
+    {
+      "section": "api",
       "id": "utils",
       "shortName": "utils",
       "type": "service",
@@ -256,15 +353,6 @@ NG_DOCS={
       "moduleName": "utils",
       "shortDescription": "This is used to maintain lists of userIds to socketIds and channelIds to socketIds",
       "keywords": "absolute adapted api array basename basepath channelids contents css dir directory dorectory eror extension file filepath files find findextforbase findextforbasepath github givven https isdir jade json lists loadpackagejson loads lookup maintain matching mode null object package parse path readdirsync reads returns root service socketids socketstream start synchronous thorws true unable userids utils views"
-    },
-    {
-      "section": "api",
-      "id": "utils.log:log",
-      "shortName": "log",
-      "type": "service",
-      "moduleName": "utils",
-      "shortDescription": "Contains method stubs for logging to console (by default) or",
-      "keywords": "api assigning choose console debug default error fairly function happened info informed keeping level log logging method override parameters provider require service socketstream ss stubs sysadmin takes time trivial unexpected utils var wakeup warn winston"
     },
     {
       "section": "api",
