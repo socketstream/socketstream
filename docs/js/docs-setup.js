@@ -250,6 +250,15 @@ NG_DOCS={
     },
     {
       "section": "api",
+      "id": "events",
+      "shortName": "events",
+      "type": "service",
+      "moduleName": "events",
+      "shortDescription": "Internal Event bus.",
+      "keywords": "api assets bus emitted event events expended idea internal module note production saved server service socketstream ss-console starts"
+    },
+    {
+      "section": "api",
       "id": "http.index:index",
       "shortName": "index",
       "type": "service",
@@ -335,6 +344,15 @@ NG_DOCS={
       "type": "property",
       "moduleName": "ss",
       "keywords": "api major minor property ss version"
+    },
+    {
+      "section": "api",
+      "id": "start",
+      "shortName": "start",
+      "type": "function",
+      "moduleName": "start",
+      "shortDescription": "Starts the development or production server",
+      "keywords": "api development function http instance module production server start starts"
     },
     {
       "section": "api",
