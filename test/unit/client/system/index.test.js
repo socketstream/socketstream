@@ -1,14 +1,18 @@
 'use strict';
 
 var path    = require('path'),
-    ss      = require( path.join(process.env.PWD, 'lib/socketstream'));
-
+    should  = require('should'),
+    ss      = require( path.join(process.env.PWD, 'lib/socketstream')),
+    options = ss.client.options;
 
 describe('client system library', function () {
 
+    var origDefaultEntryInit = options.defaultEntryInit;
 
     describe('#send', function () {
         beforeEach(function() {
+
+            options.defaultEntryInit = origDefaultEntryInit;
 
             ss.client.assets.unload();
             ss.client.assets.load();
@@ -38,6 +42,42 @@ describe('client system library', function () {
             jsAfter = ss.api.bundler.systemLibs();
             jsAfter.content.should.have.length(jsBefore.content.length - 8854);
         });
+
+        it('should replace init code', function() {
+
+            //ss.client.options.entryModuleName =
+            var expected = 'require("./entry");',//ss.client.options.defaultEntryInit,
+                client = {
+                    entryInitPath: './entry'
+                };
+
+            // Code to execute once everything is loaded
+            ss.client.assets.send('code', 'init', options.defaultEntryInit);
+
+            var start = ss.api.bundler.startCode(client);
+            start.should.be.type('object');
+            start.type.should.be.equal('start');
+            start.content.should.be.equal(expected);
+            // client.entryInitPath
+        });
+
+        it('should allow startCode for the client to be configured', function(){
+            var expected = 'require("./startCode");',
+                client = {};
+
+            options.defaultEntryInit = 'require("./startCode");';
+
+            // Code to execute once everything is loaded
+            ss.client.assets.send('code', 'init', options.defaultEntryInit);
+
+            var start = ss.api.bundler.startCode(client);
+            start.should.be.type('object');
+            start.type.should.be.equal('start');
+            start.content.should.be.equal(expected);
+        });
+
+        //TODO options.entryModuleName
+        //TODO options.defaultEntryInit
     });
 
 
