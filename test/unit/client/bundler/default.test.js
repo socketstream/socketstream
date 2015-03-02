@@ -9,6 +9,58 @@ describe('default bundler', function () {
 
     var origDefaultEntryInit = options.defaultEntryInit;
 
+    describe('define', function() {
+
+        it('should support default css/code/view/tmpl locations');
+
+        it('should support relative css/code/view/tmpl locations');
+
+        it('should set up client and bundler', function() {
+
+            //TODO set project root function
+            ss.root = ss.api.root = path.join(__dirname, '../../../fixtures/project');
+
+            var client = ss.client.define('abc', {
+                css: './abc/style.css',
+                code: './abc/index.js',
+                view: './abc/abc.html'
+            });
+
+            client.id.should.be.type('string');
+
+            client.paths.should.be.type('object');
+            client.paths.css.should.be.eql(['./abc/style.css']);
+            client.paths.code.should.be.eql(['./abc/index.js']);
+            client.paths.view.should.be.eql('./abc/abc.html');
+            client.paths.tmpl.should.be.eql([]);
+
+            client.includes.should.be.type('object');
+            client.includes.css.shoud.be.equal(true);
+            client.includes.html.shoud.be.equal(true);
+            client.includes.system.shoud.be.equal(true);
+            client.includes.initCode.shoud.be.equal(true);
+            client.entryInitPath.should.be.equal('./code/abc/entry');
+
+            client.dests.paths.html.should.be.equal( path.join(ss.root, 'assets', 'abc', client.id + '.html') );
+            client.dests.paths.css.should.be.equal( path.join(ss.root, 'assets', 'abc', client.id + '.css') );
+            client.dests.paths.js.should.be.equal( path.join(ss.root, 'assets', 'abc', client.id + '.js') );
+
+            client.dests.relPaths.html.should.be.equal( path.join( 'assets', 'abc', client.id + '.html') );
+            client.dests.relPaths.css.should.be.equal( path.join( 'assets', 'abc', client.id + '.css') );
+            client.dests.relPaths.js.should.be.equal( path.join( 'assets', 'abc', client.id + '.js') );
+
+            client.dests.dir.should.be.equal( path.join(ss.root,'assets', client.id) );
+            client.dests.containerDir.should.be.equal( path.join(ss.root,'assets') );
+
+
+            //client.id = shortid.generate();
+        });
+    });
+
+    afterEach(function() {
+        ss.client.forget();
+    });
+
     describe('#entries', function () {
 
         beforeEach(function() {
