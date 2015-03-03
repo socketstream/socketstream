@@ -2,7 +2,7 @@
 
 var path    = require('path'),
     should  = require('should'),
-    ss      = require( path.join(process.env.PWD, 'lib/socketstream')),
+    ss      = require( '../../../../lib/socketstream'),
     options = ss.client.options;
 
 describe('default bundler', function () {
@@ -35,22 +35,24 @@ describe('default bundler', function () {
             client.paths.tmpl.should.be.eql([]);
 
             client.includes.should.be.type('object');
-            client.includes.css.shoud.be.equal(true);
-            client.includes.html.shoud.be.equal(true);
-            client.includes.system.shoud.be.equal(true);
-            client.includes.initCode.shoud.be.equal(true);
+            client.includes.css.should.be.equal(true);
+            client.includes.html.should.be.equal(true);
+            client.includes.system.should.be.equal(true);
+            client.includes.initCode.should.be.equal(true);
             client.entryInitPath.should.be.equal('./code/abc/entry');
 
-            client.dests.paths.html.should.be.equal( path.join(ss.root, 'assets', 'abc', client.id + '.html') );
-            client.dests.paths.css.should.be.equal( path.join(ss.root, 'assets', 'abc', client.id + '.css') );
-            client.dests.paths.js.should.be.equal( path.join(ss.root, 'assets', 'abc', client.id + '.js') );
+            var bundler = ss.api.bundler.get('abc');
 
-            client.dests.relPaths.html.should.be.equal( path.join( 'assets', 'abc', client.id + '.html') );
-            client.dests.relPaths.css.should.be.equal( path.join( 'assets', 'abc', client.id + '.css') );
-            client.dests.relPaths.js.should.be.equal( path.join( 'assets', 'abc', client.id + '.js') );
+            bundler.dests.paths.html.should.be.equal( path.join(ss.root,'client','static', 'assets', 'abc', client.id + '.html') );
+            bundler.dests.paths.css.should.be.equal( path.join(ss.root,'client','static', 'assets', 'abc', client.id + '.css') );
+            bundler.dests.paths.js.should.be.equal( path.join(ss.root,'client','static', 'assets', 'abc', client.id + '.js') );
 
-            client.dests.dir.should.be.equal( path.join(ss.root,'assets', client.id) );
-            client.dests.containerDir.should.be.equal( path.join(ss.root,'assets') );
+            bundler.dests.relPaths.html.should.be.equal( path.join('/client','static', 'assets', 'abc', client.id + '.html') );
+            bundler.dests.relPaths.css.should.be.equal( path.join('/client','static', 'assets', 'abc', client.id + '.css') );
+            bundler.dests.relPaths.js.should.be.equal( path.join('/client','static', 'assets', 'abc', client.id + '.js') );
+
+            bundler.dests.dir.should.be.equal( path.join(ss.root,'client','static','assets', client.name) );
+            bundler.dests.containerDir.should.be.equal( path.join(ss.root,'client','static','assets') );
 
 
             //client.id = shortid.generate();
