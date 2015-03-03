@@ -300,7 +300,7 @@ NG_DOCS={
       "type": "service",
       "moduleName": "ss",
       "shortDescription": "Client bundling API",
-      "keywords": "api bundler bundling client content custom default define describe descriptor entry implementing libraries method module require return service single ss system systemlibs systemmodule true wrap wrapped"
+      "keywords": "actual api args arguments assets bundler bundlers bundling call client containerdir content custom default define definition describe describing descriptor destinations destsfor determine dir directly entry entry-points file implementing libraries locations method module object offer params passed paths query relpaths replace require return service single ss store system systemlibs systemmodule true tweak wrap wrapped"
     },
     {
       "section": "api",

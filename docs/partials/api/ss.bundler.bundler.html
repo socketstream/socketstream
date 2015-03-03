@@ -8,7 +8,26 @@
 <p>Client bundling API for implementing a custom bundler.</p>
 </div></div>
 <div class="member method"><h2 id="methods">Methods</h2>
-<ul class="methods"><li><h3 id="methods_systemlibs">systemLibs()</h3>
+<ul class="methods"><li><h3 id="methods_define">define(client, args)</h3>
+<div class="define"><h5 id="methods_define_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>client</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="ss-bundler-page ss-bundler-bundler-define-page"><p>object to store the definition in</p>
+</div></td></tr><tr><td>args</td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="ss-bundler-page ss-bundler-bundler-define-page"><p>arguments passed to define</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_destsfor">destsFor(client)</h3>
+<div class="destsfor"><div class="ss-bundler-page ss-bundler-bundler-destsfor-page"><p>The define client method of all bundlers must return the file locations for the client.</p>
+<pre><code>return ss.bundler.destsFor(client);
+</code></pre><p>To offer a very different way to define the entry-points for assets the bundler can tweak
+the paths or replace them.</p>
+</div><h5 id="methods_destsfor_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>client</td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="ss-bundler-page ss-bundler-bundler-destsfor-page"><p>Object describing the client.</p>
+</div></td></tr></tbody></table><h5 id="methods_destsfor_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="ss-bundler-page ss-bundler-bundler-destsfor-page"><p>Destinations paths, relPaths, dir, containerDir</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_get">get(client)</h3>
+<div class="get"><div class="ss-bundler-page ss-bundler-bundler-get-page"><p>Determine the bundler for a client</p>
+</div><h5 id="methods_get_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>client</td><td><a href="" class="label type-hint type-hint-object">object</a><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="ss-bundler-page ss-bundler-bundler-get-page"><p>Query params with client=name or an actual client object</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_systemlibs">systemLibs()</h3>
 <div class="systemlibs"><div class="ss-bundler-page ss-bundler-bundler-systemlibs-page"><p>A single entry for all system libraries.</p>
 </div><h5 id="methods_systemlibs_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-assetentry">AssetEntry</a></td><td><div class="ss-bundler-page ss-bundler-bundler-systemlibs-page"><p>Entry</p>
 </div></td></tr></table></div>
