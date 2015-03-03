@@ -4,3 +4,4 @@ node_modules
 dump.rdb
 npm-debug.log
 *.tgz
+test/fixtures/project/client/static/assets/abc

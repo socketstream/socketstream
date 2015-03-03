@@ -1,0 +1,16 @@
+<h1><code ng:non-bindable=""></code>
+<div><span class="hint"></span>
+</div>
+</h1>
+<div><div class="client-side-development-page"><h2 id="client-side-development">Client-Side Development</h2>
+<p>Each view is served with a separate bundle of assets. A HTML, JS and CSS file makes up the view.</p>
+<p>Each entry is served separately to the browser injected in the HTML on the fly.</p>
+<ul>
+<li>A relative path is given in the URL, relative to the &quot;/client&quot; directory.</li>
+<li>The client is given in the URL to determine the bundler.</li>
+<li>The asset type is specified in the URL to determine the bundler.</li>
+<li>A timestamp is given in the URL to break any caching.</li>
+</ul>
+<p>The URL pattern is <code>http:///_serveDev/&lt;type&gt;/&lt;relative path&gt;?ts=&lt;id&gt;</code>.</p>
+<p>Bundlers generally work within the client directory to reduce the amount of files to watch.</p>
+</div></div>

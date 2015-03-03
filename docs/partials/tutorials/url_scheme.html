@@ -1,0 +1,22 @@
+<h1><code ng:non-bindable=""></code>
+<div><span class="hint"></span>
+</div>
+</h1>
+<div><div class="url-scheme-page"><h2 id="url-scheme">URL Scheme</h2>
+<p>The common URL for a view is its name at the root level, but you can choose whatever you will calling <code>serveClient(..)</code>.</p>
+<h3 id="url-scheme_assets">Assets</h3>
+<p>The contents of the client assets directory will be served under <code>/assets</code>.</p>
+<p>When views are packed for production they are saved under the client assets directory. This will change in the future
+to make relative URLs work the same in development and production.</p>
+<h3 id="url-scheme_middleware">Middleware</h3>
+<p>At development time middleware is added to serve HTML, JS and CSS on the fly.</p>
+<h3 id="url-scheme_serving-css">Serving CSS</h3>
+<p>CSS files are served under /assets/<view>/123.css in production. When served ad hoc in development, and on-demand in
+production all CSS must be served on the same level and ideally in an equivalent URL.</p>
+<h3 id="url-scheme_js-module-paths">JS Module Paths</h3>
+<h3 id="url-scheme_on-demand-loading">On Demand Loading</h3>
+<p>The current on-demand fetching of JS is handled by middleware. It should be possible to do it using static files.</p>
+<p>In production it would make sense to support a path like <code>/assets/require/..</code>.</p>
+<p>We will have to consider whether all client code is considered completely open, or only partially. Should all client
+modules be exported in minified form, or only those in a whitelist.</p>
+</div></div>

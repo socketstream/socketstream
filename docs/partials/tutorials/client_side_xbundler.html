@@ -1,0 +1,69 @@
+<h1><code ng:non-bindable=""></code>
+<div><span class="hint"></span>
+</div>
+</h1>
+<div><div class="client-side-bundler-page"><h2 id="client-side-bundler">Client-Side Bundler</h2>
+<p>Each view is served with a separate bundle of assets. A HTML, JS and CSS file makes up the view.
+The default bundler will create the bundle based on the client definition as described in Client-Side Code and Client-Side Templates.</p>
+<p>You can implement your own bundler and use it for a client definition. The bundlers are named and referenced by name.</p>
+<p>Be aware the <em>API is experimental</em>. The current bundler is based on an early Browserify implementation, so it lacks some
+features. The objective is to be able to move to bundling based on newer ones such as WebPack or JSPM. It should be possible
+to implement a bundler that completely changes how the client is implemented. Hence there will be additional responsibilities
+for bundlers in the future.</p>
+<h4 id="client-side-bundler_custom-bundler">Custom Bundler</h4>
+<p>You can define a custom bundler by implementing a bundler function that will be called for each client it is used on.</p>
+<pre><code>function webpackBundler(ss, options) {
+    var bundler = {};
+    bundler.define = function(client,config,next_arg...) {
+        // ...
+        return ss.bundler.destsFor(ss,client,options);
+    };
+    bundler.load = function() {};
+    bundler.asset = {
+        html: function(path, opts, cb) { cb(output) },
+        css: function(path, opts, cb) { cb(output) },
+        js: function(path, opts, cb) { cb(output) },
+        worker: function(path, opts, cb) { cb(output) }
+    };
+    bundler.pack = {
+        css: function(cb) { cb(output); },
+        js: function(cb) { cb(output); }
+    };
+
+    return bundler;
+}
+</code></pre><p>You can use a custom bundler by for a client view by specifying it in the definition.</p>
+<pre><code>ss.client.define(&#39;discuss&#39;, webpackBundler, {
+  view: &#39;./views/discuss.jade&#39;,
+  css:  &#39;./css/discuss.scss&#39;,
+  code: &#39;./code/discuss&#39;,
+  tmpl: &#39;./templates/discuss&#39;
+});
+</code></pre><p>The define method of the bundler will be called to complete <code>ss.client.define</code>.</p>
+<h4 id="client-side-bundler_bundler-define">Bundler Define <code>define(client,config,..)</code></h4>
+<p>The define method will be called with a client object containing <code>id</code>, <code>name</code>,
+If you pass additional arguments to define they will be passed to <code>bundler.define</code>. This may be dropped in the future.</p>
+<h4 id="client-side-bundler_bundler-load">Bundler Load <code>load()</code></h4>
+<p>The load method is called as the first step to load the client views. This is done as a bulk action as part of starting
+the server.</p>
+<h4 id="client-side-bundler_bundler-asset-methods">Bundler asset methods</h4>
+<p>For each of the asset types supported individual files can be served during development.
+A callback function is passed, and must be called with the text contents.</p>
+<h4 id="client-side-bundler_bundler-pack-methods">Bundler pack methods</h4>
+<p>Files are saved in the assets directory for production use. The HTML file is the same as the one used during development,
+so the <code>asset.html</code> method will be called. For JS and CSS the pack methods are called to do additional minification and
+other optimisations.</p>
+<h4 id="client-side-bundler_bundler-shorthand">Bundler shorthand</h4>
+<p>A lot of functionality is built-in. When you write your own bundler you shouldn&#39;t have to do it all over again. So most
+of the existing behaviour can be called through <code>ss.bundler</code>.</p>
+<h6 id="client-side-bundler_bundler-shorthand"><code>ss.bundler.sourcePaths(ss,paths,options)</code></h6>
+<p>This returns a revised paths object. Paths should contain entries <code>code</code>, <code>css</code>, <code>tmpl</code>. They will be forced into an array.
+If a path starts with &quot;./&quot;, it is considered relative to &quot;/client&quot;. Otherwise it is considered relative to &quot;/client/code&quot;,
+&quot;/client/css&quot;, &quot;/client/templates&quot;. These directory options can be set using <code>ss.client.set</code>.</p>
+<pre><code>ss.client.set({
+    dirs: {
+        client: &#39;/client&#39;,
+        code: &#39;/client/code&#39;
+    }
+});
+</code></pre></div></div>
