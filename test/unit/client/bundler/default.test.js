@@ -51,6 +51,10 @@ describe('default bundler', function () {
             bundler.dests.relPaths.css.should.be.equal( path.join('/client','static', 'assets', 'abc', client.id + '.css') );
             bundler.dests.relPaths.js.should.be.equal( path.join('/client','static', 'assets', 'abc', client.id + '.js') );
 
+            bundler.dests.urls.html.should.be.equal('/assets/abc/'+client.id+'.html');
+            bundler.dests.urls.css.should.be.equal('/assets/abc/'+client.id+'.css');
+            bundler.dests.urls.js.should.be.equal('/assets/abc/'+client.id+'.js');
+
             bundler.dests.dir.should.be.equal( path.join(ss.root,'client','static','assets', client.name) );
             bundler.dests.containerDir.should.be.equal( path.join(ss.root,'client','static','assets') );
 
