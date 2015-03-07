@@ -73,12 +73,34 @@ describe('default bundler', function () {
 
             options.defaultEntryInit = origDefaultEntryInit;
 
-            //ss.client.assets.unload();
-            //ss.client.assets.load();
+            ss.client.assets.unload();
+            ss.client.assets.load();
         });
 
+        it('should return entries for everything needed in view with just css', function() {
 
-        it('should return entries for everything needed in view', function() {
+          ss.root = ss.api.root = path.join(__dirname, '../../../fixtures/project');
+
+          var client = ss.client.define('abc', {
+            css: './abc/style.css',
+            view: './abc.html'
+          });
+
+          ss.client.load();
+
+          var bundler = ss.api.bundler.get('abc'),
+            entriesCSS = bundler.asset.entries('css'),
+            entriesJS = bundler.asset.entries('js');
+
+          entriesCSS.should.have.lengthOf(1);
+          entriesJS.should.have.lengthOf(4);
+
+          // css entries
+          entriesCSS[0].file.should.be.equal('./abc/style.css');
+          entriesCSS[0].importedBy.should.be.equal('./abc/style.css');
+        });
+
+        it('should return entries for everything needed in view with just code', function() {
 
             //TODO set project root function
             ss.root = ss.api.root = path.join(__dirname, '../../../fixtures/project');
@@ -111,6 +133,7 @@ describe('default bundler', function () {
 
             // mod TODO
             entriesJS[3].file.should.be.equal('./abc/index.js');
+            entriesJS[3].importedBy.should.be.equal('./abc/index.js');
             //entriesJS[3].type.should.be.equal('mod');
 
             // start TODO
