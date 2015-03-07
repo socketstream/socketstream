@@ -11,56 +11,100 @@ describe('default bundler', function () {
 
     describe('define', function() {
 
-        it('should support default css/code/view/tmpl locations');
+      it('should support default css/code/view/tmpl locations');
 
-        it('should support relative css/code/view/tmpl locations');
+      it('should support relative css/code/view/tmpl locations');
 
-        it('should set up client and bundler', function() {
+      it('should set up client and bundler', function () {
 
-            //TODO set project root function
-            ss.root = ss.api.root = path.join(__dirname, '../../../fixtures/project');
+        //TODO set project root function
+        ss.root = ss.api.root = path.join(__dirname, '../../../fixtures/project');
 
-            var client = ss.client.define('abc', {
-                css: './abc/style.css',
-                code: './abc/index.js',
-                view: './abc/abc.html'
-            });
-
-            client.id.should.be.type('string');
-
-            client.paths.should.be.type('object');
-            client.paths.css.should.be.eql(['./abc/style.css']);
-            client.paths.code.should.be.eql(['./abc/index.js']);
-            client.paths.view.should.be.eql('./abc/abc.html');
-            client.paths.tmpl.should.be.eql([]);
-
-            client.includes.should.be.type('object');
-            client.includes.css.should.be.equal(true);
-            client.includes.html.should.be.equal(true);
-            client.includes.system.should.be.equal(true);
-            client.includes.initCode.should.be.equal(true);
-            client.entryInitPath.should.be.equal('./code/abc/entry');
-
-            var bundler = ss.api.bundler.get('abc');
-
-            bundler.dests.paths.html.should.be.equal( path.join(ss.root,'client','static', 'assets', 'abc', client.id + '.html') );
-            bundler.dests.paths.css.should.be.equal( path.join(ss.root,'client','static', 'assets', 'abc', client.id + '.css') );
-            bundler.dests.paths.js.should.be.equal( path.join(ss.root,'client','static', 'assets', 'abc', client.id + '.js') );
-
-            bundler.dests.relPaths.html.should.be.equal( path.join('/client','static', 'assets', 'abc', client.id + '.html') );
-            bundler.dests.relPaths.css.should.be.equal( path.join('/client','static', 'assets', 'abc', client.id + '.css') );
-            bundler.dests.relPaths.js.should.be.equal( path.join('/client','static', 'assets', 'abc', client.id + '.js') );
-
-            bundler.dests.urls.html.should.be.equal('/assets/abc/'+client.id+'.html');
-            bundler.dests.urls.css.should.be.equal('/assets/abc/'+client.id+'.css');
-            bundler.dests.urls.js.should.be.equal('/assets/abc/'+client.id+'.js');
-
-            bundler.dests.dir.should.be.equal( path.join(ss.root,'client','static','assets', client.name) );
-            bundler.dests.containerDir.should.be.equal( path.join(ss.root,'client','static','assets') );
-
-
-            //client.id = shortid.generate();
+        var client = ss.client.define('abc', {
+          css: './abc/style.css',
+          code: './abc/index.js',
+          view: './abc/abc.html'
         });
+
+        client.id.should.be.type('string');
+
+        client.paths.should.be.type('object');
+        client.paths.css.should.be.eql(['./abc/style.css']);
+        client.paths.code.should.be.eql(['./abc/index.js']);
+        client.paths.view.should.be.eql('./abc/abc.html');
+        client.paths.tmpl.should.be.eql([]);
+
+        client.includes.should.be.type('object');
+        client.includes.css.should.be.equal(true);
+        client.includes.html.should.be.equal(true);
+        client.includes.system.should.be.equal(true);
+        client.includes.initCode.should.be.equal(true);
+        client.entryInitPath.should.be.equal('./code/abc/entry');
+
+        var bundler = ss.api.bundler.get('abc');
+
+        bundler.dests.paths.html.should.be.equal(path.join(ss.root, 'client', 'static', 'assets', 'abc', client.id + '.html'));
+        bundler.dests.paths.css.should.be.equal(path.join(ss.root, 'client', 'static', 'assets', 'abc', client.id + '.css'));
+        bundler.dests.paths.js.should.be.equal(path.join(ss.root, 'client', 'static', 'assets', 'abc', client.id + '.js'));
+
+        bundler.dests.relPaths.html.should.be.equal(path.join('/client', 'static', 'assets', 'abc', client.id + '.html'));
+        bundler.dests.relPaths.css.should.be.equal(path.join('/client', 'static', 'assets', 'abc', client.id + '.css'));
+        bundler.dests.relPaths.js.should.be.equal(path.join('/client', 'static', 'assets', 'abc', client.id + '.js'));
+
+        bundler.dests.urls.html.should.be.equal('/assets/abc/' + client.id + '.html');
+        bundler.dests.urls.css.should.be.equal('/assets/abc/' + client.id + '.css');
+        bundler.dests.urls.js.should.be.equal('/assets/abc/' + client.id + '.js');
+
+        bundler.dests.dir.should.be.equal(path.join(ss.root, 'client', 'static', 'assets', client.name));
+        bundler.dests.containerDir.should.be.equal(path.join(ss.root, 'client', 'static', 'assets'));
+
+
+        //client.id = shortid.generate();
+      });
+
+      it('should set up client with includes', function () {
+
+        ss.root = ss.api.root = path.join(__dirname, '../../../fixtures/project');
+
+        var client = ss.client.define('abc', {
+          css: './abc/style.css',
+          code: './abc/index.js',
+          view: './abc/abc.html'
+        });
+
+        client.includes.should.be.type('object');
+        client.includes.css.should.be.true;
+        client.includes.system.should.be.true;
+        client.includes.initCode.should.be.true;
+        client.includes.html.should.be.true;
+
+        var client = ss.client.define('abc-no-overrides', {
+          css: './abc/style.css',
+          code: './abc/index.js',
+          view: './abc/abc.html',
+          includes: { }
+        });
+
+        client.includes.should.be.type('object');
+        client.includes.css.should.be.true;
+        client.includes.system.should.be.true;
+        client.includes.initCode.should.be.true;
+        client.includes.html.should.be.true;
+
+        var client = ss.client.define('abc-false-overrides', {
+          css: './abc/style.css',
+          code: './abc/index.js',
+          view: './abc/abc.html',
+          includes: { css:false, system:false, initCode:false, html:false }
+        });
+
+        client.includes.should.be.type('object');
+        client.includes.css.should.be.false;
+        client.includes.system.should.be.false;
+        client.includes.initCode.should.be.false;
+        client.includes.html.should.be.false;
+
+      });
     });
 
     afterEach(function() {
@@ -100,7 +144,27 @@ describe('default bundler', function () {
           entriesCSS[0].importedBy.should.be.equal('./abc/style.css');
         });
 
-        it('should return entries for everything needed in view with just code', function() {
+      it('should return no entries for css if not in includes', function() {
+
+        ss.root = ss.api.root = path.join(__dirname, '../../../fixtures/project');
+
+        var client = ss.client.define('abc', {
+          includes: { css:false },
+          css: './abc/style.css',
+          view: './abc.html'
+        });
+
+        ss.client.load();
+
+        var bundler = ss.api.bundler.get('abc'),
+          entriesCSS = bundler.asset.entries('css'),
+          entriesJS = bundler.asset.entries('js');
+
+        entriesCSS.should.have.lengthOf(0);
+        entriesJS.should.have.lengthOf(4);
+      });
+
+      it('should return entries for everything needed in view with just code', function() {
 
             //TODO set project root function
             ss.root = ss.api.root = path.join(__dirname, '../../../fixtures/project');
