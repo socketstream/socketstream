@@ -43,7 +43,23 @@ describe('default bundler', function () {
         bundler.dests.containerDir.should.be.equal(path.join(ss.root, 'client', 'static', 'assets'));
       });
 
-      it('should support relative css/code/view/tmpl locations');
+      it('should support relative css/code/view/tmpl locations', function() {
+        var client = ss.client.define('main', {
+          css: './css/main',
+          code: './code/main/demo.coffee',
+          view: './views/main.jade',
+          tmpl: './templates/chat/message.jade'
+        });
+
+        client.id.should.be.type('string');
+
+        client.paths.should.be.type('object');
+        client.paths.css.should.be.eql(['./css/main']);
+        client.paths.code.should.be.eql(['./code/main/demo.coffee']);
+        client.paths.view.should.be.eql('./views/main.jade');
+        client.paths.tmpl.should.be.eql(['./templates/chat/message.jade']);
+
+      });
 
       it('should set up client and bundler', function () {
 
@@ -226,10 +242,27 @@ describe('default bundler', function () {
             //entriesJS.should.be.equal([{ path:'./abc.js'}]);
         });
 
+      it('should return entries for JS flagged in includes', function() {
 
-        it('should return be affected by includes flags');
+        var client = ss.client.define('abc', {
+          includes: { system:false, initCode: false},
+          code: './abc/index.js',
+          view: './abc.html'
+        });
 
+        ss.client.load();
 
+        var bundler = ss.api.bundler.get('abc'),
+          entriesCSS = bundler.asset.entries('css'),
+          entriesJS = bundler.asset.entries('js');
+
+        entriesCSS.should.have.lengthOf(0);
+        entriesJS.should.have.lengthOf(1);
+
+        // mod TODO
+        entriesJS[0].file.should.be.equal('./abc/index.js');
+        entriesJS[0].importedBy.should.be.equal('./abc/index.js');
+      });
   });
 
 
