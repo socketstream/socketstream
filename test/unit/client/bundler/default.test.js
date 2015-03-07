@@ -9,16 +9,43 @@ describe('default bundler', function () {
 
     var origDefaultEntryInit = options.defaultEntryInit;
 
+    //TODO set project root function
+
+    ss.root = ss.api.root = path.join(__dirname, '../../../fixtures/project');
+
+
     describe('define', function() {
 
-      it('should support default css/code/view/tmpl locations');
+      it('should support default css/code/view/tmpl locations',function() {
+        var client = ss.client.define('main', {
+          css: 'main',
+          code: 'main/demo.coffee',
+          view: 'main.jade'
+        });
+
+        client.id.should.be.type('string');
+
+        client.paths.should.be.type('object');
+        client.paths.css.should.be.eql(['./css/main']);
+        client.paths.code.should.be.eql(['./code/main/demo.coffee']);
+        client.paths.view.should.be.eql('./views/main.jade');
+        client.paths.tmpl.should.be.eql([]);
+
+        client.entryInitPath.should.be.equal('./code/main/entry');
+
+        var bundler = ss.api.bundler.get('main');
+
+        bundler.dests.urls.html.should.be.equal('/assets/main/' + client.id + '.html');
+        bundler.dests.urls.css.should.be.equal('/assets/main/' + client.id + '.css');
+        bundler.dests.urls.js.should.be.equal('/assets/main/' + client.id + '.js');
+
+        bundler.dests.dir.should.be.equal(path.join(ss.root, 'client', 'static', 'assets', client.name));
+        bundler.dests.containerDir.should.be.equal(path.join(ss.root, 'client', 'static', 'assets'));
+      });
 
       it('should support relative css/code/view/tmpl locations');
 
       it('should set up client and bundler', function () {
-
-        //TODO set project root function
-        ss.root = ss.api.root = path.join(__dirname, '../../../fixtures/project');
 
         var client = ss.client.define('abc', {
           css: './abc/style.css',
@@ -63,8 +90,6 @@ describe('default bundler', function () {
       });
 
       it('should set up client with includes', function () {
-
-        ss.root = ss.api.root = path.join(__dirname, '../../../fixtures/project');
 
         var client = ss.client.define('abc', {
           css: './abc/style.css',
@@ -123,8 +148,6 @@ describe('default bundler', function () {
 
         it('should return entries for everything needed in view with just css', function() {
 
-          ss.root = ss.api.root = path.join(__dirname, '../../../fixtures/project');
-
           var client = ss.client.define('abc', {
             css: './abc/style.css',
             view: './abc.html'
@@ -146,8 +169,6 @@ describe('default bundler', function () {
 
       it('should return no entries for css if not in includes', function() {
 
-        ss.root = ss.api.root = path.join(__dirname, '../../../fixtures/project');
-
         var client = ss.client.define('abc', {
           includes: { css:false },
           css: './abc/style.css',
@@ -165,9 +186,6 @@ describe('default bundler', function () {
       });
 
       it('should return entries for everything needed in view with just code', function() {
-
-            //TODO set project root function
-            ss.root = ss.api.root = path.join(__dirname, '../../../fixtures/project');
 
             var client = ss.client.define('abc', {
                 code: './abc/index.js',
