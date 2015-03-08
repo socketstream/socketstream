@@ -169,12 +169,12 @@ describe('client asset manager index', function () {
           ss.client.unload();
         });
 
-        var expectedHtml = '<html>\n' +
-          '<head><title>ABC</title></head>\n' +
-          '<body><p>ABC</p></body>\n' +
-          '</html>';
-
         it('should render the ABC view', function(done) {
+          var expectedHtml = '<html>\n' +
+            '<head><title>ABC</title></head>\n' +
+            '<body><p>ABC</p></body>\n' +
+            '</html>';
+
           var client = ss.client.define('abc', {
             css: './abc/style.css',
             code: './abc/index.js',
@@ -187,6 +187,29 @@ describe('client asset manager index', function () {
           });
 
         });
+
+      it('should render the SS view', function(done) {
+        var client = ss.client.define('abc', {
+          css: './abc/style.css',
+          code: './abc/index.js',
+          view: './abc/ss.html'
+        });
+
+        var expectedHtml = ('<html>\n' +
+          '<head><title>ABC</title>' +
+          '<link href="/assets/abc/m1bf9lApd.css" media="screen" rel="stylesheet" type="text/css">' +
+          '<script src="/assets/abc/m1bf9lApd.js" type="text/javascript"></script>'+ '</head>\n' +
+          '<body><p>ABC</p></body>\n' +
+          '</html>\n').replace(/m1bf9lApd/g,client.id);
+
+        view(ss.api, client, options, function(output) {
+          output.should.equal(expectedHtml);
+          done();
+        });
+
+      });
     });
 
 });
+
+
