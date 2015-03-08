@@ -8,6 +8,11 @@ var path    = require('path'),
 
 describe('client asset manager index', function () {
 
+    var origDefaultEntryInit = options.defaultEntryInit;
+
+    afterEach(function() {
+      ss.client.forget();
+    });
 
 
     describe('#formatters', function () {
@@ -74,7 +79,21 @@ describe('client asset manager index', function () {
 
 
 
-        it('should tell the asset manager to pack and minimise all assets');
+        it('should tell the asset manager to pack and minimise all assets', function() {
+
+            options.packedAssets = true;
+
+            //TODO set project root function
+            ss.root = ss.api.root = path.join(__dirname, '../../fixtures/project');
+
+            var client = ss.client.define('abc', {
+                code: './abc/index.js',
+                view: './abc.html'
+            });
+
+            //ss.client.load();
+
+        });
 
 
 
@@ -132,6 +151,42 @@ describe('client asset manager index', function () {
 
     });
 
+    var view = require('../../../lib/client/view');
 
+    describe('#view', function() {
+
+        beforeEach(function() {
+
+          options.defaultEntryInit = origDefaultEntryInit;
+
+          ss.client.load();
+          ss.client.assets.unload();
+          ss.client.assets.load();
+          ss.client.load();
+        });
+
+        afterEach(function() {
+          ss.client.unload();
+        });
+
+        var expectedHtml = '<html>\n' +
+          '<head><title>ABC</title></head>\n' +
+          '<body><p>ABC</p></body>\n' +
+          '</html>';
+
+        it('should render the ABC view', function(done) {
+          var client = ss.client.define('abc', {
+            css: './abc/style.css',
+            code: './abc/index.js',
+            view: './abc/abc.html'
+          });
+
+          view(ss.api, client, options, function(output) {
+            output.should.equal(expectedHtml);
+            done();
+          });
+
+        });
+    });
 
 });
