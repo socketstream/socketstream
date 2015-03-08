@@ -152,20 +152,41 @@ describe('client asset manager index', function () {
     var view = require('../../../lib/client/view');
 
     describe('unpacked #view',function() {
-        it('should render the SS view');
+
+      beforeEach(function() {
+
+        // back to initial client state
+        ss.client.unload();
+        ss.client.assets.unload();
+        ss.client.forget();
+        ss.client.assets.load();
+
+        // options and load client
+        options.packedAssets = false;
+        ss.client.load();
+      });
+
+      afterEach(function() {
+        ss.client.unload();
+      });
+
+      it('should render the SS view');
+
     });
 
     describe('packed #view', function() {
 
-        options.packedAssets = true;
 
         beforeEach(function() {
 
-          options.defaultEntryInit = origDefaultEntryInit;
-
-          ss.client.load();
+          // back to initial client state
+          ss.client.unload();
           ss.client.assets.unload();
+          ss.client.forget();
           ss.client.assets.load();
+
+          // options and load client
+          options.packedAssets = true;
           ss.client.load();
         });
 

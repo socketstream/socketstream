@@ -159,6 +159,7 @@ describe('default bundler', function () {
             options.defaultEntryInit = origDefaultEntryInit;
 
             ss.client.assets.unload();
+            ss.client.forget();
             ss.client.assets.load();
         });
 
