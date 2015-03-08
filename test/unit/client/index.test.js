@@ -77,11 +77,9 @@ describe('client asset manager index', function () {
 
     describe('#packAssets', function () {
 
-
+        options.packedAssets = true;
 
         it('should tell the asset manager to pack and minimise all assets', function() {
-
-            options.packedAssets = true;
 
             //TODO set project root function
             ss.root = ss.api.root = path.join(__dirname, '../../fixtures/project');
@@ -103,7 +101,7 @@ describe('client asset manager index', function () {
 
     describe('#define', function () {
 
-
+        options.packedAssets = false;
 
         it('should return a client object containing a name, and the paths of all the files it has');
 
@@ -127,7 +125,7 @@ describe('client asset manager index', function () {
 
     describe('#load', function () {
 
-
+        options.packedAssets = false;
 
         it('should listen for incoming asset requests');
 
@@ -153,7 +151,13 @@ describe('client asset manager index', function () {
 
     var view = require('../../../lib/client/view');
 
-    describe('#view', function() {
+    describe('unpacked #view',function() {
+        it('should render the SS view');
+    });
+
+    describe('packed #view', function() {
+
+        options.packedAssets = true;
 
         beforeEach(function() {
 
@@ -196,8 +200,28 @@ describe('client asset manager index', function () {
         });
 
         var expectedHtml = ('<html>\n' +
+        '<head><title>ABC</title>' +
+        '<link href="/assets/abc/m1bf9lApd.css" media="screen" rel="stylesheet" type="text/css">' +
+        '<script src="/assets/abc/m1bf9lApd.js" type="text/javascript"></script>'+ '</head>\n' +
+        '<body><p>ABC</p></body>\n' +
+        '</html>\n').replace(/m1bf9lApd/g,client.id);
+
+        view(ss.api, client, options, function(output) {
+          output.should.equal(expectedHtml);
+          done();
+        });
+      });
+
+      it('should render the SS view without CSS if include is false', function(done) {
+        var client = ss.client.define('abc', {
+          includes: {css:false},
+          css: './abc/style.css',
+          code: './abc/index.js',
+          view: './abc/ss.html'
+        });
+
+        var expectedHtml = ('<html>\n' +
           '<head><title>ABC</title>' +
-          '<link href="/assets/abc/m1bf9lApd.css" media="screen" rel="stylesheet" type="text/css">' +
           '<script src="/assets/abc/m1bf9lApd.js" type="text/javascript"></script>'+ '</head>\n' +
           '<body><p>ABC</p></body>\n' +
           '</html>\n').replace(/m1bf9lApd/g,client.id);
@@ -206,7 +230,6 @@ describe('client asset manager index', function () {
           output.should.equal(expectedHtml);
           done();
         });
-
       });
     });
 
