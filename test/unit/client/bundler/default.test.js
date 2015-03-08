@@ -162,11 +162,13 @@ describe('default bundler', function () {
             ss.client.assets.load();
         });
 
+        it('should report erroneous paths in an easy way');
+
         it('should return entries for everything needed in view with just css', function() {
 
           var client = ss.client.define('abc', {
             css: './abc/style.css',
-            view: './abc.html'
+            view: './abc/abc.html'
           });
 
           ss.client.load();
@@ -188,7 +190,7 @@ describe('default bundler', function () {
         var client = ss.client.define('abc', {
           includes: { css:false },
           css: './abc/style.css',
-          view: './abc.html'
+          view: './abc/abc.html'
         });
 
         ss.client.load();
@@ -205,7 +207,7 @@ describe('default bundler', function () {
 
             var client = ss.client.define('abc', {
                 code: './abc/index.js',
-                view: './abc.html'
+                view: './abc/abc.html'
             });
 
             ss.client.load();
@@ -247,7 +249,7 @@ describe('default bundler', function () {
         var client = ss.client.define('abc', {
           includes: { system:false, initCode: false},
           code: './abc/index.js',
-          view: './abc.html'
+          view: './abc/abc.html'
         });
 
         ss.client.load();
