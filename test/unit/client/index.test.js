@@ -17,11 +17,10 @@ describe('client asset manager index', function () {
 
     describe('#formatters', function () {
 
-
-
-        it('should return the code formatters API');
-
-
+        it('should return the code formatters API',function() {
+          ss.client.formatters.add.should.be.type('function');
+          ss.client.formatters.load.should.be.type('function');
+        });
 
     });
 
@@ -29,11 +28,11 @@ describe('client asset manager index', function () {
 
     describe('#templateEngine', function () {
 
-
-
-        it('should return the templateEngine API');
-
-
+        it('should return the templateEngine API', function() {
+          ss.client.templateEngine.use.should.be.type('function');
+          ss.client.templateEngine.load.should.be.type('function');
+          ss.client.templateEngine.generate.should.be.type('function');
+        });
 
     });
 
@@ -41,11 +40,12 @@ describe('client asset manager index', function () {
 
     describe('#systemAssets', function () {
 
-
-
-        it('should return the system assets API');
-
-
+        it('should return the system assets API', function() {
+          ss.client.assets.send.should.be.type('function');
+          ss.client.assets.load.should.be.type('function');
+          ss.client.assets.unload.should.be.type('function');
+          ss.client.assets.assets.should.be.type('object');
+        });
 
     });
 
@@ -53,11 +53,9 @@ describe('client asset manager index', function () {
 
     describe('#options', function () {
 
-
-
-        it('should return an object specifying the app\'s options');
-
-
+        it('should return an object specifying the app\'s options', function() {
+          ss.client.options.should.be.type('object');
+        });
 
     });
 
