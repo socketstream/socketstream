@@ -1,9 +1,13 @@
 'use strict';
 
 var path = require('path'),
-    log  = require(path.join(process.env.PWD, 'lib/utils/log'));
+    ss   = require( '../../../lib/socketstream'),
+    log  = require( '../../../lib/utils/log');
 
 describe('lib/utils/log', function() {
+    ss.api.publish = {
+      all: function() {}
+    }
 
     it('should be a function', function(done) {
         log.should.have.a.type('function');

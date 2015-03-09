@@ -4,7 +4,7 @@
 
 var path          = require('path'),
     EventEmitter2 = require('eventemitter2').EventEmitter2,
-    Router        = require( path.join(process.env.PWD, 'lib/http/router.js') ).Router,
+    Router        = require( '../../../lib/http/router').Router,
     req           = {},
     res           = {},
     cb,
@@ -13,7 +13,7 @@ var path          = require('path'),
 describe('lib/http/router', function () {
 
     beforeEach(function (done) {
-        router = new (Router);
+        router = new Router();
 
         cb = function() {
             return;
