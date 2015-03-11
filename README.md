@@ -71,7 +71,7 @@ Checkout the [documentation here](http://socketstream.github.io/socketstream/doc
 ### Next Major Release 0.4
 
 [![Build Status](https://api.travis-ci.org/socketstream/socketstream.svg?branch=next)](https://travis-ci.org/socketstream/socketstream)
-[![Coverage Status](https://img.shields.io/coveralls/socketstream/socketstream.svg)](https://coveralls.io/r/socketstream/socketstream?branch=next)
+[![Coverage Status](https://coveralls.io/repos/socketstream/socketstream/badge.svg?branch=next)](https://coveralls.io/r/socketstream/socketstream?branch=next)
 
 #### Notes
 
