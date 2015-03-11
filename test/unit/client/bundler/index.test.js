@@ -38,7 +38,7 @@ describe('bundler', function () {
     });
 
     it('should look up bundler by id', function() {
-      var client = ss.client.define('abc2', { view: 'abc.html' });
+      var client = ss.client.define('abc', { view: 'abc.html' });
 
       var bundler = ss.api.bundler.get({ ts: client.id });
       bundler.should.be.type('object');
@@ -46,11 +46,28 @@ describe('bundler', function () {
     });
 
     it('should throw odd bundler lookups', function() {
-      var client = ss.client.define('abc3', { view: 'abc.html' });
+      var client = ss.client.define('abc', { view: 'abc.html' });
 
       should(function() {
         ss.api.bundler.get({ ts: 'abc' });
       }).throw(Error);
+    });
+
+    it('should throw if defined twice', function() {
+      ss.client.define('abc', { view: 'abc.html' });
+
+      should(function() {
+        ss.client.define('abc', { view: 'abc.html' });
+      }).throw(Error);
+    });
+
+    it('should set client options piecemeal', function() {
+      ss.client.set({ 'a':'a'});
+      options.a.should.equal('a');
+      ss.client.set({ 'b':'b'});
+      options.b.should.equal('b');
+      ss.client.set({ 'b':'B'});
+      options.b.should.equal('B');
     });
   });
 
