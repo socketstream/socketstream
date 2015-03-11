@@ -3,6 +3,7 @@
 var path    = require('path'),
     should  = require('should'),
     ss      = require( '../../../../lib/socketstream'),
+    viewer  = require( '../../../../lib/client/view'),
     options = ss.client.options;
 
 describe('default bundler', function () {
@@ -12,6 +13,7 @@ describe('default bundler', function () {
     //TODO set project root function
 
     ss.root = ss.api.root = path.join(__dirname, '../../../fixtures/project');
+    //ss.api.bundler = require('../../../../lib/client/bundler/index')(ss.api,options);
 
 
     describe('define', function() {
@@ -114,12 +116,12 @@ describe('default bundler', function () {
         });
 
         client.includes.should.be.type('object');
-        client.includes.css.should.be.true;
-        client.includes.system.should.be.true;
-        client.includes.initCode.should.be.true;
-        client.includes.html.should.be.true;
+        client.includes.css.should.equal(true);
+        client.includes.system.should.equal(true);
+        client.includes.initCode.should.equal(true);
+        client.includes.html.should.equal(true);
 
-        var client = ss.client.define('abc-no-overrides', {
+        client = ss.client.define('abc-no-overrides', {
           css: './abc/style.css',
           code: './abc/index.js',
           view: './abc/abc.html',
@@ -127,12 +129,12 @@ describe('default bundler', function () {
         });
 
         client.includes.should.be.type('object');
-        client.includes.css.should.be.true;
-        client.includes.system.should.be.true;
-        client.includes.initCode.should.be.true;
-        client.includes.html.should.be.true;
+        client.includes.css.should.equal(true);
+        client.includes.system.should.equal(true);
+        client.includes.initCode.should.equal(true);
+        client.includes.html.should.equal(true);
 
-        var client = ss.client.define('abc-false-overrides', {
+        client = ss.client.define('abc-false-overrides', {
           css: './abc/style.css',
           code: './abc/index.js',
           view: './abc/abc.html',
@@ -140,10 +142,10 @@ describe('default bundler', function () {
         });
 
         client.includes.should.be.type('object');
-        client.includes.css.should.be.false;
-        client.includes.system.should.be.false;
-        client.includes.initCode.should.be.false;
-        client.includes.html.should.be.false;
+        client.includes.css.should.equal(false);
+        client.includes.system.should.equal(false);
+        client.includes.initCode.should.equal(false);
+        client.includes.html.should.equal(false);
 
       });
     });
@@ -268,6 +270,63 @@ describe('default bundler', function () {
       });
   });
 
+  describe('html',function() {
 
+    beforeEach(function() {
+
+      options.defaultEntryInit = origDefaultEntryInit;
+
+      ss.client.assets.unload();
+      ss.client.forget();
+      ss.client.assets.load();
+    });
+
+    it('should contain a tail script by default',function() {
+
+      var client = ss.client.define('abc', {
+        includes: {system: false, initCode: false},
+        code: './abc/index.js',
+        view: './abc/abc.html'
+      });
+
+      ss.client.load();
+
+      viewer(ss.api, client, options, function (html) {
+        html.should.be.type('string');
+        html.should.equal([
+          '<html>',
+          '<head><title>ABC</title></head>',
+          '<body><p>ABC</p><script>require("./code/abc/entry");</script></body>',
+          '</html>'
+        ].join('\n'))
+      });
+
+    });
+
+    it('should not contain a tail script with startInBundle option',function() {
+
+      options.startInBundle = true;
+
+      var client = ss.client.define('abc', {
+        includes: { system:false, initCode: false},
+        code: './abc/index.js',
+        view: './abc/abc.html'
+      });
+
+      ss.client.load();
+
+      viewer(ss.api, client, options, function(html) {
+        html.should.be.type('string');
+        html.should.equal([
+          '<html>',
+          '<head><title>ABC</title></head>',
+          '<body><p>ABC</p></body>',
+          '</html>'
+        ].join('\n'))
+      });
+
+    });
+
+  });
 
 });

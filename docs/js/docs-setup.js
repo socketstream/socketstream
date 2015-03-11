@@ -39,7 +39,7 @@ NG_DOCS={
       "type": "overview",
       "moduleName": "Client-Side Development",
       "shortDescription": "Client-Side Development",
-      "keywords": "amount asset assets break browser bundle bundler bundlers caching client client-side css determine development directory entry file files fly generally html http injected js overview path pattern reduce relative separate separately served timestamp tutorials type url view watch work"
+      "keywords": "additional amount assets base browser bundle bundler bundlers bundles client client-side css determined determines developing development directory entries entry extending file files follow form generally html http identification js loader mod overview parameter passed path pattern production query reduce relative resolved saved separate separately served start string tutorials type url view watch work"
     },
     {
       "section": "tutorials",
@@ -94,6 +94,15 @@ NG_DOCS={
       "moduleName": "How it works",
       "shortDescription": "How does it work?",
       "keywords": "action actions ajax alert allows analytics answer app application applications asynchronous automatically basic bi-directional blog box broken browser building call called calling choice client client-side clunky code coming command common communication compressed connection connects console content-rich convention create css data default define depending eagle-eyed engine established example examples exports fallbacks file fine fit follow format function games great hand handlers header html html5 http image included instantly interested invoke invoked invoking javascript js json-over-rpc latency list ll local location logged manner md messages mode modern monitoring multiple naming notice number optimization organize overhead overview perfect platform polling poor popup processed processor production publicly re-established realtime received reload request require requires res resize responders response restart return returned rpc save search send sends server server-side simple site socketstream square squared squares ss static stock streaming sub-directories supports task time trading true tutorials undefined unique urls user var visits ways websocket wondering work works write written"
+    },
+    {
+      "section": "tutorials",
+      "id": "how_to_write_view_html",
+      "shortName": "How to write view HTML",
+      "type": "overview",
+      "moduleName": "How to write view HTML",
+      "shortDescription": "How to write view HTML ?",
+      "keywords": "appending assigntransport behaviour block body browser bundle bundles client closing code configuring connection consider content contents control css default div echo-responder ensure events-responder executed files filled formatter formatters full hand head heavy html huge include insert inserted installation jade javascript js light link loaded loading lot main notation note option overview place plain previous recommended require requirement script scripts seconds send served set size slow socketstream socketstream-rpc ss start startcode startinbundle styled supported synced-model tag tags top true tutorials typical ultimately user view views white write written xhtml"
     },
     {
       "section": "tutorials",

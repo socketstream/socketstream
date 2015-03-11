@@ -1,0 +1,60 @@
+@ngdoc overview
+@name How to write view HTML
+
+@description
+# How to write view HTML ?
+
+Views can be written as plain HTML, Jade or any other supported by HTML formatters.
+
+You only have one requirement. In HTML insert `<SocketStream>` where you want link and script tags to be inserted.
+This will ensure that you get the CSS and JavaScript files loaded in the page.
+You should consider the size of what you are loading. Normally CSS is not that huge, so let's consider JS.
+
+If you have a lot of JavaScript and you put the SocketStream tag within the head tag, the user will not see the contents
+of the page until the scripts have been loaded which on a slow connection could take seconds when the page might be  plain
+white.
+
+If on the other hand you have a page heavy on content and light on JavaScript, and you put it within the head tag,
+the user will see the top of the page styled before the full page is loaded.
+
+The recommended place for bundles of CSS and JS to be loaded is just before the closing `</body>` tag. This is where
+you should put the SocketStream tag.
+
+If you are doing XHTML rather than HTML use `<SocketStream/>`.
+
+If you are doing Jade use `!= SocketStream` such as
+
+```
+  body
+    +facebook-root()
+    main
+      div#content
+        block content
+          p Content block to be filled in
+      != SocketStream
+```
+
+Note than the SocketStream include notation and up to the page formatter, so ultimately you are in control by configuring
+the formatters.
+
+
+### Page Start code
+
+By default the start code will be executed at the end of the view regardless of where you put the SocketStream tag.
+In a typical installation the end of your HTML for the view served to the browser will look like,
+
+```
+<script>require('synced-model')(1, {}, require('socketstream').send(1));
+require('echo-responder')(2, {}, require('socketstream').send(2));
+require('events-responder')(0, {}, require('socketstream').send(0));
+require('socketstream-rpc')(3, {}, require('socketstream').send(3));
+require('socketstream').assignTransport({});
+require("./code/discuss/entry");</script></body></html>
+```
+
+If you want the previous behaviour of appending the startCode to the JS bundle rather than the view HTML set the client
+option "startInBundle".
+
+```
+ss.client.set({ startInBundle: true });
+```

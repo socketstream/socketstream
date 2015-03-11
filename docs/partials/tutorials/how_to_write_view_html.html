@@ -1,0 +1,40 @@
+<h1><code ng:non-bindable=""></code>
+<div><span class="hint"></span>
+</div>
+</h1>
+<div><div class="how-to-write-view-html-page"><h2 id="how-to-write-view-html">How to write view HTML ?</h2>
+<p>Views can be written as plain HTML, Jade or any other supported by HTML formatters.</p>
+<p>You only have one requirement. In HTML insert <code>&lt;SocketStream&gt;</code> where you want link and script tags to be inserted.
+This will ensure that you get the CSS and JavaScript files loaded in the page.
+You should consider the size of what you are loading. Normally CSS is not that huge, so let&#39;s consider JS.</p>
+<p>If you have a lot of JavaScript and you put the SocketStream tag within the head tag, the user will not see the contents
+of the page until the scripts have been loaded which on a slow connection could take seconds when the page might be  plain
+white.</p>
+<p>If on the other hand you have a page heavy on content and light on JavaScript, and you put it within the head tag,
+the user will see the top of the page styled before the full page is loaded.</p>
+<p>The recommended place for bundles of CSS and JS to be loaded is just before the closing <code>&lt;/body&gt;</code> tag. This is where
+you should put the SocketStream tag.</p>
+<p>If you are doing XHTML rather than HTML use <code>&lt;SocketStream/&gt;</code>.</p>
+<p>If you are doing Jade use <code>!= SocketStream</code> such as</p>
+<pre><code>  body
+    +facebook-root()
+    main
+      div#content
+        block content
+          p Content block to be filled in
+      != SocketStream
+</code></pre><p>Note than the SocketStream include notation and up to the page formatter, so ultimately you are in control by configuring
+the formatters.</p>
+<h4 id="how-to-write-view-html_page-start-code">Page Start code</h4>
+<p>By default the start code will be executed at the end of the view regardless of where you put the SocketStream tag.
+In a typical installation the end of your HTML for the view served to the browser will look like,</p>
+<pre><code>&lt;script&gt;require(&#39;synced-model&#39;)(1, {}, require(&#39;socketstream&#39;).send(1));
+require(&#39;echo-responder&#39;)(2, {}, require(&#39;socketstream&#39;).send(2));
+require(&#39;events-responder&#39;)(0, {}, require(&#39;socketstream&#39;).send(0));
+require(&#39;socketstream-rpc&#39;)(3, {}, require(&#39;socketstream&#39;).send(3));
+require(&#39;socketstream&#39;).assignTransport({});
+require(&quot;./code/discuss/entry&quot;);&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;
+</code></pre><p>If you want the previous behaviour of appending the startCode to the JS bundle rather than the view HTML set the client
+option &quot;startInBundle&quot;.</p>
+<pre><code>ss.client.set({ startInBundle: true });
+</code></pre></div></div>
