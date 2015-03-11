@@ -56,11 +56,18 @@ describe('lib/socketstream', function () {
             ss.env.should.equal('development');
             done();
         });
-
-
-
     });
 
+    describe('API', function() {
 
+        it('should allow extension', function() {
+          var ss = uncachedRequire('../../lib/socketstream.js');
+          ss.api.add('abc',{abc:'abc'});
+          ss.api.abc.should.equal({abc:'abc'});
+          should(function() {
+            ss.api.add('abc',{abc:'def'});
+          }).throw(Error);
+        });
+    });
 
 });
