@@ -4,7 +4,9 @@
 
 // Dependencies
 
-var uncachedRequire               = require('../helpers/uncache');
+var uncachedRequire               = require('../helpers/uncache'),
+  path = require('path'),
+  should  = require('should');
 
 
 
@@ -63,11 +65,36 @@ describe('lib/socketstream', function () {
         it('should allow extension', function() {
           var ss = uncachedRequire('../../lib/socketstream.js');
           ss.api.add('abc',{abc:'abc'});
-          ss.api.abc.should.equal({abc:'abc'});
+          ss.api.abc.should.eql({abc:'abc'});
           should(function() {
             ss.api.add('abc',{abc:'def'});
           }).throw(Error);
         });
     });
 
+    describe('start', function() {
+
+        it('should start event serving clients', function() {
+          process.chdir(path.join(__dirname, '../fixtures/project'));
+          var ss = uncachedRequire('../../lib/socketstream.js');
+          ss.root = ss.api.root = path.join(__dirname, '../fixtures/project');
+
+          ss.client.define('abc', {
+            css: 'main',
+            code: 'main/demo.coffee',
+            view: 'main.jade'
+          });
+          ss.http.route('/abc', function(req, res){
+            res.serveClient('abc');
+          });
+
+          var http = require('http');
+          var server = http.Server(ss.http.middleware);
+          server.listen(13000);
+          ss.start(server);
+
+          //TODO test that /abc is served
+
+        });
+    });
 });
