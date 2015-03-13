@@ -333,6 +333,8 @@ describe('default bundler', function () {
       });
   });
 
+  //TODO locals set in different ways
+
   describe('constants', function() {
 
     beforeEach(function() {

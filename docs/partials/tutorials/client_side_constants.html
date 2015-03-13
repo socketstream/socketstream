@@ -1,0 +1,41 @@
+<h1><code ng:non-bindable=""></code>
+<div><span class="hint"></span>
+</div>
+</h1>
+<div><div class="client-side-constants-page"><h2 id="client-side-constants">Client-Side Constants</h2>
+<p>When you load the view in the browser, constants will be defined as global variables, so they can be
+accessed anywhere by their name.</p>
+<p>To define a constant add it under <code>consts:</code> in the view definition.</p>
+<pre><code>ss.client.define(&#39;myview&#39;,{
+    view: &#39;myview.html&#39;,
+    consts: {
+      appConfig: {
+        facebookAppId: &#39;1234&#39;,
+        twitterKey: &#39;AAA&#39;
+      }
+    }
+});
+</code></pre><p>The constants will only be loaded in the view. Other views will not be affected.</p>
+<p>You can also define a global constant using <code>ss.client.send</code>. In this case the constant will be loaded
+in all views. In case you have a constant in a view definition with the same name, it will be
+used rather than the global value.</p>
+<h3 id="client-side-constants_locals">Locals</h3>
+<p>When you write HTML and CSS you often want to use a common value which isn&#39;t defined in the source code,
+but rather in configuration. Version number and copyright are good examples of these, so are color values,
+debugging environment and level of browser support.</p>
+<p>Following convention these are called locals. They are not available as variables in the browser. That is unless
+your formatter expose them as such. They are however passed to the template_engines and formatters.</p>
+<p>To define a local add it under <code>locals:</code> in the view defintion.</p>
+<pre><code>ss.client.define(&#39;myview&#39;,{
+    view: &#39;myview.html&#39;,
+    locals: {
+      appConfig: {
+        copyright: &#39;1999&#39;
+      }
+    }
+});
+</code></pre><p>The locals will only be passed when rendering that view. Other views will not be affected.</p>
+<p>You can also define a global local(yes, naming sucks) using <code>ss.client.send</code>. In this case the local will be
+used in all views. In case you have a local in a view definition with the same name, it will be
+used rather than the global value.</p>
+</div></div>
