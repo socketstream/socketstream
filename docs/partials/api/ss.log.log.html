@@ -34,6 +34,15 @@ function that takes the same parameters as console.log.</p>
 </code></pre></div></div>
 </div>
 </li>
+<li><h3 id="methods_trace">trace()</h3>
+<div class="trace"><div class="ss-log-trace-page"><p>Trace function calls in socketstream and plugins. By default nothing is done.
+If you want to switch on tracing override the <code>trace</code> method.</p>
+<pre><code>var ss = require(&#39;socketstream&#39;);
+ss.api.log.trace = function() {
+console.log.apply(console,arguments);
+};
+</code></pre></div></div>
+</li>
 <li><h3 id="methods_warn">warn()</h3>
 <div class="warn"><div class="ss-log-warn-page"><p>Warn level logging, uses console.log by default. Override by assigning a
 function that takes the same parameters as console.log:</p>

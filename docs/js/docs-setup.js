@@ -322,6 +322,15 @@ NG_DOCS={
     },
     {
       "section": "api",
+      "id": "ss.client.formatters:formatters",
+      "shortName": "formatters",
+      "type": "service",
+      "moduleName": "ss.client",
+      "shortDescription": "Formatter registry",
+      "keywords": "add api asset client config configuring define formatter formatters method nameormodule object parameters registry rendering service ss"
+    },
+    {
+      "section": "api",
       "id": "ss.client:client",
       "shortName": "client",
       "type": "service",
@@ -344,7 +353,7 @@ NG_DOCS={
       "type": "service",
       "moduleName": "ss",
       "shortDescription": "Contains method stubs for logging to console (by default) or",
-      "keywords": "api assigning choose console debug default error fairly function happened info informed keeping level log logging method override parameters provider require service socketstream ss stubs sysadmin takes time trivial unexpected var wakeup warn winston"
+      "keywords": "api apply arguments assigning calls choose console debug default error fairly function happened info informed keeping level log logging method override parameters plugins provider require service socketstream ss stubs switch sysadmin takes time trace tracing trivial unexpected var wakeup warn winston"
     },
     {
       "section": "api",
