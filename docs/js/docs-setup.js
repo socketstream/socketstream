@@ -34,6 +34,15 @@ NG_DOCS={
     },
     {
       "section": "tutorials",
+      "id": "client_side_constants",
+      "shortName": "Client-Side Constants",
+      "type": "overview",
+      "moduleName": "Client-Side Constants",
+      "shortDescription": "Client-Side Constants",
+      "keywords": "aaa accessed add appconfig browser called case client client-side code color common configuration constant constants consts convention copyright css debugging define defined definition defintion environment examples expose facebookappid formatter formatters global good html isn level load loaded local locals myview naming number overview passed rendering send source ss sucks support template_engines tutorials twitterkey values variables version view views write"
+    },
+    {
+      "section": "tutorials",
       "id": "client_side_development",
       "shortName": "Client-Side Development",
       "type": "overview",

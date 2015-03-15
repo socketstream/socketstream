@@ -19,7 +19,7 @@ describe('client system library', function () {
         });
 
         it('should extend libs',function() {
-            
+
             var jsBefore, jsAfter;
 
             jsBefore = ss.api.bundler.systemLibs();
@@ -56,8 +56,8 @@ describe('client system library', function () {
 
             var start = ss.api.bundler.startCode(client);
             start.should.be.type('object');
-            start.type.should.be.equal('start');
-            start.content.should.be.equal(expected);
+            start[start.length-1].type.should.be.equal('start');
+            start[start.length-1].content.should.be.equal(expected);
             // client.entryInitPath
         });
 
@@ -72,8 +72,8 @@ describe('client system library', function () {
 
             var start = ss.api.bundler.startCode(client);
             start.should.be.type('object');
-            start.type.should.be.equal('start');
-            start.content.should.be.equal(expected);
+            start[start.length-1].type.should.be.equal('start');
+            start[start.length-1].content.should.be.equal(expected);
         });
 
         //TODO options.entryModuleName

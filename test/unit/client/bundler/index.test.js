@@ -11,6 +11,8 @@ describe('bundler', function () {
 
   ss.root = ss.api.root = path.join(__dirname, '../../../fixtures/project');
 
+  options.liveReload = false;
+
   describe('API',function() {
 
     afterEach(function() {

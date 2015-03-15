@@ -192,11 +192,33 @@ describe('client asset manager index', function () {
           ss.client.unload();
         });
 
-        it('should render the ABC view', function(done) {
+        it('should render the ABC view (with start)', function(done) {
+          var expectedHtml = '<html>\n' +
+            '<head><title>ABC</title></head>\n' +
+            '<body><p>ABC</p><script>require("./code/abc/entry");</script></body>\n' +
+            '</html>';
+
+          var client = ss.client.define('abc', {
+            css: './abc/style.css',
+            code: './abc/index.js',
+            view: './abc/abc.html'
+          });
+
+          view(ss.api, client, options, function (output) {
+            output.should.equal(expectedHtml);
+            done();
+          });
+
+        } );
+
+        it('should render the ABC view (without start)', function(done) {
+
           var expectedHtml = '<html>\n' +
             '<head><title>ABC</title></head>\n' +
             '<body><p>ABC</p></body>\n' +
             '</html>';
+
+          options.startInBundle = true;
 
           var client = ss.client.define('abc', {
             css: './abc/style.css',
@@ -208,10 +230,9 @@ describe('client asset manager index', function () {
             output.should.equal(expectedHtml);
             done();
           });
-
         });
 
-      it('should render the SS view', function(done) {
+      it('should render the SS view (with start)', function(done) {
         var client = ss.client.define('abc', {
           css: './abc/style.css',
           code: './abc/index.js',
@@ -221,9 +242,31 @@ describe('client asset manager index', function () {
         var expectedHtml = ('<html>\n' +
         '<head><title>ABC</title>' +
         '<link href="/assets/abc/m1bf9lApd.css" media="screen" rel="stylesheet" type="text/css">' +
-        '<script src="/assets/abc/m1bf9lApd.js" type="text/javascript"></script>'+ '</head>\n' +
-        '<body><p>ABC</p></body>\n' +
-        '</html>\n').replace(/m1bf9lApd/g,client.id);
+        '<script src="/assets/abc/m1bf9lApd.js" type="text/javascript"></script>' + '</head>\n' +
+        '<body><p>ABC</p><script>require("./code/abc/entry");</script></body>\n' +
+        '</html>\n').replace(/m1bf9lApd/g, client.id);
+
+        view(ss.api, client, options, function (output) {
+          output.should.equal(expectedHtml);
+          done();
+        });
+
+      });
+      it('should render SS view (without start)', function(done) {
+        options.startInBundle = true;
+
+        var client = ss.client.define('abc', {
+          css: './abc/style.css',
+          code: './abc/index.js',
+          view: './abc/ss.html'
+        });
+
+        var expectedHtml = ('<html>\n' +
+          '<head><title>ABC</title>' +
+          '<link href="/assets/abc/m1bf9lApd.css" media="screen" rel="stylesheet" type="text/css">' +
+          '<script src="/assets/abc/m1bf9lApd.js" type="text/javascript"></script><script>require("./code/abc/entry");</script>'+ '</head>\n' +
+          '<body><p>ABC</p></body>\n' +
+          '</html>\n').replace(/m1bf9lApd/g,client.id);
 
         view(ss.api, client, options, function(output) {
           output.should.equal(expectedHtml);
@@ -242,7 +285,7 @@ describe('client asset manager index', function () {
         var expectedHtml = ('<html>\n' +
           '<head><title>ABC</title>' +
           '<script src="/assets/abc/m1bf9lApd.js" type="text/javascript"></script>'+ '</head>\n' +
-          '<body><p>ABC</p></body>\n' +
+          '<body><p>ABC</p><script>require("./code/abc/entry");</script></body>\n' +
           '</html>\n').replace(/m1bf9lApd/g,client.id);
 
         view(ss.api, client, options, function(output) {
