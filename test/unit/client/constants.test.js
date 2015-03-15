@@ -78,7 +78,7 @@ describe('locals', function() {
 
     //TODO packAssetSet
     var bundler = ss.api.bundler.get(client);
-    ss.api.bundler.packAssetSet('js', client, bundler.toMinifiedJS);
+    //ss.api.bundler.packAssetSet('js', client, bundler.toMinifiedJS);
   });
 
 });
