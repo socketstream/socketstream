@@ -2,6 +2,7 @@
 
 var path    = require('path'),
   should  = require('should'),
+  sinon   = require('sinon'),
   ss      = require( '../../../lib/socketstream'),
   options = ss.client.options;
 
@@ -113,10 +114,10 @@ var path    = require('path'),
 
 
       it('should throw an error if the formatter is not supported by SocketStream internally', function() {
-        should(function() {
+        (function() {
           ss.client.formatters.add('not-there',{});
 
-        }).throw(Error);
+        }).should.throw(Error('The \'./formatters/not-there\' '));
       });
 
     });
@@ -189,7 +190,7 @@ var path    = require('path'),
         ss.client.forget();
       });
 
-      it('should forward exceptions returned', function() {
+      it('should forward exceptions returned', function(done) {
 
         var formatter = {
           init: function (root, config) {
@@ -214,15 +215,20 @@ var path    = require('path'),
         ss.api.client.formatters = ss.client.formatters.load();
 
         ss.api.client.formatters.should.be.type('object');
-        var concrete = ss.api.client.formatters.a;
-        concrete.call('abc/def.a',{},function(out) {
-          out.should.be.equal('not called');
-        }, function(err) {
-          err.message.should.be.equal('c');
-        });
+        var concrete = ss.api.client.formatters.a,
+            resolve = sinon.spy(),
+            reject = sinon.spy(function(err) {
+              err.message.should.be.equal('c');
+              done();
+            });
+        concrete.call('abc/def.a',{}, resolve, reject);
+        //resolve.calledWith().should.equal(false);
+        //resolve.calledWith({message:''}).should.equal(true);
+        sinon.assert.notCalled(resolve);
+        sinon.assert.calledOnce(reject);
       });
 
-      it('should forward exceptions thrown', function() {
+      it('should forward exceptions thrown', function(done) {
 
         var formatter = {
           init: function (root, config) {
@@ -247,20 +253,18 @@ var path    = require('path'),
         ss.api.client.formatters = ss.client.formatters.load();
 
         ss.api.client.formatters.should.be.type('object');
-        var concrete = ss.api.client.formatters.a;
-        concrete.call('abc/def.a',{},function(out) {
-          out.should.be.equal('not called');
-        }, function(err) {
-          err.message.should.be.equal('c');
-        });
+        var concrete = ss.api.client.formatters.a,
+          resolve = sinon.spy(),
+          reject = sinon.spy(function(err) {
+            err.message.should.be.equal('c');
+            done();
+          });
+        concrete.call('abc/def.a',{},resolve,reject);
+        sinon.assert.notCalled(resolve);
+        sinon.assert.calledOnce(reject);
       });
 
       it('should format JavaScript comment',function() {
-        var client = ss.client.define('abc', {
-          css: './abc/style.css',
-          code: './abc/index.a',
-          view: './abc/abc.html'
-        });
 
         var formatter = {
           init: function (root, config) {
