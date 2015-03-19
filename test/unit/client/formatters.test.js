@@ -189,6 +189,72 @@ var path    = require('path'),
         ss.client.forget();
       });
 
+      it('should forward exceptions returned', function() {
+
+        var formatter = {
+          init: function (root, config) {
+
+            return {
+              name: 'f1',
+              extensions: ['a', 'b'],
+              assetType: 'js',
+              contentType: 'text/javascript; charset=utf-8',
+              config: config,
+              compile: function (pathEntry, options, cb) {
+                cb(new Error(config.c));
+              }
+            };
+          }
+        };
+
+        ss.client.formatters.add(formatter,{'c':'c'});
+
+        // load
+        ss.api.bundler.load();
+        ss.api.client.formatters = ss.client.formatters.load();
+
+        ss.api.client.formatters.should.be.type('object');
+        var concrete = ss.api.client.formatters.a;
+        concrete.call('abc/def.a',{},function(out) {
+          out.should.be.equal('not called');
+        }, function(err) {
+          err.message.should.be.equal('c');
+        });
+      });
+
+      it('should forward exceptions thrown', function() {
+
+        var formatter = {
+          init: function (root, config) {
+
+            return {
+              name: 'f1',
+              extensions: ['a', 'b'],
+              assetType: 'js',
+              contentType: 'text/javascript; charset=utf-8',
+              config: config,
+              compile: function (pathEntry, options, cb) {
+                throw new Error(config.c);
+              }
+            };
+          }
+        };
+
+        ss.client.formatters.add(formatter,{'c':'c'});
+
+        // load
+        ss.api.bundler.load();
+        ss.api.client.formatters = ss.client.formatters.load();
+
+        ss.api.client.formatters.should.be.type('object');
+        var concrete = ss.api.client.formatters.a;
+        concrete.call('abc/def.a',{},function(out) {
+          out.should.be.equal('not called');
+        }, function(err) {
+          err.message.should.be.equal('c');
+        });
+      });
+
       it('should format JavaScript comment',function() {
         var client = ss.client.define('abc', {
           css: './abc/style.css',
