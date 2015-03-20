@@ -98,14 +98,14 @@ describe('bundler', function () {
 
     it('should identify templates explicitly defined', function() {
       var abc = ss.client.define('abc',{
-        view: 'main.html',
+        view: 'main2.html',
         css: 'main.css',
         code: 'main.js',
         tmpl: 'main.html'
       });
 
       var abc2 = ss.client.define('abc2',{
-        view: 'main.html',
+        view: 'main2.html',
         css: 'main.css',
         code: 'main.js',
         tmpl: ['main.html','abc/1.html','abc/2.html']
@@ -132,7 +132,7 @@ describe('bundler', function () {
     it('should identify templates using /*', function() {
 
       var abc2 = ss.client.define('abc2',{
-        view: 'main.html',
+        view: 'main2.html',
         css: 'main.css',
         code: 'main.js',
         tmpl: 'abc/*'
