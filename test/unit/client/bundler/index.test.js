@@ -73,4 +73,83 @@ describe('bundler', function () {
     });
   });
 
+  describe('custom bundlers', function() {
+
+    it('should define client using custom bundler function');
+
+    it('should call load and unload bundler');
+
+  });
+
+
+  describe('entries', function() {
+
+    afterEach(function() {
+      ss.client.forget();
+    });
+
+    it('should identify css explicitly defined');
+
+    it('should identify css defined using /*');
+
+    it('should identify js explicitly defined');
+
+    it('should identify js defined using /*');
+
+    it('should identify templates explicitly defined', function() {
+      var abc = ss.client.define('abc',{
+        view: 'main.html',
+        css: 'main.css',
+        code: 'main.js',
+        tmpl: 'main.html'
+      });
+
+      var abc2 = ss.client.define('abc2',{
+        view: 'main.html',
+        css: 'main.css',
+        code: 'main.js',
+        tmpl: ['main.html','abc/1.html','abc/2.html']
+      });
+
+      ss.api.bundler.load();
+
+      var engines = ss.api.client.templateEngines = ss.client.templateEngine.load();
+      var loaded = ss.api.client.formatters = ss.client.formatters.load();
+
+      var templates = ss.api.bundler.entries(abc,'tmpl');
+      templates.should.eql([{
+        file: './templates/main.html', importedBy: './templates/main.html', includeType: 'html'
+      }]);
+
+      var templates = ss.api.bundler.entries(abc2,'tmpl');
+      templates.should.eql([
+        { file: './templates/main.html', importedBy: './templates/main.html', includeType: 'html' },
+        { file: './templates/abc/1.html', importedBy: './templates/abc/1.html', includeType: 'html' },
+        { file: './templates/abc/2.html', importedBy: './templates/abc/2.html', includeType: 'html' }
+      ]);
+    });
+
+    it('should identify templates using /*', function() {
+
+      var abc2 = ss.client.define('abc2',{
+        view: 'main.html',
+        css: 'main.css',
+        code: 'main.js',
+        tmpl: 'abc/*'
+      });
+
+      ss.api.bundler.load();
+
+      var engines = ss.api.client.templateEngines = ss.client.templateEngine.load();
+      var loaded = ss.api.client.formatters = ss.client.formatters.load();
+
+      var templates = ss.api.bundler.entries(abc2,'tmpl');
+      templates.should.eql([
+        { file: './templates/abc/1.html', importedBy: './templates/abc/1.html', includeType: 'html' },
+        { file: './templates/abc/2.html', importedBy: './templates/abc/2.html', includeType: 'html' }
+      ]);
+    });
+
+  });
+
 });
