@@ -45,7 +45,7 @@ Building a simple chat app that uses websockets is easy, but rich, non-trivial, 
 
 - [Dashku](https://github.com/Anephenix/dashku): Realtime dashboards and widgets using HTML, CSS and JavaScript. Also hosted at [dashku.com](https://dashku.com).
 - [SketchDeck](http://sketchdeck.com): An app for designing great slide decks from sketches, also a Y Combinator tech startup.
-- [Hollow](http://hollowdocumentary.com/): An interactive site for the award-winning documentary Hollow, which debuted at the Sundance festival.
+- [Hollow](http://hollowdocumentary.com/): An interactive, emmy-nominated documentary.
 - [Bitjoy](http://bitjoy.org/): Realtime Bitcoin prices and news.
 - [Teeleader](http://www.teeleader.com): A booking engine for Golf courses.
 
