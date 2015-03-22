@@ -56,7 +56,5 @@ describe('default template engine', function () {
 
   });
 
-  //ss.client.templateEngine.use('angular');
-
 
 });
