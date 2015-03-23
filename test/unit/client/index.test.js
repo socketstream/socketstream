@@ -157,6 +157,12 @@ describe('client asset manager index', function () {
         ss.client.unload();
         ss.client.assets.unload();
         ss.client.forget();
+
+        ss.client.formattes.add('css');
+        ss.client.formattes.add('javascript');
+        ss.client.formattes.add('map');
+        ss.client.formattes.add('html');
+
         ss.client.assets.load();
 
         // options and load client
@@ -181,6 +187,12 @@ describe('client asset manager index', function () {
           ss.client.unload();
           ss.client.assets.unload();
           ss.client.forget();
+
+          ss.client.formatters.add('css');
+          ss.client.formatters.add('javascript');
+          ss.client.formatters.add('map');
+          ss.client.formatters.add('html');
+
           ss.client.assets.load();
 
           // options and load client

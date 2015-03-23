@@ -268,6 +268,51 @@ NG_DOCS={
     },
     {
       "section": "api",
+      "id": "client",
+      "shortName": "client",
+      "type": "service",
+      "moduleName": "client",
+      "shortDescription": "Client serving, bundling, development, building.",
+      "keywords": "api building bundling client clients css defined development file html js module production require returned served service serving single socketstream"
+    },
+    {
+      "section": "api",
+      "id": "client.define",
+      "shortName": "client.define",
+      "type": "service",
+      "moduleName": "client",
+      "shortDescription": "Define a client view to serve.",
+      "keywords": "api client clientdefinition code css define definition function http logical my-view paths res route serve serveclient service ss tmpl view"
+    },
+    {
+      "section": "api",
+      "id": "client.formatters:formatters",
+      "shortName": "formatters",
+      "type": "service",
+      "moduleName": "client",
+      "shortDescription": "Formatter registry",
+      "keywords": "api client formatter formatters registry service"
+    },
+    {
+      "section": "api",
+      "id": "client.formatters:formatters",
+      "shortName": "formatters",
+      "type": "service",
+      "moduleName": "client",
+      "shortDescription": "This is for the module returned by require(&#39;socketstream&#39;).client.formatters.",
+      "keywords": "add api asset client config configuring define formatter formatters method module nameormodule object parameters rendering require returned service socketstream"
+    },
+    {
+      "section": "api",
+      "id": "client.templateEngine:templateEngine",
+      "shortName": "templateEngine",
+      "type": "service",
+      "moduleName": "client",
+      "shortDescription": "This is for the module returned by require(&#39;socketstream&#39;).client.templateEngine.",
+      "keywords": "api built-in bundler callback cb client config default directories dirs engine engines enging entries error files function generate indicated instance making markup module object output passed receive render require returned service socketstream string template templateengine templates templating"
+    },
+    {
+      "section": "api",
       "id": "events",
       "shortName": "events",
       "type": "service",
@@ -322,21 +367,12 @@ NG_DOCS={
     },
     {
       "section": "api",
-      "id": "ss.client.formatters:formatters",
-      "shortName": "formatters",
-      "type": "service",
-      "moduleName": "ss.client",
-      "shortDescription": "Formatter registry",
-      "keywords": "add api asset client config configuring define formatter formatters method nameormodule object parameters registry rendering service ss"
-    },
-    {
-      "section": "api",
       "id": "ss.client:client",
       "shortName": "client",
       "type": "service",
       "moduleName": "ss",
-      "shortDescription": "Client serving, bundling, development, building.",
-      "keywords": "add allow allows api assets building bundling client clients code coffee compress content css defined development file flags format function html js lib library libs module options production require send served service serving single ss system type"
+      "shortDescription": "Allow other libs to send assets to the client",
+      "keywords": "add allow allows api assets client code coffee compress content flags format function js lib library libs module options require send service ss system type"
     },
     {
       "section": "api",

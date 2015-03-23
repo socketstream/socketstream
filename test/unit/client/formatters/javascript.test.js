@@ -24,6 +24,8 @@ describe('js formatter', function () {
 
     it('should return an object describing what file extensions the formatter handles', function() {
 
+      ss.client.formatters.add('javascript');
+
       ss.api.bundler.load();
       var formatters = ss.api.client.formatters = ss.client.formatters.load();
 
@@ -32,6 +34,8 @@ describe('js formatter', function () {
     });
 
     it('should return an object describing what asset and content types that the formatter handles',function() {
+
+      ss.client.formatters.add('javascript');
 
       ss.api.bundler.load();
       var formatters = ss.api.client.formatters = ss.client.formatters.load();
@@ -47,6 +51,8 @@ describe('js formatter', function () {
 
     it('should return the JS file content as is', function() {
 
+      ss.client.formatters.add('javascript');
+
       ss.api.bundler.load();
       ss.api.client.formatters = ss.client.formatters.load();
 
@@ -61,6 +67,8 @@ describe('js formatter', function () {
     });
 
     it('should return the MAP file content as is for processing',function() {
+
+      ss.client.formatters.add('map');
 
       ss.api.bundler.load();
       ss.api.client.formatters = ss.client.formatters.load();

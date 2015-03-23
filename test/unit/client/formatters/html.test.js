@@ -24,6 +24,8 @@ describe('html formatter', function () {
 
     it('should return an object describing what file extensions the formatter handles', function() {
 
+      ss.client.formatters.add('html');
+
       ss.api.bundler.load();
       var formatters = ss.api.client.formatters = ss.client.formatters.load();
 
@@ -33,6 +35,8 @@ describe('html formatter', function () {
 
 
     it('should return an object describing what asset and content types that the formatter handles',function() {
+
+      ss.client.formatters.add('html');
 
       ss.api.bundler.load();
       var formatters = ss.api.client.formatters = ss.client.formatters.load();
@@ -46,6 +50,8 @@ describe('html formatter', function () {
     describe('#compile', function () {
 
       it('should return the HTML file content as is', function() {
+
+        ss.client.formatters.add('html');
 
         ss.api.bundler.load();
         ss.api.client.formatters = ss.client.formatters.load();

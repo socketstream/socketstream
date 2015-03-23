@@ -345,6 +345,8 @@ describe('default bundler', function () {
       ss.client.assets.unload();
       ss.client.forget();
       ss.client.assets.load();
+
+      ss.client.formatters.add('html');
     });
 
     /*
@@ -462,6 +464,8 @@ describe('default bundler', function () {
       ss.client.assets.unload();
       ss.client.forget();
       ss.client.assets.load();
+
+      ss.client.formatters.add('html');
     });
 
     it('should contain a tail script by default',function() {

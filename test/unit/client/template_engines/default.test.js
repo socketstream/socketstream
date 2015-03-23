@@ -24,14 +24,17 @@ describe('default template engine', function () {
     // back to initial client state
     ss.client.assets.unload();
     ss.client.assets.load();
+
+    ss.client.formatters.add('html');
   });
 
   afterEach(function() {
+    ss.client.unload();
     ss.client.forget();
   });
 
 
-  it('should output an inline template for use with jQuery or HoganJS', function() {
+  it('should output an inline template for use with jQuery or HoganJS', function(done) {
 
     var client = ss.client.define('abc', {
         css: './abc/style.css',
@@ -41,7 +44,7 @@ describe('default template engine', function () {
 
     ss.api.bundler.load();
 
-    var engines = ss.api.client.templateEngines = templateEngine.load();
+    var engines = ss.api.client.templateEngines = ss.client.templateEngine.load();
     var formatters = ss.api.client.formatters = ss.client.formatters.load();
 
     var bundler = ss.api.bundler.get('abc');
@@ -50,8 +53,35 @@ describe('default template engine', function () {
       { file: './templates/1.html', importedBy:'./templates/1.html', includeType:'html' }
     ];
 
-    templateEngine.generate(bundler, files, function(tag) {
+    ss.client.templateEngine.generate(bundler, files, function(tag) {
       tag.should.be.equal('<script id="tmpl-templates-1" type="text/x-tmpl"><body><div>1</div></body>\n</script>');
+      done();
+    });
+
+  });
+
+  it('should output an inline template for a subpath', function(done) {
+
+    var client = ss.client.define('abc', {
+      css: './abc/style.css',
+      code: './abc/index.a',
+      view: './abc/abc.html'
+    });
+
+    ss.api.bundler.load();
+
+    var engines = ss.api.client.templateEngines = ss.client.templateEngine.load();
+    var formatters = ss.api.client.formatters = ss.client.formatters.load();
+
+    var bundler = ss.api.bundler.get('abc');
+
+    var files = [
+      { file: './templates/abc/1.html', importedBy:'./templates/abc/1.html', includeType:'html' }
+    ];
+
+    ss.client.templateEngine.generate(bundler, files, function(tag) {
+      tag.should.be.equal('<script id="tmpl-templates-abc-1" type="text/x-tmpl"><div>abc 1</div>\n</script>');
+      done();
     });
 
   });
