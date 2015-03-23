@@ -309,7 +309,7 @@ NG_DOCS={
       "type": "service",
       "moduleName": "client",
       "shortDescription": "This is for the module returned by require(&#39;socketstream&#39;).client.templateEngine.",
-      "keywords": "api built-in bundler callback cb client config default directories dirs engine engines enging entries error files function generate indicated instance making markup module object output passed receive render require returned service socketstream string template templateengine templates templating"
+      "keywords": "angular api built-in bundler callback cb client config custom custom-engine default directories dirs ember engine engines enging entries error files function generate indicated instance making markup module object output passed receive render require returned service socketstream ss string template templateengine templates templating"
     },
     {
       "section": "api",
