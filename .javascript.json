@@ -1,0 +1,37 @@
+
+{
+  "asi": false,
+  "bitwise": true,
+  "browser": true,
+  "node": true,
+  "camelcase": true,
+  "curly": true,
+  "forin": true,
+  "immed": true,
+  "latedef": "nofunc",
+  "maxlen": 120,
+  "newcap": true,
+  "noarg": true,
+  "noempty": true,
+  "nonew": true,
+  "predef": [
+    "$",
+    "jQuery",
+
+    "jasmine",
+    "beforeEach",
+    "describe",
+    "expect",
+    "it",
+    "xit",
+
+    "angular",
+    "inject",
+    "module",
+    "exports"
+  ],
+  "quotmark": true,
+  "trailing": true,
+  "undef": true,
+  "unused": true
+}
