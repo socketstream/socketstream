@@ -6,28 +6,9 @@ var path    = require('path'),
   ss      = require( '../../../../lib/socketstream'),
   bundlerMod = require('../../../../lib/client/bundler'),
   //engineMod = require('../../../../lib/client/template_engine'),
-  options = ss.client.options;
+  options = ss.client.options,
+  defineAbcClient = require('../abcClient');
 
-function defineAbcClient(conf) {
-  var r = {
-    css: './abc/style.css',
-    code: './abc/index.js',
-    view: './abc/abc.html',
-    tmpl: './templates/abc/1.html'
-  };
-  for(var k in conf) r[k] = conf[k];
-  return ss.client.define('abc',r);
-}
-
-function defineAbcClientAndLoad(conf,run) {
-  var client = defineAbcClient(conf);
-  run();
-  ss.api.bundler.load();
-  ss.api.client.templateEngines = ss.client.templateEngine.load();
-  ss.api.client.formatters = ss.client.formatters.load();
-
-  return client;
-}
 
 describe('angular.js template engine', function () {
 
@@ -56,7 +37,7 @@ describe('angular.js template engine', function () {
 
   it('should output an inline template when angular is used by default', function(done) {
 
-    defineAbcClientAndLoad({ code: './abc/index.a' },function() {
+    defineAbcClient({ code: './abc/index.a' },function() {
       ss.client.templateEngine.use('angular');
     });
 
@@ -74,7 +55,7 @@ describe('angular.js template engine', function () {
 
   it('should output an inline template when angular is used by / default', function(done) {
 
-    defineAbcClientAndLoad({ code: './abc/index.a' },function() {
+    defineAbcClient({ code: './abc/index.a' },function() {
       ss.client.templateEngine.use('angular', '/');
     });
 
@@ -92,7 +73,7 @@ describe('angular.js template engine', function () {
 
   it('should output an inline template when angular is used by ./templates root', function(done) {
 
-    defineAbcClientAndLoad({ code: './abc/index.a' },function() {
+    defineAbcClient({ code: './abc/index.a' },function() {
       ss.client.templateEngine.use('angular', './templates');
     });
 
@@ -110,7 +91,7 @@ describe('angular.js template engine', function () {
 
   it('should output a regular template when angular is used by ./templates root', function(done) {
 
-    defineAbcClientAndLoad({ code: './abc/index.a' },function() {
+    defineAbcClient({ code: './abc/index.a' },function() {
       ss.client.templateEngine.use('angular', './templates');
     });
 
@@ -128,7 +109,7 @@ describe('angular.js template engine', function () {
 
   it('should output an template when engine is tied to subpath within templates', function(done) {
 
-    defineAbcClientAndLoad({ code: './abc/index.a' },function() {
+    defineAbcClient({ code: './abc/index.a' },function() {
       ss.client.templateEngine.use('angular','/abc');
     });
 
