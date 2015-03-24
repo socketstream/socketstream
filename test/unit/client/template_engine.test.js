@@ -14,6 +14,41 @@ describe('Template engine', function() {
 
   options.liveReload = false;
 
+  describe('builtin use', function() {
+
+    beforeEach(function() {
+
+      // back to initial client state
+      ss.client.assets.unload();
+      ss.client.assets.load();
+
+      ss.client.formatters.add('html');
+    });
+
+    afterEach(function() {
+      ss.client.unload();
+      ss.client.forget();
+    });
+
+    it('should throw error for unknown builtin engine', function() {
+
+      defineAbcClient({ },function() {
+        (function() {
+          ss.client.templateEngine.use('not-there');
+        }).should.throw('Cannot find module \'./template_engines/not-there\'');
+      });
+    });
+
+    it('should throw error for module use', function() {
+
+      (function() {
+        defineAbcClient({ },function() {
+          ss.client.templateEngine.use('angular','my-module');
+        });
+      }).should.throw('Directory name \'my-module\' passed to second argument of ss.client.templateEngine.use() command must start with / or ./');
+    });
+  });
+
   describe('custom use', function() {
 
     var oldEngine = {
@@ -21,6 +56,9 @@ describe('Template engine', function() {
         root.should.equal(ss.root);
         return {
           name: 'Old',
+          selectFormatter: function() {
+            return null;
+          },
           process: function (template, path, id) {
             return '<script id="old-' + id + '" type="text/x-tmpl"><!-- ' + config.comment + ' -->' + template + '</script>';
           }
@@ -97,5 +135,31 @@ describe('Template engine', function() {
         done();
       });
     });
+
+    /*TODO
+    it('should wrap with old API custom engine selectFormatter function', function(done) {
+
+      sinon.spy(oldEngine, 'init');
+
+      defineAbcClient({ },function() {
+        ss.client.templateEngine.use(oldEngine,'.',{comment:'123'});
+      });
+
+      sinon.assert.calledOnce(oldEngine.init);
+
+
+      var files = [
+        {file: './templates/1.html', importedBy: './templates/1.html', includeType: 'html'}
+      ];
+
+      var bundler = ss.api.bundler.get('abc');
+
+      ss.client.templateEngine.generate(bundler, files, function (tag) {
+        tag.should.be.equal('<script id="old-templates-1" type="text/x-tmpl"><!-- 123 --><body><div>1</div></body>\n</script>');
+        done();
+      });
+    });
+    */
+
   });
 });
