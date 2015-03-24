@@ -4,7 +4,8 @@ var path    = require('path'),
   should  = require('should'),
   ss      = require( '../../../lib/socketstream'),
   Router = require('../../../lib/http/router').Router,
-  options = ss.client.options;
+  options = ss.client.options,
+  defineAbcClient = require('./abcClient');
 
 var responseStub = {
     writeHead: function(status,headers) {},
@@ -29,40 +30,33 @@ describe('constants',function() {
 
   it('should be available in formatters', function() {
 
-    var client = ss.client.define('abc', {
-      css: './abc/style.css',
-      code: './abc/index.a',
-      view: './abc/abc.html'
+    var client = defineAbcClient({ code: './abc/index.a' }, function() {
+
+      require('../../../lib/client/serve/dev')(ss.api, router, options);
+
+      ss.api.client.send('constant','abc','abc');
+
+      var formatter = {
+        init: function (root, config) {
+
+          return {
+            name: 'f1',
+            extensions: ['a', 'b'],
+            assetType: 'js',
+            contentType: 'text/javascript; charset=utf-8',
+            compile: function (pathEntry, options, cb) {
+              options.constants.should.be.type('object');
+              options.constants.abc.should.equal('abc');
+              cb('//');
+            }
+          };
+        }
+      };
+
+      ss.client.formatters.add(formatter,{});
+      //ss.client.templateEngine.use('angular');
     });
 
-    require('../../../lib/client/serve/dev')(ss.api, router, options);
-
-    ss.api.client.send('constant','abc','abc');
-
-    var formatter = {
-      init: function (root, config) {
-
-        return {
-          name: 'f1',
-          extensions: ['a', 'b'],
-          assetType: 'js',
-          contentType: 'text/javascript; charset=utf-8',
-          compile: function (pathEntry, options, cb) {
-            options.constants.should.be.type('object');
-            options.constants.abc.should.equal('abc');
-            cb('//');
-          }
-        };
-      }
-    };
-
-    ss.client.formatters.add(formatter,{});
-    //ss.client.templateEngine.use('angular');
-
-    // load
-    ss.api.bundler.load();
-    ss.api.client.formatters = ss.client.formatters.load();
-    //ss.api.client.templateEngines = templateEngine.load();
 
     // dev time URL
     var req = {url: '/assets/abc/'+client.id+'.js?_=./abc/index.a' };
@@ -97,40 +91,32 @@ describe('locals', function() {
 
   it('should be available in formatters', function() {
 
-    var client = ss.client.define('abc', {
-      css: './abc/style.css',
-      code: './abc/index.a',
-      view: './abc/abc.html'
+    var client = defineAbcClient({ code: './abc/index.a' }, function() {
+
+      require('../../../lib/client/serve/dev')(ss.api, router, options);
+
+      ss.api.client.send('local','abc','abc');
+
+      var formatter = {
+        init: function (root, config) {
+
+          return {
+            name: 'f1',
+            extensions: ['a', 'b'],
+            assetType: 'js',
+            contentType: 'text/javascript; charset=utf-8',
+            compile: function (pathEntry, options, cb) {
+              options.locals.should.be.type('object');
+              options.locals.abc.should.equal('abc');
+              cb('//');
+            }
+          };
+        }
+      };
+
+      ss.client.formatters.add(formatter,{});
+      //ss.client.templateEngine.use('angular');
     });
-
-    require('../../../lib/client/serve/dev')(ss.api, router, options);
-
-    ss.api.client.send('local','abc','abc');
-
-    var formatter = {
-      init: function (root, config) {
-
-        return {
-          name: 'f1',
-          extensions: ['a', 'b'],
-          assetType: 'js',
-          contentType: 'text/javascript; charset=utf-8',
-          compile: function (pathEntry, options, cb) {
-            options.locals.should.be.type('object');
-            options.locals.abc.should.equal('abc');
-            cb('//');
-          }
-        };
-      }
-    };
-
-    ss.client.formatters.add(formatter,{});
-    //ss.client.templateEngine.use('angular');
-
-    // load
-    ss.api.bundler.load();
-    ss.api.client.formatters = ss.client.formatters.load();
-    //ss.api.client.templateEngines = templateEngine.load();
 
     // dev time URL
     var req = {url: '/assets/abc/'+client.id+'.js?_=./abc/index.a' };
