@@ -9,7 +9,10 @@ var path    = require('path'),
 
   describe('code formatter loading API', function () {
 
+    describe('ss api', function() {
 
+      it('should throw exception when called as function');
+    });
 
     describe('#add', function () {
 

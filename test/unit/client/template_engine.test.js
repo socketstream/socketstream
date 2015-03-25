@@ -136,6 +136,7 @@ describe('Template engine', function() {
       });
     });
 
+    it('should wrap with old API custom engine selectFormatter function');
     /*TODO
     it('should wrap with old API custom engine selectFormatter function', function(done) {
 
@@ -161,5 +162,12 @@ describe('Template engine', function() {
     });
     */
 
+    it('should append suffix');
+
+    it('should prepend prefix');
+
+    it('should catch and pass error object');
+
+    it('should suggest good default IDs');
   });
 });
