@@ -118,14 +118,14 @@ describe('bundler', function () {
 
       var templates = ss.api.bundler.entries(abc,'tmpl');
       templates.should.eql([{
-        file: './templates/main.html', importedBy: './templates/main.html', includeType: 'html'
+        file: './templates/main.html', importedBy: './templates/main.html', includeType: 'html', ext:'html'
       }]);
 
       var templates = ss.api.bundler.entries(abc2,'tmpl');
       templates.should.eql([
-        { file: './templates/main.html', importedBy: './templates/main.html', includeType: 'html' },
-        { file: './templates/abc/1.html', importedBy: './templates/abc/1.html', includeType: 'html' },
-        { file: './templates/abc/2.html', importedBy: './templates/abc/2.html', includeType: 'html' }
+        { file: './templates/main.html', importedBy: './templates/main.html', includeType: 'html', ext:'html' },
+        { file: './templates/abc/1.html', importedBy: './templates/abc/1.html', includeType: 'html', ext:'html' },
+        { file: './templates/abc/2.html', importedBy: './templates/abc/2.html', includeType: 'html', ext:'html' }
       ]);
     });
 
@@ -145,8 +145,8 @@ describe('bundler', function () {
 
       var templates = ss.api.bundler.entries(abc2,'tmpl');
       templates.should.eql([
-        { file: './templates/abc/1.html', importedBy: './templates/abc/1.html', includeType: 'html' },
-        { file: './templates/abc/2.html', importedBy: './templates/abc/2.html', includeType: 'html' }
+        { file: './templates/abc/1.html', importedBy: './templates/abc/1.html', includeType: 'html', ext:'html' },
+        { file: './templates/abc/2.html', importedBy: './templates/abc/2.html', includeType: 'html', ext:'html' }
       ]);
     });
 
