@@ -56,15 +56,15 @@ var path    = require('path'),
 
       it('should append a module for handling a code format (new API)',function() {
 
-        var formatter = function (ss, config) {
-
+        var formatter = function (api, config) {
+            api.should.equal(ss.api);
             return {
               name: 'f1',
               extensions: ['a', 'b'],
               assetType: 'js',
               contentType: 'text/javascript; charset=utf-8',
               config: config,
-              root: ss.root,
+              root: api.root,
               compile: function (pathEntry, options, cb) {
                 cb('//');
               }
