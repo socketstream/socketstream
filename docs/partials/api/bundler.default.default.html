@@ -7,17 +7,7 @@
 <div class="description"><div class="bundler-default-page bundler-default-default-page"><p>The default bundler of HTML, CSS &amp; JS</p>
 </div></div>
 <div class="member method"><h2 id="methods">Methods</h2>
-<ul class="methods"><li><h3 id="methods_assetloader">assetLoader()</h3>
-<div class="assetloader"><div class="bundler-default-page bundler-default-default-assetloader-page"><p>Return entry for the JS loader depending on the includes.system client config.</p>
-</div><h5 id="methods_assetloader_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-assetentry">AssetEntry</a></td><td><div class="bundler-default-page bundler-default-default-assetloader-page"><p>Loader resource</p>
-</div></td></tr></table></div>
-</li>
-<li><h3 id="methods_assetstart">assetStart()</h3>
-<div class="assetstart"><div class="bundler-default-page bundler-default-default-assetstart-page"><p>Return the resource for starting the view. It is code for immediate execution at the end of the page.</p>
-</div><h5 id="methods_assetstart_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-assetentry">AssetEntry</a></td><td><div class="bundler-default-page bundler-default-default-assetstart-page"><p>Start Script resource</p>
-</div></td></tr></table></div>
-</li>
-<li><h3 id="methods_entries">entries(assetType, systemAssets)</h3>
+<ul class="methods"><li><h3 id="methods_entries">entries(assetType, systemAssets)</h3>
 <div class="entries"><div class="bundler-default-page bundler-default-default-entries-page"><p>Provides the view and the pack functions with a
 list of entries for an asset type relative to the client directory.
 The default implementation is used.</p>
@@ -26,11 +16,11 @@ The default implementation is used.</p>
 </div></td></tr></tbody></table><h5 id="methods_entries_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">[AssetEntry]</a></td><td><div class="bundler-default-page bundler-default-default-entries-page"><p>List of output entries</p>
 </div></td></tr></table></div>
 </li>
-<li><h3 id="methods_systemmodule">systemModule(name)</h3>
-<div class="systemmodule"><div class="bundler-default-page bundler-default-default-systemmodule-page"><p>Return the resource for a registered system module by the given name. It uses
-the default wrapCode for module registration with require.</p>
-</div><h5 id="methods_systemmodule_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>name</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="bundler-default-page bundler-default-default-systemmodule-page"><p>Logical Module Name</p>
-</div></td></tr></tbody></table><h5 id="methods_systemmodule_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-assetentry">AssetEntry</a></td><td><div class="bundler-default-page bundler-default-default-systemmodule-page"><p>Module resource</p>
+<li><h3 id="methods_system">system()</h3>
+<div class="system"><div class="bundler-default-page bundler-default-default-system-page"><p>Return entries for the loader/start/module depending on includes.system client config and system assets.
+Multiple arguments will attempt to add module for the name.
+Special module names are &#39;loader&#39; and &#39;start&#39;.</p>
+</div><h5 id="methods_system_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-assetentry">AssetEntry</a></td><td><div class="bundler-default-page bundler-default-default-system-page"><p>Resource entries array</p>
 </div></td></tr></table></div>
 </li>
 </ul>

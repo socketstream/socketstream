@@ -205,8 +205,8 @@ describe('default bundler', function () {
           ss.client.load();
 
           var bundler = ss.api.bundler.get('abc'),
-            entriesCSS = bundler.asset.entries('css'),
-            entriesJS = bundler.asset.entries('js');
+            entriesCSS = bundler.entries('css'),
+            entriesJS = bundler.entries('js');
 
           entriesCSS.should.have.lengthOf(1);
           entriesJS.should.have.lengthOf(3);
@@ -227,8 +227,8 @@ describe('default bundler', function () {
         ss.client.load();
 
         var bundler = ss.api.bundler.get('abc'),
-          entriesCSS = bundler.asset.entries('css'),
-          entriesJS = bundler.asset.entries('js');
+          entriesCSS = bundler.entries('css'),
+          entriesJS = bundler.entries('js');
 
         entriesCSS.should.have.lengthOf(0);
         entriesJS.should.have.lengthOf(3);
@@ -244,8 +244,8 @@ describe('default bundler', function () {
             ss.client.load();
 
             var bundler = ss.api.bundler.get('abc'),
-                entriesCSS = bundler.asset.entries('css'),
-                entriesJS = bundler.asset.entries('js');
+                entriesCSS = bundler.entries('css'),
+                entriesJS = bundler.entries('js');
 
             entriesCSS.should.have.lengthOf(0);
             entriesJS.should.have.lengthOf(4);
@@ -282,8 +282,8 @@ describe('default bundler', function () {
         ss.client.load();
 
         var bundler = ss.api.bundler.get('abc'),
-          entriesCSS = bundler.asset.entries('css'),
-          entriesJS = bundler.asset.entries('js');
+          entriesCSS = bundler.entries('css'),
+          entriesJS = bundler.entries('js');
 
         entriesCSS.should.have.lengthOf(0);
         entriesJS.should.have.lengthOf(5);
@@ -321,8 +321,8 @@ describe('default bundler', function () {
         ss.client.load();
 
         var bundler = ss.api.bundler.get('abc'),
-          entriesCSS = bundler.asset.entries('css'),
-          entriesJS = bundler.asset.entries('js');
+          entriesCSS = bundler.entries('css'),
+          entriesJS = bundler.entries('js');
 
         entriesCSS.should.have.lengthOf(0);
         entriesJS.should.have.lengthOf(1);
@@ -331,6 +331,14 @@ describe('default bundler', function () {
         entriesJS[0].file.should.be.equal('./abc/index.js');
         entriesJS[0].importedBy.should.be.equal('./abc/index.js');
       });
+
+      it('should render css asset file as empty if includes is false');
+
+      it('should not put css in entries if includes is false');
+
+      it('should exclude system from js asset file if includes is false');
+
+      it('should not put sytem in entries if includes is false');
   });
 
   //TODO locals set in different ways
