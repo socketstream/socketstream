@@ -49,9 +49,7 @@ describe('default template engine', function () {
 
     var bundler = ss.api.bundler.get('abc');
 
-    var files = [
-      { file: './templates/1.html', importedBy:'./templates/1.html', includeType:'html' }
-    ];
+    var files = [ bundler.entryFor('tmpl','./templates/1.html') ];
 
     ss.client.templateEngine.generate(bundler, files, function(tag) {
       tag.should.be.equal('<script id="tmpl-templates-1" type="text/x-tmpl"><body><div>1</div></body>\n</script>');
@@ -75,9 +73,7 @@ describe('default template engine', function () {
 
     var bundler = ss.api.bundler.get('abc');
 
-    var files = [
-      { file: './templates/abc/1.html', importedBy:'./templates/abc/1.html', includeType:'html' }
-    ];
+    var files = [ bundler.entryFor('tmpl','./templates/abc/1.html') ];
 
     ss.client.templateEngine.generate(bundler, files, function(tag) {
       tag.should.be.equal('<script id="tmpl-templates-abc-1" type="text/x-tmpl"><div>abc 1</div>\n</script>');

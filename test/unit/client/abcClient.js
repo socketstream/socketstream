@@ -22,6 +22,7 @@ function defineAbcClientAndLoad(conf,run,load) {
     ss.api.bundler.load();
     ss.api.client.templateEngines = ss.client.templateEngine.load();
     ss.api.client.formatters = ss.client.formatters.load();
+    ss.api.client.send('code', 'init', ss.client.options.defaultEntryInit);
   }
 
   return client;

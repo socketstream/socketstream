@@ -103,12 +103,9 @@ describe('Template engine', function() {
 
       sinon.assert.calledOnce(oldEngine.init);
 
-
-      var files = [
-        {file: './templates/1.html', importedBy: './templates/1.html', includeType: 'html'}
-      ];
-
       var bundler = ss.api.bundler.get('abc');
+
+      var files = [ bundler.entryFor('tmpl','./templates/1.html') ];
 
       ss.client.templateEngine.generate(bundler, files, function (tag) {
         tag.should.be.equal('<script id="old-templates-1" type="text/x-tmpl"><!-- 123 --><body><div>1</div></body>\n</script>');
@@ -124,11 +121,9 @@ describe('Template engine', function() {
 
       sinon.assert.calledOnce(newEngine);
 
-      var files = [
-        {file: './templates/1.html', importedBy: './templates/1.html', includeType: 'html'}
-      ];
-
       var bundler = ss.api.bundler.get('abc');
+
+      var files = [ bundler.entryFor('tmpl','./templates/1.html') ];
 
       ss.client.templateEngine.generate(bundler, files, function (tag) {
         tag.should.be.equal('<script id="new-templates-1" type="text/x-tmpl"><!-- 1243 --><body><div>1</div></body>\n</script>');

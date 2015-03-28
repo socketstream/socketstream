@@ -44,9 +44,7 @@ describe('Ember.js template engine', function () {
 
     var bundler = ss.api.bundler.get('abc');
 
-    var files = [
-      { file: './templates/1.html', importedBy:'./templates/1.html', includeType:'html' }
-    ];
+    var files = [ bundler.entryFor('tmpl','./templates/1.html') ];
 
     ss.client.templateEngine.generate(bundler, files, function(tag) {
       tag.should.be.equal('<script type="text/x-handlebars" data-template-name="templates-1"><body><div>1</div></body>\n</script>');

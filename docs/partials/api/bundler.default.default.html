@@ -11,6 +11,16 @@
 <div class="entries"><div class="bundler-default-page bundler-default-default-entries-page"><p>Provides the view and the pack functions with a
 list of entries for an asset type relative to the client directory.
 The default implementation is used.</p>
+<p>An entry describes:</p>
+<ul>
+<li>file: source file name relative to client directory</li>
+<li>importedFrom: Pulled in by require in other file</li>
+<li>content: If pre-loaded</li>
+<li>type: If system asset it will have type lib/mod</li>
+<li>bundle: which production bundle (html, tmpl, css, js, worker)</li>
+<li>assetType: css, js, html</li>
+<li>extension: source file extension</li>
+</ul>
 </div><h5 id="methods_entries_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>assetType</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="bundler-default-page bundler-default-default-entries-page"><p>js/css/tmpl</p>
 </div></td></tr><tr><td>systemAssets</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="bundler-default-page bundler-default-default-entries-page"><p>Collection of libs, modules, initCode</p>
 </div></td></tr></tbody></table><h5 id="methods_entries_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">[AssetEntry]</a></td><td><div class="bundler-default-page bundler-default-default-entries-page"><p>List of output entries</p>

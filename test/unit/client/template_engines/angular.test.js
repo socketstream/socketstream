@@ -41,11 +41,9 @@ describe('angular.js template engine', function () {
       ss.client.templateEngine.use('angular');
     });
 
-    var files = [
-      {file: './templates/1.html', importedBy: './templates/1.html', includeType: 'html'}
-    ];
-
     var bundler = ss.api.bundler.get('abc');
+
+    var files = [ bundler.entryFor('tmpl','./templates/1.html') ];
 
     ss.client.templateEngine.generate(bundler, files, function (tag) {
       tag.should.be.equal('<script type="text/ng-template" id="templates-1.html"><body><div>1</div></body>\n</script>');
@@ -59,11 +57,9 @@ describe('angular.js template engine', function () {
       ss.client.templateEngine.use('angular', '/');
     });
 
-    var files = [
-      {file: './templates/1.html', importedBy: './templates/1.html', includeType: 'html'}
-    ];
-
     var bundler = ss.api.bundler.get('abc');
+
+    var files = [ bundler.entryFor('tmpl','./templates/1.html') ];
 
     ss.client.templateEngine.generate(bundler, files, function (tag) {
       tag.should.be.equal('<script type="text/ng-template" id="templates-1.html"><body><div>1</div></body>\n</script>');
@@ -77,11 +73,9 @@ describe('angular.js template engine', function () {
       ss.client.templateEngine.use('angular', './templates');
     });
 
-    var files = [
-      {file: './templates/1.html', importedBy: './templates/1.html', includeType: 'html'}
-    ];
-
     var bundler = ss.api.bundler.get('abc');
+
+    var files = [ bundler.entryFor('tmpl','./templates/1.html') ];
 
     ss.client.templateEngine.generate(bundler, files, function (tag) {
       tag.should.be.equal('<script type="text/ng-template" id="templates-1.html"><body><div>1</div></body>\n</script>');
@@ -95,11 +89,9 @@ describe('angular.js template engine', function () {
       ss.client.templateEngine.use('angular', './templates');
     });
 
-    var files = [
-      {file: './abc/abc.html', importedBy: './abc/abc.html', includeType: 'html'}
-    ];
-
     var bundler = ss.api.bundler.get('abc');
+
+    var files = [ bundler.entryFor('tmpl','./abc/abc.html') ];
 
     ss.client.templateEngine.generate(bundler, files, function (tag) {
       tag.should.be.equal('<script id="tmpl-abc-abc" type="text/x-tmpl"><html>\n<head><title>ABC</title></head>\n<body><p>ABC</p></body>\n</html></script>');
@@ -113,15 +105,10 @@ describe('angular.js template engine', function () {
       ss.client.templateEngine.use('angular','/abc');
     });
 
-    var files = [
-      { file: './templates/abc/1.html', importedBy:'./templates/abc/1.html', includeType:'html' }
-    ];
-
-    var files1 = [
-      { file: './templates/1.html', importedBy:'./templates/1.html', includeType:'html' }
-    ];
-
     var bundler = ss.api.bundler.get('abc');
+
+    var files = [ bundler.entryFor('tmpl','./templates/abc/1.html') ];
+    var files1 = [ bundler.entryFor('tmpl','./templates/1.html') ];
 
     ss.client.templateEngine.generate(bundler, files, function(tag) {
       tag.should.be.equal('<script type="text/ng-template" id="templates-abc-1.html"><div>abc 1</div>\n</script>');
