@@ -4,3 +4,4 @@ node_modules
 dump.rdb
 npm-debug.log
 *.tgz
+/docs.js
