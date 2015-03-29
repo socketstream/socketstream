@@ -1,5 +1,6 @@
 coverage
 docs
+docs/js/docs-setup.js
 lib/client/system/libs
 lib/client/system/modules/eventemitter2.js
 new_project/client/code/libs/
