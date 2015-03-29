@@ -1,4 +1,3 @@
-[![Stories in Ready](https://badge.waffle.io/socketstream/socketstream.png?label=ready&title=Ready)](https://waffle.io/socketstream/socketstream)
 ![SocketStream!](https://github.com/socketstream/socketstream/raw/master/new_project/client/static/images/logo.png)
 
 # SocketStream
@@ -6,6 +5,7 @@
 [![Issue Stats](http://issuestats.com/github/socketstream/socketstream/badge/pr)](http://issuestats.com/github/socketstream/socketstream)
 [![Issue Stats](http://issuestats.com/github/socketstream/socketstream/badge/issue)](http://issuestats.com/github/socketstream/socketstream)
 [![Coverage Status](https://img.shields.io/coveralls/socketstream/socketstream.svg)](https://coveralls.io/r/socketstream/socketstream?branch=master)
+[![Stories in Ready](https://badge.waffle.io/socketstream/socketstream.png?label=ready&title=Ready)](https://waffle.io/socketstream/socketstream)
 
 
 ### Introduction
