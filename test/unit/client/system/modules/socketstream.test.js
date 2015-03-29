@@ -1,7 +1,7 @@
 'use strict';
 
 var path    = require('path'),
-    ss      = require( path.join(process.env.PWD, 'lib/socketstream'));
+    ss      = require( path.join('../../../../..', 'lib/socketstream'));
 
 
 describe('socketstream client library', function () {

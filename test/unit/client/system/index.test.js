@@ -2,7 +2,7 @@
 
 var path    = require('path'),
     should  = require('should'),
-    ss      = require( path.join(process.env.PWD, 'lib/socketstream')),
+    ss      = require( path.join('../../../..', 'lib/socketstream')),
     options = ss.client.options;
 
 describe('client system library', function () {

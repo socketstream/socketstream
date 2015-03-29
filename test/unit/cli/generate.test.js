@@ -5,9 +5,9 @@ var exec                                  = require('child_process').exec,
     fs                                    = require('fs'),
     path                                  = require('path'),
     async                                 = require('async'),
-    generate                              = require(path.join(process.env.PWD, 'lib/cli/generate')),
+    generate                              = require('../../../lib/cli/generate'),
     demoAppEndDir                         = 'test/results/waaa',
-    demoAppPath                           = path.join(process.env.PWD, demoAppEndDir),
+    demoAppPath                           = path.join(__dirname,'../../..', demoAppEndDir),
     program                               = {},
     logs                                  = [],
     newProjectDirectoriesThatShouldExist  = [];
@@ -48,7 +48,7 @@ describe('lib/cli/generate', function () {
 
     beforeEach(function (done) {
 
-        
+
 
         logs    = [];
 

@@ -255,7 +255,7 @@ NG_DOCS={
       "type": "service",
       "moduleName": "bundler",
       "shortDescription": "The default bundler of HTML, CSS &amp; JS",
-      "keywords": "api asset assetcss assethtml assetjs assetloader assetstart assettype assetworker bundler client code collection config css default define depending directory entries entry execution functions html implementation includes initcode js libs list load loader logical method module modules output pack registered registration relative require resource return script service start starting system systemassets systemmodule tominifiedcss tominifiedjs type view worker wrapcode"
+      "keywords": "add api arguments array asset assetcss assethtml assetjs assetloader assets assetstart assettype assetworker attempt bundle bundler client collection config content css default define depending describes directory entries entry extension file functions html implementation importedfrom includes initcode js lib libs list load loader method module modules multiple names output pack pre-loaded production pulled relative require resource return service source special start system systemassets systemmodule tmpl tominifiedcss tominifiedjs type view worker"
     },
     {
       "section": "api",
@@ -265,6 +265,51 @@ NG_DOCS={
       "moduleName": "bundler",
       "shortDescription": "The webpack bundler of HTML, CSS &amp; JS",
       "keywords": "api asset assettype bundler client collection concept css custom demonstration directory entries functions html improved initcode js libs list method modules output pack purposes relative service systemassets type validate view webpack"
+    },
+    {
+      "section": "api",
+      "id": "client",
+      "shortName": "client",
+      "type": "service",
+      "moduleName": "client",
+      "shortDescription": "Client serving, bundling, development, building.",
+      "keywords": "api building bundling client clients css defined development file html js module production require returned served service serving single socketstream"
+    },
+    {
+      "section": "api",
+      "id": "client.define",
+      "shortName": "client.define",
+      "type": "service",
+      "moduleName": "client",
+      "shortDescription": "Define a client view to serve.",
+      "keywords": "api client clientdefinition code css define definition function http logical my-view paths res route serve serveclient service ss tmpl view"
+    },
+    {
+      "section": "api",
+      "id": "client.formatters:formatters",
+      "shortName": "formatters",
+      "type": "service",
+      "moduleName": "client",
+      "shortDescription": "Formatter registry",
+      "keywords": "api client formatter formatters registry service"
+    },
+    {
+      "section": "api",
+      "id": "client.formatters:formatters",
+      "shortName": "formatters",
+      "type": "service",
+      "moduleName": "client",
+      "shortDescription": "This is for the module returned by require(&#39;socketstream&#39;).client.formatters.",
+      "keywords": "add api asset client config configuring define formatter formatters method module nameormodule object parameters rendering require returned service socketstream"
+    },
+    {
+      "section": "api",
+      "id": "client.templateEngine:templateEngine",
+      "shortName": "templateEngine",
+      "type": "service",
+      "moduleName": "client",
+      "shortDescription": "This is for the module returned by require(&#39;socketstream&#39;).client.templateEngine.",
+      "keywords": "angular api built-in bundler callback cb client config custom custom-engine default directories dirs ember engine engines enging entries error files function generate indicated instance making markup module object output passed receive render require returned service socketstream ss string template templateengine templates templating"
     },
     {
       "section": "api",
@@ -326,8 +371,8 @@ NG_DOCS={
       "shortName": "client",
       "type": "service",
       "moduleName": "ss",
-      "shortDescription": "Client serving, bundling, development, building.",
-      "keywords": "add allow allows api assets building bundling client clients code coffee compress content css defined development file flags format function html js lib library libs module options production require send served service serving single ss system type"
+      "shortDescription": "Allow other libs to send assets to the client",
+      "keywords": "add allow allows api assets client code coffee compress content flags format function js lib library libs module options require send service ss system type"
     },
     {
       "section": "api",
@@ -344,7 +389,7 @@ NG_DOCS={
       "type": "service",
       "moduleName": "ss",
       "shortDescription": "Contains method stubs for logging to console (by default) or",
-      "keywords": "api assigning choose console debug default error fairly function happened info informed keeping level log logging method override parameters provider require service socketstream ss stubs sysadmin takes time trivial unexpected var wakeup warn winston"
+      "keywords": "api apply arguments assigning calls choose console debug default error fairly function happened info informed keeping level log logging method override parameters plugins provider require service socketstream ss stubs switch sysadmin takes time trace tracing trivial unexpected var wakeup warn winston"
     },
     {
       "section": "api",

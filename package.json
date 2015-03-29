@@ -68,6 +68,7 @@
     "npm-dview": "1.1.2",
     "shelljs": "0.3.0",
     "should": "4.6.1",
+    "sinon": "^1.14.1",
     "supertest": "0.15.0"
   },
   "scripts": {
@@ -75,7 +76,7 @@
     "checkDependencies": "node_modules/.bin/npm-dview",
     "lint": "node_modules/.bin/jshint .",
     "notes": "node_modules/.bin/notes",
-    "test": "node_modules/.bin/mocha test/unit/**/* --reporter spec",
+    "test": "node_modules/.bin/mocha test/unit/**/* --reporter spec --require should --require sinon",
     "testDebug": "node_modules/.bin/mocha --debug-brk test/unit/**/* --reporter spec"
   },
   "directories": {

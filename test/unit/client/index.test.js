@@ -8,12 +8,19 @@ var path    = require('path'),
 
 describe('client asset manager index', function () {
 
+  ss.root = ss.api.root = path.join(__dirname, '../../../fixtures/project');
+
     var origDefaultEntryInit = options.defaultEntryInit;
 
     afterEach(function() {
       ss.client.forget();
     });
 
+    describe('#api', function() {
+        it('should return client root', function() {
+          ss.client.root.should.equal( path.join(__dirname,'../../fixtures/project/client') );
+        });
+    });
 
     describe('#formatters', function () {
 
@@ -157,6 +164,12 @@ describe('client asset manager index', function () {
         ss.client.unload();
         ss.client.assets.unload();
         ss.client.forget();
+
+        ss.client.formatters.add('css');
+        ss.client.formatters.add('javascript');
+        ss.client.formatters.add('map');
+        ss.client.formatters.add('html');
+
         ss.client.assets.load();
 
         // options and load client
@@ -181,6 +194,12 @@ describe('client asset manager index', function () {
           ss.client.unload();
           ss.client.assets.unload();
           ss.client.forget();
+
+          ss.client.formatters.add('css');
+          ss.client.formatters.add('javascript');
+          ss.client.formatters.add('map');
+          ss.client.formatters.add('html');
+
           ss.client.assets.load();
 
           // options and load client

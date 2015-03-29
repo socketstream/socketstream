@@ -1,14 +1,14 @@
 'use strict';
 
 var path      = require('path'),
-    UniqueSet = require( path.join(process.env.PWD, 'lib/utils/unique_set') ).UniqueSet,
+    UniqueSet = require( path.join('../../..', 'lib/utils/unique_set') ).UniqueSet,
     set;
 
 describe('lib/utils/unique_set', function () {
 
     beforeEach(function (done) {
 
-        
+
         set = new UniqueSet;
         done();
     });

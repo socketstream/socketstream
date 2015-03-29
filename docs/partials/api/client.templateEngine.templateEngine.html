@@ -1,0 +1,56 @@
+<h1><code ng:non-bindable="">templateEngine</code>
+<div><span class="hint">service in module <code ng:non-bindable="">client</code>
+</span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="client-templateengine-page client-templateengine-templateengine-page"><p>This is for the module returned by <code>require(&#39;socketstream&#39;).client.templateEngine</code>.</p>
+</div></div>
+<div class="member method"><h2 id="methods">Methods</h2>
+<ul class="methods"><li><h3 id="methods_generate">generate(bundler, files, cb)</h3>
+<div class="generate"><div class="client-templateengine-page client-templateengine-templateengine-generate-page"><p>Generate output (as a string) from Template Engines</p>
+<pre><code>function(out) {
+  if (typeof out === &#39;string&#39;) {
+  } else {
+  // error object
+  }
+}
+</code></pre></div><h5 id="methods_generate_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>bundler</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="client-templateengine-page client-templateengine-templateengine-generate-page"><ul>
+<li>Bundler instance for client.</li>
+</ul>
+</div></td></tr><tr><td>files</td><td><a href="" class="label type-hint type-hint-array">Array</a></td><td><div class="client-templateengine-page client-templateengine-templateengine-generate-page"><ul>
+<li>Entries for the templates to render markup for.</li>
+</ul>
+</div></td></tr><tr><td>cb</td><td><a href="" class="label type-hint type-hint-function">Function</a></td><td><div class="client-templateengine-page client-templateengine-templateengine-generate-page"><ul>
+<li>Callback to receive the string output or Error object.</li>
+</ul>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_use">use(name, dirs, config)</h3>
+<div class="use"><div class="client-templateengine-page client-templateengine-templateengine-use-page"><p>Use a template engine for the &#39;dirs&#39; indicated (will use it on all &#39;/&#39; dirs within /client/templates by default)</p>
+<p>To make templates in <code>/client/ember-view</code> available in Ember.</p>
+<pre><code>ss.client.templateEngine.use(&#39;ember&#39;,&#39;./ember-view&#39;);
+</code></pre><p>To make templates in <code>/client/angular-view</code> available in Angular.</p>
+<pre><code>ss.client.templateEngine.use(&#39;angular&#39;,&#39;./angular-view&#39;);
+</code></pre><p>To make templates in <code>/client/templates/angular-view</code> available in Angular.</p>
+<pre><code>ss.client.templateEngine.use(&#39;angular&#39;,&#39;/angular-view&#39;);
+</code></pre><p>To make templates anywhere in <code>/client</code> available in Angular.</p>
+<pre><code>ss.client.templateEngine.use(&#39;angular&#39;,&#39;/&#39;);
+</code></pre><p>To make templates anywhere in <code>/client</code> available using a custom engine.</p>
+<pre><code>ss.client.templateEngine.use(require(&#39;custom-engine&#39;));
+</code></pre><p>To make templates anywhere in <code>/client/custom</code> available using a custom engine.</p>
+<pre><code>ss.client.templateEngine.use(require(&#39;custom-engine&#39;),&#39;./custom&#39;);
+</code></pre></div><h5 id="methods_use_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>name</td><td><a href="" class="label type-hint type-hint-string">string</a><a href="" class="label type-hint type-hint-function">Function</a></td><td><div class="client-templateengine-page client-templateengine-templateengine-use-page"><ul>
+<li>Built-in templating engine or function making the enging.</li>
+</ul>
+</div></td></tr><tr><td>dirs</td><td><a href="" class="label type-hint type-hint-array">Array</a></td><td><div class="client-templateengine-page client-templateengine-templateengine-use-page"><ul>
+<li>Directories to use template for (optional)</li>
+</ul>
+</div></td></tr><tr><td>config</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="client-templateengine-page client-templateengine-templateengine-use-page"><ul>
+<li>Config passed to the template engine.</li>
+</ul>
+</div></td></tr></tbody></table></div>
+</li>
+</ul>
+</div>
+</div>

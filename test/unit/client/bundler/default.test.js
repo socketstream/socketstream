@@ -4,7 +4,8 @@ var path    = require('path'),
     should  = require('should'),
     ss      = require( '../../../../lib/socketstream'),
     viewer  = require( '../../../../lib/client/view'),
-    options = ss.client.options;
+    options = ss.client.options,
+    defineAbcClient = require('../abcClient');
 
 describe('default bundler', function () {
 
@@ -197,16 +198,14 @@ describe('default bundler', function () {
 
         it('should return entries for everything needed in view with just css', function() {
 
-          var client = ss.client.define('abc', {
-            css: './abc/style.css',
-            view: './abc/abc.html'
+          defineAbcClient({
+            code: undefined
+          },function() {
           });
 
-          ss.client.load();
-
           var bundler = ss.api.bundler.get('abc'),
-            entriesCSS = bundler.asset.entries('css'),
-            entriesJS = bundler.asset.entries('js');
+            entriesCSS = bundler.entries('css'),
+            entriesJS = bundler.entries('js');
 
           entriesCSS.should.have.lengthOf(1);
           entriesJS.should.have.lengthOf(3);
@@ -218,17 +217,15 @@ describe('default bundler', function () {
 
       it('should return no entries for css if not in includes', function() {
 
-        var client = ss.client.define('abc', {
+        defineAbcClient({
           includes: { css:false },
-          css: './abc/style.css',
-          view: './abc/abc.html'
+          code: undefined
+        },function() {
         });
 
-        ss.client.load();
-
         var bundler = ss.api.bundler.get('abc'),
-          entriesCSS = bundler.asset.entries('css'),
-          entriesJS = bundler.asset.entries('js');
+          entriesCSS = bundler.entries('css'),
+          entriesJS = bundler.entries('js');
 
         entriesCSS.should.have.lengthOf(0);
         entriesJS.should.have.lengthOf(3);
@@ -236,56 +233,51 @@ describe('default bundler', function () {
 
       it('should return entries for everything needed in view with just code', function() {
 
-            var client = ss.client.define('abc', {
-                code: './abc/index.js',
-                view: './abc/abc.html'
-            });
-
-            ss.client.load();
-
-            var bundler = ss.api.bundler.get('abc'),
-                entriesCSS = bundler.asset.entries('css'),
-                entriesJS = bundler.asset.entries('js');
-
-            entriesCSS.should.have.lengthOf(0);
-            entriesJS.should.have.lengthOf(4);
-
-            // libs
-            entriesJS[0].names.should.have.lengthOf(1);
-            entriesJS[0].names[0].should.be.equal('browserify.js');
-
-            // mod
-            entriesJS[1].name.should.be.equal('eventemitter2');
-            entriesJS[1].type.should.be.equal('mod');
-
-            // mod
-            entriesJS[2].name.should.be.equal('socketstream');
-            entriesJS[2].type.should.be.equal('mod');
-
-            // mod TODO
-            entriesJS[3].file.should.be.equal('./abc/index.js');
-            entriesJS[3].importedBy.should.be.equal('./abc/index.js');
-            //entriesJS[3].type.should.be.equal('mod');
-
-            //entriesJS.should.be.equal([{ path:'./abc.js'}]);
+        defineAbcClient({
+          css: undefined
+        },function() {
         });
+
+        var bundler = ss.api.bundler.get('abc'),
+            entriesCSS = bundler.entries('css'),
+            entriesJS = bundler.entries('js');
+
+        entriesCSS.should.have.lengthOf(0);
+        entriesJS.should.have.lengthOf(4);
+
+        // libs
+        entriesJS[0].names.should.have.lengthOf(1);
+        entriesJS[0].names[0].should.be.equal('browserify.js');
+
+        // mod
+        entriesJS[1].name.should.be.equal('eventemitter2');
+        entriesJS[1].type.should.be.equal('mod');
+
+        // mod
+        entriesJS[2].name.should.be.equal('socketstream');
+        entriesJS[2].type.should.be.equal('mod');
+
+        // mod TODO
+        entriesJS[3].file.should.be.equal('./abc/index.js');
+        entriesJS[3].importedBy.should.be.equal('./abc/index.js');
+        //entriesJS[3].type.should.be.equal('mod');
+
+        //entriesJS.should.be.equal([{ path:'./abc.js'}]);
+    });
 
       it('should return entries for everything needed in view with startInBundle', function() {
 
         options.startInBundle = true;
 
-        var client = ss.client.define('abc', {
-          code: './abc/index.js',
-          view: './abc/abc.html'
+        defineAbcClient({
+        },function() {
         });
 
-        ss.client.load();
-
         var bundler = ss.api.bundler.get('abc'),
-          entriesCSS = bundler.asset.entries('css'),
-          entriesJS = bundler.asset.entries('js');
+          entriesCSS = bundler.entries('css'),
+          entriesJS = bundler.entries('js');
 
-        entriesCSS.should.have.lengthOf(0);
+        entriesCSS.should.have.lengthOf(1);
         entriesJS.should.have.lengthOf(5);
 
         // libs
@@ -312,17 +304,14 @@ describe('default bundler', function () {
 
       it('should return entries for JS flagged in includes', function() {
 
-        var client = ss.client.define('abc', {
-          includes: { system:false, initCode: false},
-          code: './abc/index.js',
-          view: './abc/abc.html'
+        defineAbcClient({
+          includes: { system:false, initCode: false, css:false}
+        },function() {
         });
 
-        ss.client.load();
-
         var bundler = ss.api.bundler.get('abc'),
-          entriesCSS = bundler.asset.entries('css'),
-          entriesJS = bundler.asset.entries('js');
+          entriesCSS = bundler.entries('css'),
+          entriesJS = bundler.entries('js');
 
         entriesCSS.should.have.lengthOf(0);
         entriesJS.should.have.lengthOf(1);
@@ -331,6 +320,14 @@ describe('default bundler', function () {
         entriesJS[0].file.should.be.equal('./abc/index.js');
         entriesJS[0].importedBy.should.be.equal('./abc/index.js');
       });
+
+      it('should render css asset file as empty if includes is false');
+
+      it('should not put css in entries if includes is false');
+
+      it('should exclude system from js asset file if includes is false');
+
+      it('should not put sytem in entries if includes is false');
   });
 
   //TODO locals set in different ways
@@ -345,6 +342,8 @@ describe('default bundler', function () {
       ss.client.assets.unload();
       ss.client.forget();
       ss.client.assets.load();
+
+      ss.client.formatters.add('html');
     });
 
     /*
@@ -373,17 +372,14 @@ describe('default bundler', function () {
 
     it('should put specific constants in html', function() {
 
-      var client = ss.client.define('abc', {
-        code: './abc/index.js',
-        view: './abc/abc.html',
+      var client = defineAbcClient({
         constants: {
           abcl: {
             "b":"b"
           }
         }
+      },function() {
       });
-
-      ss.client.load();
 
       viewer(ss.api, client, options, function (html) {
         html.should.be.type('string');
@@ -396,21 +392,17 @@ describe('default bundler', function () {
       });
     });
 
-    it('should put global and specific constants in html', function() {
+    it('should put global and specific constants in html', function(done) {
 
-      var client = ss.client.define('abc', {
-        code: './abc/index.js',
-        view: './abc/abc.html',
+      var client = defineAbcClient({
         constants: {
           abcl: {
             "b":"b"
           }
         }
+      },function() {
+        ss.api.client.send('constant', 'abcg', {a:'a'});
       });
-
-      ss.api.client.send('constant', 'abcg', {a:'a'});
-
-      ss.client.load();
 
       viewer(ss.api, client, options, function (html) {
         html.should.be.type('string');
@@ -420,24 +412,23 @@ describe('default bundler', function () {
           '<body><p>ABC</p><script>var abcg={"a":"a"};\nvar abcl={"b":"b"};\nrequire("./code/abc/entry");</script></body>',
           '</html>'
         ].join('\n'))
+        done();
       });
     });
 
     it('should replace global with specific constants in html', function() {
 
-      var client = ss.client.define('abc', {
-        code: './abc/index.js',
-        view: './abc/abc.html',
+      var client = defineAbcClient({
         constants: {
           abcg: {
             "b":"b"
           }
         }
+      },function() {
+        ss.api.client.send('constant', 'abcg', {a:'a'});
       });
 
-      ss.api.client.send('constant', 'abcg', {a:'a'});
-
-      ss.client.load();
+      //breaks because old stuff hangs around
 
       viewer(ss.api, client, options, function (html) {
         html.should.be.type('string');
@@ -462,16 +453,19 @@ describe('default bundler', function () {
       ss.client.assets.unload();
       ss.client.forget();
       ss.client.assets.load();
+
+      ss.client.formatters.add('html');
+    });
+
+    it('should contain templates in the html',function() {
+
     });
 
     it('should contain a tail script by default',function() {
 
-      var client = ss.client.define('abc', {
-        code: './abc/index.js',
-        view: './abc/abc.html'
+      var client = defineAbcClient({
+      },function() {
       });
-
-      ss.client.load();
 
       viewer(ss.api, client, options, function (html) {
         html.should.be.type('string');
@@ -489,13 +483,10 @@ describe('default bundler', function () {
 
       options.startInBundle = true;
 
-      var client = ss.client.define('abc', {
-        includes: { system:false, initCode: false},
-        code: './abc/index.js',
-        view: './abc/abc.html'
+      var client = defineAbcClient({
+        includes: { system:false, initCode: false}
+      },function() {
       });
-
-      ss.client.load();
 
       viewer(ss.api, client, options, function(html) {
         html.should.be.type('string');
