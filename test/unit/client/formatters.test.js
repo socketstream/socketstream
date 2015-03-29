@@ -4,7 +4,8 @@ var path    = require('path'),
   should  = require('should'),
   sinon   = require('sinon'),
   ss      = require( '../../../lib/socketstream'),
-  options = ss.client.options;
+  options = ss.client.options,
+  defineAbcClient = require('./abcClient');
 
 
   describe('code formatter loading API', function () {
@@ -300,5 +301,53 @@ var path    = require('path'),
         });
       });
     });
+
+  describe('application',function() {
+
+    var view = require('../../../lib/client/view');
+
+    beforeEach(function() {
+
+      ss.client.assets.unload();
+      ss.client.assets.load();
+    });
+
+    afterEach(function() {
+      ss.client.unload();
+      ss.client.forget();
+    });
+
+    it('should serve view using custom formatter', function(done) {
+      var client = defineAbcClient({
+        view: '1.jade'
+      },function() {
+        ss.client.formatters.add('css');
+        ss.client.formatters.add('javascript');
+        ss.client.formatters.add('map');
+        ss.client.formatters.add('html');
+        ss.client.formatters.add(function() {
+          return {
+            name: 'Jade',
+            extensions: ['jade'],
+            assetType: 'html',
+            contentType: 'text/html',
+            compile: function (pathEntry, options, cb) {
+              cb('<body>Jade</body>');
+            }
+          };
+        });
+
+      });
+
+      var options = {},
+          expectedHtml = '<body>Jade<script>require("./code/abc/entry");</script></body>';
+
+      view(ss.api, client, options, function(output) {
+        output.should.equal(expectedHtml);
+        done();
+      });
+    });
+
+  });
 
 });
