@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/socketstream/socketstream.png?label=ready&title=Ready)](https://waffle.io/socketstream/socketstream)
 ![SocketStream!](https://github.com/socketstream/socketstream/raw/master/new_project/client/static/images/logo.png)
 
 # SocketStream
