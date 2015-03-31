@@ -55,7 +55,8 @@ directories, and use more than one in a view.
 ### Implications for ondemand loading in production
 
 In production code is loaded as a single bundle, but as additional modules can be loaded on demand the code is copied into the static assets.
-The code should be under `/client/static/assets/code`. During development this will be served on-the-fly.
+The code should be under `/client/static/assets/<namespace>/code`. By default the namespace is the client name, but if you want to share
+code you can define a common namespace. During development this will be served on-the-fly.
 
 ### Should I put library X in 'libs' or 'system'?
 

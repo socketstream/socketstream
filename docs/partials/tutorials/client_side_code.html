@@ -29,7 +29,8 @@ So in this case the view is started automatically with the call <code>require(&#
 directories, and use more than one in a view.</p>
 <h4 id="client-side-code_implications-for-ondemand-loading-in-production">Implications for ondemand loading in production</h4>
 <p>In production code is loaded as a single bundle, but as additional modules can be loaded on demand the code is copied into the static assets.
-The code should be under <code>/client/static/assets/code</code>. During development this will be served on-the-fly.</p>
+The code should be under <code>/client/static/assets/&lt;namespace&gt;/code</code>. By default the namespace is the client name, but if you want to share
+code you can define a common namespace. During development this will be served on-the-fly.</p>
 <h4 id="client-side-code_should-i-put-library-x-in-libs-or-system">Should I put library X in &#39;libs&#39; or &#39;system&#39;?</h4>
 <p>It depends if it needs access to the <code>window</code> variable. For example, Backbone.js works great as a <code>system</code> module unless you&#39;re using Backbone.history as this requires access to <code>window</code>.</p>
 <h4 id="client-side-code_what-happens-if-i-try-to-require-a-module-which-doesnt-exist">What happens if I try to require a module which doesn&#39;t exist?</h4>
