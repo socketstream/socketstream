@@ -91,6 +91,27 @@ describe('browserify', function() {
       //bPath.dirname('/a/b/c/d/').should.be.equal('/a/b/c/d');
     });
 
+    it('should resolve /index directly or indirectly', function() {
+      browser.require.define('/a/b/c/index',
+        function(require, module, exports, __dirname, __filename) {
+        }
+      );
+
+      browser.require.define('builtin/index',
+        function(require, module, exports, __dirname, __filename) {
+        }
+      );
+
+      browser.require.resolve('/a/b/c/index').should.equal('/a/b/c/index');
+      browser.require.resolve('./a/b/c/index').should.equal('/a/b/c/index');
+      browser.require.resolve('../a/b/c/index','/other').should.equal('/a/b/c/index');
+      browser.require.resolve('/a/b/c').should.equal('/a/b/c/index');
+      browser.require.resolve('/a/b/c/').should.equal('/a/b/c/index');
+
+      browser.require.resolve('builtin/index').should.equal('builtin/index');
+      browser.require.resolve('builtin').should.equal('builtin/index');
+    });
+
     it('should resolve require with absolute path', function() {
       browser.require.define('/a/b/c/d',
         function(require, module, exports, __dirname, __filename) {
@@ -140,7 +161,7 @@ describe('browserify', function() {
 
     it('should resolve the entry module');
 
-    it('should resolve relative require within an absolute module',function() {
+    xit('should resolve relative require within an absolute module',function() {
 
       browser.require.define('/a/b/c/d',
         function(require, module, exports, __dirname, __filename) {
@@ -165,10 +186,43 @@ describe('browserify', function() {
       sub.filename.should.equal('/a/b/c/d');
 
       // sub-module in main
-      var main = browser.require('/a/b/c/index');
-      main.g.should.equal('g');
+      var main = browser.require('/a/b/c');
+      should(main).not.be.equal(undefined);
       main.dirname.should.equal('/a/b/c');
       main.filename.should.equal('/a/b/c/index');
+      main.g.should.equal('g');
+      should(main.d).equal(sub);
+    });
+
+    it('should resolve relative require within an absolute sibling module',function() {
+
+      browser.require.define('/a/b/c/d',
+        function(require, module, exports, __dirname, __filename) {
+          exports.f = 'f';
+          exports.dirname = __dirname;
+          exports.filename = __filename;
+        }
+      );
+
+      browser.require.define('/a/b/c/x',
+        function(require, module, exports, __dirname, __filename) {
+          exports.g = 'g';
+          exports.dirname = __dirname;
+          exports.filename = __filename;
+          exports.d = require('./d');
+        }
+      );
+
+      var sub = browser.require('/a/b/c/d');
+      sub.f.should.equal('f');
+      sub.dirname.should.equal('/a/b/c');
+      sub.filename.should.equal('/a/b/c/d');
+
+      // sub-module in main
+      var main = browser.require('/a/b/c/x');
+      main.g.should.equal('g');
+      main.dirname.should.equal('/a/b/c');
+      main.filename.should.equal('/a/b/c/x');
       should(main.d).equal(sub);
     });
 
