@@ -41,10 +41,21 @@ Tip: If you're making a new folder called `/client/code/system`, don't forget to
 
 #### '/entry.js' - A single point of entry
 
-The `entry` module has a special distinction: it is the only module to be required automatically once all files have been sent to the browser.
+The `entry` module has a special distinction: it is the only module to be required automatically once all files have been
+sent to the browser.
 
-An `entry.js` (or `entry.coffee`) file is created for you by default when you make a new project. It contains a small amount of boiler-plate code which you may modify to handle the websocket connection going down, reconnecting, and (critically), what module to `require()` next once the websocket connection is established.
+An `entry.js` (or `entry.coffee`) file is created for you in the `app` view by default when you make a new project.
+It contains a small amount of boiler-plate code which you may modify to handle the websocket connection going down,
+reconnecting, and (critically), what module to `require()` next once the websocket connection is established.
 
+The `code` is set to `['libs/jquery.min.js', 'app']`. The first module with an `entry.js` is taken as the main module for the view.
+So in this case the view is started automatically with the call `require('./code/app/entry');`. This allows you to share code
+directories, and use more than one in a view.
+
+### Implications for ondemand loading in production
+
+In production code is loaded as a single bundle, but as additional modules can be loaded on demand the code is copied into the static assets.
+The code should be under `/client/static/assets/code`. During development this will be served on-the-fly.
 
 ### Should I put library X in 'libs' or 'system'?
 
@@ -66,7 +77,7 @@ You don't necessarily have to send all modules to the browser at once, you can a
 ss.client.set({ browserifyExcludePaths: ['app/controllers', 'app/directives'] });
 </pre>
 - **entryModuleName {string} ** - to change or disable automatically execuring the client side
-code for the entry module. If null or a blank string is given no entry module is executed during load of the view in the browser. If for example your app is `my` and entryModuleName is `app` the view will execute `client/code/my/app.js`. Be aware that this name will apply to all views. 
+code for the entry module. If null or a blank string is given no entry module is executed during load of the view in the browser. If for example your app is `my` and entryModuleName is `app` the view will execute `client/code/my/app.js`. Be aware that this name will apply to all views.
 <pre>
 ss.client.set({ entryModuleName: null });
 </pre>

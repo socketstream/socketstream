@@ -40,7 +40,7 @@ describe('client system library', function () {
             jsBefore.type.should.be.equal('loader');
             ss.client.assets.send('lib','browserify.js','');
             jsAfter = ss.api.bundler.systemLibs();
-            jsAfter.content.should.have.length(jsBefore.content.length - 8854);
+            jsAfter.content.should.have.length(0);
         });
 
         it('should replace init code', function() {
