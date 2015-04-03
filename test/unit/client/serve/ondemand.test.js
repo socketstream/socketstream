@@ -29,5 +29,7 @@ describe('production mode asset server', function () {
     it('should raise an error if the file is referenced, but missing');
 
 
+  it('should define modules importedBy correctly with pathPrefix');
+
 
 });

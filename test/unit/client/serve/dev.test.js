@@ -54,5 +54,6 @@ describe('development mode asset server', function () {
     it('should provide a route for serving requests for CSS files');
 
 
+  it('should define modules importedBy correctly with pathPrefix');
 
 });

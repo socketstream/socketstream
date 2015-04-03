@@ -183,6 +183,8 @@ describe('client asset manager index', function () {
 
       it('should render the SS view');
 
+      it('should provide URLS for modules importedBy correctly with pathPrefix');
+
     });
 
     describe('packed #view', function() {

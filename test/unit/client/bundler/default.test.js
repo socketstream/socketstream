@@ -502,4 +502,9 @@ describe('default bundler', function () {
 
   });
 
+  describe('pack', function() {
+
+    it('should define modules importedBy correctly with pathPrefix');
+  });
+
 });
