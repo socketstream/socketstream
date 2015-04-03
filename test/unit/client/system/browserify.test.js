@@ -20,7 +20,7 @@ var path    = require('path'),
  2. If X begins with './' or '/' or '../'
  a. LOAD_AS_FILE(Y + X)
  b. LOAD_AS_DIRECTORY(Y + X)
- 3. LOAD_NODE_MODULES(X, dirname(Y))
+ 3. not relevant: LOAD_NODE_MODULES(X, dirname(Y))
  4. THROW "not found"
 
  LOAD_AS_FILE(X)
@@ -37,23 +37,6 @@ var path    = require('path'),
  2. If X/index.js is a file, load X/index.js as JavaScript text.  STOP
  3. If X/index.json is a file, parse X/index.json to a JavaScript object. STOP
  4. If X/index.node is a file, load X/index.node as binary addon.  STOP
-
- LOAD_NODE_MODULES(X, START)
- 1. let DIRS=NODE_MODULES_PATHS(START)
- 2. for each DIR in DIRS:
- a. LOAD_AS_FILE(DIR/X)
- b. LOAD_AS_DIRECTORY(DIR/X)
-
- NODE_MODULES_PATHS(START)
- 1. let PARTS = path split(START)
- 2. let I = count of PARTS - 1
- 3. let DIRS = []
- 4. while I >= 0,
- a. if PARTS[I] = "node_modules" CONTINUE
- c. DIR = path join(PARTS[0 .. I] + "node_modules")
- b. DIRS = DIRS + DIR
- c. let I = I - 1
- 5. return DIRS
  */
 describe('browserify', function() {
 
@@ -92,7 +75,17 @@ describe('browserify', function() {
     });
 
     it('should resolve /index directly or indirectly', function() {
+      browser.require.define('/a/b/c/d',
+        function(require, module, exports, __dirname, __filename) {
+        }
+      );
+
       browser.require.define('/a/b/c/index',
+        function(require, module, exports, __dirname, __filename) {
+        }
+      );
+
+      browser.require.define('builtin/e',
         function(require, module, exports, __dirname, __filename) {
         }
       );
@@ -108,8 +101,13 @@ describe('browserify', function() {
       browser.require.resolve('/a/b/c').should.equal('/a/b/c/index');
       browser.require.resolve('/a/b/c/').should.equal('/a/b/c/index');
 
+      //browser.require.resolve('/c/index','/a/b').should.equal('/a/b/c/index');
+      //browser.require.resolve('/c','/a/b').should.equal('/a/b/c/index');
+      //browser.require.resolve('/c/','/a/b').should.equal('/a/b/c/index');
+
       browser.require.resolve('builtin/index').should.equal('builtin/index');
-      browser.require.resolve('builtin').should.equal('builtin/index');
+
+      //browser.require.resolve('builtin/index','/a/b').should.equal('builtin/index');
     });
 
     it('should resolve require with absolute path', function() {
