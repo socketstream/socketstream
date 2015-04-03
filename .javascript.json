@@ -5,12 +5,11 @@
   "browser": true,
   "node": true,
   "camelcase": true,
-  "curly": true,
+  "curly": false,
   "forin": true,
   "immed": true,
   "latedef": "nofunc",
   "maxlen": 150,
-  "newcap": true,
   "noarg": true,
   "noempty": true,
   "nonew": true,
@@ -30,7 +29,6 @@
     "module",
     "exports"
   ],
-  "quotmark": true,
   "trailing": true,
   "undef": true,
   "unused": true

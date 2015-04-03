@@ -65,6 +65,7 @@ describe('browserify', function() {
       bPath.resolve('/').should.be.equal('/');
       bPath.resolve('abc/def','./ghi').should.be.equal('abc/def/ghi');
       bPath.resolve('foo/bar', '/tmp/file/', '..', 'a/../subfile').should.be.equal('/tmp/subfile');
+      bPath.resolve('/a/b','c/index').should.be.equal('/a/b/c/index');
     });
 
     it('should have functioning require.modules.path.dirname',function() {
@@ -76,22 +77,22 @@ describe('browserify', function() {
 
     it('should resolve /index directly or indirectly', function() {
       browser.require.define('/a/b/c/d',
-        function(require, module, exports, __dirname, __filename) {
+        function(/*require, module, exports, __dirname, __filename*/) {
         }
       );
 
       browser.require.define('/a/b/c/index',
-        function(require, module, exports, __dirname, __filename) {
+        function(/*require, module, exports, __dirname, __filename*/) {
         }
       );
 
       browser.require.define('builtin/e',
-        function(require, module, exports, __dirname, __filename) {
+        function(/*require, module, exports, __dirname, __filename*/) {
         }
       );
 
       browser.require.define('builtin/index',
-        function(require, module, exports, __dirname, __filename) {
+        function(/*require, module, exports, __dirname, __filename*/) {
         }
       );
 
@@ -101,13 +102,13 @@ describe('browserify', function() {
       browser.require.resolve('/a/b/c').should.equal('/a/b/c/index');
       browser.require.resolve('/a/b/c/').should.equal('/a/b/c/index');
 
-      //browser.require.resolve('/c/index','/a/b').should.equal('/a/b/c/index');
-      //browser.require.resolve('/c','/a/b').should.equal('/a/b/c/index');
-      //browser.require.resolve('/c/','/a/b').should.equal('/a/b/c/index');
+      browser.require.resolve('/c/index','/a/b').should.equal('/a/b/c/index');
+      browser.require.resolve('/c','/a/b').should.equal('/a/b/c/index');
+      browser.require.resolve('/c/','/a/b').should.equal('/a/b/c/index');
 
       browser.require.resolve('builtin/index').should.equal('builtin/index');
 
-      //browser.require.resolve('builtin/index','/a/b').should.equal('builtin/index');
+      browser.require.resolve('builtin/index','/a/b').should.equal('builtin/index');
     });
 
     it('should resolve require with absolute path', function() {
