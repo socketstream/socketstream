@@ -216,7 +216,7 @@ describe('client asset manager index', function () {
         it('should render the ABC view (with start)', function(done) {
           var expectedHtml = '<html>\n' +
             '<head><title>ABC</title></head>\n' +
-            '<body><p>ABC</p><script>require("./code/abc/entry");</script></body>\n' +
+            '<body><p>ABC</p><script>require("/abc/index");</script></body>\n' +
             '</html>';
 
           var client = ss.client.define('abc', {
@@ -264,7 +264,7 @@ describe('client asset manager index', function () {
         '<head><title>ABC</title>' +
         '<link href="/assets/abc/m1bf9lApd.css" media="screen" rel="stylesheet" type="text/css">' +
         '<script src="/assets/abc/m1bf9lApd.js" type="text/javascript"></script>' + '</head>\n' +
-        '<body><p>ABC</p><script>require("./code/abc/entry");</script></body>\n' +
+        '<body><p>ABC</p><script>require("/abc/index");</script></body>\n' +
         '</html>\n').replace(/m1bf9lApd/g, client.id);
 
         view(ss.api, client, options, function (output) {
@@ -285,7 +285,7 @@ describe('client asset manager index', function () {
         var expectedHtml = ('<html>\n' +
           '<head><title>ABC</title>' +
           '<link href="/assets/abc/m1bf9lApd.css" media="screen" rel="stylesheet" type="text/css">' +
-          '<script src="/assets/abc/m1bf9lApd.js" type="text/javascript"></script><script>require("./code/abc/entry");</script>'+ '</head>\n' +
+          '<script src="/assets/abc/m1bf9lApd.js" type="text/javascript"></script><script>require("/abc/index");</script>'+ '</head>\n' +
           '<body><p>ABC</p></body>\n' +
           '</html>\n').replace(/m1bf9lApd/g,client.id);
 
@@ -306,7 +306,7 @@ describe('client asset manager index', function () {
         var expectedHtml = ('<html>\n' +
           '<head><title>ABC</title>' +
           '<script src="/assets/abc/m1bf9lApd.js" type="text/javascript"></script>'+ '</head>\n' +
-          '<body><p>ABC</p><script>require("./code/abc/entry");</script></body>\n' +
+          '<body><p>ABC</p><script>require("/abc/index");</script></body>\n' +
           '</html>\n').replace(/m1bf9lApd/g,client.id);
 
         view(ss.api, client, options, function(output) {

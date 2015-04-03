@@ -44,7 +44,7 @@ describe('default bundler', function () {
       client.paths.view.should.be.eql('./views/main.jade');
       client.paths.tmpl.should.be.eql([]);
 
-      client.entryInitPath.should.be.equal('./code/main/entry');
+      client.entryInitPath.should.be.equal('/code/main/demo');
 
       var bundler = ss.api.bundler.get('main');
 
@@ -95,6 +95,33 @@ describe('default bundler', function () {
     });
   });
 
+  describe('define code entry point', function() {
+
+    afterEach(function() {
+      ss.client.forget();
+    });
+
+    it('should pick ./entry in first module if present', function() {
+
+      var client = ss.client.define('abc', {
+        css: 'main',
+        code: ['kickoff','main/demo.coffee'],
+        view: 'main.jade'
+      });
+      client.entryInitPath.should.equal('/code/kickoff/entry');
+    });
+
+    it('should pick ./entry in second module if present, and not in first', function() {
+
+      var client = ss.client.define('abc', {
+        css: 'main',
+        code: ['extras','kickoff','main/demo.coffee'],
+        view: 'main.jade'
+      });
+      client.entryInitPath.should.equal('/code/kickoff/entry');
+    });
+  });
+
     describe('define', function() {
 
       it('should set up client and bundler', function () {
@@ -113,7 +140,7 @@ describe('default bundler', function () {
         client.paths.view.should.be.eql('./abc/abc.html');
         client.paths.tmpl.should.be.eql([]);
 
-        client.entryInitPath.should.be.equal('./code/abc/entry');
+        client.entryInitPath.should.be.equal('/abc/index');
 
         var bundler = ss.api.bundler.get('abc');
 
@@ -298,7 +325,7 @@ describe('default bundler', function () {
         //entriesJS[3].type.should.be.equal('mod');
 
         // start TODO
-        entriesJS[4].content.should.be.equal('require("./code/abc/entry");');
+        entriesJS[4].content.should.be.equal('require("/abc/index");');
         entriesJS[4].type.should.be.equal('start');
       });
 
@@ -363,7 +390,7 @@ describe('default bundler', function () {
         html.should.equal([
           '<html>',
           '<head><title>ABC</title></head>',
-          '<body><p>ABC</p><script>var abcg={"a":"a"};\nrequire("./code/abc/entry");</script></body>',
+          '<body><p>ABC</p><script>var abcg={"a":"a"};\nrequire("/abc/");</script></body>',
           '</html>'
         ].join('\n'))
       });
@@ -386,7 +413,7 @@ describe('default bundler', function () {
         html.should.equal([
           '<html>',
           '<head><title>ABC</title></head>',
-          '<body><p>ABC</p><script>var abcl={"b":"b"};\nrequire("./code/abc/entry");</script></body>',
+          '<body><p>ABC</p><script>var abcl={"b":"b"};\nrequire("/abc/index");</script></body>',
           '</html>'
         ].join('\n'))
       });
@@ -409,7 +436,7 @@ describe('default bundler', function () {
         html.should.equal([
           '<html>',
           '<head><title>ABC</title></head>',
-          '<body><p>ABC</p><script>var abcg={"a":"a"};\nvar abcl={"b":"b"};\nrequire("./code/abc/entry");</script></body>',
+          '<body><p>ABC</p><script>var abcg={"a":"a"};\nvar abcl={"b":"b"};\nrequire("/abc/index");</script></body>',
           '</html>'
         ].join('\n'))
         done();
@@ -435,7 +462,7 @@ describe('default bundler', function () {
         html.should.equal([
           '<html>',
           '<head><title>ABC</title></head>',
-          '<body><p>ABC</p><script>var abcg={"b":"b"};\nrequire("./code/abc/entry");</script></body>',
+          '<body><p>ABC</p><script>var abcg={"b":"b"};\nrequire("/abc/index");</script></body>',
           '</html>'
         ].join('\n'))
       });
@@ -472,7 +499,7 @@ describe('default bundler', function () {
         html.should.equal([
           '<html>',
           '<head><title>ABC</title></head>',
-          '<body><p>ABC</p><script>require("./code/abc/entry");</script></body>',
+          '<body><p>ABC</p><script>require("/abc/index");</script></body>',
           '</html>'
         ].join('\n'))
       });
