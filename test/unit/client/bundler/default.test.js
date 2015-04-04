@@ -470,6 +470,148 @@ describe('default bundler', function () {
 
   });
 
+  describe('JS assets',function() {
+    var bundler;
+
+    beforeEach(function() {
+
+      options.defaultEntryInit = origDefaultEntryInit;
+      options.startInBundle = false;
+
+      ss.client.assets.unload();
+      ss.client.forget();
+      ss.client.assets.load();
+
+      ss.client.formatters.add('javascript');
+
+      var client = defineAbcClient({ },function() { });
+      bundler = ss.api.bundler.get(client);
+    });
+
+    it('should wrap regular modules correctly', function() {
+
+      var entry = {
+        'file': './code/mod/alert.js',
+        'importedBy': './code/mod/alert.js',
+        assetType: 'js',
+        bundle: 'js',
+        ext: 'js'
+      };
+      var opts = {
+
+      };
+      var code = 'alert()';
+      var wrappedAlert = bundler.wrapCode(code, entry, opts);
+
+      var modPath = '/code/mod/alert';
+      wrappedAlert.should.equal('require.define("' + modPath + '", function (require, module, exports, __dirname, __filename){\n' + code + '\n});');
+
+      entry = {
+        'file': './code/alert/index.js',
+        'importedBy': './code/alert/index.js',
+        assetType: 'js',
+        bundle: 'js'
+      };
+      wrappedAlert = bundler.wrapCode(code, entry, opts);
+
+      modPath = '/code/alert/index';
+      wrappedAlert.should.equal('require.define("' + modPath + '", function (require, module, exports, __dirname, __filename){\n' + code + '\n});');
+
+      entry = {
+        'file': './code/alert/impl.js',
+        'importedBy': './code/alert/impl.js',
+        assetType: 'js',
+        bundle: 'js'
+      };
+      wrappedAlert = bundler.wrapCode(code, entry, opts);
+
+      modPath = '/code/alert/impl';
+      wrappedAlert.should.equal('require.define("' + modPath + '", function (require, module, exports, __dirname, __filename){\n' + code + '\n});');
+    });
+
+    it('should wrap relative modules correctly', function() {
+
+      var entry = {
+        'file': './mod/alert.js',
+        'importedBy': './mod/alert.js',
+        assetType: 'js',
+        bundle: 'js',
+        ext: 'js'
+      };
+      var opts = {
+
+      };
+      var code = 'alert()';
+      var wrappedAlert = bundler.wrapCode(code, entry, opts);
+
+      var modPath = '/mod/alert';
+      wrappedAlert.should.equal('require.define("' + modPath + '", function (require, module, exports, __dirname, __filename){\n' + code + '\n});');
+
+      entry = {
+        'file': './mod/alert/index.js',
+        'importedBy': './mod/alert/index.js',
+        assetType: 'js',
+        bundle: 'js'
+      };
+      wrappedAlert = bundler.wrapCode(code, entry, opts);
+
+      modPath = '/mod/alert/index';
+      wrappedAlert.should.equal('require.define("' + modPath + '", function (require, module, exports, __dirname, __filename){\n' + code + '\n});');
+
+      entry = {
+        'file': './mod/alert/impl.js',
+        'importedBy': './mod/alert/impl.js',
+        assetType: 'js',
+        bundle: 'js'
+      };
+      wrappedAlert = bundler.wrapCode(code, entry, opts);
+
+      modPath = '/mod/alert/impl';
+      wrappedAlert.should.equal('require.define("' + modPath + '", function (require, module, exports, __dirname, __filename){\n' + code + '\n});');
+    });
+
+    it('should wrap system modules correctly',function() {
+
+      var entry = {
+        'file': './code/system/alert.js',
+        'importedBy': './code/system/alert.js',
+        assetType: 'js',
+        bundle: 'js'
+      };
+      var opts = {
+
+      };
+      var code = 'alert()';
+      var wrappedAlert = bundler.wrapCode(code, entry, opts);
+
+      var modPath = 'alert';
+      wrappedAlert.should.equal('require.define("' + modPath + '", function (require, module, exports, __dirname, __filename){\n' + code + '\n});');
+
+      entry = {
+        'file': './code/system/alert/index.js',
+        'importedBy': './code/system/alert/index.js',
+        assetType: 'js',
+        bundle: 'js'
+      };
+      wrappedAlert = bundler.wrapCode(code, entry, opts);
+
+      modPath = 'alert/index';
+      wrappedAlert.should.equal('require.define("' + modPath + '", function (require, module, exports, __dirname, __filename){\n' + code + '\n});');
+
+      entry = {
+        'file': './code/system/alert/impl.js',
+        'importedBy': './code/system/alert/impl.js',
+        assetType: 'js',
+        bundle: 'js'
+      };
+      wrappedAlert = bundler.wrapCode(code, entry, opts);
+
+      modPath = 'alert/impl';
+      wrappedAlert.should.equal('require.define("' + modPath + '", function (require, module, exports, __dirname, __filename){\n' + code + '\n});');
+
+    });
+  });
+
   describe('html',function() {
 
     beforeEach(function() {
