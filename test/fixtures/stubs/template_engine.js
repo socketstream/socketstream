@@ -1,4 +1,4 @@
-"use strict"
+'use strict';
 
 exports.init = function(name) {
   return {

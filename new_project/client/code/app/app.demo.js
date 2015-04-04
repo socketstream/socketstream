@@ -1,3 +1,4 @@
+'use strict';
 /* QUICK CHAT DEMO */
 
 // Delete this file once you've seen how the demo works
@@ -43,15 +44,15 @@ exports.send = function(text, cb) {
 
 // Private functions
 
-var timestamp = function() {
+function timestamp() {
   var d = new Date();
   return d.getHours() + ':' + pad2(d.getMinutes()) + ':' + pad2(d.getSeconds());
-};
+}
 
-var pad2 = function(number) {
+function pad2(number) {
   return (number < 10 ? '0' : '') + number;
-};
+}
 
-var valid = function(text) {
+function valid(text) {
   return text && text.length > 0;
-};
+}

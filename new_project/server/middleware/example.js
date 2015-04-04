@@ -1,3 +1,4 @@
+'use strict';
 // Example request middleware
 
 // Only let a request through if the session has been authenticated

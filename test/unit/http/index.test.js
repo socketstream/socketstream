@@ -22,7 +22,7 @@ var cookieParser = require('cookie-parser');
 
 var request      = require('supertest'),
     path         = require('path'),
-    connect      = require('connect'),
+    //connect      = require('connect'),
     util         = require('util'),
     httpFunc     = require( path.join(process.env.PWD, 'lib/http/index') ),
     serveStatic  = require('../../../lib/utils/serve-static'),

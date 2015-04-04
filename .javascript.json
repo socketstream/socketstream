@@ -9,14 +9,16 @@
   "forin": true,
   "immed": true,
   "latedef": "nofunc",
-  "maxlen": 120,
-  "newcap": true,
+  "maxlen": 150,
+  "newcap": false,
   "noarg": true,
   "noempty": true,
   "nonew": true,
   "predef": [
     "$",
     "jQuery",
+    "ss",
+    "alert",
 
     "jasmine",
     "beforeEach",

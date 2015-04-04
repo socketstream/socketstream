@@ -6,7 +6,8 @@
     "forin"    : true,
     "immed"    : true,
     "latedef"  : "nofunc",
-    "newcap"   : true,
+    "maxlen": 150,
+    "newcap"   : false,
     "noarg"    : true,
     "noempty"  : true,
     "nonew"    : true,
@@ -37,6 +38,8 @@
         "spyOn"      : false,
         "jQuery"     : false,
         "$"          : false,
+        "alert"      : false,
+        "ss"         : false,
         "Worker"     : false,
         "window"     : false,
         "document"   : false
