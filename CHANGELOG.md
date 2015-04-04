@@ -1,3 +1,8 @@
+#### Compatibility
+
+* The browserify.js require implementation no longer looks for 'node_modules' paths. This feature makes little sense in
+the browser, and goes against a principle of simplicity. The require lookup is now small and simple. 1) File 2) Directory 3) System
+
 <a name="0.3.11"></a>
 ### 0.3.11 (2014-10-15)
 

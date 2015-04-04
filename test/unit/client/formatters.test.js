@@ -340,7 +340,7 @@ var path    = require('path'),
       });
 
       var options = {},
-          expectedHtml = '<body>Jade<script>require("./code/abc/entry");</script></body>';
+          expectedHtml = '<body>Jade<script>require("/abc/index");</script></body>';
 
       view(ss.api, client, options, function(output) {
         output.should.equal(expectedHtml);

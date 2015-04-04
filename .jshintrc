@@ -21,7 +21,7 @@
     "node"     : true,
     "unused"   : true,
     "multistr" : true,
-    "maxlen"   : 130,
+    "maxlen"   : 150,
     "smarttabs": true,
     "globals"  :
     {
