@@ -214,6 +214,15 @@ NG_DOCS={
     },
     {
       "section": "api",
+      "id": "ss.publish:publish",
+      "shortName": "publish",
+      "type": "service",
+      "moduleName": "ss",
+      "shortDescription": "Extend the internal API with a publish object you can call from your own server-side code",
+      "keywords": "active api browsers call channel client code ended event extend function internal object parameter publish server-side service ss"
+    },
+    {
+      "section": "api",
       "id": "utils",
       "shortName": "utils",
       "type": "service",

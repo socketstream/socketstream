@@ -2,7 +2,7 @@
  * Plain HTML Formatter
  */
 
-"use strict"
+'use strict';
 
 var fs;
 

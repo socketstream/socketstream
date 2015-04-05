@@ -4,4 +4,6 @@ lib/client/system/libs
 lib/client/system/modules/eventemitter2.js
 new_project/client/code/libs/
 node_modules
-test/fixtures/project/client/code/libs
+test/fixtures/project/client/code
+test/fixtures/project/app.js
+Gruntfile.js

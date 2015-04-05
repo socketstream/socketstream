@@ -1,0 +1,3 @@
+java_script:
+  config_file: .javascript.json
+  ignore_file: .jshintignore

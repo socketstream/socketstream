@@ -10,3 +10,4 @@ new_project/**/*
 node_modules/**/*
 test/**/*
 *.tgz
+/docs.js
