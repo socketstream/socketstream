@@ -1,3 +1,38 @@
+<a name="0.3.12"></a>
+### 0.3.12 (2015-04-05)
+
+
+#### Bug Fixes
+
+* **cookie:** cookie configuration in http strategy #454 ([8f6c20f0](https://github.com/socketstream/socketstream/commit/8f6c20f0b817c952ea43e16dfe0d2b8bf5b757c3))
+* **debugging:** Log stack trace for internal server errors ([ec0f7337](https://github.com/socketstream/socketstream/commit/ec0f7337fff2337d4161694d16fbc172ab76cd78))
+* **docs:**
+  * Fixed formatting in the docs ([ebd60804](https://github.com/socketstream/socketstream/commit/ebd60804885f1af0f3cedb9d8707effa8a5d816d))
+  * Updated docs ([bc0ec325](https://github.com/socketstream/socketstream/commit/bc0ec3253ced75f8d8484ef0983f561044fb61cc))
+  * Updated main page and fixed broken links ([f81cddb3](https://github.com/socketstream/socketstream/commit/f81cddb3fa675b84977ef1a0e6388ec1c315eb2d))
+* **integrations:** Fixed config for gitter notify ([28543c51](https://github.com/socketstream/socketstream/commit/28543c51b6b5e1d129309b5a128c8ef03bcb5a7a))
+* **static:**
+  * Static files from static and assets dirs ([f93652e4](https://github.com/socketstream/socketstream/commit/f93652e4b16515d973a95ef59ab68ca6a4aef64c))
+  * Views and static paths can coexist without name clashes #470
+
+
+#### Features
+
+* **modules and libs:**
+  * Can be overridden #456
+  * Shims are loaded before libs and can be added with the send call. ([d0d0715165](https://github.com/socketstream/socketstream/commit/c0bea3c1c3a8bf43d84bd1176dfccfd0d0715165))
+* **http:**
+  * Alternate strategies for http middleware ([a25c3d86](https://github.com/socketstream/socketstream/commit/a25c3d8639287c86f962cf758e63d1386423c825))
+  * static strategy ([d2037735](https://github.com/socketstream/socketstream/commit/d2037735dbfc6b500af642993d5629e79fbd358c))
+* **static:** Support no use of ss.http.middleware ([f2fd0ca0](https://github.com/socketstream/socketstream/commit/f2fd0ca0c2201887ad5e609717f9e416914e90f6))
+
+### Compatibility
+
+* **Node 0.6** is no longer supported
+* Upgraded to latest **Connect** version #504
+* Upgraded to latest **Engine.io** version #435
+
+
 <a name="0.3.11"></a>
 ### 0.3.11 (2014-10-15)
 
