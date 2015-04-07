@@ -18,6 +18,7 @@ var responseStub = {
 describe('production mode asset server', function () {
 
   var router = new Router();
+  ss.root = ss.api.root = path.join(__dirname, '../../../../fixtures/project');
 
 
   beforeEach(function() {
@@ -26,6 +27,8 @@ describe('production mode asset server', function () {
     ss.client.assets.unload();
     ss.client.assets.load();
     ss.client.formatters.add('javascript');
+    console.log(ss.api.client.root,'is client root');
+    console.log(ss.api.root, ss.client.options.dirs.client);
   });
 
   afterEach(function() {
@@ -33,33 +36,33 @@ describe('production mode asset server', function () {
   });
 
 
-  /*TODO
   it('should provide a route for serving javascript code', function(){
-    code: './abc/index.a'
-  }, function() {
-    require('../../../../lib/client/serve/ondemand')(ss.api, router, options);
-  });
-
-  // dev time URL
-  var req = {url: '/assets/abc/'+client.id+'.js?mod=loader' };
-  router.route(req.url,req,responseStub).should.equal(true);
-   responseStub.body.should.equal('// calc pi\n');
-  });
-*/
-
-
-    it('should provide a route for serving web worker requests', function() {
-      var client = defineAbcClient({
-        code: './abc/index.a'
-      }, function() {
-        require('../../../../lib/client/serve/ondemand')(ss.api, router, options);
-      });
-
-      // dev time URL
-      var req = {url: '/_serve/worker?/pi.js' };
-      router.route(req.url,req,responseStub).should.equal(true);
-      responseStub.body.should.equal('// calc pi\n');
+    var client = defineAbcClient({
+      code: './abc/index.a'
+    }, function() {
+      require('../../../../lib/client/serve/ondemand')(ss.api, router, options);
     });
+
+    // dev time URL
+    var req = {url: '/_serve/code?extras/e1.js' };
+    router.route(req.url,req,responseStub).should.equal(true);
+    responseStub.body.should.equal('var e1 = 1;\n');
+  });
+
+  it('should provide a bundle of javascript code for a directory entry');
+
+  it('should provide a route for serving web worker requests', function() {
+    var client = defineAbcClient({
+      code: './abc/index.a'
+    }, function() {
+      require('../../../../lib/client/serve/ondemand')(ss.api, router, options);
+    });
+
+    // dev time URL
+    var req = {url: '/_serve/worker?/pi.js' };
+    router.route(req.url,req,responseStub).should.equal(true);
+    responseStub.body.should.equal('// calc pi\n');
+  });
 
 
 
