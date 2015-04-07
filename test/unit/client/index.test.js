@@ -18,8 +18,26 @@ describe('client asset manager index', function () {
 
     describe('#api', function() {
         it('should return client root', function() {
-          ss.client.root.should.equal( path.join(__dirname,'../../fixtures/project/client') );
+          ss.client.dirs.root.should.equal( path.join(__dirname,'../../fixtures/project/client') );
         });
+      it('should return client views', function() {
+        ss.client.dirs.views.should.equal( path.join(__dirname,'../../fixtures/project/client/views') );
+      });
+      it('should return client code', function() {
+        ss.client.dirs.code.should.equal( path.join(__dirname,'../../fixtures/project/client/code') );
+      });
+      it('should return client system', function() {
+        ss.client.dirs.system.should.equal( path.join(__dirname,'../../fixtures/project/client/code/system') );
+      });
+      it('should return client workers', function() {
+        ss.client.dirs.workers.should.equal( path.join(__dirname,'../../fixtures/project/client/workers') );
+      });
+      it('should return client css', function() {
+        ss.client.dirs.css.should.equal( path.join(__dirname,'../../fixtures/project/client/css') );
+      });
+      it('should return client assets', function() {
+        ss.client.dirs.assets.should.equal( path.join(__dirname,'../../fixtures/project/client/static/assets') );
+      });
     });
 
     describe('#formatters', function () {

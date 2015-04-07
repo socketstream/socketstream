@@ -19,6 +19,9 @@
 
     "jasmine",
     "beforeEach",
+    "afterEach",
+    "after",
+    "before",
     "describe",
     "expect",
     "it",
