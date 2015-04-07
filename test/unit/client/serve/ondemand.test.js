@@ -1,7 +1,8 @@
 'use strict';
 
 require('should');
-var ss      = require( '../../../../lib/socketstream'),
+var path    = require('path'),
+    ss      = require( '../../../../lib/socketstream'),
     Router = require('../../../../lib/http/router').Router,
     options = ss.client.options,
     defineAbcClient = require('../abcClient');
