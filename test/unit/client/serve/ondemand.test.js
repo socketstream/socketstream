@@ -36,7 +36,7 @@ describe('production mode asset server', function () {
 
 
   it('should provide a route for serving javascript code', function(){
-    var client = defineAbcClient({
+    defineAbcClient({
       code: './abc/index.a'
     }, function() {
       require('../../../../lib/client/serve/ondemand')(ss.api, router, options);
@@ -51,7 +51,7 @@ describe('production mode asset server', function () {
   it('should provide a bundle of javascript code for a directory entry');
 
   it('should provide a route for serving web worker requests', function() {
-    var client = defineAbcClient({
+    defineAbcClient({
       code: './abc/index.a'
     }, function() {
       require('../../../../lib/client/serve/ondemand')(ss.api, router, options);
