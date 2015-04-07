@@ -10,7 +10,7 @@ var path    = require('path'),
   defineAbcClient = require('../abcClient');
 
 var responseStub = {
-  writeHead: function(status,headers) {},
+  writeHead: function() {},
   end: function(body) {
     this.body = body;
   }

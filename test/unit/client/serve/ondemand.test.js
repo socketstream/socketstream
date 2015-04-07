@@ -1,14 +1,13 @@
 'use strict';
 
-var path    = require('path'),
-  should  = require('should'),
-  ss      = require( '../../../../lib/socketstream'),
-  Router = require('../../../../lib/http/router').Router,
-  options = ss.client.options,
-  defineAbcClient = require('../abcClient');
+require('should');
+var ss      = require( '../../../../lib/socketstream'),
+    Router = require('../../../../lib/http/router').Router,
+    options = ss.client.options,
+    defineAbcClient = require('../abcClient');
 
 var responseStub = {
-  writeHead: function(status,headers) {},
+  writeHead: function() {},
   end: function(body) {
     this.body = body;
   }
