@@ -7,10 +7,12 @@ var path    = require('path'),
   options = ss.client.options,
   defineAbcClient = require('./abcClient');
 
+var view = require('../../../lib/client/view');
+
 var responseStub = {
     writeHead: function(status,headers) {},
     end: function(body) {}
-  };
+};
 
 describe('constants',function() {
 
@@ -28,9 +30,60 @@ describe('constants',function() {
     ss.client.forget();
   });
 
+  var newEngine = function newEngine(api,config,options) {
+    api.should.equal(ss.api);
+    options.should.equal(ss.client.options);
+    return {
+      name: 'New',
+      process: function (template, path, id, opts) {
+        return '<script id="new-' + id + '" type="text/x-tmpl">' + template + JSON.stringify(opts.constants) + '</script>';
+      }
+    }
+  };
+
+  it('should be available in template engine formatters', function(done) {
+
+    var compileOptions = null;
+
+    defineAbcClient({ constants:{def:"def"} },function() {
+
+      var formatter = {
+        init: function () {
+
+          return {
+            name: 't1',
+            extensions: ['html'],
+            assetType: 'html',
+            contentType: 'text/javascript; charset=utf-8',
+            compile: function (pathEntry, options, cb) {
+              compileOptions = options;
+              cb('t1='+options.constants.abc);
+            }
+          };
+        }
+      };
+
+      ss.client.formatters.add(formatter,{});
+      //ss.client.formatters.add('html');
+      ss.client.templateEngine.use(newEngine,'.');
+    });
+
+    ss.api.client.send('constant','abc','abc');
+
+    var bundler = ss.api.bundler.get('abc');
+
+    var files = [ bundler.entryFor('tmpl','./templates/1.html') ];
+
+    ss.client.templateEngine.generate(bundler, files, function (tag) {
+      tag.should.be.equal('<script id="new-templates-1" type="text/x-tmpl">t1=abc{"abc":"abc","def":"def"}</script>');
+      done();
+    });
+  });
+
   it('should be available in formatters', function() {
 
-    var client = defineAbcClient({ code: './abc/index.a' }, function() {
+    var compileOptions = null,
+        client = defineAbcClient({ code: './abc/index.a' }, function() {
 
       require('../../../lib/client/serve/dev')(ss.api, router, options);
 
@@ -45,8 +98,7 @@ describe('constants',function() {
             assetType: 'js',
             contentType: 'text/javascript; charset=utf-8',
             compile: function (pathEntry, options, cb) {
-              options.constants.should.be.type('object');
-              options.constants.abc.should.equal('abc');
+              compileOptions = options;
               cb('//');
             }
           };
@@ -54,22 +106,43 @@ describe('constants',function() {
       };
 
       ss.client.formatters.add(formatter,{});
-      //ss.client.templateEngine.use('angular');
     });
 
 
     // dev time URL
     var req = {url: '/assets/abc/'+client.id+'.js?_=./abc/index.a' };
     router.route(req.url,req,responseStub).should.equal(true);
-    //TODO assert formatter.compile is called
+    compileOptions.constants.should.be.type('object');
+    compileOptions.constants.abc.should.equal('abc');
 
     //TODO packAssetSet
     var bundler = ss.api.bundler.get(client);
     //ss.api.bundler.packAssetSet('js', client, bundler.toMinifiedJS);
   });
 
-  it('should be loaded in the browser as globals', function() {
+  it('should be loaded in the browser as globals', function(done) {
 
+    var compileOptions = null,
+      client = defineAbcClient({ constants:{"def":"def"} }, function() {
+
+        require('../../../lib/client/serve/dev')(ss.api, router, options);
+
+        ss.api.client.send('constant','abc','abc');
+
+        ss.client.formatters.add('html');
+      });
+
+    var expectedHtml = '<html>\n'+
+      '<head><title>ABC</title></head>\n'+
+      '<body><p>ABC</p>'+
+      '<script>var abc="abc";\nvar def="def";\nrequire("/abc/index");</script>'+
+      '</body>\n'+
+      '</html>';
+
+    view(ss.api, client, options, function(output) {
+      output.should.equal(expectedHtml);
+      done();
+    });
   });
 });
 
@@ -89,16 +162,67 @@ describe('locals', function() {
     ss.client.forget();
   });
 
+  var newEngine = function newEngine(api,config,options) {
+    api.should.equal(ss.api);
+    options.should.equal(ss.client.options);
+    return {
+      name: 'New',
+      process: function (template, path, id, opts) {
+        return '<script id="new-' + id + '" type="text/x-tmpl">' + template + JSON.stringify(opts.locals) + '</script>';
+      }
+    }
+  };
+
+  it('should be available in template engine formatters', function(done) {
+
+    var compileOptions = null;
+
+    defineAbcClient({ locals:{def:"def"} },function() {
+
+      var formatter = {
+        init: function () {
+
+          return {
+            name: 't1',
+            extensions: ['html'],
+            assetType: 'html',
+            contentType: 'text/javascript; charset=utf-8',
+            compile: function (pathEntry, options, cb) {
+              compileOptions = options;
+              cb('t1='+options.locals.abc);
+            }
+          };
+        }
+      };
+
+      ss.client.formatters.add(formatter,{});
+      //ss.client.formatters.add('html');
+      ss.client.templateEngine.use(newEngine,'.');
+    });
+
+    ss.api.client.send('local','abc','abc');
+
+    var bundler = ss.api.bundler.get('abc');
+
+    var files = [ bundler.entryFor('tmpl','./templates/1.html') ];
+
+    ss.client.templateEngine.generate(bundler, files, function (tag) {
+      tag.should.be.equal('<script id="new-templates-1" type="text/x-tmpl">t1=abc{"abc":"abc","def":"def"}</script>');
+      done();
+    });
+  });
+
   it('should be available in formatters', function() {
 
-    var client = defineAbcClient({ code: './abc/index.a' }, function() {
+    var compileOptions = null,
+        client = defineAbcClient({ code: './abc/index.a' }, function() {
 
       require('../../../lib/client/serve/dev')(ss.api, router, options);
 
       ss.api.client.send('local','abc','abc');
 
       var formatter = {
-        init: function (root, config) {
+        init: function () {
 
           return {
             name: 'f1',
@@ -106,8 +230,7 @@ describe('locals', function() {
             assetType: 'js',
             contentType: 'text/javascript; charset=utf-8',
             compile: function (pathEntry, options, cb) {
-              options.locals.should.be.type('object');
-              options.locals.abc.should.equal('abc');
+              compileOptions = options;
               cb('//');
             }
           };
@@ -121,7 +244,8 @@ describe('locals', function() {
     // dev time URL
     var req = {url: '/assets/abc/'+client.id+'.js?_=./abc/index.a' };
     router.route(req.url,req,responseStub).should.equal(true);
-    //TODO assert formatter.compile is called
+    compileOptions.locals.should.be.type('object');
+    compileOptions.locals.abc.should.equal('abc');
 
     //TODO packAssetSet
     var bundler = ss.api.bundler.get(client);
