@@ -45,7 +45,7 @@ describe('constants',function() {
 
     var compileOptions = null;
 
-    defineAbcClient({ constants:{def:"def"} },function() {
+    defineAbcClient({ constants:{def:'def'} },function() {
 
       var formatter = {
         init: function () {
@@ -122,8 +122,7 @@ describe('constants',function() {
 
   it('should be loaded in the browser as globals', function(done) {
 
-    var compileOptions = null,
-      client = defineAbcClient({ constants:{"def":"def"} }, function() {
+    var client = defineAbcClient({ constants:{'def':'def'} }, function() {
 
         require('../../../lib/client/serve/dev')(ss.api, router, options);
 
@@ -170,14 +169,14 @@ describe('locals', function() {
       process: function (template, path, id, opts) {
         return '<script id="new-' + id + '" type="text/x-tmpl">' + template + JSON.stringify(opts.locals) + '</script>';
       }
-    }
+    };
   };
 
   it('should be available in template engine formatters', function(done) {
 
     var compileOptions = null;
 
-    defineAbcClient({ locals:{def:"def"} },function() {
+    defineAbcClient({ locals:{def:'def'} },function() {
 
       var formatter = {
         init: function () {
