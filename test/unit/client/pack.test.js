@@ -32,6 +32,24 @@ describe('pack',function() {
     }
   };
 
+  it('should make blank css and js bundles when nothing is defined', function() {
+
+    var client = defineAbcClient({
+      code: undefined,
+      css: undefined
+    }, function() {
+
+      ss.client.formatters.add('html');
+      ss.client.formatters.add('css');
+      ss.client.formatters.add('javascript');
+    });
+
+    ss.api.bundler.pack(client);
+
+    js.should.equal('');
+    css.should.equal('');
+  });
+
   it('should be available in formatters pack simple css and js', function() {
 
     var client = defineAbcClient({ }, function() {
@@ -55,5 +73,13 @@ describe('pack',function() {
     js.should.equal(expected_js);
     css.should.equal('');
   });
+
+  it('should make JS bundle with multiple modules if directory is entry point');
+
+  it('should make JS bundle with start if startInBundle is true');
+
+  it('should make CSS bundle with multiple files if directory is entry point');
+
+  it('should make CSS bundle with multiple files from multiple entry points');
 });
 
