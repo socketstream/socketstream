@@ -46,6 +46,9 @@ describe('pack',function() {
 
     ss.api.bundler.pack(client);
 
+    var js = fs.readFileSync(path.join(__dirname,'../../fixtures/project/client/static/assets/abc/' + client.id + '.js'),'utf-8');
+    var css = fs.readFileSync(path.join(__dirname,'../../fixtures/project/client/static/assets/abc/' + client.id + '.css'),'utf-8');
+
     js.should.equal('');
     css.should.equal('');
   });
