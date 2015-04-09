@@ -32,7 +32,7 @@ describe('pack',function() {
     }
   };
 
-  it('should make blank css and js bundles when nothing is defined', function() {
+  it('should make blank css and minimal js bundles when nothing is defined', function() {
 
     var client = defineAbcClient({
       code: undefined,
@@ -48,8 +48,9 @@ describe('pack',function() {
 
     var js = fs.readFileSync(path.join(__dirname,'../../fixtures/project/client/static/assets/abc/' + client.id + '.js'),'utf-8');
     var css = fs.readFileSync(path.join(__dirname,'../../fixtures/project/client/static/assets/abc/' + client.id + '.css'),'utf-8');
+    var expected_js = fs.readFileSync(path.join(__dirname,'../../fixtures/project/client/abc/empty-expected.js'),'utf-8');
 
-    js.should.equal('');
+    js.should.equal(expected_js);
     css.should.equal('');
   });
 
