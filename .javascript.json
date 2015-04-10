@@ -26,6 +26,8 @@
     "expect",
     "it",
     "xit",
+    "should",
+    "sinon",
 
     "angular",
     "inject",

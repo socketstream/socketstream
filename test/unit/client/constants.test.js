@@ -1,17 +1,15 @@
 'use strict';
 
-var path    = require('path'),
-  should  = require('should'),
-  ss      = require( '../../../lib/socketstream'),
-  Router = require('../../../lib/http/router').Router,
+var ss      = require( '../../../lib/socketstream'),
   options = ss.client.options,
+  Router = require('../../../lib/http/router').Router,
   defineAbcClient = require('./abcClient');
 
 var view = require('../../../lib/client/view');
 
 var responseStub = {
-    writeHead: function(status,headers) {},
-    end: function(body) {}
+    writeHead: function() {},
+    end: function() {}
 };
 
 describe('constants',function() {
@@ -90,7 +88,7 @@ describe('constants',function() {
       ss.api.client.send('constant','abc','abc');
 
       var formatter = {
-        init: function (root, config) {
+        init: function () {
 
           return {
             name: 'f1',

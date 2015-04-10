@@ -34,6 +34,8 @@
         "afterEach"  : false,
         "beforeEach" : false,
         "spyOn"      : false,
+        "should":false,
+        "sinon":false,
         "jQuery"     : false,
         "$"          : false,
         "Worker"     : false,

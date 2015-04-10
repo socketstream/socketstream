@@ -2,8 +2,7 @@
 
 'use strict';
 
-var path          = require('path'),
-    EventEmitter2 = require('eventemitter2').EventEmitter2,
+var EventEmitter2 = require('eventemitter2').EventEmitter2,
     Router        = require( '../../../lib/http/router').Router,
     req           = {},
     res           = {},

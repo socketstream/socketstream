@@ -1,8 +1,6 @@
 'use strict';
 
 var path    = require('path'),
-  should  = require('should'),
-  //sinon   = require('sinon'),
   ss      = require( '../../../../lib/socketstream'),
   bundlerMod = require('../../../../lib/client/bundler'),
   engineMod = require('../../../../lib/client/template_engine'),
@@ -17,7 +15,7 @@ describe('default template engine', function () {
 
   ss.api.bundler = bundlerMod(ss.api, options);
 
-  var templateEngine = engineMod(ss.api,options);
+  engineMod(ss.api,options);
 
   beforeEach(function() {
 
@@ -36,7 +34,7 @@ describe('default template engine', function () {
 
   it('should output an inline template for use with jQuery or HoganJS', function(done) {
 
-    var client = ss.client.define('abc', {
+    ss.client.define('abc', {
         css: './abc/style.css',
         code: './abc/index.a',
         view: './abc/abc.html'
@@ -44,8 +42,8 @@ describe('default template engine', function () {
 
     ss.api.bundler.load();
 
-    var engines = ss.api.client.templateEngines = ss.client.templateEngine.load();
-    var formatters = ss.api.client.formatters = ss.client.formatters.load();
+    ss.api.client.templateEngines = ss.client.templateEngine.load();
+    ss.api.client.formatters = ss.client.formatters.load();
 
     var bundler = ss.api.bundler.get('abc');
 
@@ -60,7 +58,7 @@ describe('default template engine', function () {
 
   it('should output an inline template for a subpath', function(done) {
 
-    var client = ss.client.define('abc', {
+    ss.client.define('abc', {
       css: './abc/style.css',
       code: './abc/index.a',
       view: './abc/abc.html'
@@ -68,8 +66,8 @@ describe('default template engine', function () {
 
     ss.api.bundler.load();
 
-    var engines = ss.api.client.templateEngines = ss.client.templateEngine.load();
-    var formatters = ss.api.client.formatters = ss.client.formatters.load();
+    ss.api.client.templateEngines = ss.client.templateEngine.load();
+    ss.api.client.formatters = ss.client.formatters.load();
 
     var bundler = ss.api.bundler.get('abc');
 

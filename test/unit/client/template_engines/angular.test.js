@@ -1,11 +1,8 @@
 'use strict';
 
 var path    = require('path'),
-  should  = require('should'),
-//sinon   = require('sinon'),
   ss      = require( '../../../../lib/socketstream'),
   bundlerMod = require('../../../../lib/client/bundler'),
-  //engineMod = require('../../../../lib/client/template_engine'),
   options = ss.client.options,
   defineAbcClient = require('../abcClient');
 
@@ -17,8 +14,6 @@ describe('angular.js template engine', function () {
   options.liveReload = false;
 
   ss.api.bundler = bundlerMod(ss.api, options);
-
-  //var templateEngine = engineMod(ss.api,options);
 
   beforeEach(function() {
 

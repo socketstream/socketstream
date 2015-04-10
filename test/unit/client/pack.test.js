@@ -2,7 +2,6 @@
 
 var path    = require('path'),
   fs      = require('fs'),
-  should  = require('should'),
   ss      = require( '../../../lib/socketstream'),
   options = ss.client.options,
   defineAbcClient = require('./abcClient');
@@ -48,7 +47,7 @@ describe('pack',function() {
 
     var js = fs.readFileSync(path.join(__dirname,'../../fixtures/project/client/static/assets/abc/' + client.id + '.js'),'utf-8');
     var css = fs.readFileSync(path.join(__dirname,'../../fixtures/project/client/static/assets/abc/' + client.id + '.css'),'utf-8');
-    var expected_js = fs.readFileSync(path.join(__dirname,'../../fixtures/project/client/abc/empty-expected.js'),'utf-8');
+    var expected_js = fs.readFileSync(path.join(__dirname,'../../fixtures/project/client/abc/empty-expected.min.js'),'utf-8');
 
     js.should.equal(expected_js);
     css.should.equal('');
@@ -71,7 +70,7 @@ describe('pack',function() {
     var js = fs.readFileSync(path.join(__dirname,'../../fixtures/project/client/static/assets/abc/' + client.id + '.js'),'utf-8');
     var css = fs.readFileSync(path.join(__dirname,'../../fixtures/project/client/static/assets/abc/' + client.id + '.css'),'utf-8');
     var expected_html = fs.readFileSync(path.join(__dirname,'../../fixtures/project/client/abc/expected.html'),'utf-8');
-    var expected_js = fs.readFileSync(path.join(__dirname,'../../fixtures/project/client/abc/expected.js'),'utf-8');
+    var expected_js = fs.readFileSync(path.join(__dirname,'../../fixtures/project/client/abc/expected.min.js'),'utf-8');
 
     html.should.equal(expected_html);
     js.should.equal(expected_js);

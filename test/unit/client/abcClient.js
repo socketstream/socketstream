@@ -11,9 +11,10 @@ function defineAbcClient(conf) {
     view: './abc/abc.html',
     tmpl: './templates/abc/1.html'
   };
-  for(var k in conf)
+  for(var k in conf) {
     if (conf[k] === undefined) { delete r[k]; }
     else { r[k] = conf[k]; }
+  }
   return ss.client.define('abc',r);
 }
 

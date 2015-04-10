@@ -1,15 +1,7 @@
 'use strict';
 
-var path = require('path'),
-    ss   = require( '../../../lib/socketstream'),
-    sinon = require('sinon'),
-    log  = require( '../../../lib/utils/log'),
-    consoleOrig = {
-      info: console.info,
-      log: console.log,
-      error: console.error,
-      debug: console.debug
-    };
+var ss   = require( '../../../lib/socketstream'),
+    log  = require( '../../../lib/utils/log');
 
 describe('lib/utils/log', function() {
     ss.api.publish = {
