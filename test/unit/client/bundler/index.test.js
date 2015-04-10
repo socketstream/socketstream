@@ -49,6 +49,7 @@ describe('bundler', function () {
     it('should throw odd bundler lookups', function() {
       ss.client.define('abc', { view: 'abc.html' });
 
+      // jshint immed: false
       (function() {
         ss.api.bundler.get({ ts: 'abc' });
       }).should.throw(Error);
@@ -57,6 +58,7 @@ describe('bundler', function () {
     it('should throw if defined twice', function() {
       ss.client.define('abc', { view: 'abc.html' });
 
+      // jshint immed: false
       (function() {
         ss.client.define('abc', { view: 'abc.html' });
       }).should.throw(Error);

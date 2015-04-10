@@ -206,6 +206,7 @@ describe('default bundler', function () {
 
       it('should require view to be part of the definition and not previously be defined',function() {
 
+        // jshint immed: false
         (function() {
           ss.client.define('abc', {
             css: './abc/style.css',
@@ -214,6 +215,7 @@ describe('default bundler', function () {
           });
         }).should.throw('You may only define one HTML view per single-page client. Please pass a filename as a string, not an Array');
 
+        // jshint immed: false
         (function() {
           ss.client.define('abc', {
             css: './abc/style.css',
@@ -222,6 +224,7 @@ describe('default bundler', function () {
           });
         }).should.throw('Client name \'abc\' has already been defined');
 
+        // jshint immed: false
         (function() {
           ss.client.define('abc2', {
             css: './abc/style.css',
