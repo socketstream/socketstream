@@ -35,6 +35,14 @@ code you can define a common namespace. During development this will be served o
 <p>It depends if it needs access to the <code>window</code> variable. For example, Backbone.js works great as a <code>system</code> module unless you&#39;re using Backbone.history as this requires access to <code>window</code>.</p>
 <h4 id="client-side-code_what-happens-if-i-try-to-require-a-module-which-doesnt-exist">What happens if I try to require a module which doesn&#39;t exist?</h4>
 <p>You&#39;ll see an error in the browser&#39;s console. In the future SocketStream will be able to catch these problems before they arise.</p>
+<h4 id="client-side-code_using-require-in-the-browser">Using require in the browser</h4>
+<p>Within client view code you should generally require another module by relative path (<code>&quot;./controller&quot;</code>) or system module (<code>&quot;facility&quot;</code>).
+If you use absolute path it will be relative to the client directory, so if you want to require a directory module within the default
+code directory do something like,</p>
+<pre><code>require(&quot;/code/app/part1&quot;)
+</code></pre><p>This will load the module for the source file <code>/code/app/part1/index.js</code> or <code>/code/app/part1/index.coffee</code>. If part1 isn&#39;t a directory
+it can also be used to load <code>/code/app/part1.js</code>. You could also do this explicitly using <code>require(&quot;/code/app/part1/index.js&quot;)</code>,
+but this isn&#39;t advised as it locks you in to the exact source structure.</p>
 <h4 id="client-side-code_loading-modules-on-demand">Loading modules on demand</h4>
 <p>You don&#39;t necessarily have to send all modules to the browser at once, you can also <a href="https://github.com/socketstream/socketstream/blob/master/doc/guide/en/loading_assets_on_demand.md">load them on demand</a>.</p>
 <h4 id="client-side-code_options">Options</h4>

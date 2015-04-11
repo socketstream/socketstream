@@ -127,6 +127,26 @@ describe('browserify', function() {
       r.filename.should.equal('/a/b/c/d');
     });
 
+    it('should resolve require any extension with absolute path', function() {
+      browser.require.define('/a/b/c/d',
+        function(require, module, exports, __dirname, __filename) {
+          exports.a = 'a';
+          exports.dirname = __dirname;
+          exports.filename = __filename;
+        }
+      );
+
+      var r = browser.require('/a/b/c/d.js');
+      r.a.should.equal('a');
+      r.dirname.should.equal('/a/b/c');
+      r.filename.should.equal('/a/b/c/d');
+
+      r = browser.require('/a/b/c/d.coffee');
+      r.a.should.equal('a');
+      r.dirname.should.equal('/a/b/c');
+      r.filename.should.equal('/a/b/c/d');
+    });
+
     it('should resolve require of module', function() {
       browser.require.define('mod-a',
         function(require, module, exports, __dirname, __filename) {
@@ -224,6 +244,42 @@ describe('browserify', function() {
       main.dirname.should.equal('/a/b/c');
       main.filename.should.equal('/a/b/c/x');
       should(main.d).equal(sub);
+    });
+
+    it('should resolve relative require with an extension within an absolute sibling module',function() {
+
+      browser.require.define('/a/b/c/d',
+        function(require, module, exports, __dirname, __filename) {
+          exports.f = 'f';
+          exports.dirname = __dirname;
+          exports.filename = __filename;
+        }
+      );
+
+      browser.require.define('/a/b/c/x',
+        function(require, module, exports, __dirname, __filename) {
+          exports.g = 'g';
+          exports.dirname = __dirname;
+          exports.filename = __filename;
+          exports.d = require('./d.coffee');
+          exports.djs = require('./d.js');
+          exports.da = require('./d.a');
+        }
+      );
+
+      var sub = browser.require('/a/b/c/d');
+      sub.f.should.equal('f');
+      sub.dirname.should.equal('/a/b/c');
+      sub.filename.should.equal('/a/b/c/d');
+
+      // sub-module in main
+      var main = browser.require('/a/b/c/x');
+      main.g.should.equal('g');
+      main.dirname.should.equal('/a/b/c');
+      main.filename.should.equal('/a/b/c/x');
+      should(main.d).equal(sub);
+      should(main.djs).equal(sub);
+      should(main.da).equal(sub);
     });
 
     it('should resolve module relative to a root', function() {
