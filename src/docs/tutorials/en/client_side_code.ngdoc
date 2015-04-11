@@ -68,6 +68,20 @@ It depends if it needs access to the `window` variable. For example, Backbone.js
 You'll see an error in the browser's console. In the future SocketStream will be able to catch these problems before they arise.
 
 
+### Using require in the browser
+
+Within client view code you should generally require another module by relative path (`"./controller"`) or system module (`"facility"`).
+If you use absolute path it will be relative to the client directory, so if you want to require a directory module within the default
+code directory do something like,
+
+    require("/code/app/part1")
+
+This will load the module for the source file `/code/app/part1/index.js` or `/code/app/part1/index.coffee`. If part1 isn't a directory
+it can also be used to load `/code/app/part1.js`. You could also do this explicitly using `require("/code/app/part1/index.js")`,
+but this isn't advised as it locks you in to the exact source structure.
+
+
+
 ### Loading modules on demand
 
 You don't necessarily have to send all modules to the browser at once, you can also [load them on demand](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/loading_assets_on_demand.md).
