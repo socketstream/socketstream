@@ -90,7 +90,7 @@ describe('angular.js template engine', function () {
 
     ss.client.templateEngine.generate(bundler, files, function (tag) {
       tag.should.be.equal('<script id="tmpl-abc-abc" type="text/x-tmpl"><html>\n'+
-        '<head><title>ABC</title></head>\n<body><p>ABC</p></body>\n</html></script>');
+        '<head><title>ABC</title></head>\n<body><p>ABC</p></body>\n</html>\n</script>');
       done();
     });
   });

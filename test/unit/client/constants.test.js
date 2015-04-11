@@ -134,7 +134,7 @@ describe('constants',function() {
       '<body><p>ABC</p>'+
       '<script>var abc="abc";\nvar def="def";\nrequire("/abc/index");</script>'+
       '</body>\n'+
-      '</html>';
+      '</html>\n';
 
     view(ss.api, client, options, function(output) {
       output.should.equal(expectedHtml);

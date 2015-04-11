@@ -42,32 +42,24 @@ describe('client system library', function () {
             jsAfter.content.should.have.length(0);
         });
 
-        it('should replace init code', function() {
+        it('should have init code for client', function() {
 
-            //ss.client.options.entryModuleName =
-            var expected = 'require("./entry");',//ss.client.options.defaultEntryInit,
+            var expected = 'require("./entry2");',//ss.client.options.defaultEntryInit,
                 client = {
-                    entryInitPath: './entry'
+                    entryInitPath: './entry2'
                 };
-
-            // Code to execute once everything is loaded
-            ss.client.assets.send('code', 'init', options.defaultEntryInit);
 
             var start = ss.api.bundler.startCode(client);
             start.should.be.type('object');
             start[start.length-1].type.should.be.equal('start');
             start[start.length-1].content.should.be.equal(expected);
-            // client.entryInitPath
         });
 
-        it('should allow startCode for the client to be configured', function(){
+        it('should allow startCode for all clients to be configured', function(){
             var expected = 'require("./startCode");',
                 client = {};
 
             options.defaultEntryInit = 'require("./startCode");';
-
-            // Code to execute once everything is loaded
-            ss.client.assets.send('code', 'init', options.defaultEntryInit);
 
             var start = ss.api.bundler.startCode(client);
             start.should.be.type('object');

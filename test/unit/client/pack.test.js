@@ -69,7 +69,7 @@ describe('pack',function() {
     var html = fs.readFileSync(path.join(__dirname,'../../fixtures/project/client/static/assets/abc/' + client.id + '.html'),'utf-8');
     var js = fs.readFileSync(path.join(__dirname,'../../fixtures/project/client/static/assets/abc/' + client.id + '.js'),'utf-8');
     var css = fs.readFileSync(path.join(__dirname,'../../fixtures/project/client/static/assets/abc/' + client.id + '.css'),'utf-8');
-    var expected_html = fs.readFileSync(path.join(__dirname,'../../fixtures/project/client/abc/expected.html'),'utf-8');
+    var expected_html = fs.readFileSync(path.join(__dirname,'../../fixtures/project/client/abc/expected-with-abc-constants.html'),'utf-8');
     var expected_js = fs.readFileSync(path.join(__dirname,'../../fixtures/project/client/abc/expected.min.js'),'utf-8');
 
     html.should.equal(expected_html);

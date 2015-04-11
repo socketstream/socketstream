@@ -443,7 +443,7 @@ describe('default bundler', function () {
           '<html>',
           '<head><title>ABC</title></head>',
           '<body><p>ABC</p><script>var abcl={"b":"b"};\nrequire("/abc/index");</script></body>',
-          '</html>'
+          '</html>\n'
         ].join('\n'))
       });
     });
@@ -466,7 +466,7 @@ describe('default bundler', function () {
           '<html>',
           '<head><title>ABC</title></head>',
           '<body><p>ABC</p><script>var abcg={"a":"a"};\nvar abcl={"b":"b"};\nrequire("/abc/index");</script></body>',
-          '</html>'
+          '</html>\n'
         ].join('\n'))
         done();
       });
@@ -492,7 +492,7 @@ describe('default bundler', function () {
           '<html>',
           '<head><title>ABC</title></head>',
           '<body><p>ABC</p><script>var abcg={"b":"b"};\nrequire("/abc/index");</script></body>',
-          '</html>'
+          '</html>\n'
         ].join('\n'))
       });
     });
@@ -671,7 +671,7 @@ describe('default bundler', function () {
           '<html>',
           '<head><title>ABC</title></head>',
           '<body><p>ABC</p><script>require("/abc/index");</script></body>',
-          '</html>'
+          '</html>\n'
         ].join('\n'))
       });
 
@@ -692,7 +692,7 @@ describe('default bundler', function () {
           '<html>',
           '<head><title>ABC</title></head>',
           '<body><p>ABC</p></body>',
-          '</html>'
+          '</html>\n'
         ].join('\n'))
       });
 

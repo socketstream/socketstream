@@ -12,6 +12,12 @@ describe('client asset manager index', function () {
 
     //var origDefaultEntryInit = options.defaultEntryInit;
 
+  beforeEach(function() {
+    if (ss.client.assets.assets.constants.abc) {
+      delete ss.client.assets.assets.constants.abc;
+    }
+  });
+
     afterEach(function() {
       ss.client.forget();
     });
@@ -102,6 +108,16 @@ describe('client asset manager index', function () {
 
         //options.packedAssets = true;
 
+      beforeEach(function() {
+
+        ss.client.unload();
+        ss.client.forget();
+        ss.client.formatters.add('html');
+        ss.client.formatters.add('javascript');
+        ss.client.formatters.add('css');
+
+      });
+
       afterEach(function() {
         ss.client.unload();
         ss.client.forget();
@@ -111,13 +127,9 @@ describe('client asset manager index', function () {
 
           ss.root = ss.api.root = path.join(__dirname, '../../fixtures/project');
 
-        ss.client.formatters.add('html');
-        ss.client.formatters.add('javascript');
-        ss.client.formatters.add('css');
-
         var client = ss.client.define('abc', {
             code: './abc/index.js',
-            view: './abc.html'
+            view: './abc/abc.html'
         });
 
         ss.client.packAssets();
@@ -253,7 +265,7 @@ describe('client asset manager index', function () {
           var expectedHtml = '<html>\n' +
             '<head><title>ABC</title></head>\n' +
             '<body><p>ABC</p><script>require("/abc/index");</script></body>\n' +
-            '</html>';
+            '</html>\n';
 
           var client = ss.client.define('abc', {
             css: './abc/style.css',
@@ -273,7 +285,7 @@ describe('client asset manager index', function () {
           var expectedHtml = '<html>\n' +
             '<head><title>ABC</title></head>\n' +
             '<body><p>ABC</p></body>\n' +
-            '</html>';
+            '</html>\n';
 
           options.startInBundle = true;
 
