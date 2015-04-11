@@ -32,6 +32,7 @@ describe('Template engine', function() {
     it('should throw error for unknown builtin engine', function() {
 
       defineAbcClient({ },function() {
+        // jshint immed: false
         (function() {
           ss.client.templateEngine.use('not-there');
         }).should.throw('Cannot find module \'./template_engines/not-there\'');
@@ -40,6 +41,7 @@ describe('Template engine', function() {
 
     it('should throw error for module use', function() {
 
+      // jshint immed: false
       (function() {
         defineAbcClient({ },function() {
           ss.client.templateEngine.use('angular','my-module');

@@ -116,6 +116,7 @@ var ss      = require( '../../../lib/socketstream'),
 
 
       it('should throw an error if the formatter is not supported by SocketStream internally', function() {
+        // jshint immed: false
         (function() {
           ss.client.formatters.add('not-there',{});
 
