@@ -1,9 +1,7 @@
 'use strict';
 
 var path    = require('path'),
-  should  = require('should'),
-  ss      = require( '../../../../lib/socketstream'),
-  options = ss.client.options;
+  ss      = require( '../../../../lib/socketstream');
 
 
 describe('html formatter', function () {

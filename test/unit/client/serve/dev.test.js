@@ -1,9 +1,7 @@
 'use strict';
 
 var path    = require('path'),
-  should  = require('should'),
   fs      = require('fs'),
-  path    = require('path'),
   ss      = require( '../../../../lib/socketstream'),
   Router = require('../../../../lib/http/router').Router,
   options = ss.client.options,

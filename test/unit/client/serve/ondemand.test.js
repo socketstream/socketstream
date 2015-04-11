@@ -1,6 +1,5 @@
 'use strict';
 
-require('should');
 var path    = require('path'),
     ss      = require( '../../../../lib/socketstream'),
     Router = require('../../../../lib/http/router').Router,

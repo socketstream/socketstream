@@ -1,7 +1,6 @@
 'use strict';
 
 var path    = require('path'),
-    should  = require('should'),
     ss      = require( '../../../lib/socketstream'),
     options = ss.client.options;
 
@@ -10,7 +9,7 @@ describe('client asset manager index', function () {
 
   ss.root = ss.api.root = path.join(__dirname, '../../../fixtures/project');
 
-    var origDefaultEntryInit = options.defaultEntryInit;
+    //var origDefaultEntryInit = options.defaultEntryInit;
 
     afterEach(function() {
       ss.client.forget();

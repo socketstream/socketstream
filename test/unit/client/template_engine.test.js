@@ -1,8 +1,6 @@
 'use strict';
 
 var path    = require('path'),
-  should  = require('should'),
-  sinon   = require('sinon'),
   ss      = require( '../../../lib/socketstream'),
   options = ss.client.options,
   defineAbcClient = require('./abcClient');
@@ -10,6 +8,7 @@ var path    = require('path'),
 
 describe('Template engine', function() {
 
+  var sinon = require('sinon');
   ss.root = ss.api.root = path.join(__dirname, '../../../fixtures/project');
 
   options.liveReload = false;

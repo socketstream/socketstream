@@ -5,8 +5,7 @@
 // Dependencies
 
 var uncachedRequire               = require('../helpers/uncache'),
-  path = require('path'),
-  should  = require('should');
+  path = require('path');
 
 
 

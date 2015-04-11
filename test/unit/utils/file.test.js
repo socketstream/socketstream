@@ -4,7 +4,6 @@
 
 var fs              = require('fs'),
     path            = require('path'),
-    should          = require('should'),
     fileUtils       = require( path.join('../../..', 'lib/utils/file') ),
     projectDir      = path.join(__dirname,'../../fixtures', 'project'),
     testDir         = path.join(__dirname,'../../fixtures', 'files'),
@@ -153,7 +152,7 @@ describe('lib/utils/file', function () {
         it('should return null for files that do not exist', function (done) {
 
             var basename = testDir + '/i-dont-exist';
-            should.not.exist(fileUtils.findExtForBasePath(basename));
+            require('should').not.exist(fileUtils.findExtForBasePath(basename));
             done();
 
         });

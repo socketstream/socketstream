@@ -1,7 +1,6 @@
 'use strict';
 
 var path    = require('path'),
-    should  = require('should'),
     ss      = require( '../../../../lib/socketstream'),
     options = ss.client.options;
 
@@ -48,19 +47,19 @@ describe('bundler', function () {
     });
 
     it('should throw odd bundler lookups', function() {
-      var client = ss.client.define('abc', { view: 'abc.html' });
+      ss.client.define('abc', { view: 'abc.html' });
 
-      should(function() {
+      (function() {
         ss.api.bundler.get({ ts: 'abc' });
-      }).throw(Error);
+      }).should.throw(Error);
     });
 
     it('should throw if defined twice', function() {
       ss.client.define('abc', { view: 'abc.html' });
 
-      should(function() {
+      (function() {
         ss.client.define('abc', { view: 'abc.html' });
-      }).throw(Error);
+      }).should.throw(Error);
     });
 
     it('should set client options piecemeal', function() {
@@ -106,8 +105,8 @@ describe('bundler', function () {
 
       ss.api.bundler.load();
 
-      var engines = ss.api.client.templateEngines = ss.client.templateEngine.load();
-      var loaded = ss.api.client.formatters = ss.client.formatters.load();
+      ss.api.client.templateEngines = ss.client.templateEngine.load();
+      ss.api.client.formatters = ss.client.formatters.load();
 
       var templates = ss.api.bundler.entries(client,'tmpl');
       templates.should.eql([{
@@ -127,8 +126,8 @@ describe('bundler', function () {
 
       ss.api.bundler.load();
 
-      var engines = ss.api.client.templateEngines = ss.client.templateEngine.load();
-      var loaded = ss.api.client.formatters = ss.client.formatters.load();
+      ss.api.client.templateEngines = ss.client.templateEngine.load();
+      ss.api.client.formatters = ss.client.formatters.load();
 
       var templates = ss.api.bundler.entries(client,'tmpl');
       templates.should.eql([
@@ -149,8 +148,8 @@ describe('bundler', function () {
 
       ss.api.bundler.load();
 
-      var engines = ss.api.client.templateEngines = ss.client.templateEngine.load();
-      var loaded = ss.api.client.formatters = ss.client.formatters.load();
+      ss.api.client.templateEngines = ss.client.templateEngine.load();
+      ss.api.client.formatters = ss.client.formatters.load();
 
       var templates = ss.api.bundler.entries(client,'tmpl');
       templates.should.eql([

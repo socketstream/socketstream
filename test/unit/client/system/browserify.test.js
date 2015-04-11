@@ -3,7 +3,6 @@
 var path    = require('path'),
   vm      = require('vm'),
   fs      = require('fs'),
-  should  = require('should'),
   ss      = require( '../../../../lib/socketstream');
 
 /**
@@ -39,6 +38,8 @@ var path    = require('path'),
  4. If X/index.node is a file, load X/index.node as binary addon.  STOP
  */
 describe('browserify', function() {
+
+  var should = require('should');
 
   var browserify = fs.readFileSync( path.join(__dirname,'../../../..', 'lib/client/system/libs/browserify.js')),
       browser;

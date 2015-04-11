@@ -1,7 +1,6 @@
 'use strict';
 
 var path    = require('path'),
-    should  = require('should'),
     ss      = require( '../../../../lib/socketstream'),
     viewer  = require( '../../../../lib/client/view'),
     options = ss.client.options,
@@ -203,6 +202,33 @@ describe('default bundler', function () {
         client.includes.initCode.should.equal(false);
         client.includes.html.should.equal(false);
 
+      });
+
+      it('should require view to be part of the definition and not previously be defined',function() {
+
+        (function() {
+          ss.client.define('abc', {
+            css: './abc/style.css',
+            code: './abc/index.js',
+            view: undefined
+          });
+        }).should.throw('You may only define one HTML view per single-page client. Please pass a filename as a string, not an Array');
+
+        (function() {
+          ss.client.define('abc', {
+            css: './abc/style.css',
+            code: './abc/index.js',
+            view: undefined
+          });
+        }).should.throw('Client name \'abc\' has already been defined');
+
+        (function() {
+          ss.client.define('abc2', {
+            css: './abc/style.css',
+            code: './abc/index.js',
+            view: './abc/view'
+          });
+        }).should.throw('The \'./abc/view\' view must have a valid HTML extension (such as .html or .jade)');
       });
     });
 

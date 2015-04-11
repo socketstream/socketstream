@@ -1,14 +1,12 @@
 'use strict';
 
-var path    = require('path'),
-  should  = require('should'),
-  sinon   = require('sinon'),
-  ss      = require( '../../../lib/socketstream'),
-  options = ss.client.options,
+var ss      = require( '../../../lib/socketstream'),
   defineAbcClient = require('./abcClient');
 
 
   describe('code formatter loading API', function () {
+
+    var sinon = require('sinon')
 
     describe('ss api', function() {
 
@@ -121,7 +119,7 @@ var path    = require('path'),
         (function() {
           ss.client.formatters.add('not-there',{});
 
-        }).should.throw(Error('The \'./formatters/not-there\' '));
+        }).should.throw('The not-there formatter is not supported by SocketStream internally. Please pass a compatible module instead');
       });
 
     });
@@ -143,7 +141,7 @@ var path    = require('path'),
 
       it('should load the code formatters, and return an object containing them', function() {
 
-          var client = ss.client.define('abc', {
+          ss.client.define('abc', {
             css: './abc/style.css',
             code: './abc/index.a',
             view: './abc/abc.html'
@@ -243,7 +241,7 @@ var path    = require('path'),
               assetType: 'js',
               contentType: 'text/javascript; charset=utf-8',
               config: config,
-              compile: function (pathEntry, options, cb) {
+              compile: function () {
                 throw new Error(config.c);
               }
             };

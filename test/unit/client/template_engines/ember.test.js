@@ -1,8 +1,6 @@
 'use strict';
 
 var path    = require('path'),
-  should  = require('should'),
-//sinon   = require('sinon'),
   ss      = require( '../../../../lib/socketstream'),
   options = ss.client.options;
 
@@ -29,7 +27,7 @@ describe('Ember.js template engine', function () {
 
   it('should output an inline template for use with Ember.js', function(done) {
 
-    var client = ss.client.define('abc', {
+    ss.client.define('abc', {
       css: './abc/style.css',
       code: './abc/index.a',
       view: './abc/abc.html'
@@ -39,8 +37,8 @@ describe('Ember.js template engine', function () {
 
     ss.api.bundler.load();
 
-    var engines = ss.api.client.templateEngines = ss.client.templateEngine.load();
-    var formatters = ss.api.client.formatters = ss.client.formatters.load();
+    ss.api.client.templateEngines = ss.client.templateEngine.load();
+    ss.api.client.formatters = ss.client.formatters.load();
 
     var bundler = ss.api.bundler.get('abc');
 

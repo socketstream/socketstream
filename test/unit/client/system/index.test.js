@@ -1,7 +1,6 @@
 'use strict';
 
 var path    = require('path'),
-    should  = require('should'),
     ss      = require( path.join('../../../..', 'lib/socketstream')),
     options = ss.client.options;
 
