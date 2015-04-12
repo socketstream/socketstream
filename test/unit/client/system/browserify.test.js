@@ -41,7 +41,7 @@ describe('browserify', function() {
 
   var should = require('should');
 
-  var browserify = fs.readFileSync( path.join(__dirname,'../../../..', 'lib/client/system/libs/browserify.js')),
+  var browserify = fs.readFileSync( path.join(__dirname,'../../../..', 'lib/client/bundler/browserify.js')),
       browser;
 
   describe('require()', function () {

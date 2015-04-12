@@ -241,35 +241,35 @@ describe('default bundler', function () {
 
     describe('#entries', function () {
 
-        beforeEach(function() {
+      beforeEach(function() {
 
-            options.defaultEntryInit = origDefaultEntryInit;
+          options.defaultEntryInit = origDefaultEntryInit;
 
-            ss.client.assets.unload();
-            ss.client.forget();
-            ss.client.assets.load();
+          ss.client.assets.unload();
+          ss.client.forget();
+          ss.client.assets.load();
+      });
+
+      it('should report erroneous paths in an easy way');
+
+      it('should return entries for everything needed in view with just css', function() {
+
+        defineAbcClient({
+          code: undefined
+        },function() {
         });
 
-        it('should report erroneous paths in an easy way');
+        var bundler = ss.api.bundler.get('abc'),
+          entriesCSS = bundler.entries('css'),
+          entriesJS = bundler.entries('js');
 
-        it('should return entries for everything needed in view with just css', function() {
+        entriesCSS.should.have.lengthOf(1);
+        entriesJS.should.have.lengthOf(4);
 
-          defineAbcClient({
-            code: undefined
-          },function() {
-          });
-
-          var bundler = ss.api.bundler.get('abc'),
-            entriesCSS = bundler.entries('css'),
-            entriesJS = bundler.entries('js');
-
-          entriesCSS.should.have.lengthOf(1);
-          entriesJS.should.have.lengthOf(3);
-
-          // css entries
-          entriesCSS[0].file.should.be.equal('./abc/style.css');
-          entriesCSS[0].importedBy.should.be.equal('./abc/style.css');
-        });
+        // css entries
+        entriesCSS[0].file.should.be.equal('./abc/style.css');
+        entriesCSS[0].importedBy.should.be.equal('./abc/style.css');
+      });
 
       it('should return no entries for css if not in includes', function() {
 
@@ -284,7 +284,7 @@ describe('default bundler', function () {
           entriesJS = bundler.entries('js');
 
         entriesCSS.should.have.lengthOf(0);
-        entriesJS.should.have.lengthOf(3);
+        entriesJS.should.have.lengthOf(4);
       });
 
       it('should return entries for everything needed in view with just code', function() {
@@ -299,24 +299,24 @@ describe('default bundler', function () {
             entriesJS = bundler.entries('js');
 
         entriesCSS.should.have.lengthOf(0);
-        entriesJS.should.have.lengthOf(4);
+        entriesJS.should.have.lengthOf(5);
 
         // libs
         entriesJS[0].names.should.have.lengthOf(1);
         entriesJS[0].names[0].should.be.equal('browserify.js');
 
         // mod
-        entriesJS[1].name.should.be.equal('eventemitter2');
-        entriesJS[1].type.should.be.equal('mod');
-
-        // mod
-        entriesJS[2].name.should.be.equal('socketstream');
+        entriesJS[2].name.should.be.equal('eventemitter2');
         entriesJS[2].type.should.be.equal('mod');
 
+        // mod
+        entriesJS[3].name.should.be.equal('socketstream');
+        entriesJS[3].type.should.be.equal('mod');
+
         // mod TODO
-        entriesJS[3].file.should.be.equal('./abc/index.js');
-        entriesJS[3].importedBy.should.be.equal('./abc/index.js');
-        //entriesJS[3].type.should.be.equal('mod');
+        entriesJS[4].file.should.be.equal('./abc/index.js');
+        entriesJS[4].importedBy.should.be.equal('./abc/index.js');
+        //entriesJS[4].type.should.be.equal('mod');
 
         //entriesJS.should.be.equal([{ path:'./abc.js'}]);
     });
@@ -334,28 +334,28 @@ describe('default bundler', function () {
           entriesJS = bundler.entries('js');
 
         entriesCSS.should.have.lengthOf(1);
-        entriesJS.should.have.lengthOf(5);
+        entriesJS.should.have.lengthOf(6);
 
         // libs
         entriesJS[0].names.should.have.lengthOf(1);
         entriesJS[0].names[0].should.be.equal('browserify.js');
 
         // mod
-        entriesJS[1].name.should.be.equal('eventemitter2');
-        entriesJS[1].type.should.be.equal('mod');
-
-        // mod
-        entriesJS[2].name.should.be.equal('socketstream');
+        entriesJS[2].name.should.be.equal('eventemitter2');
         entriesJS[2].type.should.be.equal('mod');
 
+        // mod
+        entriesJS[3].name.should.be.equal('socketstream');
+        entriesJS[3].type.should.be.equal('mod');
+
         // mod TODO
-        entriesJS[3].file.should.be.equal('./abc/index.js');
-        entriesJS[3].importedBy.should.be.equal('./abc/index.js');
-        //entriesJS[3].type.should.be.equal('mod');
+        entriesJS[4].file.should.be.equal('./abc/index.js');
+        entriesJS[4].importedBy.should.be.equal('./abc/index.js');
+        //entriesJS[4].type.should.be.equal('mod');
 
         // start TODO
-        entriesJS[4].content.should.be.equal('require("/abc/index");');
-        entriesJS[4].type.should.be.equal('start');
+        entriesJS[5].content.should.be.equal('require("/abc/index");');
+        entriesJS[5].type.should.be.equal('start');
       });
 
       it('should return entries for JS flagged in includes', function() {

@@ -19,15 +19,10 @@ describe('client system library', function () {
 
         it('should extend libs',function() {
 
-            var jsBefore, jsAfter;
-
-            jsBefore = ss.api.bundler.systemLibs();
-            jsBefore.should.be.type('object');
-            jsBefore.type.should.be.equal('loader');
             ss.client.assets.send('lib','extra.js','var extra = 0;');
-            jsAfter = ss.api.bundler.systemLibs();
+            var jsAfter = ss.api.bundler.systemLibs();
             jsAfter.should.be.type('object');
-            jsAfter.content.should.have.length(jsBefore.content.length + 1 + 14);
+            jsAfter.content.should.have.length(14);
         });
 
         it('should replace libs',function() {

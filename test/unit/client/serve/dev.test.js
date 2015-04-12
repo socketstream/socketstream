@@ -40,13 +40,14 @@ describe('development mode asset server', function () {
       code: './abc/index.a'
     }, function() {
       require('../../../../lib/client/serve/dev')(ss.api, router, options);
-      ss.client.assets.send('lib','browserify.js','// loader');
     });
+
+    var browserify = fs.readFileSync(path.join(__dirname,'../../../../lib/client/bundler/browserify.js'),'utf8');
 
     // dev time URL
     var req = {url: '/assets/abc/'+client.id+'.js?mod=loader' };
     router.route(req.url,req,responseStub).should.equal(true);
-    responseStub.body.should.equal('// loader');
+    responseStub.body.should.equal(browserify + '\n');
   });
 
   it('should provide a route for serving system libraries and modules', function() {
