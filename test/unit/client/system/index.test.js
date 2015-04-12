@@ -8,6 +8,8 @@ describe('client system library', function () {
 
     var origDefaultEntryInit = options.defaultEntryInit;
 
+  var should = require('should');
+
     describe('#send', function () {
         beforeEach(function() {
 
@@ -19,15 +21,10 @@ describe('client system library', function () {
 
         it('should extend libs',function() {
 
-            var jsBefore, jsAfter;
-
-            jsBefore = ss.api.bundler.systemLibs();
-            jsBefore.should.be.type('object');
-            jsBefore.type.should.be.equal('loader');
             ss.client.assets.send('lib','extra.js','var extra = 0;');
-            jsAfter = ss.api.bundler.systemLibs();
+            var jsAfter = ss.api.bundler.systemLibs();
             jsAfter.should.be.type('object');
-            jsAfter.content.should.have.length(jsBefore.content.length + 1 + 14);
+            jsAfter.content.should.have.length(14);
         });
 
         it('should replace libs',function() {
@@ -69,40 +66,34 @@ describe('client system library', function () {
 
         //TODO options.entryModuleName
         //TODO options.defaultEntryInit
+
+      it('should add start code to bootstrap',function() {
+        var client = {};
+        ss.client.assets.send('code','init','//x sysinit');
+        var start = ss.api.bundler.startCode(client);
+        start[0].content.should.equal('//x sysinit\nrequire("/entry");');
+      });
+
+      it('should return undefined for unknown system module', function() {
+
+        var mod = ss.api.bundler.systemModule('unknown-thing');
+        should(mod).equal(undefined);
+      });
+
+      it('should allow a module to be defined',function() {
+        ss.client.assets.send('mod','sysmod','//sysmod');
+        var mod = ss.api.bundler.systemModule('sysmod');
+        mod.name.should.equal('sysmod');
+        mod.includeType.should.equal('system');
+        mod.content.should.equal('require.define("sysmod", function (require, module, exports, __dirname, __filename){\n//sysmod\n});');
+      });
+
+      it('should throw exception when redefining system module', function() {
+        ss.client.assets.send('mod','sysmod','//sysmod');
+        (function() {
+          ss.client.assets.send('mod','sysmod','//sysmod');
+        }).should.throw('System module name \'sysmod\' already exists');
+      });
     });
-
-
-
-    describe('#load', function () {
-
-
-
-    });
-
-
-
-    describe('#serve', function () {
-
-
-
-        describe('#js', function () {
-
-
-
-        });
-
-
-
-        describe('#initCode', function () {
-
-
-
-        });
-
-
-
-    });
-
-
 
 });
