@@ -17,6 +17,8 @@ _Latest release: 0.4 beta ([view changelog](https://github.com/socketstream/sock
 
 ### Installation
 
+Please note that this is a beta release, for a production ready version use 0.3.12
+
     npm install -g socketstream
 
 ### Usage
