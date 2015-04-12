@@ -69,8 +69,6 @@ describe('client system library', function () {
 
       it('should add start code to bootstrap',function() {
         var client = {};
-        var startLength = ss.api.bundler.startCode(client).length;
-
         ss.client.assets.send('code','init','//x sysinit');
         var start = ss.api.bundler.startCode(client);
         start[0].content.should.equal('//x sysinit\nrequire("/entry");');
