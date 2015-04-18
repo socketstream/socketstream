@@ -90,6 +90,7 @@ describe('client system library', function () {
 
       it('should throw exception when redefining system module', function() {
         ss.client.assets.send('mod','sysmod','//sysmod');
+        // jshint immed: false
         (function() {
           ss.client.assets.send('mod','sysmod','//sysmod');
         }).should.throw('System module name \'sysmod\' already exists');

@@ -6,12 +6,7 @@ var ss      = require( '../../../lib/socketstream'),
 
   describe('code formatter loading API', function () {
 
-    var sinon = require('sinon')
-
-    describe('ss api', function() {
-
-      it('should throw exception when called as function');
-    });
+    var sinon = require('sinon');
 
     describe('#add', function () {
 
@@ -191,6 +186,58 @@ var ss      = require( '../../../lib/socketstream'),
 
       afterEach(function() {
         ss.client.forget();
+      });
+
+      it('should support alternate extensions', function(done) {
+        ss.client.formatters.add(function() {
+          return {
+            name: 'f2',
+            extensions: ['a'],
+            assetType: 'js',
+            contentType: 'text/javascript; charset=utf-8',
+            compile: function(pathEntry, options, cb) {
+              cb('window.a = "formatter index.a";');
+            }
+          };
+        });
+
+        var client = defineAbcClient({ code:'./abc/index.a' },function() {});
+
+        ss.api.bundler.packAssetSet('js', client, function(files) {
+          files[3].content.should.equal('require.define("/abc/index",function(e,t,n,r,i){window.a="formatter index.a"})');
+          done();
+        });
+      });
+
+      it('should complain when not finding formatter', function() {
+        var client = defineAbcClient({ code:'./abc/index.a' },function() {});
+
+        // jshint immed: false
+        (function() {
+          ss.api.bundler.packAssetSet('js', client, function() {
+          });
+        }).should.throw('Unsupported file extension \'.a\' when we were expecting some type of JS file. Please provide a formatter for ./abc/index.a or move it to /client/static');
+      });
+
+      it('should complain about unmatched assetType', function() {
+        ss.client.formatters.add(function() {
+          return {
+            name: 'f2',
+            extensions: ['a'],
+            contentType: 'text/javascript; charset=utf-8',
+            compile: function(pathEntry, options, cb) {
+              cb('window.a = "formatter index.a";');
+            }
+          };
+        });
+
+        var client = defineAbcClient({ code:'./abc/index.a' },function() {});
+
+        // jshint immed: false
+        (function() {
+          ss.api.bundler.packAssetSet('js', client, function() {
+          });
+        }).should.throw('Unable to render \'./abc/index.a\' as this appears to be a JS file. Expecting some type of JS file in ./abc instead');
       });
 
       it('should forward exceptions returned', function(done) {

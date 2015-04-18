@@ -106,6 +106,15 @@ NG_DOCS={
     },
     {
       "section": "tutorials",
+      "id": "how_to_write_a_formatter",
+      "shortName": "How to write a formatter",
+      "type": "overview",
+      "moduleName": "How to write a formatter",
+      "shortDescription": "How to write a formatter ?",
+      "keywords": "action additional adjust array asset assettype asynchronous based call called calls cb changed charset client code compilation compile compress compressed console constants contenttype created css debugging default describes description don dot encountered error excluding expressions extension extensions feel file forget formatted formatter formatters formatting free function general headers html http implementation info javascript js key locals log logger logging managed mime object option options output overview packed passing pathentry pre-compile provide read render return returning runtime shouldn signature size smallest socketstream source ss string throwing time trace true tutorials type variables warn warning warnings write written"
+    },
+    {
+      "section": "tutorials",
       "id": "how_to_write_view_html",
       "shortName": "How to write view HTML",
       "type": "overview",

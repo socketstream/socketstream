@@ -1,0 +1,44 @@
+@ngdoc overview
+@name How to write a formatter
+
+@description
+# How to write a formatter ?
+
+Formatters can be written as a function returning an object. The object describes how to compile the formatted source code to
+the general asset type(js, css, html).
+
+key         | description
+------------|-------------
+name        | Give your formatter a name for use in logging
+extensions  | Array of source file extension excluding the dot
+assetType   | The output type js/css/html
+contentType | Mime type for HTTP headers. Don't forget charset.
+compile     | Function with the signature (pathEntry, options, cb)
+
+
+### Compile function
+
+The function must read the file at `pathEntry` and render it as a string.
+The `cb` function must be called with the string output.
+
+You can also return an error object created with `Error()`. Throwing an error is not an option as the formatter
+is asynchronous.
+
+`options` provide additional information such as
+
+key         | description
+------------|-------------
+compress    | True if the output should be compressed or packed for the smallest possible size.
+locals      | Variables for use in HTML and CSS compilation. They could also be used in JavaScript expressions at pre-compile time.
+constants   | Constants for passing to the client runtime. They could also be used in JavaScript expressions at pre-compile time.
+
+Be sure to adjust your formatter implementation based on these options.
+
+### Logging warnings
+
+If warnings are encountered during the formatting you shouldn't output to console as it cannot be managed by Socketstream.
+
+Instead call `ss.log.warn` with the warning. Other logger calls are `ss.log.info`, `ss.log.trace` and `ss.log.error`.
+The default action for `ss.log.trace` is nothing. It is for debugging where it can be changed to log the trace, so feel
+free to call trace in your formatter.
+

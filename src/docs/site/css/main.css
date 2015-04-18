@@ -40,6 +40,11 @@ ul.methods {
     text-shadow: none;
 }
 
+.table-striped tbody > tr:nth-child(odd) > td,
+.table-striped tbody > tr:nth-child(odd) > th {
+  background-color: rgba(255,255,255,.3);
+}
+
 body,
 html {
   height: 100%;
@@ -231,13 +236,13 @@ input[type="text"]::-webkit-input-placeholder {
 }
 
 input[type="text"]:-moz-placeholder { /* Firefox 18- */
-  color: #f1f1f1;  
+  color: #f1f1f1;
 }
 
 input[type="text"]::-moz-placeholder {  /* Firefox 19+ */
-  color: #f1f1f1;  
+  color: #f1f1f1;
 }
 
-input[type="text"]:-ms-input-placeholder {  
-   color: #f1f1f1;  
+input[type="text"]:-ms-input-placeholder {
+   color: #f1f1f1;
 }
