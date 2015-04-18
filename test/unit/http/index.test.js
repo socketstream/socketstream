@@ -22,8 +22,9 @@ var cookieParser = require('cookie-parser');
 
 var request      = require('supertest'),
     path         = require('path'),
+    //connect      = require('connect'),
     util         = require('util'),
-    httpFunc     = require( path.join('../../..', 'lib/http/index') ),
+    httpFunc     = require( path.join(process.env.PWD, 'lib/http/index') ),
     serveStatic  = require('../../../lib/utils/serve-static'),
     http         = null,
     app          = null,
@@ -130,7 +131,7 @@ describe('lib/http/index', function () {
                 obj.should.be.an.instanceOf(Object);
                 obj.serveClient.should.be.an.instanceOf(Object);
 
-                // NOTE - we need to do some less-specific matching,
+                // NOTE - we need to do some less-specific matching, 
                 // as istanbul injects listeners - PBJENSEN
                 //
                 obj.serveClient.toString().replace(/(\s+|\n)/g, ' ').indexOf('return res.serveClient(name)').should.not.eql(-1);

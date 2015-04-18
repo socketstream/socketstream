@@ -5,19 +5,21 @@
 [![Issue Stats](http://issuestats.com/github/socketstream/socketstream/badge/pr)](http://issuestats.com/github/socketstream/socketstream)
 [![Issue Stats](http://issuestats.com/github/socketstream/socketstream/badge/issue)](http://issuestats.com/github/socketstream/socketstream)
 [![Coverage Status](https://img.shields.io/coveralls/socketstream/socketstream.svg)](https://coveralls.io/r/socketstream/socketstream?branch=master)
+[![Stories in Ready](https://badge.waffle.io/socketstream/socketstream.png?label=ready&title=Ready)](https://waffle.io/socketstream/socketstream)
 
 
 ### Introduction
 
 SocketStream is a framework for Realtime Web Apps
 
-_Latest release: 0.4 beta ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))_
+_Latest release: 0.4.0 ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))_
 
 [Live demo](http://demo.socketstream.com) | [Documentation](http://socketstream.github.io/socketstream/docs/)
 
 ### Installation
 
-Please note that this is a beta release, for a production ready version use 0.3.12
+Please note that this is release with many modifications. It is expected to be robust and changes are well covered by tests. If you are already in production use 0.3.12, or even better
+test this in a staging environment.
 
     npm install -g socketstream
 
@@ -47,7 +49,7 @@ Building a simple chat app that uses websockets is easy, but rich, non-trivial, 
 
 - [Dashku](https://github.com/Anephenix/dashku): Realtime dashboards and widgets using HTML, CSS and JavaScript. Also hosted at [dashku.com](https://dashku.com).
 - [SketchDeck](http://sketchdeck.com): An app for designing great slide decks from sketches, also a Y Combinator tech startup.
-- [Hollow](http://hollowdocumentary.com/): An interactive site for the award-winning documentary Hollow, which debuted at the Sundance festival.
+- [Hollow](http://hollowdocumentary.com/): An interactive, emmy-nominated documentary.
 - [Bitjoy](http://bitjoy.org/): Realtime Bitcoin prices and news.
 - [Teeleader](http://www.teeleader.com): A booking engine for Golf courses.
 
@@ -69,6 +71,16 @@ Building a simple chat app that uses websockets is easy, but rich, non-trivial, 
 ### Documentation
 
 Checkout the [documentation here](http://socketstream.github.io/socketstream/docs/#/tutorials).
+
+### Next Major Release 0.5
+
+[![Build Status](https://api.travis-ci.org/socketstream/socketstream.svg?branch=next)](https://travis-ci.org/socketstream/socketstream)
+[![Coverage Status](https://coveralls.io/repos/socketstream/socketstream/badge.svg?branch=next)](https://coveralls.io/r/socketstream/socketstream?branch=next)
+
+#### Notes
+
+This upcoming is expected in July. The current state can be found on the `next` branch.
+
 
 ### Team
 
