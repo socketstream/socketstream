@@ -8,7 +8,7 @@
   "curly": true,
   "forin": true,
   "immed": true,
-  "latedef": "nofunc",
+  "latedef": false,
   "maxlen": 150,
   "newcap": false,
   "noarg": true,
@@ -22,17 +22,21 @@
 
     "jasmine",
     "beforeEach",
+    "afterEach",
+    "after",
+    "before",
     "describe",
     "expect",
     "it",
     "xit",
+    "should",
+    "sinon",
 
     "angular",
     "inject",
     "module",
     "exports"
   ],
-  "quotmark": true,
   "trailing": true,
   "undef": true,
   "unused": true

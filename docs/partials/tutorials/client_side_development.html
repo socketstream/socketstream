@@ -1,0 +1,24 @@
+<h1><code ng:non-bindable=""></code>
+<div><span class="hint"></span>
+</div>
+</h1>
+<div><div class="client-side-development-page"><h2 id="client-side-development">Client-Side Development</h2>
+<p>Each view is served with a separate bundle of assets. A HTML, JS and CSS file makes up the view.</p>
+<p>The production form will,</p>
+<ul>
+<li>be saved in the <code>assets</code> (configurable) directory and served under the <code>/assets</code> path.</li>
+<li>Have the same path and name</li>
+<li>have an extending that determines the type</li>
+<li>Follow the form <code>assets/&lt;name&gt;/&lt;id&gt;.&lt;type&gt;</code>.</li>
+</ul>
+<p>Each of the entries that make of the bundles are served separately to the browser while developing.</p>
+<ul>
+<li>The base path is the same as in production</li>
+<li>Additional identification will be passed with a query string</li>
+<li>The client and bundler is determined by the <code>name</code> part of the path.</li>
+<li>A parameter determines the entry (_,loader,mod,start)</li>
+</ul>
+<p>The URL pattern is <code>http:///assets/&lt;name&gt;/&lt;id&gt;.&lt;type&gt;?_=&lt;entry_path&gt;</code>.</p>
+<p>Bundlers generally work within the client directory to reduce the amount of files to watch. The path
+of entries is normally resolved relative to the client directory.</p>
+</div></div>

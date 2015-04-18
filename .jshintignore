@@ -1,9 +1,13 @@
 coverage
 docs
+docs/js/docs-setup.js
 lib/client/system/libs
 lib/client/system/modules/eventemitter2.js
 new_project/client/code/libs/
 node_modules
 test/fixtures/project/client/code
+test/fixtures/project/client/static/assets/
 test/fixtures/project/app.js
+**/*.min.js
+**/*.min.css
 Gruntfile.js

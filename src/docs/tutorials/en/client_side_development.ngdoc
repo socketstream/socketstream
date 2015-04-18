@@ -1,0 +1,29 @@
+@ngdoc overview
+@name Client-Side Development
+
+@description
+# Client-Side Development
+
+Each view is served with a separate bundle of assets. A HTML, JS and CSS file makes up the view.
+
+The production form will,
+
+* be saved in the `assets` (configurable) directory and served under the `/assets` path.
+* Have the same path and name
+* have an extending that determines the type
+* Follow the form `assets/<name>/<id>.<type>`.
+
+Each of the entries that make of the bundles are served separately to the browser while developing.
+
+* The base path is the same as in production
+* Additional identification will be passed with a query string
+* The client and bundler is determined by the `name` part of the path.
+* A parameter determines the entry (_,loader,mod,start)
+
+The URL pattern is `http:///assets/<name>/<id>.<type>?_=<entry_path>`.
+
+Bundlers generally work within the client directory to reduce the amount of files to watch. The path
+of entries is normally resolved relative to the client directory.
+
+
+

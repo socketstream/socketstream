@@ -1,0 +1,1 @@
+var kick = 'off';

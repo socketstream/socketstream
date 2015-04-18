@@ -4,11 +4,10 @@
 
 var fs              = require('fs'),
     path            = require('path'),
-    should          = require('should'),
-    fileUtils       = require( path.join(process.env.PWD, 'lib/utils/file') ),
-    projectDir      = path.join(process.env.PWD, 'test/fixtures/project'),
-    testDir         = path.join(process.env.PWD, 'test/fixtures/files'),
-    testReadDirSync = path.join(process.env.PWD, 'test/fixtures/readDirSync');
+    fileUtils       = require( path.join('../../..', 'lib/utils/file') ),
+    projectDir      = path.join(__dirname,'../../fixtures', 'project'),
+    testDir         = path.join(__dirname,'../../fixtures', 'files'),
+    testReadDirSync = path.join(__dirname,'../../fixtures', 'readDirSync');
 
 describe('lib/utils/file', function () {
     describe('.isDir()', function () {
@@ -153,7 +152,7 @@ describe('lib/utils/file', function () {
         it('should return null for files that do not exist', function (done) {
 
             var basename = testDir + '/i-dont-exist';
-            should.not.exist(fileUtils.findExtForBasePath(basename));
+            require('should').not.exist(fileUtils.findExtForBasePath(basename));
             done();
 
         });

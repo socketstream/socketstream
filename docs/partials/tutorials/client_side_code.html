@@ -19,12 +19,30 @@
 <p>As SocketStream uses code from <a href="https://github.com/substack/node-browserify">Browserify</a>, the &#39;system&#39; directory also allows you to use one of Node&#39;s inbuilt modules in the browser. Just head over to <a href="https://github.com/substack/node-browserify/tree/master/builtins">https://github.com/substack/node-browserify/tree/master/builtins</a> and copy the libraries you need into any directory within <code>/client/code</code> called <code>system</code>.</p>
 <p>Tip: If you&#39;re making a new folder called <code>/client/code/system</code>, don&#39;t forget to add <code>system</code> to the list of code directores to serve in the <code>ss.client.define()</code> statement within <code>app.js</code>.</p>
 <h5 id="client-side-code_special-exceptions_/entryjs---a-single-point-of-entry">&#39;/entry.js&#39; - A single point of entry</h5>
-<p>The <code>entry</code> module has a special distinction: it is the only module to be required automatically once all files have been sent to the browser.</p>
-<p>An <code>entry.js</code> (or <code>entry.coffee</code>) file is created for you by default when you make a new project. It contains a small amount of boiler-plate code which you may modify to handle the websocket connection going down, reconnecting, and (critically), what module to <code>require()</code> next once the websocket connection is established.</p>
+<p>The <code>entry</code> module has a special distinction: it is the only module to be required automatically once all files have been
+sent to the browser.</p>
+<p>An <code>entry.js</code> (or <code>entry.coffee</code>) file is created for you in the <code>app</code> view by default when you make a new project.
+It contains a small amount of boiler-plate code which you may modify to handle the websocket connection going down,
+reconnecting, and (critically), what module to <code>require()</code> next once the websocket connection is established.</p>
+<p>The <code>code</code> is set to <code>[&#39;libs/jquery.min.js&#39;, &#39;app&#39;]</code>. The first module with an <code>entry.js</code> is taken as the main module for the view.
+So in this case the view is started automatically with the call <code>require(&#39;./code/app/entry&#39;);</code>. This allows you to share code
+directories, and use more than one in a view.</p>
+<h4 id="client-side-code_implications-for-ondemand-loading-in-production">Implications for ondemand loading in production</h4>
+<p>In production code is loaded as a single bundle, but as additional modules can be loaded on demand the code is copied into the static assets.
+The code should be under <code>/client/static/assets/&lt;namespace&gt;/code</code>. By default the namespace is the client name, but if you want to share
+code you can define a common namespace. During development this will be served on-the-fly.</p>
 <h4 id="client-side-code_should-i-put-library-x-in-libs-or-system">Should I put library X in &#39;libs&#39; or &#39;system&#39;?</h4>
 <p>It depends if it needs access to the <code>window</code> variable. For example, Backbone.js works great as a <code>system</code> module unless you&#39;re using Backbone.history as this requires access to <code>window</code>.</p>
 <h4 id="client-side-code_what-happens-if-i-try-to-require-a-module-which-doesnt-exist">What happens if I try to require a module which doesn&#39;t exist?</h4>
 <p>You&#39;ll see an error in the browser&#39;s console. In the future SocketStream will be able to catch these problems before they arise.</p>
+<h4 id="client-side-code_using-require-in-the-browser">Using require in the browser</h4>
+<p>Within client view code you should generally require another module by relative path (<code>&quot;./controller&quot;</code>) or system module (<code>&quot;facility&quot;</code>).
+If you use absolute path it will be relative to the client directory, so if you want to require a directory module within the default
+code directory do something like,</p>
+<pre><code>require(&quot;/code/app/part1&quot;)
+</code></pre><p>This will load the module for the source file <code>/code/app/part1/index.js</code> or <code>/code/app/part1/index.coffee</code>. If part1 isn&#39;t a directory
+it can also be used to load <code>/code/app/part1.js</code>. You could also do this explicitly using <code>require(&quot;/code/app/part1/index.js&quot;)</code>,
+but this isn&#39;t advised as it locks you in to the exact source structure.</p>
 <h4 id="client-side-code_loading-modules-on-demand">Loading modules on demand</h4>
 <p>You don&#39;t necessarily have to send all modules to the browser at once, you can also <a href="https://github.com/socketstream/socketstream/blob/master/doc/guide/en/loading_assets_on_demand.md">load them on demand</a>.</p>
 <h4 id="client-side-code_options">Options</h4>
@@ -34,13 +52,9 @@
 ss.client.set({ browserifyExcludePaths: ['app/controllers', 'app/directives'] });
 </pre></li>
 <li><strong>entryModuleName {string} </strong> - to change or disable automatically execuring the client side
-code for the entry module. If null or a blank string is given no entry module is executed during load of the view in the browser. If for example your app is <code>my</code> and entryModuleName is <code>app</code> the view will execute <code>client/code/my/app.js</code>. Be aware that this name will apply to all views. 
+code for the entry module. If null or a blank string is given no entry module is executed during load of the view in the browser. If for example your app is <code>my</code> and entryModuleName is <code>app</code> the view will execute <code>client/code/my/app.js</code>. Be aware that this name will apply to all views.
 <pre class="prettyprint linenums">
 ss.client.set({ entryModuleName: null });
-</pre></li>
-<li><strong>globalModules {boolean} </strong> - set true to load client side modules using their full path relative to <code>client/code</code>. If for example your app is <code>my</code> the entry module can be accessed with <code>require(&#39;/my/entry&#39;)</code>.
-<pre class="prettyprint linenums">
-ss.client.set({ globalModules: true });
 </pre></li>
 </ul>
 <p><strong>Note</strong>, that paths for excluding should be relative to <code>client/code/</code> and that file <code>client/code/app/entry.js</code> could not be excluded in any cases.</p>

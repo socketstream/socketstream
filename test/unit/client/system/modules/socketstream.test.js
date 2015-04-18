@@ -1,5 +1,7 @@
 'use strict';
 
+var path    = require('path'),
+    ss      = require( path.join('../../../../..', 'lib/socketstream'));
 
 
 describe('socketstream client library', function () {
@@ -24,8 +26,48 @@ describe('socketstream client library', function () {
 
     describe('#send', function () {
 
+        it('should extend mods',function() {
 
+            ss.client.assets.send('mod','extra.js','var extra = 0;');
+            var extra = ss.api.bundler.systemModule('extra.js',false);
+            extra.should.be.type('object');
+            extra.name.should.be.equal('extra');
+            extra.file.should.be.equal('extra');
+            extra.path.should.be.equal(path.join(process.env.PWD,'lib/client/system/modules/','extra.js'));
+            extra.dir.should.be.equal(path.join(process.env.PWD,'lib/client/system/modules'));
+            extra.content.should.be.equal('var extra = 0;');
 
+            var extra2 = ss.api.bundler.systemModule('extra.js');
+            extra2.should.be.type('object');
+            extra2.name.should.be.equal('extra');
+            extra2.file.should.be.equal('extra');
+            extra2.path.should.be.equal(path.join(process.env.PWD,'lib/client/system/modules/','extra.js'));
+            extra2.dir.should.be.equal(path.join(process.env.PWD,'lib/client/system/modules'));
+            extra2.content.should.be.equal('require.define("extra", function (require, module, exports, __dirname, __filename){\n' +
+            'var extra = 0;\n});');
+        });
+
+        it('should replace mods',function() {
+
+            ss.client.assets.send('mod','extra.js','var extra = 0;');
+            ss.client.assets.send('mod','extra.js','var extra2 = 100;');
+            var extra = ss.api.bundler.systemModule('extra.js',false);
+            extra.should.be.type('object');
+            extra.name.should.be.equal('extra');
+            extra.file.should.be.equal('extra');
+            extra.path.should.be.equal(path.join(process.env.PWD,'lib/client/system/modules/','extra.js'));
+            extra.dir.should.be.equal(path.join(process.env.PWD,'lib/client/system/modules'));
+            extra.content.should.be.equal('var extra2 = 100;');
+
+            var extra2 = ss.api.bundler.systemModule('extra.js');
+            extra2.should.be.type('object');
+            extra2.name.should.be.equal('extra');
+            extra2.file.should.be.equal('extra');
+            extra2.path.should.be.equal(path.join(process.env.PWD,'lib/client/system/modules/','extra.js'));
+            extra2.dir.should.be.equal(path.join(process.env.PWD,'lib/client/system/modules'));
+            extra2.content.should.be.equal('require.define("extra", function (require, module, exports, __dirname, __filename){\n' +
+            'var extra2 = 100;\n});');
+        });
     });
 
 

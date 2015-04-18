@@ -1,0 +1,38 @@
+<h1><code ng:non-bindable="">default</code>
+<div><span class="hint">service in module <code ng:non-bindable="">bundler</code>
+</span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="bundler-default-page bundler-default-default-page"><p>The default bundler of HTML, CSS &amp; JS</p>
+</div></div>
+<div class="member method"><h2 id="methods">Methods</h2>
+<ul class="methods"><li><h3 id="methods_entries">entries(assetType, systemAssets)</h3>
+<div class="entries"><div class="bundler-default-page bundler-default-default-entries-page"><p>Provides the view and the pack functions with a
+list of entries for an asset type relative to the client directory.
+The default implementation is used.</p>
+<p>An entry describes:</p>
+<ul>
+<li>file: source file name relative to client directory</li>
+<li>importedFrom: Pulled in by require in other file</li>
+<li>content: If pre-loaded</li>
+<li>type: If system asset it will have type lib/mod</li>
+<li>bundle: which production bundle (html, tmpl, css, js, worker)</li>
+<li>assetType: css, js, html</li>
+<li>extension: source file extension</li>
+</ul>
+</div><h5 id="methods_entries_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>assetType</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="bundler-default-page bundler-default-default-entries-page"><p>js/css/tmpl</p>
+</div></td></tr><tr><td>systemAssets</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="bundler-default-page bundler-default-default-entries-page"><p>Collection of libs, modules, initCode</p>
+</div></td></tr></tbody></table><h5 id="methods_entries_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">[AssetEntry]</a></td><td><div class="bundler-default-page bundler-default-default-entries-page"><p>List of output entries</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_system">system()</h3>
+<div class="system"><div class="bundler-default-page bundler-default-default-system-page"><p>Return entries for the loader/start/module depending on includes.system client config and system assets.
+Multiple arguments will attempt to add module for the name.
+Special module names are &#39;loader&#39; and &#39;start&#39;.</p>
+</div><h5 id="methods_system_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-assetentry">AssetEntry</a></td><td><div class="bundler-default-page bundler-default-default-system-page"><p>Resource entries array</p>
+</div></td></tr></table></div>
+</li>
+</ul>
+</div>
+</div>

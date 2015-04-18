@@ -30,7 +30,25 @@ NG_DOCS={
       "type": "overview",
       "moduleName": "Client-Side Code",
       "shortDescription": "Client-Side Code",
-      "keywords": "ability absolutely access accessed add allowing allows alphanumerically amd amount app apply approaches as-is automatically aware awesome backbone background bear better blank boiler-plate brought browser browserify browserifyexcludepaths cache called calls case cases catch change chaos choice clean client client-code client-side code coffee coming command common components connection console copy create created critical critically default define demand depend dependencies depends developer developers difference directores directory disable distinction doesn don easily ensure entry entrymodulename error established exactly example exceptions exclude excluded excluding execuring execute executed exist expect experience explicitly export file files folder forget form full functions future globalmodules goal going great handle head history hopes https inbuilt info instantly internally javascript jquery js killing leading legacy libraries library libs lightweight list live lives ll load loading long magic major making manage managing manually md mess mind modification modify module modules namespacing node null onus options order org overview packaging path paths performs point position problem problems project querystring reconnecting reference regular relative require required requires send serve served server server-side set share sharing side single slash small socketstream solution solutions solves special ss stack statement string structure subdirectories substack syntax system top track treated tricky true tutorials type typically underscore unique unstructured url values variable view views wade wanted web websocket window work works write writing"
+      "keywords": "ability absolute absolutely access accessed add additional advised allowing allows alphanumerically amd amount app apply approaches as-is assets automatically aware awesome backbone background bear better blank boiler-plate brought browser browserify browserifyexcludepaths bundle cache call called calls case cases catch change chaos choice clean client client-code client-side code coffee coming command common components connection console copied copy create created critical critically default define demand depend dependencies depends developer developers development difference directores directories directory disable distinction doesn don easily ensure entry entrymodulename error established exact exactly example exceptions exclude excluded excluding execuring execute executed exist expect experience explicitly export facility file files folder forget form functions future generally goal going great handle head history hopes https implications inbuilt info instantly internally isn javascript jquery js killing leading legacy libraries library libs lightweight list live lives ll load loaded loading locks long magic main major making manage managing manually md mess min mind modification modify module modules namespace namespacing node null on-the-fly ondemand onus options order org overview packaging part1 path paths performs point position problem problems production project querystring reconnecting reference regular relative require required requires send serve served server server-side set share sharing side single slash small socketstream solution solutions solves source special ss stack started statement static string structure subdirectories substack syntax system top track treated tricky tutorials type typically underscore unique unstructured url values variable view views wade wanted web websocket window work works write writing"
+    },
+    {
+      "section": "tutorials",
+      "id": "client_side_constants",
+      "shortName": "Client-Side Constants",
+      "type": "overview",
+      "moduleName": "Client-Side Constants",
+      "shortDescription": "Client-Side Constants",
+      "keywords": "aaa accessed add appconfig browser called case client client-side code color common configuration constant constants consts convention copyright css debugging define defined definition defintion environment examples expose facebookappid formatter formatters global good html isn level load loaded local locals myview naming number overview passed rendering send source ss sucks support template_engines tutorials twitterkey values variables version view views write"
+    },
+    {
+      "section": "tutorials",
+      "id": "client_side_development",
+      "shortName": "Client-Side Development",
+      "type": "overview",
+      "moduleName": "Client-Side Development",
+      "shortDescription": "Client-Side Development",
+      "keywords": "additional amount assets base browser bundle bundler bundlers bundles client client-side css determined determines developing development directory entries entry extending file files follow form generally html http identification js loader mod overview parameter passed path pattern production query reduce relative resolved saved separate separately served start string tutorials type url view watch work"
     },
     {
       "section": "tutorials",
@@ -40,6 +58,15 @@ NG_DOCS={
       "moduleName": "Client-Side Templates",
       "shortDescription": "Client-Side Templates",
       "keywords": "accessible alice allowing allows angular apart app append argument astronomy bad bandwidth biology bob browser building built-in bundled called client client-side clients code coffeekup compiled construct convert correct create css data default define directories directory display div don dramatically easy ember engine engines enter example exiting extension external favorite file find flexibility folder format formatter functions generate github good happy html including inline iphone jade jquery js languages larger layoutless length lib library libs limit live ll logic main major manually match md mix mixing mobile model model-person module modules mustache npm number optional organizing out-of-the-box outputs overview pass passing people perfect person practice prefer prefix project raw ready recommended reduces refactoring refresh render required requires scale scope second send serve server serving simple simply single-page small socketstream solution source ss ss-hogan string student studies styl subdirectory suitable supported supports tag template templateengine templates templating time tmpl tmpl- tutorials types var view ways websocket wrappers wraps"
+    },
+    {
+      "section": "tutorials",
+      "id": "client_side_xbundler",
+      "shortName": "Client-Side Bundler",
+      "type": "overview",
+      "moduleName": "Client-Side Bundler",
+      "shortDescription": "Client-Side Bundler",
+      "keywords": "action additional arguments array asset assets aware based behaviour browserify built-in bulk bundle bundler bundlers bundling callback called cb changes client client-side code complete completely config considered contents create css current custom default define definition described destsfor development directory dirs discuss dropped early entries existing experimental features file files forced function functionality future html implement implementation implemented implementing individual jade js jspm lacks load lot method methods minification move named newer next_arg object objective optimisations options opts overview pack pass passed path paths production referenced relative responsibilities return returns revised saved scss separate served server set shorthand shouldn sourcepaths ss starting starts step supported templates text tmpl tutorials types var view views webpack webpackbundler worker write"
     },
     {
       "section": "tutorials",
@@ -76,6 +103,24 @@ NG_DOCS={
       "moduleName": "How it works",
       "shortDescription": "How does it work?",
       "keywords": "action actions ajax alert allows analytics answer app application applications asynchronous automatically basic bi-directional blog box broken browser building call called calling choice client client-side clunky code coming command common communication compressed connection connects console content-rich convention create css data default define depending eagle-eyed engine established example examples exports fallbacks file fine fit follow format function games great hand handlers header html html5 http image included instantly interested invoke invoked invoking javascript js json-over-rpc latency list ll local location logged manner md messages mode modern monitoring multiple naming notice number optimization organize overhead overview perfect platform polling poor popup processed processor production publicly re-established realtime received reload request require requires res resize responders response restart return returned rpc save search send sends server server-side simple site socketstream square squared squares ss static stock streaming sub-directories supports task time trading true tutorials undefined unique urls user var visits ways websocket wondering work works write written"
+    },
+    {
+      "section": "tutorials",
+      "id": "how_to_write_a_formatter",
+      "shortName": "How to write a formatter",
+      "type": "overview",
+      "moduleName": "How to write a formatter",
+      "shortDescription": "How to write a formatter ?",
+      "keywords": "action additional adjust array asset assettype asynchronous based call called calls cb changed charset client code compilation compile compress compressed console constants contenttype created css debugging default describes description don dot encountered error excluding expressions extension extensions feel file forget formatted formatter formatters formatting free function general headers html http implementation info javascript js key locals log logger logging managed mime object option options output overview packed passing pathentry pre-compile provide read render return returning runtime shouldn signature size smallest socketstream source ss string throwing time trace true tutorials type variables warn warning warnings write written"
+    },
+    {
+      "section": "tutorials",
+      "id": "how_to_write_view_html",
+      "shortName": "How to write view HTML",
+      "type": "overview",
+      "moduleName": "How to write view HTML",
+      "shortDescription": "How to write view HTML ?",
+      "keywords": "appending assigntransport behaviour block body browser bundle bundles client closing code configuring connection consider content contents control css default div echo-responder ensure events-responder executed files filled formatter formatters full hand head heavy html huge include insert inserted installation jade javascript js light link loaded loading lot main notation note option overview place plain previous recommended require requirement script scripts seconds send served set size slow socketstream socketstream-rpc ss start startcode startinbundle styled supported synced-model tag tags top true tutorials typical ultimately user view views white write written xhtml"
     },
     {
       "section": "tutorials",
@@ -169,6 +214,15 @@ NG_DOCS={
     },
     {
       "section": "tutorials",
+      "id": "url_scheme",
+      "shortName": "URL Scheme",
+      "type": "overview",
+      "moduleName": "URL Scheme",
+      "shortDescription": "URL Scheme",
+      "keywords": "ad assets calling change choose client code common completely consider considered contents css current demand development directory equivalent exported fetching files fly form future handled hoc html ideally js level loading middleware minified module modules on-demand open overview packed partially path paths production relative root saved scheme sense serve serveclient served serving static support time tutorials url urls view views whitelist work"
+    },
+    {
+      "section": "tutorials",
       "id": "using_emberjs",
       "shortName": "Use Ember JS",
       "type": "overview",
@@ -196,6 +250,87 @@ NG_DOCS={
     },
     {
       "section": "api",
+      "id": "bundler",
+      "shortName": "bundler",
+      "type": "service",
+      "moduleName": "bundler",
+      "shortDescription": "Bundlers included.",
+      "keywords": "api bundler bundlers included service"
+    },
+    {
+      "section": "api",
+      "id": "bundler.default:default",
+      "shortName": "default",
+      "type": "service",
+      "moduleName": "bundler",
+      "shortDescription": "The default bundler of HTML, CSS &amp; JS",
+      "keywords": "add api arguments array asset assetcss assethtml assetjs assetloader assets assetstart assettype assetworker attempt bundle bundler client collection config content css default define depending describes directory entries entry extension file functions html implementation importedfrom includes initcode js lib libs list load loader method module modules multiple names output pack pre-loaded production pulled relative require resource return service source special start system systemassets systemmodule tmpl tominifiedcss tominifiedjs type view worker"
+    },
+    {
+      "section": "api",
+      "id": "bundler.webpack:webpack",
+      "shortName": "webpack",
+      "type": "service",
+      "moduleName": "bundler",
+      "shortDescription": "The webpack bundler of HTML, CSS &amp; JS",
+      "keywords": "api asset assettype bundler client collection concept css custom demonstration directory entries functions html improved initcode js libs list method modules output pack purposes relative service systemassets type validate view webpack"
+    },
+    {
+      "section": "api",
+      "id": "client",
+      "shortName": "client",
+      "type": "service",
+      "moduleName": "client",
+      "shortDescription": "Client serving, bundling, development, building.",
+      "keywords": "api building bundling client clients css defined development file html js module production require returned served service serving single socketstream"
+    },
+    {
+      "section": "api",
+      "id": "client.define",
+      "shortName": "client.define",
+      "type": "service",
+      "moduleName": "client",
+      "shortDescription": "Define a client view to serve.",
+      "keywords": "api client clientdefinition code css define definition function http logical my-view paths res route serve serveclient service ss tmpl view"
+    },
+    {
+      "section": "api",
+      "id": "client.formatters:formatters",
+      "shortName": "formatters",
+      "type": "service",
+      "moduleName": "client",
+      "shortDescription": "Formatter registry",
+      "keywords": "api client formatter formatters registry service"
+    },
+    {
+      "section": "api",
+      "id": "client.formatters:formatters",
+      "shortName": "formatters",
+      "type": "service",
+      "moduleName": "client",
+      "shortDescription": "This is for the module returned by require(&#39;socketstream&#39;).client.formatters.",
+      "keywords": "add api asset client config configuring define formatter formatters method module nameormodule object parameters rendering require returned service socketstream"
+    },
+    {
+      "section": "api",
+      "id": "client.templateEngine:templateEngine",
+      "shortName": "templateEngine",
+      "type": "service",
+      "moduleName": "client",
+      "shortDescription": "This is for the module returned by require(&#39;socketstream&#39;).client.templateEngine.",
+      "keywords": "angular api built-in bundler callback cb client config custom custom-engine default directories dirs ember engine engines enging entries error files function generate indicated instance making markup module object output passed receive render require returned service socketstream ss string template templateengine templates templating"
+    },
+    {
+      "section": "api",
+      "id": "events",
+      "shortName": "events",
+      "type": "service",
+      "moduleName": "events",
+      "shortDescription": "Internal Event bus.",
+      "keywords": "api assets bus emitted event events expended idea internal module note production saved server service socketstream ss-console starts"
+    },
+    {
+      "section": "api",
       "id": "http.index:index",
       "shortName": "index",
       "type": "service",
@@ -214,12 +349,91 @@ NG_DOCS={
     },
     {
       "section": "api",
+      "id": "ss",
+      "shortName": "ss",
+      "type": "overview",
+      "moduleName": "ss",
+      "shortDescription": "Internal API object which is passed to sub-modules and can be used within your app",
+      "keywords": "access add api app env exports function internal log object overview passed require root session socketstream ss string sub-modules var"
+    },
+    {
+      "section": "api",
+      "id": "ss.add",
+      "shortName": "ss.add",
+      "type": "function",
+      "moduleName": "ss",
+      "shortDescription": "Call from your app to safely extend the &#39;ss&#39; internal API object passed through to your /server code",
+      "keywords": "add api app call code extend fn function internal key object passed safely ss"
+    },
+    {
+      "section": "api",
+      "id": "ss.bundler:bundler",
+      "shortName": "bundler",
+      "type": "service",
+      "moduleName": "ss",
+      "shortDescription": "Client bundling API",
+      "keywords": "actual api args arguments assets bundler bundlers bundling call client containerdir content custom default define definition describe describing descriptor destinations destsfor determine dir directly entry entry-points file implementing libraries locations method module object offer params passed paths query relpaths replace require return service single ss store system systemlibs systemmodule true tweak wrap wrapped"
+    },
+    {
+      "section": "api",
+      "id": "ss.client:client",
+      "shortName": "client",
+      "type": "service",
+      "moduleName": "ss",
+      "shortDescription": "Allow other libs to send assets to the client",
+      "keywords": "add allow allows api assets client code coffee compress content flags format function js lib library libs module options require send service ss system type"
+    },
+    {
+      "section": "api",
+      "id": "ss.env",
+      "shortName": "ss.env",
+      "type": "property",
+      "moduleName": "ss",
+      "keywords": "api change default development env environment execution node_env property set ss ss_env type variable"
+    },
+    {
+      "section": "api",
+      "id": "ss.log:log",
+      "shortName": "log",
+      "type": "service",
+      "moduleName": "ss",
+      "shortDescription": "Contains method stubs for logging to console (by default) or",
+      "keywords": "api apply arguments assigning calls choose console debug default error fairly function happened info informed keeping level log logging method override parameters plugins provider require service socketstream ss stubs switch sysadmin takes time trace tracing trivial unexpected var wakeup warn winston"
+    },
+    {
+      "section": "api",
       "id": "ss.publish:publish",
       "shortName": "publish",
       "type": "service",
       "moduleName": "ss",
       "shortDescription": "Extend the internal API with a publish object you can call from your own server-side code",
       "keywords": "active api browsers call channel client code ended event extend function internal object parameter publish server-side service ss"
+    },
+    {
+      "section": "api",
+      "id": "ss.root",
+      "shortName": "ss.root",
+      "type": "property",
+      "moduleName": "ss",
+      "shortDescription": "By default the project root is the current working directory",
+      "keywords": "api current default directory project property root ss working"
+    },
+    {
+      "section": "api",
+      "id": "ss.version",
+      "shortName": "ss.version",
+      "type": "property",
+      "moduleName": "ss",
+      "keywords": "api major minor property ss version"
+    },
+    {
+      "section": "api",
+      "id": "start",
+      "shortName": "start",
+      "type": "function",
+      "moduleName": "start",
+      "shortDescription": "Starts the development or production server",
+      "keywords": "api development function http instance module production server start starts"
     },
     {
       "section": "api",
@@ -238,15 +452,6 @@ NG_DOCS={
       "moduleName": "utils",
       "shortDescription": "This is used to maintain lists of userIds to socketIds and channelIds to socketIds",
       "keywords": "absolute adapted api array basename basepath channelids contents css dir directory dorectory eror extension file filepath files find findextforbase findextforbasepath github givven https isdir jade json lists loadpackagejson loads lookup maintain matching mode null object package parse path readdirsync reads returns root service socketids socketstream start synchronous thorws true unable userids utils views"
-    },
-    {
-      "section": "api",
-      "id": "utils.log:log",
-      "shortName": "log",
-      "type": "service",
-      "moduleName": "utils",
-      "shortDescription": "Contains method stubs for logging to console (by default) or",
-      "keywords": "api assigning choose console debug default error fairly function happened info informed keeping level log logging method override parameters provider require service socketstream ss stubs sysadmin takes time trivial unexpected utils var wakeup warn winston"
     },
     {
       "section": "api",

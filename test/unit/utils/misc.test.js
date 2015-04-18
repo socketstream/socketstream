@@ -3,7 +3,7 @@
 'use strict';
 
 var path = require('path'),
-    misc = require(path.join(process.env.PWD, 'lib/utils/misc'));
+    misc = require(path.join('../../..', 'lib/utils/misc'));
 
 describe('lib/utils/misc', function () {
 

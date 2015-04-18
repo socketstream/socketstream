@@ -41,10 +41,22 @@ Tip: If you're making a new folder called `/client/code/system`, don't forget to
 
 #### '/entry.js' - A single point of entry
 
-The `entry` module has a special distinction: it is the only module to be required automatically once all files have been sent to the browser.
+The `entry` module has a special distinction: it is the only module to be required automatically once all files have been
+sent to the browser.
 
-An `entry.js` (or `entry.coffee`) file is created for you by default when you make a new project. It contains a small amount of boiler-plate code which you may modify to handle the websocket connection going down, reconnecting, and (critically), what module to `require()` next once the websocket connection is established.
+An `entry.js` (or `entry.coffee`) file is created for you in the `app` view by default when you make a new project.
+It contains a small amount of boiler-plate code which you may modify to handle the websocket connection going down,
+reconnecting, and (critically), what module to `require()` next once the websocket connection is established.
 
+The `code` is set to `['libs/jquery.min.js', 'app']`. The first module with an `entry.js` is taken as the main module for the view.
+So in this case the view is started automatically with the call `require('./code/app/entry');`. This allows you to share code
+directories, and use more than one in a view.
+
+### Implications for ondemand loading in production
+
+In production code is loaded as a single bundle, but as additional modules can be loaded on demand the code is copied into the static assets.
+The code should be under `/client/static/assets/<namespace>/code`. By default the namespace is the client name, but if you want to share
+code you can define a common namespace. During development this will be served on-the-fly.
 
 ### Should I put library X in 'libs' or 'system'?
 
@@ -54,6 +66,20 @@ It depends if it needs access to the `window` variable. For example, Backbone.js
 ### What happens if I try to require a module which doesn't exist?
 
 You'll see an error in the browser's console. In the future SocketStream will be able to catch these problems before they arise.
+
+
+### Using require in the browser
+
+Within client view code you should generally require another module by relative path (`"./controller"`) or system module (`"facility"`).
+If you use absolute path it will be relative to the client directory, so if you want to require a directory module within the default
+code directory do something like,
+
+    require("/code/app/part1")
+
+This will load the module for the source file `/code/app/part1/index.js` or `/code/app/part1/index.coffee`. If part1 isn't a directory
+it can also be used to load `/code/app/part1.js`. You could also do this explicitly using `require("/code/app/part1/index.js")`,
+but this isn't advised as it locks you in to the exact source structure.
+
 
 
 ### Loading modules on demand
@@ -66,13 +92,9 @@ You don't necessarily have to send all modules to the browser at once, you can a
 ss.client.set({ browserifyExcludePaths: ['app/controllers', 'app/directives'] });
 </pre>
 - **entryModuleName {string} ** - to change or disable automatically execuring the client side
-code for the entry module. If null or a blank string is given no entry module is executed during load of the view in the browser. If for example your app is `my` and entryModuleName is `app` the view will execute `client/code/my/app.js`. Be aware that this name will apply to all views. 
+code for the entry module. If null or a blank string is given no entry module is executed during load of the view in the browser. If for example your app is `my` and entryModuleName is `app` the view will execute `client/code/my/app.js`. Be aware that this name will apply to all views.
 <pre>
 ss.client.set({ entryModuleName: null });
-</pre>
-- **globalModules {boolean} ** - set true to load client side modules using their full path relative to `client/code`. If for example your app is `my` the entry module can be accessed with `require('/my/entry')`.
-<pre>
-ss.client.set({ globalModules: true });
 </pre>
 
 **Note**, that paths for excluding should be relative to `client/code/` and that file `client/code/app/entry.js` could not be excluded in any cases.

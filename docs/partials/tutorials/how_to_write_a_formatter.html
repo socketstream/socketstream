@@ -1,0 +1,72 @@
+<h1><code ng:non-bindable=""></code>
+<div><span class="hint"></span>
+</div>
+</h1>
+<div><div class="how-to-write-a-formatter-page"><h2 id="how-to-write-a-formatter">How to write a formatter ?</h2>
+<p>Formatters can be written as a function returning an object. The object describes how to compile the formatted source code to
+the general asset type(js, css, html).</p>
+<table>
+<thead>
+<tr>
+<th>key</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td>Give your formatter a name for use in logging</td>
+</tr>
+<tr>
+<td>extensions</td>
+<td>Array of source file extension excluding the dot</td>
+</tr>
+<tr>
+<td>assetType</td>
+<td>The output type js/css/html</td>
+</tr>
+<tr>
+<td>contentType</td>
+<td>Mime type for HTTP headers. Don&#39;t forget charset.</td>
+</tr>
+<tr>
+<td>compile</td>
+<td>Function with the signature (pathEntry, options, cb)</td>
+</tr>
+</tbody>
+</table>
+<h4 id="how-to-write-a-formatter_compile-function">Compile function</h4>
+<p>The function must read the file at <code>pathEntry</code> and render it as a string.
+The <code>cb</code> function must be called with the string output.</p>
+<p>You can also return an error object created with <code>Error()</code>. Throwing an error is not an option as the formatter
+is asynchronous.</p>
+<p><code>options</code> provide additional information such as</p>
+<table>
+<thead>
+<tr>
+<th>key</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>compress</td>
+<td>True if the output should be compressed or packed for the smallest possible size.</td>
+</tr>
+<tr>
+<td>locals</td>
+<td>Variables for use in HTML and CSS compilation. They could also be used in JavaScript expressions at pre-compile time.</td>
+</tr>
+<tr>
+<td>constants</td>
+<td>Constants for passing to the client runtime. They could also be used in JavaScript expressions at pre-compile time.</td>
+</tr>
+</tbody>
+</table>
+<p>Be sure to adjust your formatter implementation based on these options.</p>
+<h4 id="how-to-write-a-formatter_logging-warnings">Logging warnings</h4>
+<p>If warnings are encountered during the formatting you shouldn&#39;t output to console as it cannot be managed by Socketstream.</p>
+<p>Instead call <code>ss.log.warn</code> with the warning. Other logger calls are <code>ss.log.info</code>, <code>ss.log.trace</code> and <code>ss.log.error</code>.
+The default action for <code>ss.log.trace</code> is nothing. It is for debugging where it can be changed to log the trace, so feel
+free to call trace in your formatter.</p>
+</div></div>
