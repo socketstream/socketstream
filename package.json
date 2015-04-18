@@ -1,7 +1,7 @@
 {
   "name": "socketstream",
   "description": "A framework for Realtime Web Apps",
-  "version": "0.4.1-SNAPSHOT",
+  "version": "0.4.0",
   "homepage": "http://www.socketstream.org",
   "author": "Owen Barnes <owen@socketstream.org>",
   "repository": {
