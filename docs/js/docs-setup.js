@@ -264,7 +264,7 @@ NG_DOCS={
       "type": "service",
       "moduleName": "bundler",
       "shortDescription": "The default bundler of HTML, CSS &amp; JS",
-      "keywords": "add api arguments array asset assetcss assethtml assetjs assetloader assets assetstart assettype assetworker attempt bundle bundler client collection config content css default define depending describes directory entries entry extension file functions html implementation importedfrom includes initcode js lib libs list load loader method module modules multiple names output pack pre-loaded production pulled relative require resource return service source special start system systemassets systemmodule tmpl tominifiedcss tominifiedjs type view worker"
+      "keywords": "add api arguments array asset assetcss assethtml assetjs assetloader assets assetstart assettype assetworker attempt bundle bundler called cleancss client collection config content css default define depending describes directory entries entry extension file files functions html implementation importedfrom includes initcode javascript js lib libs list load loader method minified minify module modules multiple names output pack path pre-loaded production pulled relative require resource return server service source special start started stopped system systemassets systemmodule tmpl tominifiedcss tominifiedjs type uglify unload view worker"
     },
     {
       "section": "api",
