@@ -48,7 +48,8 @@
     "uglify-js": "= 1.3.3",
     "async": "0.9.0",
     "uid2": "0.0.3",
-    "utils-merge": "1.0.0"
+    "utils-merge": "1.0.0",
+    "ss-generator":"1.0.0"
   },
   "devDependencies": {
     "connect-livereload": "0.5.2",
