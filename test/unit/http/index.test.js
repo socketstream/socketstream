@@ -131,7 +131,7 @@ describe('lib/http/index', function () {
                 obj.should.be.an.instanceOf(Object);
                 obj.serveClient.should.be.an.instanceOf(Object);
 
-                // NOTE - we need to do some less-specific matching, 
+                // NOTE - we need to do some less-specific matching,
                 // as istanbul injects listeners - PBJENSEN
                 //
                 obj.serveClient.toString().replace(/(\s+|\n)/g, ' ').indexOf('return res.serveClient(name)').should.not.eql(-1);
@@ -151,6 +151,20 @@ describe('lib/http/index', function () {
                 }).should.throw( util.format('%s is not a valid URL. Valid URLs must start with /', url) );
                 done();
             });
+        });
+
+        describe('app setup with staticCache',function() {
+
+          it('should use http.set configuration');
+
+          it('should handle a sample request');
+
+        });
+
+        describe('app setup with prepended middleware', function() {
+
+          it('should work for prepending require(body) parser');
+
         });
 
         describe('app setup without SS middleware',function() {

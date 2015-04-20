@@ -105,4 +105,10 @@ describe('development mode asset server', function () {
 
   it('should define modules importedBy correctly with pathPrefix');
 
+  it('should handle strings as served content');
+
+  it('should handle Buffers as served content');
+
+  it('should serve content with correct header');
+
 });
