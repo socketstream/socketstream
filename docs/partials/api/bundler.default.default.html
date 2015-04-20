@@ -26,12 +26,32 @@ The default implementation is used.</p>
 </div></td></tr></tbody></table><h5 id="methods_entries_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">[AssetEntry]</a></td><td><div class="bundler-default-page bundler-default-default-entries-page"><p>List of output entries</p>
 </div></td></tr></table></div>
 </li>
+<li><h3 id="methods_load">load()</h3>
+<div class="load"><div class="bundler-default-page bundler-default-default-load-page"><p>Called when the server is started. Does nothing.</p>
+</div></div>
+</li>
 <li><h3 id="methods_system">system()</h3>
 <div class="system"><div class="bundler-default-page bundler-default-default-system-page"><p>Return entries for the loader/start/module depending on includes.system client config and system assets.
 Multiple arguments will attempt to add module for the name.
 Special module names are &#39;loader&#39; and &#39;start&#39;.</p>
 </div><h5 id="methods_system_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-assetentry">AssetEntry</a></td><td><div class="bundler-default-page bundler-default-default-system-page"><p>Resource entries array</p>
 </div></td></tr></table></div>
+</li>
+<li><h3 id="methods_tominifiedcss">toMinifiedCSS(files)</h3>
+<div class="tominifiedcss"><div class="bundler-default-page bundler-default-default-tominifiedcss-page"><p>Minify JavaScript using CleanCSS</p>
+</div><h5 id="methods_tominifiedcss_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>files</td><td><a href="" class="label type-hint type-hint-array">Array</a></td><td><div class="bundler-default-page bundler-default-default-tominifiedcss-page"><p>Entries with file path and content to be minified</p>
+</div></td></tr></tbody></table><h5 id="methods_tominifiedcss_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="bundler-default-page bundler-default-default-tominifiedcss-page"><p>Minified content</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_tominifiedjs">toMinifiedJS(files)</h3>
+<div class="tominifiedjs"><div class="bundler-default-page bundler-default-default-tominifiedjs-page"><p>Minify JavaScript using Uglify</p>
+</div><h5 id="methods_tominifiedjs_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>files</td><td><a href="" class="label type-hint type-hint-array">Array</a></td><td><div class="bundler-default-page bundler-default-default-tominifiedjs-page"><p>Entries with file path and content to be minified</p>
+</div></td></tr></tbody></table><h5 id="methods_tominifiedjs_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="bundler-default-page bundler-default-default-tominifiedjs-page"><p>Minified content</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_unload">unload()</h3>
+<div class="unload"><div class="bundler-default-page bundler-default-default-unload-page"><p>Called when the server is stopped. Does nothing.</p>
+</div></div>
 </li>
 </ul>
 </div>

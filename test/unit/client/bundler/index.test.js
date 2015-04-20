@@ -72,6 +72,10 @@ describe('bundler', function () {
       ss.client.set({ 'b':'B'});
       options.b.should.equal('B');
     });
+
+    it('should provides systemModules');
+
+    it('should provide systemModule by name, wrapped or not');
   });
 
   describe('custom bundlers', function() {
