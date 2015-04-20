@@ -1,5 +1,23 @@
-<a name="0.4"></a>
-### 0.4 (2015-04-12)
+<a name="0.4.1"></a>
+## 0.4.1 (2015-04-21)
+
+
+#### Bug Fixes
+
+* **dev:** bundler can supply Buffer rather than string for module content ([15e6af75](https://github.com/socketstream/socketstream/commit/15e6af75e7162bdc5d599be59d6d151fc4eeaddd))
+* **docs:** prepend and connect3 re #527 ([61b40825](https://github.com/socketstream/socketstream/commit/61b408252ecd00ee73e8d989881271e314cdd27d))
+* **merge:** fixed merge mistake ([e3826ed5](https://github.com/socketstream/socketstream/commit/e3826ed5b33c247eb4ce20f281f0d6a5cf9f582d))
+
+
+#### Features
+
+* **bundler:**
+  * ss.bundler.systemModules() returns all ([a1114433](https://github.com/socketstream/socketstream/commit/a111443351a7f07fb0e6c0c7573a405c3fb51f71))
+  * revised constructor and define calls of custom bundlers ([1caf28a5](https://github.com/socketstream/socketstream/commit/1caf28a5b852d1fd264b7ecfba13f20360004711))
+
+
+<a name="0.4.0"></a>
+### 0.4.0 (2015-04-12)
 
 
 #### Bug Fixes
