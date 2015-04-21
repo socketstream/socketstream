@@ -29,14 +29,11 @@ describe('client system library', function () {
 
         it('should replace libs',function() {
 
-            var jsBefore, jsAfter;
-
-            jsBefore = ss.api.bundler.systemLibs();
-            jsBefore.should.be.type('object');
-            jsBefore.type.should.be.equal('loader');
-            ss.client.assets.send('lib','browserify.js','');
-            jsAfter = ss.api.bundler.systemLibs();
-            jsAfter.content.should.have.length(0);
+          var js = ss.api.bundler.systemLibs();
+          js.should.be.type('object');
+          js.type.should.be.equal('mod');
+          js.file.should.be.equal('libs');
+          js.content.should.have.length(0);
         });
 
         it('should have init code for client', function() {
