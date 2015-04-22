@@ -1,12 +1,13 @@
 'use strict';
 
 var path    = require('path'),
+    fs      = require('fs'),
     ss      = require( '../../../../lib/socketstream'),
     viewer  = require( '../../../../lib/client/view'),
     options = ss.client.options,
     defineAbcClient = require('../abcClient');
 
-describe('default bundler', function () {
+describe('default bundler:', function () {
 
     var origDefaultEntryInit = options.defaultEntryInit;
 
@@ -303,7 +304,7 @@ describe('default bundler', function () {
 
         // libs
         entriesJS[0].names.should.have.lengthOf(1);
-        entriesJS[0].names[0].should.be.equal('browserify.js');
+        entriesJS[0].names[0].should.be.equal('browserify.client.js');
 
         // mod
         entriesJS[2].name.should.be.equal('eventemitter2');
@@ -338,7 +339,7 @@ describe('default bundler', function () {
 
         // libs
         entriesJS[0].names.should.have.lengthOf(1);
-        entriesJS[0].names[0].should.be.equal('browserify.js');
+        entriesJS[0].names[0].should.be.equal('browserify.client.js');
 
         // mod
         entriesJS[2].name.should.be.equal('eventemitter2');
@@ -500,7 +501,10 @@ describe('default bundler', function () {
   });
 
   describe('JS assets',function() {
-    var bundler;
+    var bundler, client;
+
+
+    var browserifyContent = fs.readFileSync(path.join(__dirname,'../../../../lib/client/bundler','browserify.client.js'),'utf8');
 
     beforeEach(function() {
 
@@ -513,8 +517,38 @@ describe('default bundler', function () {
 
       ss.client.formatters.add('javascript');
 
-      var client = defineAbcClient({ },function() { });
+      client = defineAbcClient({ },function() { });
       bundler = ss.api.bundler.get(client);
+
+      ss.client.assets.send('libs','extra','function extra(){};')
+    });
+
+    it('should have mod=loader with our browserify client as first entry and deliver that in module call', function() {
+
+      var entries = bundler.entries('js'),
+          moduleEntries = bundler.module('loader'),
+          entry = moduleEntries[0];
+
+      entries[0].type.should.equal('mod');
+      entries[0].file.should.equal('loader');
+      moduleEntries.length.should.equal(1);
+      entry.type.should.equal('mod');
+      entry.file.should.equal('loader');
+      entry.content.should.equal(browserifyContent);
+    });
+
+    it('should have mod=libs with libraries as second entry and deliver that in module call', function() {
+
+      var entries = bundler.entries('js'),
+        moduleEntries = bundler.module('libs'),
+          entry = moduleEntries[0];
+
+      entries[1].type.should.equal('mod');
+      entries[1].file.should.equal('libs');
+      moduleEntries.length.should.equal(1);
+      entry.type.should.equal('mod');
+      entry.file.should.equal('libs');
+      entry.content.should.equal(ss.client.assets.assets.libs.map(function(lib) { return lib.content; }).join('\n'));
     });
 
     it('should wrap regular modules correctly', function() {

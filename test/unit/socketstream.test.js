@@ -11,7 +11,7 @@ var uncachedRequire               = require('../helpers/uncache'),
 
 describe('lib/socketstream', function () {
 
-
+    var should = require('should');
 
     beforeEach(function (done) {
         uncachedRequire.uncache('../../lib/socketstream.js');
