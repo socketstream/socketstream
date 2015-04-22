@@ -17,7 +17,6 @@
   "predef": [
     "$",
     "jQuery",
-    "ss",
     "alert",
 
     "jasmine",
