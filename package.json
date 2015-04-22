@@ -78,9 +78,12 @@
     "lint": "node_modules/.bin/jshint .",
     "notes": "node_modules/.bin/notes",
     "test": "node_modules/.bin/mocha test/unit/**/* --reporter spec --require should --require sinon",
-    "testDebug": "node_modules/.bin/mocha --debug-brk test/unit/**/* --reporter spec --require should --require sinon",
-    "pre-commit": [ "lint"]
+    "quick-test": "node_modules/.bin/mocha test/unit/**/* --reporter progress --require should --require sinon",
+    "test-debug": "node_modules/.bin/mocha --debug-brk test/unit/**/* --reporter spec --require should --require sinon"
   },
+  "pre-commit": [
+    "lint", "quick-test"
+  ],
   "directories": {
     "lib": "./lib",
     "doc": "./doc"
