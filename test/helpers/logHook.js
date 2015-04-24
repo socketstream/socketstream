@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var log = [],
     _stream   = process.stdout,
@@ -37,7 +37,7 @@ module.exports = {
         log = [];
 
         /* _stream now write with our shiny function */
-        _stream.write = function(string) {
+        _stream.write = function (string) {
             log.push(string.replace(/\n$/, ''));
         };
     },
@@ -50,4 +50,4 @@ module.exports = {
         _stream.write = old_write;
         return log;
     }
-}
+};

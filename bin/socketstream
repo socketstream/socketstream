@@ -14,4 +14,4 @@ program
   .option('-r, --repl', 'include Console Server / REPL')
   .parse(process.argv);
 
-require(__dirname + '/../lib/cli').process(program);
+require('ss-generator').process(program);
