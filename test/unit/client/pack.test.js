@@ -3,6 +3,7 @@
 var path    = require('path'),
   fs      = require('fs'),
   ss      = require( '../../../lib/socketstream'),
+  logHook = require('../../helpers/logHook.js'),
   options = ss.client.options,
   defineAbcClient = require('./abcClient');
 
@@ -18,6 +19,7 @@ describe('pack',function() {
 
   afterEach(function() {
     ss.client.forget();
+    require('child_process').exec('cd '+path.join(__dirname,'../../..') + '&& git checkout test/fixtures/project/client/static/assets/abc');
   });
 
   var newEngine = function newEngine(api,config,options) {
@@ -43,7 +45,17 @@ describe('pack',function() {
       ss.client.formatters.add('javascript');
     });
 
+    logHook.on();
     ss.api.bundler.pack(client);
+    var outs = logHook.off();
+    outs[0].should.match(/Pre-packing and minifying the .abc. client.../);
+    outs[1].should.match(/3 previous packaged files deleted/);
+    //outs.should.match();
+    //  '\u001b[90m  Minified CSS from 0 KB to 0 KB\u001b[39m',
+    //  '\u001b[32m✓\u001b[39m Packed 0 files into /client/static/assets/abc/'+client.id+'.css',
+    //  '\u001b[32m✓\u001b[39m Packed 4 files into /client/static/assets/abc/'+client.id+'.js',
+    //  '\u001b[32m✓\u001b[39m Created and cached HTML file /client/static/assets/abc/'+client.id+'.html' ]
+    //);
 
     var js = fs.readFileSync(path.join(__dirname,'../../fixtures/project/client/static/assets/abc/' + client.id + '.js'),'utf-8');
     var css = fs.readFileSync(path.join(__dirname,'../../fixtures/project/client/static/assets/abc/' + client.id + '.css'),'utf-8');
@@ -64,7 +76,16 @@ describe('pack',function() {
         ss.client.formatters.add('javascript');
       });
 
+    logHook.on();
     ss.api.bundler.pack(client);
+    var outs = logHook.off();
+    //outs.should.equal([ '\u001b[33mPre-packing and minifying the \'abc\' client...\u001b[39m',
+    //  '\u001b[32m✓\u001b[39m 3 previous packaged files deleted',
+    //  '\u001b[90m  Minified CSS from 0.016 KB to 0 KB\u001b[39m',
+    //  '\u001b[32m✓\u001b[39m Packed 1 files into /client/static/assets/abc/'+client.id+'.css',
+    //  '\u001b[90m  Minified ./abc/index.js from 0.099 KB to 0.049 KB\u001b[39m',
+    //  '\u001b[32m✓\u001b[39m Packed 5 files into /client/static/assets/abc/'+client.id+'.js',
+    //  '\u001b[32m✓\u001b[39m Created and cached HTML file /client/static/assets/abc/'+client.id+'.html' ]);
 
     var html = fs.readFileSync(path.join(__dirname,'../../fixtures/project/client/static/assets/abc/' + client.id + '.html'),'utf-8');
     var js = fs.readFileSync(path.join(__dirname,'../../fixtures/project/client/static/assets/abc/' + client.id + '.js'),'utf-8');
