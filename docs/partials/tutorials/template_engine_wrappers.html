@@ -9,13 +9,13 @@
 <pre class="prettyprint linenums">
 /* engine.js */
 
-// Hogan Template Engine wrapper for SocketStream 0.3
+// Hogan Template Engine wrapper for SocketStream 0.4
 
 var fs = require('fs'),
     path  = require('path'),
     hogan = require('hogan.js');
 
-exports.init = function(ss, config) {
+module.exports = function(ss, config) {
 
   // Send Hogan VM to the client
   var clientCode = fs.readFileSync(path.join(__dirname, 'client.js'), 'utf8');
@@ -38,18 +38,13 @@ exports.init = function(ss, config) {
     // Compile template into a function and attach it to ss.tmpl
     process: function(template, path, id) {
 
-      var compiledTemplate;
-
       try {
-        compiledTemplate = hogan.compile(template, {asString: true});
+        var compiledTemplate = hogan.compile(template, {asString: true});
+        return 't[\'' + id + '\']=new ht(' + compiledTemplate + ');';
       } catch (e) {
-        var message = '! Error compiling the ' + path + ' template into Hogan';
-        console.log(String.prototype.hasOwnProperty('red') && message.red || message);
-        throw new Error(e);
-        compiledTemplate = '&lt;p&gt;Error&lt;/p&gt;';
+        return e;
       }
 
-      return 't[\'' + id + '\']=new ht(' + compiledTemplate + ');';    
     }
   }
 }
@@ -91,5 +86,5 @@ exports.init = function (root, config) {
 <li>Does the browser need a VM (small client-side lib) to render the templates?</li>
 </ul>
 <p>Try to pick the best trade off between performance and overall bytes sent to the client, bearing in mind it&#39;s not uncommon for a large app to have 50 or more templates.</p>
-<p>If a client-side VM is needed to render the template (as is normally the case) you should include the client code within your module and tell SocketStream to server it using the <code>ss.client.send()</code> command (see Hogan example above). </p>
+<p>If a client-side VM is needed to render the template (as is normally the case) you should include the client code within your module and tell SocketStream to server it using the <code>ss.client.send()</code> command (see Hogan example above).</p>
 </div></div>
