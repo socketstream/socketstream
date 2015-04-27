@@ -1,7 +1,7 @@
 {
   "name": "socketstream",
   "description": "A framework for Realtime Web Apps",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "homepage": "http://www.socketstream.org",
   "author": "Owen Barnes <owen@socketstream.org>",
   "repository": {
@@ -66,6 +66,7 @@
     "mocha": "2.1.0",
     "notes": "0.0.4",
     "npm-dview": "1.1.2",
+    "pre-commit": "^1.0.6",
     "shelljs": "0.4.0",
     "should": "5.2.0",
     "sinon": "^1.14.1",
@@ -77,8 +78,12 @@
     "lint": "node_modules/.bin/jshint .",
     "notes": "node_modules/.bin/notes",
     "test": "node_modules/.bin/mocha test/unit/**/* --reporter spec --require should --require sinon",
-    "testDebug": "node_modules/.bin/mocha --debug-brk test/unit/**/* --reporter spec --require should --require sinon"
+    "quick-test": "node_modules/.bin/mocha test/unit/**/* --reporter progress --require should --require sinon",
+    "test-debug": "node_modules/.bin/mocha --debug-brk test/unit/**/* --reporter spec --require should --require sinon"
   },
+  "pre-commit": [
+    "lint", "quick-test"
+  ],
   "directories": {
     "lib": "./lib",
     "doc": "./doc"

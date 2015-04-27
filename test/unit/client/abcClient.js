@@ -13,9 +13,9 @@ function defineAbcClient(conf) {
   };
   for(var k in conf) {
     if (conf[k] === undefined) { delete r[k]; }
-    else { r[k] = conf[k]; }
+    else if (k !== 'custom') { r[k] = conf[k]; }
   }
-  return ss.client.define('abc',r);
+  return conf.custom? ss.client.define('abc',conf.custom,r) : ss.client.define('abc',r);
 }
 
 function defineAbcClientAndLoad(conf,run,load) {

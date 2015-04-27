@@ -39,7 +39,6 @@
         "jQuery"     : false,
         "$"          : false,
         "alert"      : false,
-        "ss"         : false,
         "Worker"     : false,
         "window"     : false,
         "document"   : false

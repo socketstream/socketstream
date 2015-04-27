@@ -1,7 +1,8 @@
 'use strict';
 
 var ss      = require( '../../../lib/socketstream'),
-  defineAbcClient = require('./abcClient');
+    logHook = require('../../helpers/logHook.js'),
+    defineAbcClient = require('./abcClient');
 
 
   describe('code formatter loading API', function () {
@@ -203,8 +204,12 @@ var ss      = require( '../../../lib/socketstream'),
 
         var client = defineAbcClient({ code:'./abc/index.a' },function() {});
 
+
+        logHook.on();
         ss.api.bundler.packAssetSet('js', client, function(files) {
           files[3].content.should.equal('require.define("/abc/index",function(e,t,n,r,i){window.a="formatter index.a"})');
+          var outs = logHook.off();
+          //outs.should.match(/Minified .\/abc\/index.a from 0.121 KB to 0.076 KB/);
           done();
         });
       });
@@ -212,11 +217,13 @@ var ss      = require( '../../../lib/socketstream'),
       it('should complain when not finding formatter', function() {
         var client = defineAbcClient({ code:'./abc/index.a' },function() {});
 
+        logHook.on();
         // jshint immed: false
         (function() {
           ss.api.bundler.packAssetSet('js', client, function() {
           });
         }).should.throw('Unsupported file extension \'.a\' when we were expecting some type of JS file. Please provide a formatter for ./abc/index.a or move it to /client/static');
+        logHook.off();
       });
 
       it('should complain about unmatched assetType', function() {
@@ -233,11 +240,13 @@ var ss      = require( '../../../lib/socketstream'),
 
         var client = defineAbcClient({ code:'./abc/index.a' },function() {});
 
+        logHook.on();
         // jshint immed: false
         (function() {
           ss.api.bundler.packAssetSet('js', client, function() {
           });
         }).should.throw('Unable to render \'./abc/index.a\' as this appears to be a JS file. Expecting some type of JS file in ./abc instead');
+        logHook.off();
       });
 
       it('should forward exceptions returned', function(done) {
