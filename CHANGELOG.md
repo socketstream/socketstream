@@ -1,3 +1,18 @@
+<a name="0.4.2"></a>
+### 0.4.2 (2015-04-27)
+
+
+#### Bug Fixes
+
+* **templates:** bug with old template engines getting passed root rather than socketstream api ([19510e35](https://github.com/socketstream/socketstream/commit/19510e350cb7a8e0cf70b749ee8c0b3c5def2d7f))
+
+
+#### Features
+
+* **bundler:** clarify system module entries loader, libs, start ([4146ec28](https://github.com/socketstream/socketstream/commit/4146ec28c88ced01e019365806df04f31a215d73))
+* **pre-commit:** jshint must pass to commit ([34017ff2](https://github.com/socketstream/socketstream/commit/34017ff2ab579ec7c6639df5327b9b476fee08d3))
+
+
 <a name="0.4.1"></a>
 ## 0.4.1 (2015-04-21)
 
