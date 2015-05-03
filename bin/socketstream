@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-var ss = require('../')
-  , program = require('commander');
+var ss      = require('../'),
+    program = require('commander');
 
 program
   .usage('new <name_of_your_project>')
@@ -14,4 +14,4 @@ program
   .option('-r, --repl', 'include Console Server / REPL')
   .parse(process.argv);
 
-require(__dirname + '/../lib/cli').process(program);
+require('ss-generator').process(program);
