@@ -3,6 +3,7 @@
 var path    = require('path'),
     fs      = require('fs'),
     ss      = require( '../../../lib/socketstream'),
+    logHook = require('../../helpers/logHook.js'),
     options = ss.client.options;
 
 
@@ -132,8 +133,10 @@ describe('client asset manager index', function () {
             view: './abc/abc.html'
         });
 
+        logHook.on();
         ss.client.packAssets();
         ss.client.load();
+        logHook.off();
 
         var html = fs.readFileSync(path.join(__dirname,'../../fixtures/project/client/static/assets/abc/' + client.id + '.html'),'utf-8');
         var js = fs.readFileSync(path.join(__dirname,'../../fixtures/project/client/static/assets/abc/' + client.id + '.js'),'utf-8');
@@ -253,8 +256,10 @@ describe('client asset manager index', function () {
           ss.client.assets.load();
 
           // options and load client
+          logHook.on();
           options.packedAssets = true;
           ss.client.load();
+          logHook.off();
         });
 
         afterEach(function() {

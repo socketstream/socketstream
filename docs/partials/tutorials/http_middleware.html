@@ -26,7 +26,7 @@
 </pre>
 For example you could add:
 <pre class="prettyprint linenums">
-    ss.http.middleware.prepend( ss.http.connect.bodyParser() );
+    ss.http.middleware.prepend( require('connect-winston')(winston) );
 </pre>
 <h3 id="http-middleware_appending-custom-middleware">Appending custom middleware</h3>
 <p>Because SocketStream adds <code>connect.cookieParser()</code> and <code>connect.session()</code> to the stack, if the middleware you&#39;re wanting to use requires sessions support (i.e. access to <code>req.session</code>) it will need to be appended to the bottom of the stack AFTER SocketStream middleware has been loaded as so:
@@ -35,7 +35,7 @@ For example you could add:
 </pre>
 Apart from determining where the middleware should be added, the <code>prepend()</code> and <code>append()</code> functions work in exactly the same way as <code>connect.use()</code>.</p>
 <h3 id="http-middleware_loading-staticcache-middleware">Loading staticCache middleware</h3>
-<p>In order to avoid making repeated fs.readFile requests for serving static files, you can load Connect&#39;s staticCache middleware, by passing this:
+<p>In order to avoid making repeated fs.readFile requests for serving static files, you can load Connect&#39;s &#39;connect-static&#39; middleware, by passing this:
 <pre class="prettyprint linenums">
     ss.http.set({
       staticCache: {
@@ -44,12 +44,6 @@ Apart from determining where the middleware should be added, the <code>prepend()
       }
     });
 </pre>
-<p>This will load the StaticCache middleware. You will notice that when you do this, you&#39;ll see this warning when loading the app:
-<pre class="prettyprint linenums">
-    connect.staticCache() is deprecated and will be removed in 3.0 use varnish or similar reverse proxy caches.
-</pre>
-<p>As SocketStream 0.3 currently uses 0.2 of connect, this is an issue that we will address when we come to upgrading connect to 0.3.</p>
-<p>We did try to look at using <code>st</code> as an alternative, but found that it was ~ 2x slower at serving static files than using connect&#39;s static + staticCache middlewares. It is something that we will look at again in the near future. </p>
 <h3 id="http-middleware_passing-custom-http-middleware-settings">Passing custom HTTP middleware settings</h3>
 <p>You can pass custom http middleware settings via <code>ss.http.set</code>:
 <pre class="prettyprint linenums">

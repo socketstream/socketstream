@@ -2,7 +2,8 @@
 
 var path    = require('path'),
     ss      = require( '../../../../lib/socketstream'),
-    options = ss.client.options;
+    options = ss.client.options,
+    defineAbcClient = require('../abcClient');
 
 describe('bundler', function () {
 
@@ -72,6 +73,10 @@ describe('bundler', function () {
       ss.client.set({ 'b':'B'});
       options.b.should.equal('B');
     });
+
+    it('should provides systemModules');
+
+    it('should provide systemModule by name, wrapped or not');
   });
 
   describe('custom bundlers', function() {

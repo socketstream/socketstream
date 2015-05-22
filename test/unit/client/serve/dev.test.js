@@ -42,12 +42,12 @@ describe('development mode asset server', function () {
       require('../../../../lib/client/serve/dev')(ss.api, router, options);
     });
 
-    var browserify = fs.readFileSync(path.join(__dirname,'../../../../lib/client/bundler/browserify.js'),'utf8');
+    var browserify = fs.readFileSync(path.join(__dirname,'../../../../lib/client/bundler/browserify.client.js'),'utf8');
 
     // dev time URL
     var req = {url: '/assets/abc/'+client.id+'.js?mod=loader' };
     router.route(req.url,req,responseStub).should.equal(true);
-    responseStub.body.should.equal(browserify + '\n');
+    responseStub.body.should.equal(browserify);
   });
 
   it('should provide a route for serving system libraries and modules', function() {
@@ -104,5 +104,11 @@ describe('development mode asset server', function () {
 
 
   it('should define modules importedBy correctly with pathPrefix');
+
+  it('should handle strings as served content');
+
+  it('should handle Buffers as served content');
+
+  it('should serve content with correct header');
 
 });

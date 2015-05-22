@@ -53,8 +53,8 @@ describe('Template engine', function() {
   describe('custom use', function() {
 
     var oldEngine = {
-      init: function(root, config) {
-        root.should.equal(ss.root);
+      init: function(api, config) {
+        api.should.equal(ss.api);
         return {
           name: 'Old',
           selectFormatter: function() {

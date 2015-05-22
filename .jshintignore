@@ -1,13 +1,23 @@
 coverage
 docs
 docs/js/docs-setup.js
-lib/client/system/libs
+lib/client/bundler/browserify.client.js
 lib/client/system/modules/eventemitter2.js
-new_project/client/code/libs/
+lib/request/responders/events/client.js
 node_modules
 test/fixtures/project/client/code
-test/fixtures/project/client/static/assets/
+test/fixtures/project/client/static/assets
 test/fixtures/project/app.js
+Gruntfile.js
 **/*.min.js
 **/*.min.css
-Gruntfile.js
+
+# will be moved to ss-generator
+new_project
+lib/cli
+
+# TODO fix these files
+lib/websocket/transports/engineio/client.js
+lib/websocket/transports/engineio/index.js
+lib/websocket/transports/engineio/wrapper.js
+test/unit
