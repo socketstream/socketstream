@@ -9,6 +9,7 @@ var path    = require('path'),
 
 describe('angular.js template engine', function () {
 
+  var should = require('should');
   ss.root = ss.api.root = path.join(__dirname, '../../../fixtures/project');
 
   options.liveReload = false;
@@ -113,6 +114,73 @@ describe('angular.js template engine', function () {
         tag.should.be.equal('<script id="tmpl-templates-1" type="text/x-tmpl"><body><div>1</div></body>\n</script>');
         done();
       });
+    });
+  });
+
+  it('should output an template when engine is tied to subpath (relative path) within templates', function(done) {
+
+    defineAbcClient({ code: './abc/index.a' },function() {
+      ss.client.templateEngine.use('angular','./templates/abc');
+    });
+
+    var bundler = ss.api.bundler.get('abc');
+
+    var files = [ bundler.entryFor('tmpl','./templates/abc/1.html') ];
+    var files1 = [ bundler.entryFor('tmpl','./templates/1.html') ];
+
+    // console.log('fake', files);
+
+    ss.client.templateEngine.generate(bundler, files, function(tag) {
+      tag.should.be.equal('<script type="text/ng-template" id="templates-abc-1.html"><div>abc 1</div>\n</script>');
+
+      ss.client.templateEngine.generate(bundler, files1, function(tag) {
+        tag.should.be.equal('<script id="tmpl-templates-1" type="text/x-tmpl"><body><div>1</div></body>\n</script>');
+        done();
+      });
+    });
+  });
+
+  it('should output angular templates in bundles when engine is tied to a subpath', function(done) {
+
+    defineAbcClient({
+      code: './abc/index.a' ,
+      tmpl: './templates/abc'
+    },function() {
+      ss.client.templateEngine.use('angular','./templates/abc');
+    });
+
+    var bundler = ss.api.bundler.get('abc');
+    var templates = bundler.entries('tmpl');
+    templates.length.should.be.equal(2);
+
+    ss.client.templateEngine.generate(bundler, templates, function(tag) {
+      tag.should.be.equal('<script type="text/ng-template" id="templates-abc-1.html"><div>abc 1</div>\n'+
+'</script><script type="text/ng-template" id="templates-abc-2.html"><div>abc 2</div>\n'+
+'</script>');
+      done();
+    });
+  });
+
+  it('should output angular templates in bundles when engine is tied to a subpath, and defintion uses shorthand notation', function(done) {
+
+    defineAbcClient({
+      code: './abc/index.a' ,
+      tmpl: 'abc'
+    },function() {
+      ss.client.templateEngine.use('angular','./templates/abc');
+    });
+
+    var bundler = ss.api.bundler.get('abc');
+    var templates = bundler.entries('tmpl');
+    templates.length.should.be.equal(2);
+
+    // console.log('real',templates);
+
+    ss.client.templateEngine.generate(bundler, templates, function(tag) {
+      tag.should.be.equal('<script type="text/ng-template" id="templates-abc-1.html"><div>abc 1</div>\n'+
+'</script><script type="text/ng-template" id="templates-abc-2.html"><div>abc 2</div>\n'+
+'</script>');
+      done();
     });
   });
 
