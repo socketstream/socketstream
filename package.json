@@ -74,7 +74,7 @@
     "supertest": "0.15.0"
   },
   "scripts": {
-    "cover-test": "node_modules/.bin/istanbul cover node_modules/.bin/_mocha test/unit/**/* && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
+    "cover-test": "node_modules/.bin/istanbul cover -x **/new_project/** node_modules/.bin/_mocha test/unit/**/* && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
     "checkDependencies": "node_modules/.bin/npm-dview",
     "lint": "node_modules/.bin/jshint .",
     "notes": "node_modules/.bin/notes",
