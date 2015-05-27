@@ -6,7 +6,7 @@
 //
 var assert    = require('assert');
 var internal  = require('../../../../lib/request/middleware/internal');
-var logHook   = require('../../../helpers/loghook.js');
+var logHook   = require('../../../helpers/logHook.js');
 
 
 
