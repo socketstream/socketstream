@@ -38,13 +38,27 @@ describe('angular.js template engine', function () {
     });
 
     var bundler = ss.api.bundler.get('abc');
+    var templates = bundler.entries('tmpl');
+    templates.length.should.be.equal(1);
 
-    var files = [ bundler.entryFor('tmpl','./templates/1.html') ];
-
-    ss.client.templateEngine.generate(bundler, files, function (tag) {
-      tag.should.be.equal('<script type="text/ng-template" id="templates-1.html"><body><div>1</div></body>\n</script>');
+    ss.client.templateEngine.generate(bundler, templates, function (tag) {
+      tag.should.be.equal('<script type="text/ng-template" id="templates-abc-1.html"><div>abc 1</div>\n</script>');
       done();
     });
+  });
+
+  it('should bundle up all templates', function(){
+
+    defineAbcClient({
+      code: './abc/index.a',
+      tmpl: './templates'
+    },function() {
+      ss.client.templateEngine.use('angular');
+    });
+
+    var bundler = ss.api.bundler.get('abc');
+    var templates = bundler.entries('tmpl');
+    templates.length.should.be.equal(5);
   });
 
   it('should output an inline template when angular is used by / default', function(done) {
@@ -140,7 +154,7 @@ describe('angular.js template engine', function () {
     });
   });
 
-  it('should output angular templates in bundles when engine is tied to a subpath', function(done) {
+  it('should output angular templates in bundles when engine is tied to a relative subpath', function(done) {
 
     defineAbcClient({
       code: './abc/index.a' ,
