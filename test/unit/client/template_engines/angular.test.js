@@ -58,7 +58,7 @@ describe('angular.js template engine', function () {
 
     var bundler = ss.api.bundler.get('abc');
     var templates = bundler.entries('tmpl');
-    templates.length.should.be.equal(5);
+    templates.length.should.be.equal(4);
   });
 
   it('should output an inline template when angular is used by / default', function(done) {

@@ -278,6 +278,8 @@ describe('default bundler:', function () {
           includes: { css:false },
           code: undefined
         },function() {
+          ss.client.formatters.add('css');
+          ss.client.formatters.add('javascript');
         });
 
         var bundler = ss.api.bundler.get('abc'),
@@ -293,11 +295,13 @@ describe('default bundler:', function () {
         defineAbcClient({
           css: undefined
         },function() {
+          ss.client.formatters.add('css');
+          ss.client.formatters.add('javascript');
         });
 
-        var bundler = ss.api.bundler.get('abc'),
-            entriesCSS = bundler.entries('css'),
-            entriesJS = bundler.entries('js');
+        var bundler = ss.api.bundler.get('abc');
+        var entriesCSS = bundler.entries('css');
+        var entriesJS = bundler.entries('js');
 
         entriesCSS.should.have.lengthOf(0);
         entriesJS.should.have.lengthOf(5);
@@ -328,6 +332,8 @@ describe('default bundler:', function () {
 
         defineAbcClient({
         },function() {
+          ss.client.formatters.add('css');
+          ss.client.formatters.add('javascript');
         });
 
         var bundler = ss.api.bundler.get('abc'),
@@ -364,6 +370,8 @@ describe('default bundler:', function () {
         defineAbcClient({
           includes: { system:false, initCode: false, css:false}
         },function() {
+          ss.client.formatters.add('css');
+          ss.client.formatters.add('javascript');
         });
 
         var bundler = ss.api.bundler.get('abc'),
@@ -395,6 +403,10 @@ describe('default bundler:', function () {
           js: './abc',
           html: './abc'
         },function() {
+          ss.client.formatters.add('html');
+          ss.client.formatters.add('css');
+          ss.client.formatters.add('javascript');
+          ss.client.formatters.add('map');
         });
 
         var bundler = ss.api.bundler.get('abc'),
@@ -403,6 +415,11 @@ describe('default bundler:', function () {
 
         entriesCSS.should.have.lengthOf(1);
         entriesJS.should.have.lengthOf(7);
+
+        // css
+        entriesCSS[0].file.should.be.equal('abc/style.css');
+        entriesCSS[0].importedBy.should.be.equal('./abc');
+        entriesCSS[0].assetType.should.be.equal('css');
 
         // libs
         entriesJS[0].names.should.have.lengthOf(1);
@@ -477,6 +494,7 @@ describe('default bundler:', function () {
           }
         }
       },function() {
+        ss.client.formatters.add('html');
       });
 
       viewer(ss.api, client, options, function (html) {
@@ -499,6 +517,7 @@ describe('default bundler:', function () {
           }
         }
       },function() {
+        ss.client.formatters.add('html');
         ss.api.client.send('constant', 'abcg', {a:'a'});
       });
 
@@ -523,6 +542,7 @@ describe('default bundler:', function () {
           }
         }
       },function() {
+        ss.client.formatters.add('html');
         ss.api.client.send('constant', 'abcg', {a:'a'});
       });
 
