@@ -167,4 +167,21 @@ describe('bundler', function () {
 
   });
 
+  it('should identify CSS when mixed with JS', function() {
+      var client = ss.client.define('abc2',{
+        view: 'main2.html',
+        css: './abc',
+        code: './abc',
+        tmpl: './abc'
+      });
+
+      ss.api.bundler.load();
+
+      ss.api.client.templateEngines = ss.client.templateEngine.load();
+      ss.api.client.formatters = ss.client.formatters.load();
+
+      var templates = ss.api.bundler.entries(client,'tmpl');
+
+  });
+
 });

@@ -385,7 +385,48 @@ describe('default bundler:', function () {
       it('should exclude system from js asset file if includes is false');
 
       it('should not put sytem in entries if includes is false');
-  });
+
+      it('should return entries for CSS/JS when all is in abc directory', function() {
+
+        options.startInBundle = true;
+
+        defineAbcClient({
+          css: './abc',
+          js: './abc',
+          html: './abc'
+        },function() {
+        });
+
+        var bundler = ss.api.bundler.get('abc'),
+          entriesCSS = bundler.entries('css'),
+          entriesJS = bundler.entries('js');
+
+        entriesCSS.should.have.lengthOf(1);
+        entriesJS.should.have.lengthOf(7);
+
+        // libs
+        entriesJS[0].names.should.have.lengthOf(1);
+        entriesJS[0].names[0].should.be.equal('browserify.client.js');
+
+        // mod
+        entriesJS[2].name.should.be.equal('eventemitter2');
+        entriesJS[2].type.should.be.equal('mod');
+
+        // mod
+        entriesJS[3].name.should.be.equal('socketstream');
+        entriesJS[3].type.should.be.equal('mod');
+
+        // mod TODO
+        entriesJS[4].file.should.be.equal('./abc/index.js');
+        entriesJS[4].importedBy.should.be.equal('./abc/index.js');
+        //entriesJS[4].type.should.be.equal('mod');
+
+        // start TODO
+        entriesJS[5].content.should.be.equal('require("/abc/index");');
+        entriesJS[5].type.should.be.equal('start');
+      });
+
+    });
 
   //TODO locals set in different ways
 
