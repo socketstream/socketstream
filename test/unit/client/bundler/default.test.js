@@ -91,7 +91,6 @@ describe('default bundler:', function () {
       client.entryInitPath.should.be.equal('/code/kickoff/entry');
 
       var bundler = ss.api.bundler.get('abc'),
-          entriesCSS = bundler.entries('css'),
           entriesJS = bundler.entries('js');
 
       entriesJS.length.should.be.equal(7);
@@ -102,7 +101,8 @@ describe('default bundler:', function () {
       };
       var code = 'alert()';
       var wrappedAlert = bundler.wrapCode(code, entriesJS[6], opts);
-      wrappedAlert.should.equal('require.define("' + client.entryInitPath.substring(1) + '", function (require, module, exports, __dirname, __filename){\n' + code + '\n});');
+      wrappedAlert.should.equal('require.define("' + client.entryInitPath.substring(1) +
+        '", function (require, module, exports, __dirname, __filename){\n' + code + '\n});');
     });
 
   });
