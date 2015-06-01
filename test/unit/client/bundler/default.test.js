@@ -66,6 +66,47 @@ describe('default bundler:', function () {
 
   });
 
+  describe('client with standard code modules', function() {
+
+    var client;
+
+    beforeEach(function() {
+      client = defineAbcClient({
+        css: 'main.styl',
+        code: ['libs','kickoff'],
+        view: 'main.jade'
+      },function() {
+        ss.client.formatters.add('css');
+        ss.client.formatters.add('javascript');
+      });
+    });
+
+    afterEach(function() {
+      ss.client.forget();
+    });
+
+    it('should have correct entry point and module definition', function() {
+      client.id.should.be.type('string');
+
+      client.entryInitPath.should.be.equal('/code/kickoff/entry');
+
+      var bundler = ss.api.bundler.get('abc'),
+          entriesCSS = bundler.entries('css'),
+          entriesJS = bundler.entries('js');
+
+      entriesJS.length.should.be.equal(7);
+      entriesJS[6].file.should.equal('code/kickoff/entry.js');
+
+      var opts = {
+
+      };
+      var code = 'alert()';
+      var wrappedAlert = bundler.wrapCode(code, entriesJS[6], opts);
+      wrappedAlert.should.equal('require.define("' + client.entryInitPath.substring(1) + '", function (require, module, exports, __dirname, __filename){\n' + code + '\n});');
+    });
+
+  });
+
   describe('client with relative css+code+tmpl', function() {
 
     var client;
@@ -116,6 +157,15 @@ describe('default bundler:', function () {
       var client = ss.client.define('abc', {
         css: 'main',
         code: ['extras','kickoff','main/demo.coffee'],
+        view: 'main.jade'
+      });
+      client.entryInitPath.should.equal('/code/kickoff/entry');
+    });
+
+    it('should pick ./entry in second module after libs if present, and not in first', function() {
+      var client = ss.client.define('abc', {
+        css: 'main',
+        code: ['libs','kickoff'],
         view: 'main.jade'
       });
       client.entryInitPath.should.equal('/code/kickoff/entry');
