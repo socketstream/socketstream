@@ -258,6 +258,8 @@ describe('default bundler:', function () {
         defineAbcClient({
           code: undefined
         },function() {
+          ss.client.formatters.add('css');
+          ss.client.formatters.add('javascript');
         });
 
         var bundler = ss.api.bundler.get('abc'),
@@ -409,12 +411,12 @@ describe('default bundler:', function () {
           ss.client.formatters.add('map');
         });
 
-        var bundler = ss.api.bundler.get('abc'),
-          entriesCSS = bundler.entries('css'),
-          entriesJS = bundler.entries('js');
+        var bundler = ss.api.bundler.get('abc');
+        var entriesCSS = bundler.entries('css');
+        var entriesJS = bundler.entries('js');
 
         entriesCSS.should.have.lengthOf(1);
-        entriesJS.should.have.lengthOf(7);
+        entriesJS.should.have.lengthOf(6);
 
         // css
         entriesCSS[0].file.should.be.equal('abc/style.css');

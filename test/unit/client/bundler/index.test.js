@@ -159,7 +159,7 @@ describe('bundler', function () {
   });
 
   it('should identify CSS when mixed with JS', function() {
-      var client = defineAbcClient('abc2',{
+      var client = defineAbcClient({
         view: 'main2.html',
         css: './abc',
         code: './abc',
