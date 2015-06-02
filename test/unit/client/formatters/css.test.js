@@ -1,7 +1,8 @@
 'use strict';
 
 var path    = require('path'),
-  ss      = require( '../../../../lib/socketstream');
+  ss      = require( '../../../../lib/socketstream'),
+  fixtures = require('../../../fixtures');
 
 
 describe('css formatter', function () {
@@ -57,7 +58,7 @@ describe('css formatter', function () {
 
       var concrete = ss.api.client.formatters.css;
       var output;
-      concrete.call(path.join(__dirname,'../../..','fixtures/project/client/abc/style.css'),{},function(out) {
+      concrete.call(path.join(fixtures.project,'client/abc/style.css'),{},function(out) {
         output = out;
         out.should.be.equal('/* style.css */\n');
       },function(err) {

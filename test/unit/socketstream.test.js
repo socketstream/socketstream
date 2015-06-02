@@ -5,7 +5,8 @@
 // Dependencies
 
 var uncachedRequire               = require('../helpers/uncache'),
-  path = require('path');
+  path = require('path'),
+  fixtures = require('../fixtures');
 
 
 
@@ -74,9 +75,9 @@ describe('lib/socketstream', function () {
     describe('start', function() {
 
         it('should start event serving clients', function() {
-          process.chdir(path.join(__dirname, '../fixtures/project'));
+          process.chdir(fixtures.project);
           var ss = uncachedRequire('../../lib/socketstream.js');
-          ss.root = ss.api.root = path.join(__dirname, '../fixtures/project');
+          ss.root = ss.api.root = fixtures.project;
 
           ss.client.define('abc', {
             css: 'main',

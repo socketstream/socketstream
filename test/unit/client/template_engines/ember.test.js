@@ -2,11 +2,12 @@
 
 var path    = require('path'),
   ss      = require( '../../../../lib/socketstream'),
-  options = ss.client.options;
+  options = ss.client.options,
+  fixtures = require('../../../fixtures');
 
 describe('Ember.js template engine', function () {
 
-  ss.root = ss.api.root = path.join(__dirname, '../../../fixtures/project');
+  ss.root = ss.api.root = fixtures.project;
 
   options.liveReload = false;
 

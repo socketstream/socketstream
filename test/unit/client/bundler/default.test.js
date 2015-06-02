@@ -5,7 +5,8 @@ var path    = require('path'),
     ss      = require( '../../../../lib/socketstream'),
     viewer  = require( '../../../../lib/client/view'),
     options = ss.client.options,
-    defineAbcClient = require('../abcClient');
+    defineAbcClient = require('../abcClient'),
+    fixtures = require('../../../fixtures');
 
 describe('default bundler:', function () {
 
@@ -13,7 +14,7 @@ describe('default bundler:', function () {
 
     //TODO set project root function
 
-    ss.root = ss.api.root = path.join(__dirname, '../../../fixtures/project');
+    ss.root = ss.api.root = fixtures.project;
     //ss.api.bundler = require('../../../../lib/client/bundler/index')(ss.api,options);
 
   options.liveReload = false;

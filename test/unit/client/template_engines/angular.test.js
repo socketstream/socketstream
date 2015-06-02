@@ -4,12 +4,13 @@ var path    = require('path'),
   ss      = require( '../../../../lib/socketstream'),
   bundlerMod = require('../../../../lib/client/bundler'),
   options = ss.client.options,
-  defineAbcClient = require('../abcClient');
+  defineAbcClient = require('../abcClient'),
+  fixtures = require('../../../fixtures');
 
 
 describe('angular.js template engine', function () {
 
-  ss.root = ss.api.root = path.join(__dirname, '../../../fixtures/project');
+  ss.root = ss.api.root = fixtures.project;
 
   options.liveReload = false;
 

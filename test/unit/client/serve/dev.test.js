@@ -5,7 +5,8 @@ var path    = require('path'),
   ss      = require( '../../../../lib/socketstream'),
   Router = require('../../../../lib/http/router').Router,
   options = ss.client.options,
-  defineAbcClient = require('../abcClient');
+  defineAbcClient = require('../abcClient'),
+  fixtures = require('../../../fixtures');
 
 var responseStub = {
   writeHead: function() {},
@@ -18,7 +19,7 @@ var responseStub = {
 describe('development mode asset server', function () {
 
   var router = new Router();
-  ss.root = ss.api.root = path.join(__dirname, '../../../../fixtures/project');
+  ss.root = ss.api.root = fixtures.project;
 
 
   beforeEach(function() {
