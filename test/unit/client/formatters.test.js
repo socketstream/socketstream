@@ -202,7 +202,9 @@ var ss      = require( '../../../lib/socketstream'),
           };
         });
 
-        var client = defineAbcClient({ code:'./abc/index.a' },function() {});
+        var client = defineAbcClient({ code:'./abc/index.a' },function() {
+          ss.client.formatters.add('javascript');
+        });
 
 
         logHook.on();
@@ -214,19 +216,22 @@ var ss      = require( '../../../lib/socketstream'),
         });
       });
 
-      it('should complain when not finding formatter', function() {
-        var client = defineAbcClient({ code:'./abc/index.a' },function() {});
+      it('should only put JavaScript resource in the bundle', function() {
+        var client = defineAbcClient({ code:'./abc/index.a' },function() {
+          ss.client.formatters.add('javascript');
+        });
 
         logHook.on();
-        // jshint immed: false
-        (function() {
-          ss.api.bundler.packAssetSet('js', client, function() {
-          });
-        }).should.throw('Unsupported file extension \'.a\' when we were expecting some type of JS file. Please provide a formatter for ./abc/index.a or move it to /client/static');
+        ss.api.bundler.packAssetSet('js', client, function(entries) {
+          entries.should.have.lengthOf(3);
+          entries[0].content.should.startWith('// Module loading code from Browserify:');
+          entries[1].content.should.startWith('require.define("eventemitter2",');
+          entries[2].content.should.startWith('require.define("socketstream",');
+        });
         logHook.off();
       });
 
-      it('should complain about unmatched assetType', function() {
+      it('should complain about formatters with unmatched assetType', function() {
         ss.client.formatters.add(function() {
           return {
             name: 'f2',
@@ -238,14 +243,16 @@ var ss      = require( '../../../lib/socketstream'),
           };
         });
 
-        var client = defineAbcClient({ code:'./abc/index.a' },function() {});
+        var client = defineAbcClient({ code:'./abc/index.a' },function() {
+          ss.client.formatters.add('javascript');
+        });
 
         logHook.on();
         // jshint immed: false
         (function() {
           ss.api.bundler.packAssetSet('js', client, function() {
           });
-        }).should.throw('Unable to render \'./abc/index.a\' as this appears to be a JS file. Expecting some type of JS file in ./abc instead');
+        }).should.throw('Unable to render \'./abc/index.a\' as the formatter has no asset type.');
         logHook.off();
       });
 

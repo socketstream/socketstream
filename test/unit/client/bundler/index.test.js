@@ -103,17 +103,14 @@ describe('bundler', function () {
     it('should identify js defined using /*');
 
     it('should identify single template defined', function() {
-      var client = ss.client.define('abc',{
+      var client = defineAbcClient({
         view: 'main2.html',
         css: 'main.css',
         code: 'main.js',
         tmpl: 'main.html'
+      }, function() {
+        ss.client.formatters.add('html');
       });
-
-      ss.api.bundler.load();
-
-      ss.api.client.templateEngines = ss.client.templateEngine.load();
-      ss.api.client.formatters = ss.client.formatters.load();
 
       var templates = ss.api.bundler.entries(client,'tmpl');
       templates.should.eql([{
@@ -124,17 +121,14 @@ describe('bundler', function () {
     });
 
     it('should identify multiple templates explicitly defined', function() {
-      var client = ss.client.define('abc2',{
+      var client = defineAbcClient({
         view: 'main2.html',
         css: 'main.css',
         code: 'main.js',
         tmpl: ['main.html','abc/1.html','abc/2.html']
+      }, function() {
+        ss.client.formatters.add('html');
       });
-
-      ss.api.bundler.load();
-
-      ss.api.client.templateEngines = ss.client.templateEngine.load();
-      ss.api.client.formatters = ss.client.formatters.load();
 
       var templates = ss.api.bundler.entries(client,'tmpl');
       templates.should.eql([
@@ -146,17 +140,14 @@ describe('bundler', function () {
 
     it('should identify templates using /*', function() {
 
-      var client = ss.client.define('abc2',{
+      var client = defineAbcClient({
         view: 'main2.html',
         css: 'main.css',
         code: 'main.js',
         tmpl: 'abc/*'
+      }, function() {
+        ss.client.formatters.add('html');
       });
-
-      ss.api.bundler.load();
-
-      ss.api.client.templateEngines = ss.client.templateEngine.load();
-      ss.api.client.formatters = ss.client.formatters.load();
 
       var templates = ss.api.bundler.entries(client,'tmpl');
       templates.should.eql([
@@ -164,6 +155,20 @@ describe('bundler', function () {
         { file: './templates/abc/2.html', importedBy: './templates/abc/2.html', includeType: 'html', ext:'html', bundle:'tmpl', assetType:'html' }
       ]);
     });
+
+  });
+
+  it('should identify CSS when mixed with JS', function() {
+      var client = defineAbcClient({
+        view: 'main2.html',
+        css: './abc',
+        code: './abc',
+        tmpl: './abc'
+      }, function() {
+        ss.client.formatters.add('html');
+      });
+
+      var templates = ss.api.bundler.entries(client,'tmpl');
 
   });
 

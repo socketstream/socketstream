@@ -66,6 +66,47 @@ describe('default bundler:', function () {
 
   });
 
+  describe('client with standard code modules', function() {
+
+    var client;
+
+    beforeEach(function() {
+      client = defineAbcClient({
+        css: 'main.styl',
+        code: ['libs','kickoff'],
+        view: 'main.jade'
+      },function() {
+        ss.client.formatters.add('css');
+        ss.client.formatters.add('javascript');
+      });
+    });
+
+    afterEach(function() {
+      ss.client.forget();
+    });
+
+    it('should have correct entry point and module definition', function() {
+      client.id.should.be.type('string');
+
+      client.entryInitPath.should.be.equal('/code/kickoff/entry');
+
+      var bundler = ss.api.bundler.get('abc'),
+          entriesJS = bundler.entries('js');
+
+      entriesJS.length.should.be.equal(7);
+      entriesJS[6].file.should.equal('code/kickoff/entry.js');
+
+      var opts = {
+
+      };
+      var code = 'alert()';
+      var wrappedAlert = bundler.wrapCode(code, entriesJS[6], opts);
+      wrappedAlert.should.equal('require.define("' + client.entryInitPath.substring(1) +
+        '", function (require, module, exports, __dirname, __filename){\n' + code + '\n});');
+    });
+
+  });
+
   describe('client with relative css+code+tmpl', function() {
 
     var client;
@@ -116,6 +157,15 @@ describe('default bundler:', function () {
       var client = ss.client.define('abc', {
         css: 'main',
         code: ['extras','kickoff','main/demo.coffee'],
+        view: 'main.jade'
+      });
+      client.entryInitPath.should.equal('/code/kickoff/entry');
+    });
+
+    it('should pick ./entry in second module after libs if present, and not in first', function() {
+      var client = ss.client.define('abc', {
+        css: 'main',
+        code: ['libs','kickoff'],
         view: 'main.jade'
       });
       client.entryInitPath.should.equal('/code/kickoff/entry');
@@ -258,6 +308,8 @@ describe('default bundler:', function () {
         defineAbcClient({
           code: undefined
         },function() {
+          ss.client.formatters.add('css');
+          ss.client.formatters.add('javascript');
         });
 
         var bundler = ss.api.bundler.get('abc'),
@@ -278,6 +330,8 @@ describe('default bundler:', function () {
           includes: { css:false },
           code: undefined
         },function() {
+          ss.client.formatters.add('css');
+          ss.client.formatters.add('javascript');
         });
 
         var bundler = ss.api.bundler.get('abc'),
@@ -293,11 +347,13 @@ describe('default bundler:', function () {
         defineAbcClient({
           css: undefined
         },function() {
+          ss.client.formatters.add('css');
+          ss.client.formatters.add('javascript');
         });
 
-        var bundler = ss.api.bundler.get('abc'),
-            entriesCSS = bundler.entries('css'),
-            entriesJS = bundler.entries('js');
+        var bundler = ss.api.bundler.get('abc');
+        var entriesCSS = bundler.entries('css');
+        var entriesJS = bundler.entries('js');
 
         entriesCSS.should.have.lengthOf(0);
         entriesJS.should.have.lengthOf(5);
@@ -328,6 +384,8 @@ describe('default bundler:', function () {
 
         defineAbcClient({
         },function() {
+          ss.client.formatters.add('css');
+          ss.client.formatters.add('javascript');
         });
 
         var bundler = ss.api.bundler.get('abc'),
@@ -364,6 +422,8 @@ describe('default bundler:', function () {
         defineAbcClient({
           includes: { system:false, initCode: false, css:false}
         },function() {
+          ss.client.formatters.add('css');
+          ss.client.formatters.add('javascript');
         });
 
         var bundler = ss.api.bundler.get('abc'),
@@ -385,7 +445,57 @@ describe('default bundler:', function () {
       it('should exclude system from js asset file if includes is false');
 
       it('should not put sytem in entries if includes is false');
-  });
+
+      it('should return entries for CSS/JS when all is in abc directory', function() {
+
+        options.startInBundle = true;
+
+        defineAbcClient({
+          css: './abc',
+          js: './abc',
+          html: './abc'
+        },function() {
+          ss.client.formatters.add('html');
+          ss.client.formatters.add('css');
+          ss.client.formatters.add('javascript');
+          ss.client.formatters.add('map');
+        });
+
+        var bundler = ss.api.bundler.get('abc');
+        var entriesCSS = bundler.entries('css');
+        var entriesJS = bundler.entries('js');
+
+        entriesCSS.should.have.lengthOf(1);
+        entriesJS.should.have.lengthOf(6);
+
+        // css
+        entriesCSS[0].file.should.be.equal('abc/style.css');
+        entriesCSS[0].importedBy.should.be.equal('./abc');
+        entriesCSS[0].assetType.should.be.equal('css');
+
+        // libs
+        entriesJS[0].names.should.have.lengthOf(1);
+        entriesJS[0].names[0].should.be.equal('browserify.client.js');
+
+        // mod
+        entriesJS[2].name.should.be.equal('eventemitter2');
+        entriesJS[2].type.should.be.equal('mod');
+
+        // mod
+        entriesJS[3].name.should.be.equal('socketstream');
+        entriesJS[3].type.should.be.equal('mod');
+
+        // mod TODO
+        entriesJS[4].file.should.be.equal('./abc/index.js');
+        entriesJS[4].importedBy.should.be.equal('./abc/index.js');
+        //entriesJS[4].type.should.be.equal('mod');
+
+        // start TODO
+        entriesJS[5].content.should.be.equal('require("/abc/index");');
+        entriesJS[5].type.should.be.equal('start');
+      });
+
+    });
 
   //TODO locals set in different ways
 
@@ -436,6 +546,7 @@ describe('default bundler:', function () {
           }
         }
       },function() {
+        ss.client.formatters.add('html');
       });
 
       viewer(ss.api, client, options, function (html) {
@@ -458,6 +569,7 @@ describe('default bundler:', function () {
           }
         }
       },function() {
+        ss.client.formatters.add('html');
         ss.api.client.send('constant', 'abcg', {a:'a'});
       });
 
@@ -482,6 +594,7 @@ describe('default bundler:', function () {
           }
         }
       },function() {
+        ss.client.formatters.add('html');
         ss.api.client.send('constant', 'abcg', {a:'a'});
       });
 
