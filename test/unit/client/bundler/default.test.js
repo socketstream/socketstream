@@ -71,12 +71,16 @@ describe('default bundler:', function () {
 
     var client;
 
+    beforeEach(function(done){ fixtures.reset(done); });
+
     beforeEach(function() {
       client = defineAbcClient({
         css: 'main.styl',
         code: ['libs','kickoff'],
         view: 'main.jade'
       },function() {
+        fixtures.reset();
+        fixtures.setAbcPreviousAbcAssets();
         ss.client.formatters.add('css');
         ss.client.formatters.add('javascript');
       });
@@ -106,11 +110,18 @@ describe('default bundler:', function () {
         '", function (require, module, exports, __dirname, __filename){\n' + code + '\n});');
     });
 
+    it('should recognise existing asset bundle', function() {
+      var bundler = ss.api.bundler.get({ client: 'abc' });
+      bundler.latestPackedId.should.be.equal('123456789');
+    });
+
   });
 
   describe('client with relative css+code+tmpl', function() {
 
     var client;
+
+    beforeEach(function(done){ fixtures.reset(done); });
 
     beforeEach(function() {
       client = ss.client.define('main', {

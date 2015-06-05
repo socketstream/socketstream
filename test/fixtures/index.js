@@ -8,12 +8,21 @@ exports.files = path.join(__dirname, 'files');
 exports.readDirSync = path.join(__dirname, 'readDirSync');
 
 exports.reset = function(done) {
-  require('child_process').exec('cd '+__dirname + ' && git checkout project/client/static/assets');
-
   // generated abc client assets
   fs.emptyDir(path.join(__dirname,'project/client/static/assets/abc'),function() {
     if (done) {
       done();
     }
   });
+};
+
+exports.cleanup = function(done) {
+  require('child_process').exec('cd '+__dirname + ' && git checkout project/client/static/assets', done);
+};
+
+exports.setAbcPreviousAbcAssets = function() {
+  var id = '123456789';
+  fs.closeSync(fs.openSync(path.join(__dirname,'project/client/static/assets/abc',id+'.css'),'w'));
+  fs.closeSync(fs.openSync(path.join(__dirname,'project/client/static/assets/abc',id+'.js'),'w'));
+  fs.closeSync(fs.openSync(path.join(__dirname,'project/client/static/assets/abc',id+'.html'),'w'));
 };
