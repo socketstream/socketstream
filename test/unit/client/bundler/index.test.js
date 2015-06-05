@@ -3,8 +3,8 @@
 var path    = require('path'),
     ss      = require( '../../../../lib/socketstream'),
     options = ss.client.options,
-    defineAbcClient = require('../abcClient'),
-  fixtures = require('../../../fixtures');
+    //defineAbcClient = require('../abcClient'),
+    fixtures = require('../../../fixtures');
 
 describe('bundler', function () {
 

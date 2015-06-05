@@ -3,7 +3,7 @@
 var path    = require('path'),
   fs      = require('fs'),
   ss      = require( '../../../lib/socketstream'),
-  options = ss.client.options,
+  //options = ss.client.options,
   fixtures = require('../../fixtures');
 
 

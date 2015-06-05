@@ -4,9 +4,8 @@
 
 // Dependencies
 
-var uncachedRequire               = require('../helpers/uncache'),
-  path = require('path'),
-  fixtures = require('../fixtures');
+var uncachedRequire = require('../helpers/uncache'),
+    fixtures = require('../fixtures');
 
 
 

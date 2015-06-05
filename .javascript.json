@@ -4,7 +4,6 @@
   "bitwise": true,
   "browser": true,
   "node": true,
-  "camelcase": true,
   "curly": true,
   "forin": true,
   "immed": true,

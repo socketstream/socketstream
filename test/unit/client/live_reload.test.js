@@ -5,7 +5,7 @@ var path    = require('path'),
   ss      = require( '../../../lib/socketstream'),
   chokidar = require('chokidar'),
   logHook = require('../../helpers/logHook.js'),
-  options = ss.client.options,
+  //options = ss.client.options,
   fixtures = require('../../fixtures');
 
 
