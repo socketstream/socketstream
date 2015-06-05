@@ -13,6 +13,7 @@
   "noarg": true,
   "noempty": true,
   "nonew": true,
+  "camelcase": false,
   "predef": [
     "$",
     "jQuery",
