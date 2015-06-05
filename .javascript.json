@@ -36,6 +36,7 @@
     "exports"
   ],
   "trailing": true,
+  "eqnull": true,
   "undef": true,
   "unused": true
 }
