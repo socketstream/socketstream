@@ -42,7 +42,7 @@ describe('angular.js template engine', function () {
     templates.length.should.be.equal(1);
 
     ss.client.templateEngine.generate(bundler, templates, function (tag) {
-      tag.should.be.equal('<script type="text/ng-template" id="templates-abc-1.html"><div>abc 1</div>\n</script>');
+      tag.should.be.equal('<script type="text/ng-template" id="abc-1.html"><div>abc 1</div>\n</script>');
       done();
     });
   });
@@ -72,7 +72,7 @@ describe('angular.js template engine', function () {
     var files = [ bundler.entryFor('tmpl','./templates/1.html') ];
 
     ss.client.templateEngine.generate(bundler, files, function (tag) {
-      tag.should.be.equal('<script type="text/ng-template" id="templates-1.html"><body><div>1</div></body>\n</script>');
+      tag.should.be.equal('<script type="text/ng-template" id="1.html"><body><div>1</div></body>\n</script>');
       done();
     });
   });
@@ -88,7 +88,7 @@ describe('angular.js template engine', function () {
     var files = [ bundler.entryFor('tmpl','./templates/1.html') ];
 
     ss.client.templateEngine.generate(bundler, files, function (tag) {
-      tag.should.be.equal('<script type="text/ng-template" id="templates-1.html"><body><div>1</div></body>\n</script>');
+      tag.should.be.equal('<script type="text/ng-template" id="1.html"><body><div>1</div></body>\n</script>');
       done();
     });
   });
@@ -122,10 +122,10 @@ describe('angular.js template engine', function () {
     var files1 = [ bundler.entryFor('tmpl','./templates/1.html') ];
 
     ss.client.templateEngine.generate(bundler, files, function(tag) {
-      tag.should.be.equal('<script type="text/ng-template" id="templates-abc-1.html"><div>abc 1</div>\n</script>');
+      tag.should.be.equal('<script type="text/ng-template" id="abc-1.html"><div>abc 1</div>\n</script>');
 
       ss.client.templateEngine.generate(bundler, files1, function(tag) {
-        tag.should.be.equal('<script id="tmpl-templates-1" type="text/x-tmpl"><body><div>1</div></body>\n</script>');
+        tag.should.be.equal('<script id="tmpl-1" type="text/x-tmpl"><body><div>1</div></body>\n</script>');
         done();
       });
     });
@@ -145,10 +145,10 @@ describe('angular.js template engine', function () {
     // console.log('fake', files);
 
     ss.client.templateEngine.generate(bundler, files, function(tag) {
-      tag.should.be.equal('<script type="text/ng-template" id="templates-abc-1.html"><div>abc 1</div>\n</script>');
+      tag.should.be.equal('<script type="text/ng-template" id="abc-1.html"><div>abc 1</div>\n</script>');
 
       ss.client.templateEngine.generate(bundler, files1, function(tag) {
-        tag.should.be.equal('<script id="tmpl-templates-1" type="text/x-tmpl"><body><div>1</div></body>\n</script>');
+        tag.should.be.equal('<script id="tmpl-1" type="text/x-tmpl"><body><div>1</div></body>\n</script>');
         done();
       });
     });
@@ -168,8 +168,8 @@ describe('angular.js template engine', function () {
     templates.length.should.be.equal(2);
 
     ss.client.templateEngine.generate(bundler, templates, function(tag) {
-      tag.should.be.equal('<script type="text/ng-template" id="templates-abc-1.html"><div>abc 1</div>\n'+
-'</script><script type="text/ng-template" id="templates-abc-2.html"><div>abc 2</div>\n'+
+      tag.should.be.equal('<script type="text/ng-template" id="abc-1.html"><div>abc 1</div>\n'+
+'</script><script type="text/ng-template" id="abc-2.html"><div>abc 2</div>\n'+
 '</script>');
       done();
     });
@@ -191,8 +191,8 @@ describe('angular.js template engine', function () {
     // console.log('real',templates);
 
     ss.client.templateEngine.generate(bundler, templates, function(tag) {
-      tag.should.be.equal('<script type="text/ng-template" id="templates-abc-1.html"><div>abc 1</div>\n'+
-'</script><script type="text/ng-template" id="templates-abc-2.html"><div>abc 2</div>\n'+
+      tag.should.be.equal('<script type="text/ng-template" id="abc-1.html"><div>abc 1</div>\n'+
+'</script><script type="text/ng-template" id="abc-2.html"><div>abc 2</div>\n'+
 '</script>');
       done();
     });

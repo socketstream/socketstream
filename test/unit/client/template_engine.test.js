@@ -110,7 +110,7 @@ describe('Template engine', function() {
       var files = [ bundler.entryFor('tmpl','./templates/1.html') ];
 
       ss.client.templateEngine.generate(bundler, files, function (tag) {
-        tag.should.be.equal('<script id="old-templates-1" type="text/x-tmpl"><!-- 123 --><body><div>1</div></body>\n</script>');
+        tag.should.be.equal('<script id="old-1" type="text/x-tmpl"><!-- 123 --><body><div>1</div></body>\n</script>');
         done();
       });
     });
@@ -128,7 +128,7 @@ describe('Template engine', function() {
       var files = [ bundler.entryFor('tmpl','./templates/1.html') ];
 
       ss.client.templateEngine.generate(bundler, files, function (tag) {
-        tag.should.be.equal('<script id="new-templates-1" type="text/x-tmpl"><!-- 1243 --><body><div>1</div></body>\n</script>');
+        tag.should.be.equal('<script id="new-1" type="text/x-tmpl"><!-- 1243 --><body><div>1</div></body>\n</script>');
         done();
       });
     });
@@ -153,7 +153,7 @@ describe('Template engine', function() {
       var bundler = ss.api.bundler.get('abc');
 
       ss.client.templateEngine.generate(bundler, files, function (tag) {
-        tag.should.be.equal('<script id="old-templates-1" type="text/x-tmpl"><!-- 123 --><body><div>1</div></body>\n</script>');
+        tag.should.be.equal('<script id="old-1" type="text/x-tmpl"><!-- 123 --><body><div>1</div></body>\n</script>');
         done();
       });
     });
