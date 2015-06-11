@@ -3,13 +3,14 @@
 var path    = require('path'),
   ss      = require( '../../../lib/socketstream'),
   options = ss.client.options,
-  defineAbcClient = require('./abcClient');
+  defineAbcClient = require('./abcClient'),
+  fixtures = require('../../fixtures');
 
 
 describe('Template engine', function() {
 
   var sinon = require('sinon');
-  ss.root = ss.api.root = path.join(__dirname, '../../../fixtures/project');
+  ss.root = ss.api.root = fixtures.project;
 
   options.liveReload = false;
 
@@ -109,7 +110,7 @@ describe('Template engine', function() {
       var files = [ bundler.entryFor('tmpl','./templates/1.html') ];
 
       ss.client.templateEngine.generate(bundler, files, function (tag) {
-        tag.should.be.equal('<script id="old-templates-1" type="text/x-tmpl"><!-- 123 --><body><div>1</div></body>\n</script>');
+        tag.should.be.equal('<script id="old-1" type="text/x-tmpl"><!-- 123 --><body><div>1</div></body>\n</script>');
         done();
       });
     });
@@ -127,7 +128,7 @@ describe('Template engine', function() {
       var files = [ bundler.entryFor('tmpl','./templates/1.html') ];
 
       ss.client.templateEngine.generate(bundler, files, function (tag) {
-        tag.should.be.equal('<script id="new-templates-1" type="text/x-tmpl"><!-- 1243 --><body><div>1</div></body>\n</script>');
+        tag.should.be.equal('<script id="new-1" type="text/x-tmpl"><!-- 1243 --><body><div>1</div></body>\n</script>');
         done();
       });
     });
@@ -152,7 +153,7 @@ describe('Template engine', function() {
       var bundler = ss.api.bundler.get('abc');
 
       ss.client.templateEngine.generate(bundler, files, function (tag) {
-        tag.should.be.equal('<script id="old-templates-1" type="text/x-tmpl"><!-- 123 --><body><div>1</div></body>\n</script>');
+        tag.should.be.equal('<script id="old-1" type="text/x-tmpl"><!-- 123 --><body><div>1</div></body>\n</script>');
         done();
       });
     });

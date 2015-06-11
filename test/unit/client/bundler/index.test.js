@@ -3,13 +3,14 @@
 var path    = require('path'),
     ss      = require( '../../../../lib/socketstream'),
     options = ss.client.options,
-    defineAbcClient = require('../abcClient');
+    defineAbcClient = require('../abcClient'),
+    fixtures = require('../../../fixtures');
 
 describe('bundler', function () {
 
   //TODO set project root function
 
-  ss.root = ss.api.root = path.join(__dirname, '../../../fixtures/project');
+  ss.root = ss.api.root = fixtures.project;
 
   options.liveReload = false;
 

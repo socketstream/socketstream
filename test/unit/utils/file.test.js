@@ -4,10 +4,11 @@
 
 var fs              = require('fs'),
     path            = require('path'),
-    fileUtils       = require( path.join('../../..', 'lib/utils/file') ),
-    projectDir      = path.join(__dirname,'../../fixtures', 'project'),
-    testDir         = path.join(__dirname,'../../fixtures', 'files'),
-    testReadDirSync = path.join(__dirname,'../../fixtures', 'readDirSync');
+    fileUtils       = require('../../../lib/utils/file'),
+    fixtures        = require('../../fixtures'),
+    projectDir      = fixtures.project,
+    testDir         = fixtures.files,
+    testReadDirSync = fixtures.readDirSync;
 
 describe('lib/utils/file', function () {
     describe('.isDir()', function () {

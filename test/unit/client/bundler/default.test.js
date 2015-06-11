@@ -5,7 +5,8 @@ var path    = require('path'),
     ss      = require( '../../../../lib/socketstream'),
     viewer  = require( '../../../../lib/client/view'),
     options = ss.client.options,
-    defineAbcClient = require('../abcClient');
+    defineAbcClient = require('../abcClient'),
+    fixtures = require('../../../fixtures');
 
 describe('default bundler:', function () {
 
@@ -13,7 +14,7 @@ describe('default bundler:', function () {
 
     //TODO set project root function
 
-    ss.root = ss.api.root = path.join(__dirname, '../../../fixtures/project');
+    ss.root = ss.api.root = fixtures.project;
     //ss.api.bundler = require('../../../../lib/client/bundler/index')(ss.api,options);
 
   options.liveReload = false;
@@ -70,12 +71,16 @@ describe('default bundler:', function () {
 
     var client;
 
+    beforeEach(function(done){ fixtures.reset(done); });
+
     beforeEach(function() {
       client = defineAbcClient({
         css: 'main.styl',
         code: ['libs','kickoff'],
         view: 'main.jade'
       },function() {
+        fixtures.reset();
+        fixtures.setAbcPreviousAbcAssets();
         ss.client.formatters.add('css');
         ss.client.formatters.add('javascript');
       });
@@ -105,11 +110,18 @@ describe('default bundler:', function () {
         '", function (require, module, exports, __dirname, __filename){\n' + code + '\n});');
     });
 
+    it('should recognise existing asset bundle', function() {
+      var bundler = ss.api.bundler.get({ client: 'abc' });
+      bundler.latestPackedId.should.be.equal('123456789');
+    });
+
   });
 
   describe('client with relative css+code+tmpl', function() {
 
     var client;
+
+    beforeEach(function(done){ fixtures.reset(done); });
 
     beforeEach(function() {
       client = ss.client.define('main', {

@@ -73,7 +73,7 @@ describe('constants',function() {
     var files = [ bundler.entryFor('tmpl','./templates/1.html') ];
 
     ss.client.templateEngine.generate(bundler, files, function (tag) {
-      tag.should.be.equal('<script id="new-templates-1" type="text/x-tmpl">t1=abc{"abc":"abc","def":"def"}</script>');
+      tag.should.be.equal('<script id="new-1" type="text/x-tmpl">t1=abc{"abc":"abc","def":"def"}</script>');
       done();
     });
   });
@@ -204,7 +204,7 @@ describe('locals', function() {
     var files = [ bundler.entryFor('tmpl','./templates/1.html') ];
 
     ss.client.templateEngine.generate(bundler, files, function (tag) {
-      tag.should.be.equal('<script id="new-templates-1" type="text/x-tmpl">t1=abc{"abc":"abc","def":"def"}</script>');
+      tag.should.be.equal('<script id="new-1" type="text/x-tmpl">t1=abc{"abc":"abc","def":"def"}</script>');
       done();
     });
   });
