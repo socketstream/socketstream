@@ -112,7 +112,7 @@ describe('default bundler:', function () {
 
     it('should recognise existing asset bundle', function() {
       var bundler = ss.api.bundler.get({ client: 'abc' });
-      bundler.latestPackedId.should.be.equal('123456789');
+      bundler.latestPackedId.should.be.equal('1234567890');
     });
 
   });

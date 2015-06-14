@@ -40,13 +40,13 @@ describe('pack',function() {
 
   describe('{with existing assets}', function() {
 
-    var client;
+    var client, initialID;
 
     beforeEach(function(done) {
       fixtures.reset(done);
     });
 
-    beforeEach(function() {
+    beforeEach(function(done) {
 
       logHook.on();
 
@@ -62,17 +62,47 @@ describe('pack',function() {
         ss.client.packAssets();
       });
 
-      //ss.api.bundler.pack(client);
+      initialID = client.id;
+
+      // mimicks the rest of client load
+      ss.client.addTasks();
+      ss.client.orchestrator.start('serve',done); // this will be moved to socketstream.js
+    });
+
+    beforeEach(function(done) {
+
+      ss.client.unload();
+      ss.client.forget();
+
+      client = defineAbcClient({
+        code: undefined,
+        css: undefined
+      }, function() {
+
+        ss.client.formatters.add('html');
+        ss.client.formatters.add('css');
+        ss.client.formatters.add('javascript');
+
+        options.packedAssets = true;
+      });
+
+      // mimicks the rest of client load
+      ss.client.addTasks();
+      ss.client.orchestrator.start('serve',done);
+    });
+
+    beforeEach(function() {
       logHook.off();
     });
 
     it('should reuse existing assets if possible', function() {
+      client.id.should.equal(initialID);
 
-      client.id = null;
       var bundler = ss.api.bundler.get(client);
       bundler.determineLatestsPackedId();
+
       var tasks = ss.client.buildTasks();
-      tasks.should.have.length(1); //TODO fix this so it is empty
+      tasks.should.have.length(0);
     });
 
   });
