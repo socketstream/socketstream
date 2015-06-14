@@ -4,14 +4,13 @@ var path    = require('path'),
   ss      = require( '../../../../lib/socketstream'),
   bundlerMod = require('../../../../lib/client/bundler'),
   engineMod = require('../../../../lib/client/template_engine'),
-  options = ss.client.options;
+  options = ss.client.options,
+  fixtures = require('../../../fixtures');
 
 
 describe('default template engine', function () {
 
-  ss.root = ss.api.root = path.join(__dirname, '../../../fixtures/project');
-
-  options.liveReload = false;
+  ss.root = ss.api.root = fixtures.project;
 
   ss.api.bundler = bundlerMod(ss.api, options);
 
@@ -22,6 +21,7 @@ describe('default template engine', function () {
     // back to initial client state
     ss.client.assets.unload();
     ss.client.assets.load();
+    ss.client.set({liveReload:false});
 
     ss.client.formatters.add('html');
   });
@@ -50,7 +50,7 @@ describe('default template engine', function () {
     var files = [ bundler.entryFor('tmpl','./templates/1.html') ];
 
     ss.client.templateEngine.generate(bundler, files, function(tag) {
-      tag.should.be.equal('<script id="tmpl-templates-1" type="text/x-tmpl"><body><div>1</div></body>\n</script>');
+      tag.should.be.equal('<script id="tmpl-1" type="text/x-tmpl"><body><div>1</div></body>\n</script>');
       done();
     });
 
@@ -74,7 +74,7 @@ describe('default template engine', function () {
     var files = [ bundler.entryFor('tmpl','./templates/abc/1.html') ];
 
     ss.client.templateEngine.generate(bundler, files, function(tag) {
-      tag.should.be.equal('<script id="tmpl-templates-abc-1" type="text/x-tmpl"><div>abc 1</div>\n</script>');
+      tag.should.be.equal('<script id="tmpl-abc-1" type="text/x-tmpl"><div>abc 1</div>\n</script>');
       done();
     });
 

@@ -4,7 +4,6 @@
   "bitwise": true,
   "browser": true,
   "node": true,
-  "camelcase": true,
   "curly": true,
   "forin": true,
   "immed": true,
@@ -14,6 +13,7 @@
   "noarg": true,
   "noempty": true,
   "nonew": true,
+  "camelcase": false,
   "predef": [
     "$",
     "jQuery",
@@ -37,6 +37,7 @@
     "exports"
   ],
   "trailing": true,
+  "eqnull": true,
   "undef": true,
   "unused": true
 }

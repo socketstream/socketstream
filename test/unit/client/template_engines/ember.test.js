@@ -2,11 +2,12 @@
 
 var path    = require('path'),
   ss      = require( '../../../../lib/socketstream'),
-  options = ss.client.options;
+  options = ss.client.options,
+  fixtures = require('../../../fixtures');
 
 describe('Ember.js template engine', function () {
 
-  ss.root = ss.api.root = path.join(__dirname, '../../../fixtures/project');
+  ss.root = ss.api.root = fixtures.project;
 
   options.liveReload = false;
 
@@ -15,6 +16,7 @@ describe('Ember.js template engine', function () {
     // back to initial client state
     ss.client.assets.unload();
     ss.client.assets.load();
+    ss.client.set({liveReload:false});
 
     ss.client.formatters.add('html');
   });
@@ -45,7 +47,7 @@ describe('Ember.js template engine', function () {
     var files = [ bundler.entryFor('tmpl','./templates/1.html') ];
 
     ss.client.templateEngine.generate(bundler, files, function(tag) {
-      tag.should.be.equal('<script type="text/x-handlebars" data-template-name="templates-1"><body><div>1</div></body>\n</script>');
+      tag.should.be.equal('<script type="text/x-handlebars" data-template-name="1"><body><div>1</div></body>\n</script>');
       done();
     });
 

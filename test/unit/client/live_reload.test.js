@@ -5,7 +5,8 @@ var path    = require('path'),
   ss      = require( '../../../lib/socketstream'),
   chokidar = require('chokidar'),
   logHook = require('../../helpers/logHook.js'),
-  options = ss.client.options;
+  //options = ss.client.options,
+  fixtures = require('../../fixtures');
 
 
 describe('client asset manager index', function () {
@@ -14,7 +15,7 @@ describe('client asset manager index', function () {
       should = require('should'),
       chokidarSpy;
 
-  ss.root = ss.api.root = path.join(__dirname, '../../fixtures/project');
+  ss.root = ss.api.root = fixtures.project;
 
   beforeEach(function () {
     chokidarSpy = sinon.spy(chokidar,'watch');

@@ -12,3 +12,5 @@ test/**/*
 *.tgz
 /docs.js
 test/fixtures/project/client/static/assets/abc
+.idea
+.settings

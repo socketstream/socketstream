@@ -39,7 +39,8 @@ var request      = require('supertest'),
     sessionOptions = {
         maxAge: 2592000000
     },
-    root           = path.join(process.cwd(), 'test/fixtures/project'); // replace '\' with '/' to support Windows
+    fixtures    = require('../../fixtures'),
+    root        = fixtures.project;
 
 describe('lib/http/index', function () {
 
