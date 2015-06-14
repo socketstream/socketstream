@@ -12,8 +12,6 @@ describe('default template engine', function () {
 
   ss.root = ss.api.root = fixtures.project;
 
-  options.liveReload = false;
-
   ss.api.bundler = bundlerMod(ss.api, options);
 
   engineMod(ss.api,options);
@@ -23,6 +21,7 @@ describe('default template engine', function () {
     // back to initial client state
     ss.client.assets.unload();
     ss.client.assets.load();
+    ss.client.set({liveReload:false});
 
     ss.client.formatters.add('html');
   });

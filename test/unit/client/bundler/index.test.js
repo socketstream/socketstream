@@ -12,10 +12,11 @@ describe('bundler', function () {
 
   ss.root = ss.api.root = fixtures.project;
 
-  options.liveReload = false;
-
   describe('API',function() {
 
+    beforeEach(function() {
+      ss.client.set({liveReload:false});
+    });
     afterEach(function() {
       ss.client.forget();
     });
