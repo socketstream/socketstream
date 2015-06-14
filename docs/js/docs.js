@@ -79,8 +79,8 @@ docsApp.directive.code = function() {
 
 docsApp.directive.sourceEdit = function(getEmbeddedTemplate) {
   return NG_DOCS.editExample ? {
-    template: '<a class="btn pull-right" ng-click="plunkr($event)" href>' +
-      '<i class="icon-pencil"></i> Edit in Plunkr</a>',
+    template: '<a class="edit-example pull-right" ng-click="plunkr($event)" href>' +
+      '<i class="icon-edit"></i> Edit in Plunkr</a>',
     scope: true,
     controller: function($scope, $attrs, openPlunkr) {
       var sources = {
@@ -518,7 +518,19 @@ docsApp.controller.DocsController = function($scope, $location, $window, section
   }
 };
 
-angular.module('docsApp', ['ngAnimate', 'bootstrap', 'bootstrapPrettify']).
+function module(name, modules, optional) {
+  if (optional) {
+    angular.forEach(optional, function(name) {
+      try {
+        angular.module(name);
+        modules.push(name);
+      } catch(e) {}
+    });
+  }
+  return angular.module(name, modules);
+}
+
+module('docsApp', ['bootstrap', 'bootstrapPrettify'], ['ngAnimate']).
   config(function($locationProvider) {
     if (NG_DOCS.html5Mode) {
       $locationProvider.html5Mode(true).hashPrefix('!');
