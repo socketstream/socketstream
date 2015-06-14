@@ -1,4 +1,4 @@
-<a href="https://github.com/socketstream/socketstream/edit/master/lib/client/bundler/index.js" class="improve-docs"><i class="icon-edit"> </i>Improve this doc</a><a href="https://github.com/socketstream/socketstream/blob/e7beea4/lib/client/bundler/index.js#L75" class="view-source"><i class="icon-eye-open"> </i>View source</a><h1><code ng:non-bindable="">bundler</code>
+<a href="https://github.com/socketstream/socketstream/edit/master/lib/client/bundler/index.js" class="improve-docs"><i class="icon-edit"> </i>Improve this doc</a><a href="https://github.com/socketstream/socketstream/blob/9181ca7/lib/client/bundler/index.js#L75" class="view-source"><i class="icon-eye-open"> </i>View source</a><h1><code ng:non-bindable="">bundler</code>
 <div><span class="hint">service in module <code ng:non-bindable="">ss</code>
 </span>
 </div>
@@ -8,12 +8,12 @@
 <p>Client bundling API for implementing a custom bundler.</p>
 </div></div>
 <div class="member method"><h2 id="methods">Methods</h2>
-<ul class="methods"><li><a href="https://github.com/socketstream/socketstream/blob/e7beea4/lib/client/bundler/index.js#L118" class="view-source icon-eye-open"> </a><h3 id="methods_define">define(client, args)</h3>
+<ul class="methods"><li><a href="https://github.com/socketstream/socketstream/blob/9181ca7/lib/client/bundler/index.js#L118" class="view-source icon-eye-open"> </a><h3 id="methods_define">define(client, args)</h3>
 <div class="define"><h5 id="methods_define_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>client</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="ss-bundler-page ss-bundler-bundler-define-page"><p>object to store the definition in</p>
 </div></td></tr><tr><td>args</td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="ss-bundler-page ss-bundler-bundler-define-page"><p>arguments passed to define</p>
 </div></td></tr></tbody></table></div>
 </li>
-<li><a href="https://github.com/socketstream/socketstream/blob/e7beea4/lib/client/bundler/index.js#L339" class="view-source icon-eye-open"> </a><h3 id="methods_destsfor">destsFor(client)</h3>
+<li><a href="https://github.com/socketstream/socketstream/blob/9181ca7/lib/client/bundler/index.js#L339" class="view-source icon-eye-open"> </a><h3 id="methods_destsfor">destsFor(client)</h3>
 <div class="destsfor"><div class="ss-bundler-page ss-bundler-bundler-destsfor-page"><p>The define client method of all bundlers must return the file locations for the client.</p>
 <pre><code>return ss.bundler.destsFor(client);
 </code></pre><p>To offer a very different way to define the entry-points for assets the bundler can tweak
@@ -22,17 +22,17 @@ the paths or replace them.</p>
 </div></td></tr></tbody></table><h5 id="methods_destsfor_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="ss-bundler-page ss-bundler-bundler-destsfor-page"><p>Destinations paths, relPaths, dir, containerDir</p>
 </div></td></tr></table></div>
 </li>
-<li><a href="https://github.com/socketstream/socketstream/blob/e7beea4/lib/client/bundler/index.js#L145" class="view-source icon-eye-open"> </a><h3 id="methods_get">get(client)</h3>
+<li><a href="https://github.com/socketstream/socketstream/blob/9181ca7/lib/client/bundler/index.js#L145" class="view-source icon-eye-open"> </a><h3 id="methods_get">get(client)</h3>
 <div class="get"><div class="ss-bundler-page ss-bundler-bundler-get-page"><p>Determine the bundler for a client</p>
 </div><h5 id="methods_get_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>client</td><td><a href="" class="label type-hint type-hint-object">object</a><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="ss-bundler-page ss-bundler-bundler-get-page"><p>Query params with client=name or an actual client object</p>
 </div></td></tr></tbody></table></div>
 </li>
-<li><a href="https://github.com/socketstream/socketstream/blob/e7beea4/lib/client/bundler/index.js#L417" class="view-source icon-eye-open"> </a><h3 id="methods_systemlibs">systemLibs()</h3>
+<li><a href="https://github.com/socketstream/socketstream/blob/9181ca7/lib/client/bundler/index.js#L417" class="view-source icon-eye-open"> </a><h3 id="methods_systemlibs">systemLibs()</h3>
 <div class="systemlibs"><div class="ss-bundler-page ss-bundler-bundler-systemlibs-page"><p>A single entry for all system libraries.</p>
 </div><h5 id="methods_systemlibs_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-assetentry">AssetEntry</a></td><td><div class="ss-bundler-page ss-bundler-bundler-systemlibs-page"><p>Entry</p>
 </div></td></tr></table></div>
 </li>
-<li><a href="https://github.com/socketstream/socketstream/blob/e7beea4/lib/client/bundler/index.js#L440" class="view-source icon-eye-open"> </a><h3 id="methods_systemmodule">systemModule(name, wrap)</h3>
+<li><a href="https://github.com/socketstream/socketstream/blob/9181ca7/lib/client/bundler/index.js#L440" class="view-source icon-eye-open"> </a><h3 id="methods_systemmodule">systemModule(name, wrap)</h3>
 <div class="systemmodule"><div class="ss-bundler-page ss-bundler-bundler-systemmodule-page"><p>Describe a system module.</p>
 </div><h5 id="methods_systemmodule_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>name</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="ss-bundler-page ss-bundler-bundler-systemmodule-page"><p>Name of the system module to return in a descriptor</p>
 </div></td></tr><tr><td>wrap</td><td><a href="" class="label type-hint type-hint-boolean">boolean</a></td><td><div class="ss-bundler-page ss-bundler-bundler-systemmodule-page"><p>Shall the content be wrapped in <code>require.define</code>. Default is true.</p>
