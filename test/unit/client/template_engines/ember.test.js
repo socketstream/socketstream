@@ -16,6 +16,7 @@ describe('Ember.js template engine', function () {
     // back to initial client state
     ss.client.assets.unload();
     ss.client.assets.load();
+    ss.client.set({liveReload:false});
 
     ss.client.formatters.add('html');
   });

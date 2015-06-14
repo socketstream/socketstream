@@ -18,6 +18,7 @@ describe('client asset manager index', function () {
     if (ss.client.assets.assets.constants.abc) {
       delete ss.client.assets.assets.constants.abc;
     }
+    ss.client.set({liveReload:false});
   });
 
     afterEach(function() {

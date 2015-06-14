@@ -12,6 +12,7 @@ describe('css formatter', function () {
     // back to initial client state
     ss.client.assets.unload();
     ss.client.assets.load();
+    ss.client.set({liveReload:false});
   });
 
   afterEach(function() {

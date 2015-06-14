@@ -17,13 +17,13 @@ describe('default bundler:', function () {
     ss.root = ss.api.root = fixtures.project;
     //ss.api.bundler = require('../../../../lib/client/bundler/index')(ss.api,options);
 
-  options.liveReload = false;
-
   describe('client with standard css+code', function() {
 
     var client;
 
     beforeEach(function() {
+      ss.client.set({liveReload:false});
+
       client = ss.client.define('main', {
         css: 'main',
         code: 'main/demo.coffee',

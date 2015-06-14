@@ -19,6 +19,7 @@ describe('pack',function() {
     // back to initial client state
     ss.client.assets.unload();
     ss.client.assets.load();
+    ss.client.set({liveReload:false});
   });
 
   afterEach(function(done) {
@@ -26,7 +27,7 @@ describe('pack',function() {
     fixtures.cleanup(done);
   });
 
-  var newEngine = function newEngine(api,config,options) {
+  function newEngine(api,config,options) {
     api.should.equal(ss.api);
     options.should.equal(ss.client.options);
     return {
@@ -35,7 +36,7 @@ describe('pack',function() {
         return '<script id="new-' + id + '" type="text/x-tmpl">' + template + JSON.stringify(opts.constants) + '</script>';
       }
     }
-  };
+  }
 
   it('should make blank css and minimal js bundles when nothing is defined', function() {
 
