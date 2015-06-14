@@ -32,3 +32,7 @@ function defineAbcClientAndLoad(conf,run,load) {
   return client;
 }
 
+module.exports.reset = function() {
+  ss.client.unload();
+  ss.client.forget();
+};

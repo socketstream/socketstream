@@ -37,6 +37,45 @@ describe('pack',function() {
     }
   };
 
+  describe('{with existing assets}', function() {
+
+    var client;
+
+    beforeEach(function(done) {
+      fixtures.reset(done);
+    });
+
+    beforeEach(function() {
+
+      logHook.on();
+
+      client = defineAbcClient({
+        code: undefined,
+        css: undefined
+      }, function() {
+
+        ss.client.formatters.add('html');
+        ss.client.formatters.add('css');
+        ss.client.formatters.add('javascript');
+
+        ss.client.packAssets();
+      });
+
+      //ss.api.bundler.pack(client);
+      logHook.off();
+    });
+
+    it('should reuse existing assets if possible', function() {
+
+      client.id = null;
+      var bundler = ss.api.bundler.get(client);
+      bundler.determineLatestsPackedId();
+      var tasks = ss.client.buildTasks();
+      tasks.should.have.length(1); //TODO fix this so it is empty
+    });
+
+  });
+
   it('should make blank css and minimal js bundles when nothing is defined', function() {
 
     var client = defineAbcClient({

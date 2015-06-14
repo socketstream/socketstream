@@ -31,18 +31,18 @@ describe('client asset manager index', function () {
     ss.client.options.packedAssets = false;
 
     logHook.on();
-    ss.client.load();
-
-    should(chokidarSpy.calledWithMatch([
-      path.join(ss.api.root,'client','code'),
+    ss.client.load(function() {
+      should(chokidarSpy.calledWithMatch([
+        path.join(ss.api.root,'client','code'),
         path.join(ss.api.root,'client','css'),
         path.join(ss.api.root,'client','static'),
         path.join(ss.api.root,'client','templates'),
         path.join(ss.api.root,'client','views')],{
-          ignored: /(\/\.|~$)/
-        })).equal(true);
-    var logs = logHook.off();
-    logs.should.have.length(0);
+        ignored: /(\/\.|~$)/
+      })).equal(true);
+      var logs = logHook.off();
+      logs.should.have.length(0);
+    });
   });
 
   it('should not start live reload when liveReload option is set to false', function() {
@@ -50,11 +50,11 @@ describe('client asset manager index', function () {
     ss.client.options.liveReload = false;
 
     logHook.on();
-    ss.client.load();
-
-    should(chokidarSpy.called).equal(false);
-    var logs = logHook.off();
-    logs.should.have.length(0);
+    ss.client.load(function() {
+      should(chokidarSpy.called).equal(false);
+      var logs = logHook.off();
+      logs.should.have.length(0);
+    });
   });
 
   it('should monitor directories according to option liveReload', function() {
@@ -62,15 +62,15 @@ describe('client asset manager index', function () {
     ss.client.options.liveReload = ['code','css'];
 
     logHook.on();
-    ss.client.load();
-
-    should(chokidarSpy.calledWithMatch([
-      path.join(ss.api.root,'client','code'),
-      path.join(ss.api.root,'client','css')],{
-      ignored: /(\/\.|~$)/
-    })).equal(true);
-    var logs = logHook.off();
-    logs.should.have.length(0);
+    ss.client.load(function() {
+      should(chokidarSpy.calledWithMatch([
+        path.join(ss.api.root,'client','code'),
+        path.join(ss.api.root,'client','css')],{
+        ignored: /(\/\.|~$)/
+      })).equal(true);
+      var logs = logHook.off();
+      logs.should.have.length(0);
+    });
   });
 
   it('should monitor custom directories according to option liveReload');

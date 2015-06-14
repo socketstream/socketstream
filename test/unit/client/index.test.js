@@ -136,18 +136,19 @@ describe('client asset manager index', function () {
 
         logHook.on();
         ss.client.packAssets();
-        ss.client.load();
-        logHook.off();
+        ss.client.load(function() {
+          logHook.off();
 
-        var html = fs.readFileSync(path.join(fixtures.project,'client/static/assets/abc/' + client.id + '.html'),'utf-8');
-        var js = fs.readFileSync(path.join(fixtures.project,'client/static/assets/abc/' + client.id + '.js'),'utf-8');
-        var css = fs.readFileSync(path.join(fixtures.project,'client/static/assets/abc/' + client.id + '.css'),'utf-8');
-        var expected_html = fs.readFileSync(path.join(fixtures.project,'client/abc/expected.html'),'utf-8');
-        var expected_js = fs.readFileSync(path.join(fixtures.project,'client/abc/expected.min.js'),'utf-8');
+          var html = fs.readFileSync(path.join(fixtures.project,'client/static/assets/abc/' + client.id + '.html'),'utf-8');
+          var js = fs.readFileSync(path.join(fixtures.project,'client/static/assets/abc/' + client.id + '.js'),'utf-8');
+          var css = fs.readFileSync(path.join(fixtures.project,'client/static/assets/abc/' + client.id + '.css'),'utf-8');
+          var expected_html = fs.readFileSync(path.join(fixtures.project,'client/abc/expected.html'),'utf-8');
+          var expected_js = fs.readFileSync(path.join(fixtures.project,'client/abc/expected.min.js'),'utf-8');
 
-        html.should.equal(expected_html);
-        js.should.equal(expected_js);
-        css.should.equal('');
+          html.should.equal(expected_html);
+          js.should.equal(expected_js);
+          css.should.equal('');
+        });
       });
 
 
@@ -210,7 +211,7 @@ describe('client asset manager index', function () {
 
     describe('unpacked #view',function() {
 
-      beforeEach(function() {
+      beforeEach(function(done) {
 
         // back to initial client state
         ss.client.unload();
@@ -226,7 +227,7 @@ describe('client asset manager index', function () {
 
         // options and load client
         options.packedAssets = false;
-        ss.client.load();
+        ss.client.load(done);
       });
 
       afterEach(function() {
@@ -242,7 +243,7 @@ describe('client asset manager index', function () {
     describe('packed #view', function() {
 
 
-        beforeEach(function() {
+        beforeEach(function(done) {
 
           // back to initial client state
           ss.client.unload();
@@ -259,8 +260,10 @@ describe('client asset manager index', function () {
           // options and load client
           logHook.on();
           options.packedAssets = true;
-          ss.client.load();
-          logHook.off();
+          ss.client.load(function() {
+            logHook.off();
+            done();
+          });
         });
 
         afterEach(function() {
