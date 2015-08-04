@@ -1,3 +1,18 @@
+<a name="0.4.3"></a>
+### 0.4.3 (2015-06-14)
+
+
+#### Bug Fixes
+
+* **bundler:** only include asset type in bundle ([5ef3ed02](https://github.com/socketstream/socketstream/commit/5ef3ed025cbafdad4f621ef6c3b4ab7f56a208db))
+* **cli:** Ensures that new apps point to SS 0.4 ([ecd7be27](https://github.com/socketstream/socketstream/commit/ecd7be27a5a615292ba7718b7a4c459cd852d888))
+* **templates:** Generate templates with the same IDs as before, and in sub-directories if configured.
+* **tests:**
+  * Misspelt a path to a file, not caught due to OS X handling mixed case filenames  ([01718001](https://github.com/socketstream/socketstream/commit/01718001527aba26501c9c3bf72e7618a325608c))
+  * More tests added, and some unexpected functionality found ([a9c7b54a](https://github.com/socketstream/socketstream/commit/a9c7b54a9b254a5421244d4e20d4c77a9de527e0))
+  * Added some tests for the cli, ported from ss-generator ([83b11e8f](https://github.com/socketstream/socketstream/commit/83b11e8f20968af44421028427c75fa5b448b4c2))
+
+
 <a name="0.4.2"></a>
 ### 0.4.2 (2015-04-27)
 

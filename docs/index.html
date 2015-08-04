@@ -144,7 +144,7 @@
           <ul class="nav nav-list well" ng-repeat="module in modules track by module.url" class="api-list-item">
             <li class="nav-header module">
               <a class="guide">module</a>
-              <a class="code" href="{{module.url}}">{{module.name}}</a>
+              <a class="code" href="{{module.url}}" title="{{module.name}}">{{module.name}}</a>
             </li>
 
             <li ng-repeat="page in module.others track by page.url" ng-class="navClass(page)" class="api-list-item expand">
