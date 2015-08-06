@@ -66,7 +66,7 @@ describe('pack',function() {
 
       // mimicks the rest of client load
       ss.client.addTasks();
-      ss.client.orchestrator.start('serve',done); // this will be moved to socketstream.js
+      ss.api.orchestrator.start('serve',done); // this will be moved to socketstream.js
     });
 
     beforeEach(function(done) {
@@ -88,7 +88,7 @@ describe('pack',function() {
 
       // mimicks the rest of client load
       ss.client.addTasks();
-      ss.client.orchestrator.start('serve',done);
+      ss.api.orchestrator.start('serve',done);
     });
 
     beforeEach(function() {
