@@ -33,6 +33,7 @@ describe('development mode asset server', function () {
 
   afterEach(function() {
     ss.client.forget();
+    ss.tasks.forget();
   });
 
   it('should serve system loader module',function() {

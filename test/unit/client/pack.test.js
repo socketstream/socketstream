@@ -24,6 +24,7 @@ describe('pack',function() {
 
   afterEach(function(done) {
     ss.client.forget();
+    ss.tasks.forget();
     fixtures.cleanup(done);
   });
 
@@ -65,14 +66,16 @@ describe('pack',function() {
       initialID = client.id;
 
       // mimicks the rest of client load
-      ss.client.addTasks();
-      ss.api.orchestrator.start('serve',done); // this will be moved to socketstream.js
+      ss.tasks.load();
+      ss.api.orchestrator.start('pack-all',done); // this will be moved to socketstream.js
     });
 
     beforeEach(function(done) {
 
       ss.client.unload();
       ss.client.forget();
+      ss.tasks.unload();
+      ss.tasks.forget();
 
       client = defineAbcClient({
         code: undefined,
@@ -83,12 +86,12 @@ describe('pack',function() {
         ss.client.formatters.add('css');
         ss.client.formatters.add('javascript');
 
-        options.packedAssets = true;
+        ss.client.packAssets();
       });
 
       // mimicks the rest of client load
-      ss.client.addTasks();
-      ss.api.orchestrator.start('serve',done);
+      ss.tasks.load();
+      ss.api.orchestrator.start('pack-all',done);
     });
 
     beforeEach(function() {
@@ -99,10 +102,10 @@ describe('pack',function() {
       client.id.should.equal(initialID);
 
       var bundler = ss.api.bundler.get(client);
-      bundler.determineLatestsPackedId();
+      bundler.useLatestsPackedId();
 
-      var tasks = ss.client.buildTasks();
-      tasks.should.have.length(0);
+      var task = ss.api.orchestrator.tasks['pack-if-needed'];
+      task.dep.should.eql(['pack-report']);
     });
 
   });

@@ -33,6 +33,7 @@ describe('production mode asset server', function () {
 
   afterEach(function() {
     ss.client.forget();
+    ss.tasks.forget();
   });
 
 

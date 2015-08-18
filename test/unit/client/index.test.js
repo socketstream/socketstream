@@ -5,7 +5,8 @@ var path    = require('path'),
     ss      = require( '../../../lib/socketstream'),
     logHook = require('../../helpers/logHook.js'),
     options = ss.client.options,
-  fixtures = require('../../fixtures');
+    defineAbcClient = require('./abcClient'),
+    fixtures = require('../../fixtures');
 
 
 describe('client asset manager index', function () {
@@ -109,12 +110,14 @@ describe('client asset manager index', function () {
 
     describe('#packAssets', function () {
 
-        //options.packedAssets = true;
+      beforeEach(function(done){ fixtures.reset(done); });
 
       beforeEach(function() {
 
         ss.client.unload();
         ss.client.forget();
+        ss.tasks.unload();
+        ss.tasks.forget();
         ss.client.formatters.add('html');
         ss.client.formatters.add('javascript');
         ss.client.formatters.add('css');
@@ -124,20 +127,29 @@ describe('client asset manager index', function () {
       afterEach(function() {
         ss.client.unload();
         ss.client.forget();
+        ss.tasks.unload();
       });
 
-      it('should tell the asset manager to pack and minimise all assets', function() {
+      it('should tell the asset manager to pack and minimise all assets', function(done) {
 
           ss.root = ss.api.root = fixtures.project;
 
         var client = ss.client.define('abc', {
             code: './abc/index.js',
-            view: './abc/abc.html'
+            view: './abc/abc.html',
+            css: './abc/style.css'
         });
 
         logHook.on();
         ss.client.packAssets();
-        ss.client.load(function() {
+        ss.client.load();
+        ss.tasks.load();
+
+        ss.api.orchestrator.tasks.default.dep.should.eql(['pack-if-needed','live-reload','serve']);
+        ss.api.orchestrator.tasks['pack-if-needed'].dep.should.eql(['pack-report','abc:pack']);
+
+        ss.tasks.start('default',function() {
+
           logHook.off();
 
           var html = fs.readFileSync(path.join(fixtures.project,'client/static/assets/abc/' + client.id + '.html'),'utf-8');
@@ -149,6 +161,7 @@ describe('client asset manager index', function () {
           html.should.equal(expected_html);
           js.should.equal(expected_js);
           css.should.equal('');
+          done();
         });
       });
 
@@ -212,12 +225,13 @@ describe('client asset manager index', function () {
 
     describe('unpacked #view',function() {
 
-      beforeEach(function(done) {
+      beforeEach(function() {
 
         // back to initial client state
         ss.client.unload();
         ss.client.assets.unload();
         ss.client.forget();
+        ss.tasks.forget();
 
         ss.client.formatters.add('css');
         ss.client.formatters.add('javascript');
@@ -228,11 +242,13 @@ describe('client asset manager index', function () {
 
         // options and load client
         options.packedAssets = false;
-        ss.client.load(done);
+        ss.client.load();
+        ss.tasks.load();
       });
 
       afterEach(function() {
         ss.client.unload();
+        ss.tasks.unload();
       });
 
       it('should render the SS view');
@@ -244,12 +260,13 @@ describe('client asset manager index', function () {
     describe('packed #view', function() {
 
 
-        beforeEach(function(done) {
+        beforeEach(function() {
 
           // back to initial client state
           ss.client.unload();
           ss.client.assets.unload();
           ss.client.forget();
+          ss.tasks.forget();
 
           ss.client.formatters.add('css');
           ss.client.formatters.add('javascript');
@@ -261,14 +278,14 @@ describe('client asset manager index', function () {
           // options and load client
           logHook.on();
           options.packedAssets = true;
-          ss.client.load(function() {
-            logHook.off();
-            done();
-          });
+          ss.client.load();
+          ss.tasks.load();
+          logHook.off();
         });
 
         afterEach(function() {
           ss.client.unload();
+          ss.tasks.unload();
         });
 
         it('should render the ABC view (with start)', function(done) {
