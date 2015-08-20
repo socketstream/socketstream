@@ -5,6 +5,7 @@
 // Dependencies
 
 var uncachedRequire = require('../helpers/uncache'),
+    sinon = require('sinon'),
     fixtures = require('../fixtures');
 
 
@@ -87,13 +88,19 @@ describe('lib/socketstream', function () {
             res.serveClient('abc');
           });
 
+          var tasksSpy = sinon.spy(ss.tasks,'start');
+          tasksSpy.withArgs(['default'], sinon.match.function);
+
           var http = require('http');
           var server = http.Server(ss.http.middleware);
-          server.listen(13000);
-          ss.start(server);
+          server.listen(13000, function() {
+            ss.start(server);
 
-          //TODO test that /abc is served
+            should(tasksSpy.calledOnce).equal(true);
+            //TODO test that /abc is served
 
+            server.close();
+          });
         });
     });
 });
