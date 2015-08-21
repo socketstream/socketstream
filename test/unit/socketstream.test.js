@@ -5,14 +5,14 @@
 // Dependencies
 
 var uncachedRequire = require('../helpers/uncache'),
-    sinon = require('sinon'),
     fixtures = require('../fixtures');
 
 
 
 describe('lib/socketstream', function () {
 
-    var should = require('should');
+    var should = require('should'),
+        sinon = require('sinon');
 
     beforeEach(function (done) {
         uncachedRequire.uncache('../../lib/socketstream.js');

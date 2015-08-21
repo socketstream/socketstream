@@ -66,7 +66,7 @@ describe('pack',function() {
       initialID = client.id;
 
       // mimicks the rest of client load
-      ss.tasks.load();
+      ss.tasks.load(ss.http);
       ss.api.orchestrator.start('pack-all',done); // this will be moved to socketstream.js
     });
 
@@ -90,7 +90,7 @@ describe('pack',function() {
       });
 
       // mimicks the rest of client load
-      ss.tasks.load();
+      ss.tasks.load(ss.http);
       ss.api.orchestrator.start('pack-all',done);
     });
 

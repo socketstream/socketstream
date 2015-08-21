@@ -28,7 +28,7 @@ function defineAbcClientAndLoad(conf,run,load) {
     ss.api.client.templateEngines = ss.client.templateEngine.load();
     ss.api.client.formatters = ss.client.formatters.load();
 
-    ss.tasks.load();
+    ss.tasks.load(ss.http);
   }
 
   return client;

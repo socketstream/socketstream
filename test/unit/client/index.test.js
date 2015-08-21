@@ -5,11 +5,11 @@ var path    = require('path'),
     ss      = require( '../../../lib/socketstream'),
     logHook = require('../../helpers/logHook.js'),
     options = ss.client.options,
-    defineAbcClient = require('./abcClient'),
+    //defineAbcClient = require('./abcClient'),
     fixtures = require('../../fixtures');
 
 
-describe('client asset manager index', function () {
+describe('client asset manager', function () {
 
   ss.root = ss.api.root = fixtures.project;
 
@@ -121,7 +121,6 @@ describe('client asset manager index', function () {
         ss.client.formatters.add('html');
         ss.client.formatters.add('javascript');
         ss.client.formatters.add('css');
-
       });
 
       afterEach(function() {
@@ -129,6 +128,7 @@ describe('client asset manager index', function () {
         ss.client.forget();
         ss.tasks.unload();
       });
+
 
       it('should tell the asset manager to pack and minimise all assets', function(done) {
 
@@ -143,12 +143,12 @@ describe('client asset manager index', function () {
         logHook.on();
         ss.client.packAssets();
         ss.client.load();
-        ss.tasks.load();
+        ss.tasks.load(ss.http);
 
-        ss.api.orchestrator.tasks.default.dep.should.eql(['pack-if-needed','live-reload','serve']);
+        ss.api.orchestrator.tasks.default.dep.should.eql(['start-server','load-socketstream','pack-if-needed','live-reload','serve']);
         ss.api.orchestrator.tasks['pack-if-needed'].dep.should.eql(['pack-report','abc:pack']);
 
-        ss.tasks.start('default',function() {
+        ss.tasks.start(['pack-if-needed'],function() {
 
           logHook.off();
 
@@ -243,7 +243,7 @@ describe('client asset manager index', function () {
         // options and load client
         options.packedAssets = false;
         ss.client.load();
-        ss.tasks.load();
+        ss.tasks.load(ss.http);
       });
 
       afterEach(function() {
@@ -279,7 +279,7 @@ describe('client asset manager index', function () {
           logHook.on();
           options.packedAssets = true;
           ss.client.load();
-          ss.tasks.load();
+          ss.tasks.load(ss.http);
           logHook.off();
         });
 

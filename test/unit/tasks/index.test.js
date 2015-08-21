@@ -1,7 +1,7 @@
 'use strict';
 
 var ss = require( '../../../lib/socketstream'),
-    options = ss.client.options,
+    //options = ss.client.options,
     //defineAbcClient = require('./abcClient'),
     fixtures = require('../../fixtures');
 
