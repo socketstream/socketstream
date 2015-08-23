@@ -43,6 +43,7 @@ describe('bundler', function () {
 
     it('should look up bundler by id', function() {
       var client = ss.client.define('abc', { view: 'abc.html' });
+      ss.api.bundler.load();
 
       var bundler = ss.api.bundler.get({ ts: client.id });
       bundler.should.be.type('object');
@@ -51,6 +52,8 @@ describe('bundler', function () {
 
     it('should throw odd bundler lookups', function() {
       ss.client.define('abc', { view: 'abc.html' });
+
+      ss.api.bundler.load();
 
       // jshint immed: false
       (function() {

@@ -29,10 +29,12 @@ describe('default bundler:', function () {
         code: 'main/demo.coffee',
         view: 'main.jade'
       });
+      ss.api.bundler.load();
     });
 
     afterEach(function() {
       ss.client.forget();
+      ss.tasks.forget();
     });
 
     it('should support default asset source and dest locations', function() {
@@ -74,15 +76,16 @@ describe('default bundler:', function () {
     beforeEach(function(done){ fixtures.reset(done); });
 
     beforeEach(function() {
+      fixtures.setAbcPreviousAbcAssets();
       client = defineAbcClient({
         css: 'main.styl',
         code: ['libs','kickoff'],
         view: 'main.jade'
       },function() {
-        fixtures.reset();
-        fixtures.setAbcPreviousAbcAssets();
         ss.client.formatters.add('css');
         ss.client.formatters.add('javascript');
+
+        ss.client.packAssets();
       });
     });
 
@@ -112,7 +115,7 @@ describe('default bundler:', function () {
 
     it('should recognise existing asset bundle', function() {
       var bundler = ss.api.bundler.get({ client: 'abc' });
-      bundler.latestPackedId.should.be.equal('123456789');
+      bundler.latestPackedId.should.be.equal('1234567890');
     });
 
   });
@@ -188,10 +191,11 @@ describe('default bundler:', function () {
 
       it('should set up client and bundler', function () {
 
-        var client = ss.client.define('abc', {
+        var client = defineAbcClient({
           css: './abc/style.css',
           code: './abc/index.js',
-          view: './abc/abc.html'
+          view: './abc/abc.html',
+          tmpl: undefined
         });
 
         client.id.should.be.type('string');
@@ -227,7 +231,7 @@ describe('default bundler:', function () {
 
       it('should set up client with includes', function () {
 
-        var client = ss.client.define('abc', {
+        var client = defineAbcClient({
           css: './abc/style.css',
           code: './abc/index.js',
           view: './abc/abc.html'
@@ -535,7 +539,8 @@ describe('default bundler:', function () {
 
       ss.api.client.send('constant', 'abcg', {a:'a'});
 
-      ss.client.load();
+      ss.client.load(function(){});
+      ss.tasks.load(ss.http);
 
       viewer(ss.api, client, options, function (html) {
         html.should.be.type('string');
@@ -592,7 +597,7 @@ describe('default bundler:', function () {
           '<head><title>ABC</title></head>',
           '<body><p>ABC</p><script>var abcg={"a":"a"};\nvar abcl={"b":"b"};\nrequire("/abc/index");</script></body>',
           '</html>\n'
-        ].join('\n'))
+        ].join('\n'));
         done();
       });
     });
@@ -665,7 +670,7 @@ describe('default bundler:', function () {
     it('should have mod=libs with libraries as second entry and deliver that in module call', function() {
 
       var entries = bundler.entries('js'),
-        moduleEntries = bundler.module('libs'),
+          moduleEntries = bundler.module('libs'),
           entry = moduleEntries[0];
 
       entries[1].type.should.equal('mod');

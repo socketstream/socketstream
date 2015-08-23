@@ -2,6 +2,7 @@
 
 var ss      = require( '../../../lib/socketstream'),
     logHook = require('../../helpers/logHook.js'),
+    options = ss.client.options,
     defineAbcClient = require('./abcClient');
 
 
@@ -402,8 +403,7 @@ var ss      = require( '../../../lib/socketstream'),
 
       });
 
-      var options = {},
-          expectedHtml = '<body>Jade<script>require("/abc/index");</script></body>';
+      var expectedHtml = '<body>Jade<script>require("/abc/index");</script></body>';
 
       view(ss.api, client, options, function(output) {
         output.should.equal(expectedHtml);

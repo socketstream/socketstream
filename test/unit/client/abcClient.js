@@ -27,8 +27,16 @@ function defineAbcClientAndLoad(conf,run,load) {
     ss.api.bundler.load();
     ss.api.client.templateEngines = ss.client.templateEngine.load();
     ss.api.client.formatters = ss.client.formatters.load();
+
+    ss.tasks.load(ss.http);
   }
 
   return client;
 }
 
+module.exports.reset = function() {
+  ss.client.unload();
+  ss.client.forget();
+  ss.tasks.unload();
+  ss.tasks.forget();
+};

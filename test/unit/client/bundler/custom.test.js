@@ -7,6 +7,10 @@ var path    = require('path'),
 
 describe('custom bundler', function () {
 
+  beforeEach(function() {
+    defineAbcClient.reset();
+  });
+
   describe('system modules', function() {
 
     beforeEach(function() {

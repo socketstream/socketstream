@@ -21,8 +21,9 @@ exports.cleanup = function(done) {
 };
 
 exports.setAbcPreviousAbcAssets = function() {
-  var id = '123456789';
+  var id = '1234567890';
   fs.closeSync(fs.openSync(path.join(__dirname,'project/client/static/assets/abc',id+'.css'),'w'));
   fs.closeSync(fs.openSync(path.join(__dirname,'project/client/static/assets/abc',id+'.js'),'w'));
   fs.closeSync(fs.openSync(path.join(__dirname,'project/client/static/assets/abc',id+'.html'),'w'));
 };
+

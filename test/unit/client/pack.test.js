@@ -24,6 +24,7 @@ describe('pack',function() {
 
   afterEach(function(done) {
     ss.client.forget();
+    ss.tasks.forget();
     fixtures.cleanup(done);
   });
 
@@ -37,6 +38,77 @@ describe('pack',function() {
       }
     }
   }
+
+  describe('{with existing assets}', function() {
+
+    var client, initialID;
+
+    beforeEach(function(done) {
+      fixtures.reset(done);
+    });
+
+    beforeEach(function(done) {
+
+      logHook.on();
+
+      client = defineAbcClient({
+        code: undefined,
+        css: undefined
+      }, function() {
+
+        ss.client.formatters.add('html');
+        ss.client.formatters.add('css');
+        ss.client.formatters.add('javascript');
+
+        ss.client.packAssets();
+      });
+
+      initialID = client.id;
+
+      // mimicks the rest of client load
+      ss.tasks.load(ss.http);
+      ss.api.orchestrator.start('pack-all',done); // this will be moved to socketstream.js
+    });
+
+    beforeEach(function(done) {
+
+      ss.client.unload();
+      ss.client.forget();
+      ss.tasks.unload();
+      ss.tasks.forget();
+
+      client = defineAbcClient({
+        code: undefined,
+        css: undefined
+      }, function() {
+
+        ss.client.formatters.add('html');
+        ss.client.formatters.add('css');
+        ss.client.formatters.add('javascript');
+
+        ss.client.packAssets();
+      });
+
+      // mimicks the rest of client load
+      ss.tasks.load(ss.http);
+      ss.api.orchestrator.start('pack-all',done);
+    });
+
+    beforeEach(function() {
+      logHook.off();
+    });
+
+    it('should reuse existing assets if possible', function() {
+      client.id.should.equal(initialID);
+
+      var bundler = ss.api.bundler.get(client);
+      bundler.useLatestsPackedId();
+
+      var task = ss.api.orchestrator.tasks['pack-if-needed'];
+      task.dep.should.eql(['pack-report']);
+    });
+
+  });
 
   it('should make blank css and minimal js bundles when nothing is defined', function() {
 
