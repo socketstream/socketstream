@@ -210,27 +210,30 @@ var ss      = require( '../../../lib/socketstream'),
 
 
         logHook.on();
-        ss.api.bundler.packAssetSet('js', client, function(files) {
-          files[3].content.should.equal('require.define("/abc/index",function(e,t,n,r,i){window.a="formatter index.a"})');
-          var outs = logHook.off();
-          //outs.should.match(/Minified .\/abc\/index.a from 0.121 KB to 0.076 KB/);
-          done();
-        });
+        ss.api.bundler.packAssetSet('js', client,
+          function(files) {
+            files[3].content.should.equal('require.define("/abc/index",function(){window.a="formatter index.a"});');
+            var outs = logHook.off();
+            //outs.should.match(/Minified .\/abc\/index.a from 0.121 KB to 0.076 KB/);
+          },
+          done);
       });
 
-      it('should only put JavaScript resource in the bundle', function() {
+      it('should only put JavaScript resource in the bundle', function(done) {
         var client = defineAbcClient({ code:'./abc/index.a' },function() {
           ss.client.formatters.add('javascript');
         });
 
         logHook.on();
-        ss.api.bundler.packAssetSet('js', client, function(entries) {
-          entries.should.have.lengthOf(3);
-          entries[0].content.should.startWith('// Module loading code from Browserify:');
-          entries[1].content.should.startWith('require.define("eventemitter2",');
-          entries[2].content.should.startWith('require.define("socketstream",');
-        });
-        logHook.off();
+        ss.api.bundler.packAssetSet('js', client,
+          function(entries) {
+            logHook.off();
+            entries.should.have.lengthOf(3);
+            entries[0].content.should.startWith('// Module loading code from Browserify:');
+            entries[1].content.should.startWith('require.define("eventemitter2",');
+            entries[2].content.should.startWith('require.define("socketstream",');
+          },
+          done);
       });
 
       it('should complain about formatters with unmatched assetType', function() {
@@ -252,8 +255,9 @@ var ss      = require( '../../../lib/socketstream'),
         logHook.on();
         // jshint immed: false
         (function() {
-          ss.api.bundler.packAssetSet('js', client, function() {
-          });
+          ss.api.bundler.packAssetSet('js', client,
+            function() {},
+            function() {});
         }).should.throw('Unable to render \'./abc/index.a\' as the formatter has no asset type.');
         logHook.off();
       });
