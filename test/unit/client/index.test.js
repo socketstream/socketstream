@@ -146,7 +146,7 @@ describe('client asset manager', function () {
         ss.tasks.load(ss.http);
 
         ss.api.orchestrator.tasks.default.dep.should.eql(['load-socketstream','pack-if-needed','live-reload','serve']);
-        ss.api.orchestrator.tasks['pack-if-needed'].dep.should.eql(['pack-report','abc:pack']);
+        ss.api.orchestrator.tasks['pack-if-needed'].dep.should.eql(['pack-prepare','abc:pack']);
 
         ss.tasks.start(['pack-if-needed'],function(err) { //TODO pack tasks passes error
 
