@@ -540,7 +540,7 @@ describe('default bundler:', function () {
       ss.api.client.send('constant', 'abcg', {a:'a'});
 
       ss.client.load(function(){});
-      ss.tasks.load(ss.http);
+      ss.tasks.defaults();
 
       viewer(ss.api, client, options, function (html) {
         html.should.be.type('string');

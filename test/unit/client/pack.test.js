@@ -8,7 +8,7 @@ var path    = require('path'),
   defineAbcClient = require('./abcClient'),
   fixtures = require('../../fixtures');
 
-describe('pack',function() {
+describe('pack tasks',function() {
 
   beforeEach(function(done) {
     fixtures.reset(done);
@@ -39,6 +39,47 @@ describe('pack',function() {
     }
   }
 
+  describe('{doing fresh assets}', function() {
+
+    var client;
+
+    beforeEach(function(done) { fixtures.reset(done); });
+
+    beforeEach(function(done) {
+      ss.root = ss.api.root = fixtures.project;
+
+      var client = ss.client.define('abc', {
+          code: './abc/index.js',
+          view: './abc/abc.html',
+          css: './abc/style.css'
+      });
+
+      logHook.on();
+      ss.client.packAssets();
+
+      ss.start('pack-all', done);
+    });
+
+    it('should pack ABC assets correctly', function() {
+
+      logHook.off();
+
+      var html = fs.readFileSync(path.join(fixtures.project,'client/static/assets/abc/' + client.id + '.html'),'utf-8');
+      var js = fs.readFileSync(path.join(fixtures.project,'client/static/assets/abc/' + client.id + '.js'),'utf-8');
+      var css = fs.readFileSync(path.join(fixtures.project,'client/static/assets/abc/' + client.id + '.css'),'utf-8');
+      var expected_html = fs.readFileSync(path.join(fixtures.project,'client/abc/expected.html'),'utf-8');
+      var expected_js = fs.readFileSync(path.join(fixtures.project,'client/abc/expected.min.js'),'utf-8');
+
+      html.should.equal(expected_html);
+      js.should.equal(expected_js);
+      css.should.equal('');
+    });
+
+    // it('', function() {
+    //   logHook.off();
+    // })
+  });
+
   describe('{with existing assets}', function() {
 
     var client, initialID;
@@ -66,7 +107,7 @@ describe('pack',function() {
       initialID = client.id;
 
       // mimicks the rest of client load
-      ss.tasks.load(ss.http);
+      ss.tasks.defaults();
       ss.api.orchestrator.start('pack-all',done); // this will be moved to socketstream.js
     });
 
@@ -90,7 +131,7 @@ describe('pack',function() {
       });
 
       // mimicks the rest of client load
-      ss.tasks.load(ss.http);
+      ss.tasks.defaults();
       ss.api.orchestrator.start('pack-all',done);
     });
 
@@ -105,7 +146,7 @@ describe('pack',function() {
       bundler.useLatestsPackedId();
 
       var task = ss.api.orchestrator.tasks['pack-if-needed'];
-      task.dep.should.eql(['pack-prepare','abc:pack-unneeded']);
+      task.dep.should.eql(['pack-prepare','load-api','abc:pack-unneeded']);
     });
 
   });
@@ -123,9 +164,10 @@ describe('pack',function() {
     });
 
     logHook.on();
-    ss.tasks.load(ss.http);
+    ss.tasks.defaults();
     ss.api.orchestrator.start('pack-all',function() {
       var outs = logHook.off();
+      console.log('-----\n',outs);
       outs[0].should.match(/Pre-packing and minifying the .abc. client.../);
       //outs[1].should.match(/3 previous packaged files deleted/);
       outs[1].should.match(/Minified CSS from 0 KB to 0 KB/);
@@ -156,7 +198,7 @@ describe('pack',function() {
 
     logHook.on();
     // mimicks the rest of client load
-    ss.tasks.load(ss.http);
+    ss.tasks.defaults();
     ss.api.orchestrator.start('pack-all',function() {
       var outs = logHook.off();
       outs[0].should.match(/Pre-packing and minifying the .abc. client.../);
@@ -191,4 +233,3 @@ describe('pack',function() {
 
   it('should determine the correct IDs early so order of asset creation doesn\'t matter for pack-all');
 });
-
