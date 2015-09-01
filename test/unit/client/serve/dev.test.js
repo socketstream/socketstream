@@ -101,7 +101,7 @@ describe('development mode asset server', function () {
       // dev time URL
       var req = {url: '/assets/abc/'+client.id+'.css?_=abc/style.css' };
       router.route(req.url,req,responseStub).should.equal(true);
-      responseStub.body.should.equal('/* style.css */\n');
+      responseStub.body.should.equal(fixtures.expected_css);
     });
 
 

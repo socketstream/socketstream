@@ -8,135 +8,86 @@ var path    = require('path'),
   defineAbcClient = require('./abcClient'),
   fixtures = require('../../fixtures');
 
-describe('pack tasks',function() {
-
-  beforeEach(function(done) {
-    fixtures.reset(done);
-  });
-
-  beforeEach(function() {
-
-    // back to initial client state
-    ss.client.assets.unload();
-    ss.client.assets.load();
-    ss.client.set({liveReload:false});
-  });
+describe('pack-if-needed',function() {
+  ss.client.set({liveReload:false});
 
   afterEach(function(done) {
+    ss.api.unload();
     ss.client.forget();
     ss.tasks.forget();
     fixtures.cleanup(done);
   });
 
-  function newEngine(api,config,options) {
-    api.should.equal(ss.api);
-    options.should.equal(ss.client.options);
-    return {
-      name: 'New',
-      process: function (template, path, id, opts) {
-        return '<script id="new-' + id + '" type="text/x-tmpl">' + template + JSON.stringify(opts.constants) + '</script>';
-      }
-    }
-  }
+  beforeEach(function(done) { fixtures.reset(done); });
 
   describe('{doing fresh assets}', function() {
 
     var client;
+
+    afterEach(function(done) {
+      ss.client.forget();
+      ss.tasks.forget();
+      fixtures.cleanup(done);
+    });
 
     beforeEach(function(done) { fixtures.reset(done); });
 
     beforeEach(function(done) {
       ss.root = ss.api.root = fixtures.project;
 
-      var client = ss.client.define('abc', {
-          code: './abc/index.js',
-          view: './abc/abc.html',
-          css: './abc/style.css'
-      });
+      client = defineAbcClient({ tmpl:undefined }, null, false);
 
       logHook.on();
       ss.client.packAssets();
 
-      ss.start('pack-all', done);
+      ss.start('load-api','pack-if-needed',done);
     });
+    beforeEach(function() { logHook.off(); });
 
     it('should pack ABC assets correctly', function() {
-
-      logHook.off();
 
       var html = fs.readFileSync(path.join(fixtures.project,'client/static/assets/abc/' + client.id + '.html'),'utf-8');
       var js = fs.readFileSync(path.join(fixtures.project,'client/static/assets/abc/' + client.id + '.js'),'utf-8');
       var css = fs.readFileSync(path.join(fixtures.project,'client/static/assets/abc/' + client.id + '.css'),'utf-8');
-      var expected_html = fs.readFileSync(path.join(fixtures.project,'client/abc/expected.html'),'utf-8');
-      var expected_js = fs.readFileSync(path.join(fixtures.project,'client/abc/expected.min.js'),'utf-8');
 
-      html.should.equal(expected_html);
-      js.should.equal(expected_js);
-      css.should.equal('');
+      html.should.equal(fixtures.expected_html_packed);
+      js.should.equal(fixtures.expected_js_packed);
+      css.should.equal(fixtures.expected_css_packed);
     });
-
-    // it('', function() {
-    //   logHook.off();
-    // })
   });
 
-  describe('{with existing assets}', function() {
+  describe('{with existing default ABC assets}', function() {
 
-    var client, initialID;
+    var client, initialID, outs;
 
-    beforeEach(function(done) {
-      fixtures.reset(done);
+    afterEach(function(done) {
+      ss.client.forget();
+      ss.tasks.forget();
+      fixtures.cleanup(done);
     });
 
+    beforeEach(function(done) { fixtures.reset(done); });
+
     beforeEach(function(done) {
 
-      logHook.on();
-
-      client = defineAbcClient({
-        code: undefined,
-        css: undefined
-      }, function() {
-
-        ss.client.formatters.add('html');
-        ss.client.formatters.add('css');
-        ss.client.formatters.add('javascript');
-
-        ss.client.packAssets();
-      });
+      client = defineAbcClient({ tmpl:undefined }, null, false);
+      ss.client.packAssets();
 
       initialID = client.id;
 
-      // mimicks the rest of client load
-      ss.tasks.defaults();
-      ss.api.orchestrator.start('pack-all',done); // this will be moved to socketstream.js
-    });
+      logHook.on();
 
-    beforeEach(function(done) {
-
-      ss.client.unload();
-      ss.client.forget();
-      ss.tasks.unload();
-      ss.tasks.forget();
-
-      client = defineAbcClient({
-        code: undefined,
-        css: undefined
-      }, function() {
-
-        ss.client.formatters.add('html');
-        ss.client.formatters.add('css');
-        ss.client.formatters.add('javascript');
-
-        ss.client.packAssets();
-      });
-
-      // mimicks the rest of client load
-      ss.tasks.defaults();
-      ss.api.orchestrator.start('pack-all',done);
+      ss.start(['load-api','pack-if-needed'],done);
     });
 
     beforeEach(function() {
-      logHook.off();
+      outs = logHook.off();
+      ss.client.unload();
+
+      client = defineAbcClient({ tmpl:undefined }, null, false);
+      ss.client.packAssets();
+
+      // ss.api.orchestrator.start('pack-if-needed',done);
     });
 
     it('should reuse existing assets if possible', function() {
@@ -151,22 +102,31 @@ describe('pack tasks',function() {
 
   });
 
-  it('should make blank css and minimal js bundles when nothing is defined', function(done) {
+  describe('{ nothing is defined for abc }', function() {
 
-    var client = defineAbcClient({
-      code: undefined,
-      css: undefined
-    }, function() {
+    var client, outs;
 
-      ss.client.formatters.add('html');
-      ss.client.formatters.add('css');
-      ss.client.formatters.add('javascript');
+    afterEach(function(done) {
+      ss.client.forget();
+      ss.tasks.forget();
+      fixtures.cleanup(done);
     });
 
-    logHook.on();
-    ss.tasks.defaults();
-    ss.api.orchestrator.start('pack-all',function() {
-      var outs = logHook.off();
+    beforeEach(function(done) { fixtures.reset(done); });
+
+    beforeEach(function(done) {
+
+      client = defineAbcClient({ css:undefined, code:undefined, tmpl:undefined }, null, false);
+
+      logHook.on();
+
+      ss.start(['load-api','pack-if-needed'],done);
+    });
+
+    beforeEach(function() { outs = logHook.off(); });
+
+    it('should make blank css and minimal js bundles when ', function(done) {
+
       console.log('-----\n',outs);
       outs[0].should.match(/Pre-packing and minifying the .abc. client.../);
       //outs[1].should.match(/3 previous packaged files deleted/);
@@ -180,27 +140,37 @@ describe('pack tasks',function() {
       var expected_js = fs.readFileSync(path.join(fixtures.project,'client/abc/empty-expected.min.js'),'utf-8');
 
       js.should.equal(expected_js);
-      css.should.equal('');
-      done();
+      css.should.equal(fixtures.expected_css_packed);
     });
   });
 
-  it('should be available in formatters pack simple css and js', function(done) {
+  describe('{ default abc client with constant }', function() {
 
-    var client = defineAbcClient({ }, function() {
+    var client, outs;
 
-        ss.api.client.send('constant','abc','abc');
+    afterEach(function(done) {
+      ss.client.forget();
+      ss.tasks.forget();
+      fixtures.cleanup(done);
+    });
 
-        ss.client.formatters.add('html');
-        ss.client.formatters.add('css');
-        ss.client.formatters.add('javascript');
-      });
+    beforeEach(function(done) { fixtures.reset(done); });
 
-    logHook.on();
-    // mimicks the rest of client load
-    ss.tasks.defaults();
-    ss.api.orchestrator.start('pack-all',function() {
-      var outs = logHook.off();
+    beforeEach(function(done) {
+
+      client = defineAbcClient({ tmpl:undefined }, null, false);
+
+      ss.api.client.send('constant','abc','abc');
+
+      logHook.on();
+
+      ss.start(['load-api','pack-if-needed'],done);
+    });
+
+    beforeEach(function() { outs = logHook.off(); });
+
+    it('should be available in formatters pack simple css and js', function() {
+
       outs[0].should.match(/Pre-packing and minifying the .abc. client.../);
       outs[1].should.match(/Minified CSS from 0.016 KB to 0 KB/);
       outs[2].should.match(new RegExp('Packed 1 files into /client/static/assets/abc/'+client.id+'.css'));
@@ -211,15 +181,13 @@ describe('pack tasks',function() {
       var html = fs.readFileSync(path.join(fixtures.project,'client/static/assets/abc/' + client.id + '.html'),'utf-8');
       var js = fs.readFileSync(path.join(fixtures.project,'client/static/assets/abc/' + client.id + '.js'),'utf-8');
       var css = fs.readFileSync(path.join(fixtures.project,'client/static/assets/abc/' + client.id + '.css'),'utf-8');
-      var expected_html = fs.readFileSync(path.join(fixtures.project,'client/abc/expected-with-abc-constants.html'),'utf-8');
-      var expected_js = fs.readFileSync(path.join(fixtures.project,'client/abc/expected.min.js'),'utf-8');
 
-      html.should.equal(expected_html);
-      js.should.equal(expected_js);
-      css.should.equal('');
-      done();
+      html.should.equal(fixtures.expected_html_packed);
+      js.should.equal(fixtures.expected_js_packed);
+      css.should.equal(fixtures.expected_css_packed);
     });
   });
+
 
   it('should make JS bundle with multiple modules if directory is entry point');
 

@@ -27,3 +27,7 @@ exports.setAbcPreviousAbcAssets = function() {
   fs.closeSync(fs.openSync(path.join(__dirname,'project/client/static/assets/abc',id+'.html'),'w'));
 };
 
+exports.expected_css = '/* style.css */\nbody {color:red;}\n';
+exports.expected_css_packed = 'body{color:red;}\n';
+exports.expected_html_packed = fs.readFileSync(path.join(__dirname,'project/client/abc/expected.html'),'utf-8');
+exports.expected_js_packed = fs.readFileSync(path.join(__dirname,'project/client/abc/expected.min.js'),'utf-8');
