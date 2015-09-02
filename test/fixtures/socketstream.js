@@ -9,3 +9,7 @@ ss.client.reset = function() {
   ss.tasks.unload();
   ss.tasks.forget();
 };
+
+ss.tasks.reset = function() {
+  ss.tasks.forget();
+};

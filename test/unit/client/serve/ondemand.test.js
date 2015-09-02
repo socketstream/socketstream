@@ -1,7 +1,7 @@
 'use strict';
 
 var path    = require('path'),
-    ss      = require( '../../../../lib/socketstream'),
+    ss      = require( '../../../fixtures/socketstream'),
     Router = require('../../../../lib/http/router').Router,
     options = ss.client.options,
     defineAbcClient = require('../abcClient'),
@@ -22,18 +22,7 @@ describe('production mode asset server', function () {
 
 
   beforeEach(function() {
-
-    // back to initial client state
-    ss.client.assets.unload();
-    ss.client.assets.load();
-    ss.client.formatters.add('javascript');
-    //console.log(ss.api.client.root,'is client root');
-    //console.log(ss.api.root, ss.client.options.dirs.client);
-  });
-
-  afterEach(function() {
-    ss.client.forget();
-    ss.tasks.forget();
+    ss.client.reset();
   });
 
 

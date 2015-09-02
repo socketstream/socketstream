@@ -18,21 +18,19 @@ describe('live reload', function () {
   ss.root = ss.api.root = fixtures.project;
 
   beforeEach(function () {
+    ss.client.reset();
     chokidarSpy = sinon.spy(chokidar,'watch');
     logHook.on();
-    ss.client.load();
   });
 
   afterEach(function () {
     chokidar.watch.restore();
-    ss.client.unload();
-    ss.client.forget();
-    ss.tasks.unload();
-    ss.tasks.forget();
+    ss.api.unload();
   });
 
   it('should start live reload when in development', function() {
     ss.client.options.packedAssets = false;
+    ss.api.load();
     ss.tasks.defaults();
     ss.api.orchestrator.tasks.default.dep.should.containDeep(['live-reload']);
   });
@@ -40,6 +38,7 @@ describe('live reload', function () {
   it('should call chokidar for live-reload', function(done) {
 
     ss.client.options.packedAssets = false;
+    ss.api.load();
     ss.tasks.defaults();
 
     ss.tasks.start('live-reload', function() {
@@ -60,6 +59,7 @@ describe('live reload', function () {
   it('should not start live reload when liveReload option is set to false', function() {
     ss.client.options.packedAssets = false;
     ss.client.options.liveReload = false;
+    ss.api.load();
     ss.tasks.defaults();
 
     ss.api.orchestrator.tasks.default.dep.should.not.containDeep(['live-reload']);
@@ -70,6 +70,7 @@ describe('live reload', function () {
   it('should monitor directories according to option liveReload', function() {
     ss.client.options.packedAssets = false;
     ss.client.options.liveReload = ['code','css'];
+    ss.api.load();
     ss.tasks.defaults();
 
     ss.tasks.start('live-reload', function() {

@@ -18,9 +18,9 @@ describe('pack-if-needed',function() {
     fixtures.cleanup(done);
   });
 
-  beforeEach(function(done) { fixtures.reset(done); });
+  beforeEach(function(done) { ss.tasks.reset(); fixtures.reset(done); });
 
-  describe('{doing fresh assets}', function() {
+  xdescribe('{doing fresh assets}', function() {
 
     var client;
 
@@ -56,7 +56,7 @@ describe('pack-if-needed',function() {
     });
   });
 
-  describe('{with existing default ABC assets}', function() {
+  xdescribe('{with existing default ABC assets}', function() {
 
     var client, initialID, outs;
 
@@ -66,7 +66,7 @@ describe('pack-if-needed',function() {
       fixtures.cleanup(done);
     });
 
-    beforeEach(function(done) { fixtures.reset(done); });
+    beforeEach(function(done) { ss.tasks.reset(); fixtures.reset(done); });
 
     beforeEach(function(done) {
 
@@ -102,7 +102,7 @@ describe('pack-if-needed',function() {
 
   });
 
-  describe('{ nothing is defined for abc }', function() {
+  xdescribe('{ nothing is defined for abc }', function() {
 
     var client, outs;
 
@@ -144,7 +144,7 @@ describe('pack-if-needed',function() {
     });
   });
 
-  describe('{ default abc client with constant }', function() {
+  xdescribe('{ default abc client with constant }', function() {
 
     var client, outs;
 

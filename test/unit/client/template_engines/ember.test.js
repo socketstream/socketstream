@@ -12,20 +12,9 @@ describe('Ember.js template engine', function () {
   options.liveReload = false;
 
   beforeEach(function() {
-
-    // back to initial client state
-    ss.client.assets.unload();
-    ss.client.assets.load();
+    ss.client.reset();
     ss.client.set({liveReload:false});
-
-    ss.client.formatters.add('html');
   });
-
-  afterEach(function() {
-    ss.client.unload();
-    ss.client.forget();
-  });
-
 
   it('should output an inline template for use with Ember.js', function(done) {
 
@@ -37,10 +26,7 @@ describe('Ember.js template engine', function () {
 
     ss.client.templateEngine.use('ember');
 
-    ss.api.bundler.load();
-
-    ss.api.client.templateEngines = ss.client.templateEngine.load();
-    ss.api.client.formatters = ss.client.formatters.load();
+    ss.client.load();
 
     var bundler = ss.api.bundler.get('abc');
 

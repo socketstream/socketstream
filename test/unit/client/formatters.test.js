@@ -1,6 +1,6 @@
 'use strict';
 
-var ss      = require( '../../../lib/socketstream'),
+var ss      = require( '../../fixtures/socketstream'),
     logHook = require('../../helpers/logHook.js'),
     options = ss.client.options,
     defineAbcClient = require('./abcClient');
@@ -14,25 +14,12 @@ var ss      = require( '../../../lib/socketstream'),
 
 
       beforeEach(function() {
-
-        // back to initial client state
-        ss.client.assets.unload();
-        ss.client.assets.load();
-        ss.client.set({liveReload:false});
-      });
-
-      afterEach(function() {
-        ss.client.forget();
+        ss.client.reset();
       });
 
       it('should append a module from built-in directory',function() {
-        ss.client.formatters.add('css');
-        ss.client.formatters.add('javascript');
-        ss.client.formatters.add('html');
-
-        // load
-        ss.api.bundler.load();
-        var loaded = ss.api.client.formatters = ss.client.formatters.load();
+        ss.client.load();
+        var loaded = ss.api.client.formatters;
 
         loaded.css.should.be.type('object');
         loaded.css.assetType.should.be.equal('css');
@@ -71,8 +58,8 @@ var ss      = require( '../../../lib/socketstream'),
         ss.client.formatters.add(formatter, {c:'c'});
 
         // load
-        ss.api.bundler.load();
-        var loaded = ss.api.client.formatters = ss.client.formatters.load();
+        ss.client.load();
+        var loaded = ss.api.client.formatters;
 
         var concrete = loaded.a;
         concrete.root.should.be.equal(ss.api.root);
@@ -102,8 +89,8 @@ var ss      = require( '../../../lib/socketstream'),
         ss.client.formatters.add(formatter, {c:'c'});
 
         // load
-        ss.api.bundler.load();
-        var loaded = ss.api.client.formatters = ss.client.formatters.load();
+        ss.client.load();
+        var loaded = ss.api.client.formatters;
 
         var concrete = loaded.a;
         concrete.should.be.type('object');
@@ -128,14 +115,7 @@ var ss      = require( '../../../lib/socketstream'),
     describe('#load', function () {
 
       beforeEach(function() {
-
-        // back to initial client state
-        ss.client.assets.unload();
-        ss.client.assets.load();
-      });
-
-      afterEach(function() {
-        ss.client.forget();
+        ss.client.reset();
       });
 
       it('should load the code formatters, and return an object containing them', function() {
@@ -165,8 +145,7 @@ var ss      = require( '../../../lib/socketstream'),
           ss.client.formatters.add(formatter,{'c':'c'});
 
           // load
-          ss.api.bundler.load();
-          ss.api.client.formatters = ss.client.formatters.load();
+          ss.client.load();
 
           ss.api.client.formatters.should.be.type('object');
           var concrete = ss.api.client.formatters.a;
@@ -181,14 +160,7 @@ var ss      = require( '../../../lib/socketstream'),
 
     describe('#call',function() {
       beforeEach(function() {
-
-        // back to initial client state
-        ss.client.assets.unload();
-        ss.client.assets.load();
-      });
-
-      afterEach(function() {
-        ss.client.forget();
+        ss.client.reset();
       });
 
       it('should support alternate extensions', function(done) {
@@ -283,8 +255,7 @@ var ss      = require( '../../../lib/socketstream'),
         ss.client.formatters.add(formatter,{'c':'c'});
 
         // load
-        ss.api.bundler.load();
-        ss.api.client.formatters = ss.client.formatters.load();
+        ss.client.load();
 
         ss.api.client.formatters.should.be.type('object');
         var concrete = ss.api.client.formatters.a,
@@ -321,8 +292,7 @@ var ss      = require( '../../../lib/socketstream'),
         ss.client.formatters.add(formatter,{'c':'c'});
 
         // load
-        ss.api.bundler.load();
-        ss.api.client.formatters = ss.client.formatters.load();
+        ss.client.load();
 
         ss.api.client.formatters.should.be.type('object');
         var concrete = ss.api.client.formatters.a,
@@ -357,8 +327,7 @@ var ss      = require( '../../../lib/socketstream'),
         ss.client.formatters.add(formatter,{'c':'c'});
 
         // load
-        ss.api.bundler.load();
-        ss.api.client.formatters = ss.client.formatters.load();
+        ss.client.load();
 
         ss.api.client.formatters.should.be.type('object');
         var concrete = ss.api.client.formatters.a;
@@ -376,23 +345,13 @@ var ss      = require( '../../../lib/socketstream'),
 
     beforeEach(function() {
 
-      ss.client.assets.unload();
-      ss.client.assets.load();
-    });
-
-    afterEach(function() {
-      ss.client.unload();
-      ss.client.forget();
+      ss.client.reset();
     });
 
     it('should serve view using custom formatter', function(done) {
       var client = defineAbcClient({
         view: '1.jade'
       },function() {
-        ss.client.formatters.add('css');
-        ss.client.formatters.add('javascript');
-        ss.client.formatters.add('map');
-        ss.client.formatters.add('html');
         ss.client.formatters.add(function() {
           return {
             name: 'Jade',

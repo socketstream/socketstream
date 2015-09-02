@@ -2,7 +2,7 @@
 
 var path    = require('path'),
     fs      = require('fs'),
-    ss      = require( '../../../lib/socketstream'),
+    ss      = require( '../../fixtures/socketstream'),
     logHook = require('../../helpers/logHook.js'),
     options = ss.client.options,
     //defineAbcClient = require('./abcClient'),
@@ -16,6 +16,7 @@ describe('client asset manager', function () {
     //var origDefaultEntryInit = options.defaultEntryInit;
 
   beforeEach(function() {
+    ss.client.reset();
     if (ss.client.assets.assets.constants.abc) {
       delete ss.client.assets.assets.constants.abc;
     }
@@ -109,25 +110,10 @@ describe('client asset manager', function () {
 
     describe('#packAssets', function () {
 
-      beforeEach(function(done){ fixtures.reset(done); });
-
-      beforeEach(function() {
-
-        ss.client.unload();
-        ss.client.forget();
-        ss.tasks.unload();
-        ss.tasks.forget();
-        ss.client.formatters.add('html');
-        ss.client.formatters.add('javascript');
-        ss.client.formatters.add('css');
+      beforeEach(function(done){ 
+        ss.client.reset();
+        fixtures.reset(done); 
       });
-
-      afterEach(function() {
-        ss.client.unload();
-        ss.client.forget();
-        ss.tasks.unload();
-      });
-
 
       it('should tell the asset manager to pack and minimise all assets', function() {
 
@@ -240,19 +226,7 @@ describe('client asset manager', function () {
 
 
         beforeEach(function() {
-
-          // back to initial client state
-          ss.client.unload();
-          ss.client.assets.unload();
-          ss.client.forget();
-          ss.tasks.forget();
-
-          ss.client.formatters.add('css');
-          ss.client.formatters.add('javascript');
-          ss.client.formatters.add('map');
-          ss.client.formatters.add('html');
-
-          ss.client.assets.load();
+          ss.client.reset();
 
           // options and load client
           logHook.on();
