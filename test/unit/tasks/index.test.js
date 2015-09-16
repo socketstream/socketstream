@@ -78,5 +78,5 @@ describe('start tasks plan', function () {
 
     should(typeof plan.callback).be.equal('function');
     plan.targets.should.eql(['pack-all']);
-  })
+  });
 });
