@@ -18,7 +18,7 @@ describe('start tasks plan', function () {
     return ss.tasks.plan(arguments);
   }
 
-  it('plan standard start call', function() {
+  it('should plan with standard start call', function() {
     var server = require('http').createServer();
 
     // ss.start(server)
@@ -28,7 +28,7 @@ describe('start tasks plan', function () {
     plan.targets.should.eql(['default']);
   });
 
-  it('plan start() call', function() {
+  it('should plan with start() call', function() {
     // ss.start()
     var plan = start();
 
@@ -36,7 +36,7 @@ describe('start tasks plan', function () {
     plan.targets.should.eql(['default']);
   });
 
-  it('plan start("pack-all") call', function() {
+  it('should plan with start("pack-all") call', function() {
 
     // ss.start("pack-all")
     var plan = start('pack-all');
@@ -45,7 +45,7 @@ describe('start tasks plan', function () {
     plan.targets.should.eql(['pack-all']);
   });
 
-  it('plan start(server,"pack-all") call', function() {
+  it('should plan with start(server,"pack-all") call', function() {
     var server = require('http').createServer();
 
     // ss.start(server, "pack-all")
@@ -55,7 +55,7 @@ describe('start tasks plan', function () {
     plan.targets.should.eql(['pack-all']);
   });
 
-  it('plan start("pack-all","more-stuff") call', function() {
+  it('should plan with start("pack-all","more-stuff") call', function() {
     // ss.start("pack-all","more-stuff")
     var plan = start('pack-all','more-stuff');
 
@@ -63,7 +63,7 @@ describe('start tasks plan', function () {
     plan.targets.should.eql(['pack-all','more-stuff']);
   });
 
-  it('plan start(server, "pack-all","more-stuff") call', function() {
+  it('should plan with start(server, "pack-all","more-stuff") call', function() {
     var server = require('http').createServer();
 
     // ss.start("pack-all","more-stuff")
@@ -71,5 +71,12 @@ describe('start tasks plan', function () {
 
     should(plan.httpServer).be.equal(server);
     plan.targets.should.eql(['pack-all','more-stuff']);
+  });
+
+  it('should plan with start("pack-all",function) call', function() {
+    var plan = start('pack-all', function() {});
+
+    should(typeof plan.callback).be.equal('function');
+    plan.targets.should.eql(['pack-all']);
   });
 });

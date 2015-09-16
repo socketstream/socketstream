@@ -8,27 +8,15 @@ var path    = require('path'),
 describe('css formatter', function () {
 
   beforeEach(function() {
-
-    // back to initial client state
-    ss.client.assets.unload();
-    ss.client.assets.load();
-    ss.client.set({liveReload:false});
+    ss.client.reset();
+    ss.client.load();
   });
-
-  afterEach(function() {
-    ss.client.forget();
-  });
-
-
 
   describe('#init', function () {
 
     it('should return an object describing what file extensions the formatter handles', function() {
 
-      ss.client.formatters.add('css');
-
-      ss.api.bundler.load();
-      var formatters = ss.api.client.formatters = ss.client.formatters.load();
+      var formatters = ss.api.client.formatters;
 
       formatters.css.should.be.type('object');
       formatters.css.extensions.should.eql(['css']);
@@ -37,10 +25,7 @@ describe('css formatter', function () {
 
     it('should return an object describing what asset and content types that the formatter handles',function() {
 
-      ss.client.formatters.add('css');
-
-      ss.api.bundler.load();
-      var formatters = ss.api.client.formatters = ss.client.formatters.load();
+      var formatters = ss.api.client.formatters;
 
       formatters.css.should.be.type('object');
       formatters.css.assetType.should.equal('css');
@@ -52,16 +37,11 @@ describe('css formatter', function () {
 
     it('should return the CSS file content as is', function() {
 
-      ss.client.formatters.add('css');
-
-      ss.api.bundler.load();
-      ss.api.client.formatters = ss.client.formatters.load();
-
       var concrete = ss.api.client.formatters.css;
       var output;
       concrete.call(path.join(fixtures.project,'client/abc/style.css'),{},function(out) {
         output = out;
-        out.should.be.equal('/* style.css */\n');
+        out.should.be.equal(fixtures.expected_css);
       },function(err) {
         should(err).be.equal(undefined);
       });

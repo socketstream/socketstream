@@ -1,7 +1,7 @@
 'use strict';
 
 var path    = require('path'),
-  ss      = require( '../../../lib/socketstream'),
+  ss      = require( '../../fixtures/socketstream'),
   options = ss.client.options,
   defineAbcClient = require('./abcClient'),
   fixtures = require('../../fixtures');
@@ -17,18 +17,7 @@ describe('Template engine', function() {
   describe('builtin use', function() {
 
     beforeEach(function() {
-
-      // back to initial client state
-      ss.client.assets.unload();
-      ss.client.assets.load();
-      ss.client.set({liveReload:false});
-
-      ss.client.formatters.add('html');
-    });
-
-    afterEach(function() {
-      ss.client.unload();
-      ss.client.forget();
+      ss.client.reset();
     });
 
     it('should throw error for unknown builtin engine', function() {
@@ -83,17 +72,7 @@ describe('Template engine', function() {
     newEngine = sinon.spy(newEngine);
 
     beforeEach(function() {
-
-      // back to initial client state
-      ss.client.assets.unload();
-      ss.client.assets.load();
-
-      ss.client.formatters.add('html');
-    });
-
-    afterEach(function() {
-      ss.client.unload();
-      ss.client.forget();
+      ss.client.reset();
     });
 
     it('should wrap with old API custom engine process function', function(done) {
