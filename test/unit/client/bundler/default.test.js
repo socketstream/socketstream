@@ -148,6 +148,37 @@ describe('default bundler:', function () {
     });
   });
 
+  describe('client with relative css+code+tmpl outside client directory', function() {
+
+    var client;
+
+    beforeEach(function(done){ fixtures.reset(done); });
+
+    beforeEach(function() {
+      client = ss.client.define('main', {
+        css: '../more/a',
+        code: '../more/a/a.js',
+        view: '../more/a/a.html',
+        tmpl: '../more/a/a.html'
+      });
+    });
+
+    afterEach(function() {
+      ss.client.forget();
+    });
+
+    it('should support asset source locations', function() {
+
+      client.id.should.be.type('string');
+
+      client.paths.should.be.type('object');
+      client.paths.css.should.be.eql(['../more/a']);
+      client.paths.code.should.be.eql(['../more/a/a.js']);
+      client.paths.view.should.be.eql('../more/a/a.html');
+      client.paths.tmpl.should.be.eql(['../more/a/a.html']);
+    });
+  });
+
   describe('define code entry point', function() {
 
     afterEach(function() {
