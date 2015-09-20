@@ -15,9 +15,9 @@ Following are steps to create an end-point with Ember view in SocketStream.
 Use `ss.client.define` to define the Ember MVC client end point in app.js
 <pre>
     ss.client.define('todos', {
-        view:   'todos.html',
-        css :   ['libs', 'todos.css'],
-        code:   ['libs', 'todos'],
+        view:   './todos/todos.html',
+        css :   ['libs', './todos/todos.css'],
+        code:   ['libs', './todos'],
         tmpl:   []
     });
 </pre>
@@ -35,17 +35,17 @@ Enable Ember template engine in the app.js configuration.
 <pre>
     ss.client.templateEngine.use('ember');
 
-    // or use('ember', '/todos') to limit ember only to '/todos' directory.
-    ss.client.templateEngine.use('ember', '/todos');
+    // or use('ember', './todos') to limit ember only to 'client/todos' directory.
+    ss.client.templateEngine.use('ember', './todos');
 </pre>
 
 ### Add client html views with handlebar templates
 
-You can copy the Todos example html file from Ember website into `client/view/todos.html`.
+You can copy the Todos example html file from Ember website into `client/todos/todos.html`.
 Note you need to add `<SocketStream>`  in the head so socketstream framework gets loaded.
 
 In the client todos.html, html view elements are described using handlebar scripts, not html tags directly.
-The data model of the view and view event handlers are defined in the client app.js at `client/code/todos/app.js`.
+The data model of the view and view event handlers are defined in the client app.js at `client/todos/app.js`.
 
 For example, in todos.html, list of todo items are placed into a ul list view with data come from an ember array controller.
 

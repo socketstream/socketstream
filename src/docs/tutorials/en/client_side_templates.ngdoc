@@ -78,6 +78,17 @@ You may limit the scope of a template engine by passing the name of a directory 
 <pre>
 // serve all templates with ss-hogan
 ss.client.templateEngine.use(require('ss-hogan'));
+// apart from any in the /client/ember directory
+ss.client.templateEngine.use('ember', './ember');
+</pre>
+
+The new style of SocketStream is to use relative paths from the client directory. The default destinations for templates still work as shown below.
+However it is a good habit to specify the directory with the new notation style. If you want to have
+templates outside the client, you can access the project directory with the `../` prefix.
+
+<pre>
+// serve all templates with ss-hogan
+ss.client.templateEngine.use(require('ss-hogan'));
 // apart from any in the /client/templates/em directory
 ss.client.templateEngine.use('ember', '/em');
 </pre>
@@ -139,6 +150,3 @@ ss.client.define('iphone', {
   tmpl: ['main', 'mobile']  // will only send templates in the 'main' and 'mobile' directories
 });
 </pre>
-
-
-

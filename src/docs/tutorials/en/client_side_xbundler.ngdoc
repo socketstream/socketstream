@@ -4,6 +4,8 @@
 @description
 # Client-Side Bundler
 
+## (Changes in next version)
+
 Each view is served with a separate bundle of assets. A HTML, JS and CSS file makes up the view.
 The default bundler will create the bundle based on the client definition as described in Client-Side Code and Client-Side Templates.
 
@@ -49,6 +51,9 @@ You can use a custom bundler by for a client view by specifying it in the defini
     });
 
 The define method of the bundler will be called to complete `ss.client.define`.
+
+Note. The definition will switch to a production installtion light approach where the bundler
+is referenced by name rather than directly.
 
 ### Bundler Define `define(client,config,..)`
 
