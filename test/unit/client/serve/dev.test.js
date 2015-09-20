@@ -69,14 +69,14 @@ describe('development mode asset server', function () {
       });
 
       // dev time URL
-      var req = {url: '/assets/abc/'+client.id+'.js?_=/abc/index.js' };
+      var req = {url: '/assets/abc/'+client.id+'.js?_=/client/abc/index.js' };
       router.route(req.url,req,responseStub).should.equal(true);
-      responseStub.body.should.equal('require.define("/abc/index", function (require, module, exports, __dirname, __filename){\n// test\n\n});');
+      responseStub.body.should.equal('require.define("/client/abc/index", function (require, module, exports, __dirname, __filename){\n// test\n\n});');
 
       // dev time URL
-      req = {url: '/assets/abc/'+client.id+'.js?_=abc/index.js' };
+      req = {url: '/assets/abc/'+client.id+'.js?_=client/abc/index.js' };
       router.route(req.url,req,responseStub).should.equal(true);
-      responseStub.body.should.equal('require.define("/abc/index", function (require, module, exports, __dirname, __filename){\n// test\n\n});');
+      responseStub.body.should.equal('require.define("/client/abc/index", function (require, module, exports, __dirname, __filename){\n// test\n\n});');
     });
 
 
@@ -90,7 +90,7 @@ describe('development mode asset server', function () {
       });
 
       // dev time URL
-      var req = {url: '/assets/abc/'+client.id+'.css?_=abc/style.css' };
+      var req = {url: '/assets/abc/'+client.id+'.css?_=client/abc/style.css' };
       router.route(req.url,req,responseStub).should.equal(true);
       responseStub.body.should.equal(fixtures.expected_css);
     });

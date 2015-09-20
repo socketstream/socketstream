@@ -184,7 +184,7 @@ var ss      = require( '../../fixtures/socketstream'),
         logHook.on();
         ss.api.bundler.packAssetSet('js', client,
           function(files) {
-            files[3].content.should.equal('require.define("/abc/index",function(){window.a="formatter index.a"});');
+            files[3].content.should.equal('require.define("/client/abc/index",function(){window.a="formatter index.a"});');
             // var outs = 
             logHook.off();
             //outs.should.match(/Minified .\/abc\/index.a from 0.121 KB to 0.076 KB/);
@@ -231,7 +231,7 @@ var ss      = require( '../../fixtures/socketstream'),
           ss.api.bundler.packAssetSet('js', client,
             function() {},
             function() {});
-        }).should.throw('Unable to render \'./abc/index.a\' as the formatter has no asset type.');
+        }).should.throw('Unable to render \'client/abc/index.a\' as the formatter has no asset type.');
         logHook.off();
       });
 
@@ -367,7 +367,7 @@ var ss      = require( '../../fixtures/socketstream'),
 
       });
 
-      var expectedHtml = '<body>Jade<script>require("/abc/index");</script></body>';
+      var expectedHtml = '<body>Jade<script>require("/client/abc/index");</script></body>';
 
       view(ss.api, client, options, function(output) {
         output.should.equal(expectedHtml);
