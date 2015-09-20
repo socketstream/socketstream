@@ -12,10 +12,7 @@ var ss      = require( '../../fixtures/socketstream'),
 
     describe('#add', function () {
 
-
-      beforeEach(function() {
-        ss.client.reset();
-      });
+      beforeEach(ss.client.reset);
 
       it('should append a module from built-in directory',function() {
         ss.client.load();
@@ -110,13 +107,9 @@ var ss      = require( '../../fixtures/socketstream'),
 
     });
 
-
-
     describe('#load', function () {
 
-      beforeEach(function() {
-        ss.client.reset();
-      });
+      beforeEach(ss.client.reset);
 
       it('should load the code formatters, and return an object containing them', function() {
 
@@ -154,16 +147,13 @@ var ss      = require( '../../fixtures/socketstream'),
           concrete.name.should.equal('f1');
           concrete.config.c.should.equal('c');
         });
-
     });
 
-
     describe('#call',function() {
-      beforeEach(function() {
-        ss.client.reset();
-      });
+      beforeEach(ss.client.reset);
 
       it('should support alternate extensions', function(done) {
+        logHook.on();
         ss.client.formatters.add(function() {
           return {
             name: 'f2',
@@ -344,10 +334,7 @@ var ss      = require( '../../fixtures/socketstream'),
 
     var view = require('../../../lib/client/view');
 
-    beforeEach(function() {
-
-      ss.client.reset();
-    });
+    beforeEach(ss.client.reset);
 
     it('should serve view using custom formatter', function(done) {
       var client = defineAbcClient({
