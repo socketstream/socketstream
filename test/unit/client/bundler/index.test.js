@@ -113,8 +113,6 @@ describe('bundler', function () {
         css: 'main.css',
         code: 'main.js',
         tmpl: 'main.html'
-      }, function() {
-        ss.client.formatters.add('html');
       });
 
       var templates = ss.api.bundler.entries(client,'tmpl');
@@ -131,8 +129,6 @@ describe('bundler', function () {
         css: 'main.css',
         code: 'main.js',
         tmpl: ['main.html','abc/1.html','abc/2.html']
-      }, function() {
-        ss.client.formatters.add('html');
       });
 
       var templates = ss.api.bundler.entries(client,'tmpl');
@@ -150,8 +146,6 @@ describe('bundler', function () {
         css: 'main.css',
         code: 'main.js',
         tmpl: 'abc/*'
-      }, function() {
-        ss.client.formatters.add('html');
       });
 
       var templates = ss.api.bundler.entries(client,'tmpl');
@@ -169,8 +163,6 @@ describe('bundler', function () {
         css: './abc',
         code: './abc',
         tmpl: './abc'
-      }, function() {
-        ss.client.formatters.add('html');
       });
 
       var templates = ss.api.bundler.entries(client,'tmpl');

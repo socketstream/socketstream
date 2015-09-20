@@ -15,20 +15,9 @@ describe('angular.js template engine', function () {
   ss.api.bundler = bundlerMod(ss.api, options);
 
   beforeEach(function() {
-
-    // back to initial client state
-    ss.client.assets.unload();
-    ss.client.assets.load();
+    ss.client.reset();
     ss.client.set({liveReload:false});
-
-    ss.client.formatters.add('html');
   });
-
-  afterEach(function() {
-    ss.client.unload();
-    ss.client.forget();
-  });
-
 
   it('should output an inline template when angular is used by default', function(done) {
 
