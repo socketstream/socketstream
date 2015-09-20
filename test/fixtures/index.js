@@ -17,7 +17,7 @@ exports.reset = function(done) {
 };
 
 exports.cleanup = function(done) {
-  require('child_process').exec('cd '+__dirname + ' && git checkout project/client/static/assets', done);
+  fs.emptyDir(path.join(__dirname, 'project','client','static','assets'), done);
 };
 
 exports.setAbcPreviousAbcAssets = function() {
