@@ -68,7 +68,7 @@ describe('angular.js template engine', function () {
   it('should output an inline template when angular is used by client/templates root', function(done) {
 
     defineAbcClient({ code: './abc/index.a' },function() {
-      ss.client.templateEngine.use('angular', 'client/templates');
+      ss.client.templateEngine.use('angular', './templates');
     });
 
     var bundler = ss.api.bundler.get('abc');
@@ -84,7 +84,7 @@ describe('angular.js template engine', function () {
   it('should output a regular template when angular is used by client/templates root', function(done) {
 
     defineAbcClient({ code: './abc/index.a' },function() {
-      ss.client.templateEngine.use('angular', 'client/templates');
+      ss.client.templateEngine.use('angular', './templates');
     });
 
     var bundler = ss.api.bundler.get('abc');
@@ -122,7 +122,7 @@ describe('angular.js template engine', function () {
   it('should output an template when engine is tied to subpath (relative path) within templates', function(done) {
 
     defineAbcClient({ code: './abc/index.a' },function() {
-      ss.client.templateEngine.use('angular','client/templates/abc');
+      ss.client.templateEngine.use('angular','./templates/abc');
     });
 
     var bundler = ss.api.bundler.get('abc');
@@ -148,7 +148,7 @@ describe('angular.js template engine', function () {
       code: './abc/index.a' ,
       tmpl: './templates/abc'
     },function() {
-      ss.client.templateEngine.use('angular','client/templates/abc');
+      ss.client.templateEngine.use('angular','./templates/abc');
     });
 
     var bundler = ss.api.bundler.get('abc');
@@ -169,7 +169,7 @@ describe('angular.js template engine', function () {
       code: './abc/index.a' ,
       tmpl: 'abc'
     },function() {
-      ss.client.templateEngine.use('angular','client/templates/abc');
+      ss.client.templateEngine.use('angular','./templates/abc');
     });
 
     var bundler = ss.api.bundler.get('abc');
@@ -189,4 +189,21 @@ describe('angular.js template engine', function () {
   it('should output angular templates in bundles when tied to "."');
 
   it('should output angular templates in bundles when tied to "./client/templates"');
+
+  it('should output an inline template when angular is used by more root', function(done) {
+
+    defineAbcClient({ code: './abc/index.a' },function() {
+      ss.client.templateEngine.use('angular', '../more');
+    });
+
+    var bundler = ss.api.bundler.get('abc');
+
+    var files = [ bundler.entryFor('tmpl','more/a/a.html') ];
+
+    ss.client.templateEngine.generate(bundler, files, function (tag) {
+      tag.should.be.equal('<script type="text/ng-template" id="more-a-a.html"><body><div>a</div></body>\n</script>');
+      done();
+    });
+  });
+
 });
