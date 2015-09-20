@@ -30,15 +30,16 @@ describe('Template engine', function() {
       });
     });
 
-    it('should throw error for module use', function() {
-
-      // jshint immed: false
-      (function() {
-        defineAbcClient({ },function() {
-          ss.client.templateEngine.use('angular','my-module');
-        });
-      }).should.throw('Directory name \'my-module\' passed to second argument of ss.client.templateEngine.use() command must start with / or ./');
-    });
+    // dropped the requirement
+    //it('should throw error for module use', function() {
+    //
+    //  // jshint immed: false
+    //  (function() {
+    //    defineAbcClient({ },function() {
+    //      ss.client.templateEngine.use('angular','my-module');
+    //    });
+    //  }).should.throw('Directory name \'my-module\' passed to second argument of ss.client.templateEngine.use() command must start with / or ./');
+    //});
   });
 
   describe('custom use', function() {
@@ -87,7 +88,7 @@ describe('Template engine', function() {
 
       var bundler = ss.api.bundler.get('abc');
 
-      var files = [ bundler.entryFor('tmpl','./templates/1.html') ];
+      var files = [ bundler.entryFor('tmpl','client/templates/1.html') ];
 
       ss.client.templateEngine.generate(bundler, files, function (tag) {
         tag.should.be.equal('<script id="old-1" type="text/x-tmpl"><!-- 123 --><body><div>1</div></body>\n</script>');
@@ -105,7 +106,7 @@ describe('Template engine', function() {
 
       var bundler = ss.api.bundler.get('abc');
 
-      var files = [ bundler.entryFor('tmpl','./templates/1.html') ];
+      var files = [ bundler.entryFor('tmpl','client/templates/1.html') ];
 
       ss.client.templateEngine.generate(bundler, files, function (tag) {
         tag.should.be.equal('<script id="new-1" type="text/x-tmpl"><!-- 1243 --><body><div>1</div></body>\n</script>');
@@ -127,7 +128,7 @@ describe('Template engine', function() {
 
 
       var files = [
-        {file: './templates/1.html', importedBy: './templates/1.html', includeType: 'html'}
+        {file: 'templates/1.html', importedBy: 'templates/1.html', includeType: 'html'}
       ];
 
       var bundler = ss.api.bundler.get('abc');

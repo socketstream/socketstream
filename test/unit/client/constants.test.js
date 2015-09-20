@@ -71,7 +71,7 @@ describe('constants',function() {
 
     var bundler = ss.api.bundler.get('abc');
 
-    var files = [ bundler.entryFor('tmpl','./templates/1.html') ];
+    var files = [ bundler.entryFor('tmpl','client/templates/1.html') ];
 
     ss.client.templateEngine.generate(bundler, files, function (tag) {
       tag.should.be.equal('<script id="new-1" type="text/x-tmpl">t1=abc{"abc":"abc","def":"def"}</script>');
@@ -109,7 +109,7 @@ describe('constants',function() {
 
 
     // dev time URL
-    var req = {url: '/assets/abc/'+client.id+'.js?_=./abc/index.a' };
+    var req = {url: '/assets/abc/'+client.id+'.js?_=./client/abc/index.a' };
     router.route(req.url,req,responseStub).should.equal(true);
     compileOptions.constants.should.be.type('object');
     compileOptions.constants.abc.should.equal('abc');
@@ -133,7 +133,7 @@ describe('constants',function() {
     var expectedHtml = '<html>\n'+
       '<head><title>ABC</title></head>\n'+
       '<body><p>ABC</p>'+
-      '<script>var abc="abc";\nvar def="def";\nrequire("/abc/index");</script>'+
+      '<script>var abc="abc";\nvar def="def";\nrequire("/client/abc/index");</script>'+
       '</body>\n'+
       '</html>\n';
 
@@ -202,7 +202,7 @@ describe('locals', function() {
 
     var bundler = ss.api.bundler.get('abc');
 
-    var files = [ bundler.entryFor('tmpl','./templates/1.html') ];
+    var files = [ bundler.entryFor('tmpl','client/templates/1.html') ];
 
     ss.client.templateEngine.generate(bundler, files, function (tag) {
       tag.should.be.equal('<script id="new-1" type="text/x-tmpl">t1=abc{"abc":"abc","def":"def"}</script>');
@@ -240,7 +240,7 @@ describe('locals', function() {
     });
 
     // dev time URL
-    var req = {url: '/assets/abc/'+client.id+'.js?_=./abc/index.a' };
+    var req = {url: '/assets/abc/'+client.id+'.js?_=./client/abc/index.a' };
     router.route(req.url,req,responseStub).should.equal(true);
     compileOptions.locals.should.be.type('object');
     compileOptions.locals.abc.should.equal('abc');

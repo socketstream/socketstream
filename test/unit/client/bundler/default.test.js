@@ -42,12 +42,12 @@ describe('default bundler:', function () {
       client.id.should.be.type('string');
 
       client.paths.should.be.type('object');
-      client.paths.css.should.be.eql(['./css/main']);
-      client.paths.code.should.be.eql(['./code/main/demo.coffee']);
-      client.paths.view.should.be.eql('./views/main.jade');
+      client.paths.css.should.be.eql(['client/css/main']);
+      client.paths.code.should.be.eql(['client/code/main/demo.coffee']);
+      client.paths.view.should.be.eql('client/views/main.jade');
       client.paths.tmpl.should.be.eql([]);
 
-      client.entryInitPath.should.be.equal('/code/main/demo');
+      client.entryInitPath.should.be.equal('/client/code/main/demo');
 
       var bundler = ss.api.bundler.get('main');
 
@@ -93,20 +93,20 @@ describe('default bundler:', function () {
     it('should have correct entry point and module definition', function() {
       client.id.should.be.type('string');
 
-      client.entryInitPath.should.be.equal('/code/kickoff/entry');
+      client.entryInitPath.should.be.equal('/client/code/kickoff/entry');
 
       var bundler = ss.api.bundler.get('abc'),
           entriesJS = bundler.entries('js');
 
       entriesJS.length.should.be.equal(7);
-      entriesJS[6].file.should.equal('code/kickoff/entry.js');
+      entriesJS[6].file.should.equal('client/code/kickoff/entry.js');
 
       var opts = {
 
       };
       var code = 'alert()';
       var wrappedAlert = bundler.wrapCode(code, entriesJS[6], opts);
-      wrappedAlert.should.equal('require.define("' + client.entryInitPath.substring(1) +
+      wrappedAlert.should.equal('require.define("' + client.entryInitPath +
         '", function (require, module, exports, __dirname, __filename){\n' + code + '\n});');
     });
 
@@ -141,10 +141,10 @@ describe('default bundler:', function () {
       client.id.should.be.type('string');
 
       client.paths.should.be.type('object');
-      client.paths.css.should.be.eql(['./css/main']);
-      client.paths.code.should.be.eql(['./code/main/demo.coffee']);
-      client.paths.view.should.be.eql('./views/main.jade');
-      client.paths.tmpl.should.be.eql(['./templates/chat/message.jade']);
+      client.paths.css.should.be.eql(['client/css/main']);
+      client.paths.code.should.be.eql(['client/code/main/demo.coffee']);
+      client.paths.view.should.be.eql('client/views/main.jade');
+      client.paths.tmpl.should.be.eql(['client/templates/chat/message.jade']);
     });
   });
 
@@ -172,10 +172,10 @@ describe('default bundler:', function () {
       client.id.should.be.type('string');
 
       client.paths.should.be.type('object');
-      client.paths.css.should.be.eql(['../more/a']);
-      client.paths.code.should.be.eql(['../more/a/a.js']);
-      client.paths.view.should.be.eql('../more/a/a.html');
-      client.paths.tmpl.should.be.eql(['../more/a/a.html']);
+      client.paths.css.should.be.eql(['more/a']);
+      client.paths.code.should.be.eql(['more/a/a.js']);
+      client.paths.view.should.be.eql('more/a/a.html');
+      client.paths.tmpl.should.be.eql(['more/a/a.html']);
     });
   });
 
@@ -192,7 +192,7 @@ describe('default bundler:', function () {
         code: ['kickoff','main/demo.coffee'],
         view: 'main.jade'
       });
-      client.entryInitPath.should.equal('/code/kickoff/entry');
+      client.entryInitPath.should.equal('/client/code/kickoff/entry');
     });
 
     it('should pick ./entry in second module if present, and not in first', function() {
@@ -202,7 +202,7 @@ describe('default bundler:', function () {
         code: ['extras','kickoff','main/demo.coffee'],
         view: 'main.jade'
       });
-      client.entryInitPath.should.equal('/code/kickoff/entry');
+      client.entryInitPath.should.equal('/client/code/kickoff/entry');
     });
 
     it('should pick ./entry in second module after libs if present, and not in first', function() {
@@ -211,7 +211,7 @@ describe('default bundler:', function () {
         code: ['libs','kickoff'],
         view: 'main.jade'
       });
-      client.entryInitPath.should.equal('/code/kickoff/entry');
+      client.entryInitPath.should.equal('/client/code/kickoff/entry');
     });
   });
 
@@ -229,12 +229,12 @@ describe('default bundler:', function () {
         client.id.should.be.type('string');
 
         client.paths.should.be.type('object');
-        client.paths.css.should.be.eql(['./abc/style.css']);
-        client.paths.code.should.be.eql(['./abc/index.js']);
-        client.paths.view.should.be.eql('./abc/abc.html');
+        client.paths.css.should.be.eql(['client/abc/style.css']);
+        client.paths.code.should.be.eql(['client/abc/index.js']);
+        client.paths.view.should.be.eql('client/abc/abc.html');
         client.paths.tmpl.should.be.eql([]);
 
-        client.entryInitPath.should.be.equal('/abc/index');
+        client.entryInitPath.should.be.equal('/client/abc/index');
 
         var bundler = ss.api.bundler.get('abc');
 
@@ -361,8 +361,8 @@ describe('default bundler:', function () {
         entriesJS.should.have.lengthOf(4);
 
         // css entries
-        entriesCSS[0].file.should.be.equal('./abc/style.css');
-        entriesCSS[0].importedBy.should.be.equal('./abc/style.css');
+        entriesCSS[0].file.should.be.equal('client/abc/style.css');
+        entriesCSS[0].importedBy.should.be.equal('client/abc/style.css');
       });
 
       it('should return no entries for css if not in includes', function() {
@@ -406,8 +406,8 @@ describe('default bundler:', function () {
         entriesJS[3].type.should.be.equal('mod');
 
         // mod TODO
-        entriesJS[4].file.should.be.equal('./abc/index.js');
-        entriesJS[4].importedBy.should.be.equal('./abc/index.js');
+        entriesJS[4].file.should.be.equal('client/abc/index.js');
+        entriesJS[4].importedBy.should.be.equal('client/abc/index.js');
         //entriesJS[4].type.should.be.equal('mod');
 
         //entriesJS.should.be.equal([{ path:'./abc.js'}]);
@@ -440,12 +440,12 @@ describe('default bundler:', function () {
         entriesJS[3].type.should.be.equal('mod');
 
         // mod TODO
-        entriesJS[4].file.should.be.equal('./abc/index.js');
-        entriesJS[4].importedBy.should.be.equal('./abc/index.js');
+        entriesJS[4].file.should.be.equal('client/abc/index.js');
+        entriesJS[4].importedBy.should.be.equal('client/abc/index.js');
         //entriesJS[4].type.should.be.equal('mod');
 
         // start TODO
-        entriesJS[5].content.should.be.equal('require("/abc/index");');
+        entriesJS[5].content.should.be.equal('require("/client/abc/index");');
         entriesJS[5].type.should.be.equal('start');
       });
 
@@ -463,8 +463,8 @@ describe('default bundler:', function () {
         entriesJS.should.have.lengthOf(1);
 
         // mod TODO
-        entriesJS[0].file.should.be.equal('./abc/index.js');
-        entriesJS[0].importedBy.should.be.equal('./abc/index.js');
+        entriesJS[0].file.should.be.equal('client/abc/index.js');
+        entriesJS[0].importedBy.should.be.equal('client/abc/index.js');
       });
 
       it('should render css asset file as empty if includes is false');
@@ -493,8 +493,8 @@ describe('default bundler:', function () {
         entriesJS.should.have.lengthOf(6);
 
         // css
-        entriesCSS[0].file.should.be.equal('abc/style.css');
-        entriesCSS[0].importedBy.should.be.equal('./abc');
+        entriesCSS[0].file.should.be.equal('client/abc/style.css');
+        entriesCSS[0].importedBy.should.be.equal('client/abc');
         entriesCSS[0].assetType.should.be.equal('css');
 
         // libs
@@ -510,12 +510,12 @@ describe('default bundler:', function () {
         entriesJS[3].type.should.be.equal('mod');
 
         // mod TODO
-        entriesJS[4].file.should.be.equal('./abc/index.js');
-        entriesJS[4].importedBy.should.be.equal('./abc/index.js');
+        entriesJS[4].file.should.be.equal('client/abc/index.js');
+        entriesJS[4].importedBy.should.be.equal('client/abc/index.js');
         //entriesJS[4].type.should.be.equal('mod');
 
         // start TODO
-        entriesJS[5].content.should.be.equal('require("/abc/index");');
+        entriesJS[5].content.should.be.equal('require("/client/abc/index");');
         entriesJS[5].type.should.be.equal('start');
       });
 
@@ -575,7 +575,7 @@ describe('default bundler:', function () {
         html.should.equal([
           '<html>',
           '<head><title>ABC</title></head>',
-          '<body><p>ABC</p><script>var abcl={"b":"b"};\nrequire("/abc/index");</script></body>',
+          '<body><p>ABC</p><script>var abcl={"b":"b"};\nrequire("/client/abc/index");</script></body>',
           '</html>\n'
         ].join('\n'))
       });
@@ -598,7 +598,7 @@ describe('default bundler:', function () {
         html.should.equal([
           '<html>',
           '<head><title>ABC</title></head>',
-          '<body><p>ABC</p><script>var abcg={"a":"a"};\nvar abcl={"b":"b"};\nrequire("/abc/index");</script></body>',
+          '<body><p>ABC</p><script>var abcg={"a":"a"};\nvar abcl={"b":"b"};\nrequire("/client/abc/index");</script></body>',
           '</html>\n'
         ].join('\n'));
         done();
@@ -624,7 +624,7 @@ describe('default bundler:', function () {
         html.should.equal([
           '<html>',
           '<head><title>ABC</title></head>',
-          '<body><p>ABC</p><script>var abcg={"b":"b"};\nrequire("/abc/index");</script></body>',
+          '<body><p>ABC</p><script>var abcg={"b":"b"};\nrequire("/client/abc/index");</script></body>',
           '</html>\n'
         ].join('\n'))
       });
@@ -683,8 +683,8 @@ describe('default bundler:', function () {
     it('should wrap regular modules correctly', function() {
 
       var entry = {
-        'file': './code/mod/alert.js',
-        'importedBy': './code/mod/alert.js',
+        'file': 'client/code/mod/alert.js',
+        'importedBy': 'client/code/mod/alert.js',
         assetType: 'js',
         bundle: 'js',
         ext: 'js'
@@ -695,37 +695,37 @@ describe('default bundler:', function () {
       var code = 'alert()';
       var wrappedAlert = bundler.wrapCode(code, entry, opts);
 
-      var modPath = '/code/mod/alert';
+      var modPath = '/client/code/mod/alert';
       wrappedAlert.should.equal('require.define("' + modPath + '", function (require, module, exports, __dirname, __filename){\n' + code + '\n});');
 
       entry = {
-        'file': './code/alert/index.js',
-        'importedBy': './code/alert/index.js',
+        'file': 'client/code/alert/index.js',
+        'importedBy': 'client/code/alert/index.js',
         assetType: 'js',
         bundle: 'js'
       };
       wrappedAlert = bundler.wrapCode(code, entry, opts);
 
-      modPath = '/code/alert/index';
+      modPath = '/client/code/alert/index';
       wrappedAlert.should.equal('require.define("' + modPath + '", function (require, module, exports, __dirname, __filename){\n' + code + '\n});');
 
       entry = {
-        'file': './code/alert/impl.js',
-        'importedBy': './code/alert/impl.js',
+        'file': 'client/code/alert/impl.js',
+        'importedBy': 'client/code/alert/impl.js',
         assetType: 'js',
         bundle: 'js'
       };
       wrappedAlert = bundler.wrapCode(code, entry, opts);
 
-      modPath = '/code/alert/impl';
+      modPath = '/client/code/alert/impl';
       wrappedAlert.should.equal('require.define("' + modPath + '", function (require, module, exports, __dirname, __filename){\n' + code + '\n});');
     });
 
     it('should wrap relative modules correctly', function() {
 
       var entry = {
-        'file': './mod/alert.js',
-        'importedBy': './mod/alert.js',
+        'file': 'mod/alert.js',
+        'importedBy': 'mod/alert.js',
         assetType: 'js',
         bundle: 'js',
         ext: 'js'
@@ -740,8 +740,8 @@ describe('default bundler:', function () {
       wrappedAlert.should.equal('require.define("' + modPath + '", function (require, module, exports, __dirname, __filename){\n' + code + '\n});');
 
       entry = {
-        'file': './mod/alert/index.js',
-        'importedBy': './mod/alert/index.js',
+        'file': 'mod/alert/index.js',
+        'importedBy': 'mod/alert/index.js',
         assetType: 'js',
         bundle: 'js'
       };
@@ -751,8 +751,8 @@ describe('default bundler:', function () {
       wrappedAlert.should.equal('require.define("' + modPath + '", function (require, module, exports, __dirname, __filename){\n' + code + '\n});');
 
       entry = {
-        'file': './mod/alert/impl.js',
-        'importedBy': './mod/alert/impl.js',
+        'file': 'mod/alert/impl.js',
+        'importedBy': 'mod/alert/impl.js',
         assetType: 'js',
         bundle: 'js'
       };
@@ -765,8 +765,8 @@ describe('default bundler:', function () {
     it('should wrap system modules correctly',function() {
 
       var entry = {
-        'file': './code/system/alert.js',
-        'importedBy': './code/system/alert.js',
+        'file': 'client/code/system/alert.js',
+        'importedBy': 'client/code/system/alert.js',
         assetType: 'js',
         bundle: 'js'
       };
@@ -780,8 +780,8 @@ describe('default bundler:', function () {
       wrappedAlert.should.equal('require.define("' + modPath + '", function (require, module, exports, __dirname, __filename){\n' + code + '\n});');
 
       entry = {
-        'file': './code/system/alert/index.js',
-        'importedBy': './code/system/alert/index.js',
+        'file': 'client/code/system/alert/index.js',
+        'importedBy': 'client/code/system/alert/index.js',
         assetType: 'js',
         bundle: 'js'
       };
@@ -791,8 +791,8 @@ describe('default bundler:', function () {
       wrappedAlert.should.equal('require.define("' + modPath + '", function (require, module, exports, __dirname, __filename){\n' + code + '\n});');
 
       entry = {
-        'file': './code/system/alert/impl.js',
-        'importedBy': './code/system/alert/impl.js',
+        'file': 'client/code/system/alert/impl.js',
+        'importedBy': 'client/code/system/alert/impl.js',
         assetType: 'js',
         bundle: 'js'
       };
@@ -830,7 +830,7 @@ describe('default bundler:', function () {
         html.should.equal([
           '<html>',
           '<head><title>ABC</title></head>',
-          '<body><p>ABC</p><script>require("/abc/index");</script></body>',
+          '<body><p>ABC</p><script>require("/client/abc/index");</script></body>',
           '</html>\n'
         ].join('\n'))
       });

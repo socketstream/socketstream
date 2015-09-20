@@ -57,7 +57,7 @@ describe('angular.js template engine', function () {
 
     var bundler = ss.api.bundler.get('abc');
 
-    var files = [ bundler.entryFor('tmpl','./templates/1.html') ];
+    var files = [ bundler.entryFor('tmpl','client/templates/1.html') ];
 
     ss.client.templateEngine.generate(bundler, files, function (tag) {
       tag.should.be.equal('<script type="text/ng-template" id="1.html"><body><div>1</div></body>\n</script>');
@@ -65,15 +65,15 @@ describe('angular.js template engine', function () {
     });
   });
 
-  it('should output an inline template when angular is used by ./templates root', function(done) {
+  it('should output an inline template when angular is used by client/templates root', function(done) {
 
     defineAbcClient({ code: './abc/index.a' },function() {
-      ss.client.templateEngine.use('angular', './templates');
+      ss.client.templateEngine.use('angular', 'client/templates');
     });
 
     var bundler = ss.api.bundler.get('abc');
 
-    var files = [ bundler.entryFor('tmpl','./templates/1.html') ];
+    var files = [ bundler.entryFor('tmpl','client/templates/1.html') ];
 
     ss.client.templateEngine.generate(bundler, files, function (tag) {
       tag.should.be.equal('<script type="text/ng-template" id="1.html"><body><div>1</div></body>\n</script>');
@@ -81,18 +81,18 @@ describe('angular.js template engine', function () {
     });
   });
 
-  it('should output a regular template when angular is used by ./templates root', function(done) {
+  it('should output a regular template when angular is used by client/templates root', function(done) {
 
     defineAbcClient({ code: './abc/index.a' },function() {
-      ss.client.templateEngine.use('angular', './templates');
+      ss.client.templateEngine.use('angular', 'client/templates');
     });
 
     var bundler = ss.api.bundler.get('abc');
 
-    var files = [ bundler.entryFor('tmpl','./abc/abc.html') ];
+    var files = [ bundler.entryFor('tmpl','client/abc/abc.html') ];
 
     ss.client.templateEngine.generate(bundler, files, function (tag) {
-      tag.should.be.equal('<script id="tmpl-abc-abc" type="text/x-tmpl"><html>\n'+
+      tag.should.be.equal('<script id="tmpl-client-abc-abc" type="text/x-tmpl"><html>\n'+
         '<head><title>ABC</title></head>\n<body><p>ABC</p></body>\n</html>\n</script>');
       done();
     });
@@ -106,8 +106,8 @@ describe('angular.js template engine', function () {
 
     var bundler = ss.api.bundler.get('abc');
 
-    var files = [ bundler.entryFor('tmpl','./templates/abc/1.html') ];
-    var files1 = [ bundler.entryFor('tmpl','./templates/1.html') ];
+    var files = [ bundler.entryFor('tmpl','client/templates/abc/1.html') ];
+    var files1 = [ bundler.entryFor('tmpl','client/templates/1.html') ];
 
     ss.client.templateEngine.generate(bundler, files, function(tag) {
       tag.should.be.equal('<script type="text/ng-template" id="abc-1.html"><div>abc 1</div>\n</script>');
@@ -122,13 +122,13 @@ describe('angular.js template engine', function () {
   it('should output an template when engine is tied to subpath (relative path) within templates', function(done) {
 
     defineAbcClient({ code: './abc/index.a' },function() {
-      ss.client.templateEngine.use('angular','./templates/abc');
+      ss.client.templateEngine.use('angular','client/templates/abc');
     });
 
     var bundler = ss.api.bundler.get('abc');
 
-    var files = [ bundler.entryFor('tmpl','./templates/abc/1.html') ];
-    var files1 = [ bundler.entryFor('tmpl','./templates/1.html') ];
+    var files = [ bundler.entryFor('tmpl','client/templates/abc/1.html') ];
+    var files1 = [ bundler.entryFor('tmpl','client/templates/1.html') ];
 
     // console.log('fake', files);
 
@@ -148,7 +148,7 @@ describe('angular.js template engine', function () {
       code: './abc/index.a' ,
       tmpl: './templates/abc'
     },function() {
-      ss.client.templateEngine.use('angular','./templates/abc');
+      ss.client.templateEngine.use('angular','client/templates/abc');
     });
 
     var bundler = ss.api.bundler.get('abc');
@@ -169,7 +169,7 @@ describe('angular.js template engine', function () {
       code: './abc/index.a' ,
       tmpl: 'abc'
     },function() {
-      ss.client.templateEngine.use('angular','./templates/abc');
+      ss.client.templateEngine.use('angular','client/templates/abc');
     });
 
     var bundler = ss.api.bundler.get('abc');
@@ -186,4 +186,7 @@ describe('angular.js template engine', function () {
     });
   });
 
+  it('should output angular templates in bundles when tied to "."');
+
+  it('should output angular templates in bundles when tied to "./client/templates"');
 });
