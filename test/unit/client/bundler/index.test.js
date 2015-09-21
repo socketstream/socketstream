@@ -150,8 +150,8 @@ describe('bundler', function () {
 
       var templates = ss.api.bundler.entries(client,'tmpl');
       templates.should.eql([
-        { file: 'client/templates/abc/1.html', importedBy: 'client/templates/abc/1.html', includeType: 'html', ext:'html', bundle:'tmpl', assetType:'html' },
-        { file: 'client/templates/abc/2.html', importedBy: 'client/templates/abc/2.html', includeType: 'html', ext:'html', bundle:'tmpl', assetType:'html' }
+        { file: 'client/templates/abc/1.html', importedBy: 'client/templates/abc', includeType: 'html', ext:'html', bundle:'tmpl', assetType:'html' },
+        { file: 'client/templates/abc/2.html', importedBy: 'client/templates/abc', includeType: 'html', ext:'html', bundle:'tmpl', assetType:'html' }
       ]);
     });
 
