@@ -32,7 +32,7 @@ describe('live reload', function () {
     ss.client.options.packedAssets = false;
     ss.api.load();
     ss.tasks.defaults();
-    ss.api.orchestrator.tasks.default.dep.should.containDeep(['live-reload']);
+    ss.tasks.orchestrator.tasks.default.dep.should.containDeep(['live-reload']);
   });
 
   it('should call chokidar for live-reload', function(done) {
@@ -62,7 +62,7 @@ describe('live reload', function () {
     ss.api.load();
     ss.tasks.defaults();
 
-    ss.api.orchestrator.tasks.default.dep.should.not.containDeep(['live-reload']);
+    ss.tasks.orchestrator.tasks.default.dep.should.not.containDeep(['live-reload']);
     var logs = logHook.off();
     logs.should.have.length(0);
   });
