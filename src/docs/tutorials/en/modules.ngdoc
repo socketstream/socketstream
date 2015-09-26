@@ -1,0 +1,13 @@
+@ngdoc overview
+@name Modules
+
+@description
+# Loading Modules from app
+
+## Development Dependencies
+
+During development the bundlers, formatters and template engines are loaded as plugins using `ss.require`. This allows you to not require development time code in your `app.js`. If you choose to build production assets beforehand, you can keep these dependencies as development dependencies and only install production dependencies.
+
+### Internal require
+
+The internal require is used to load modules that may be built in or supplied by the project. It is a function on the API passed to plugins and used internally.

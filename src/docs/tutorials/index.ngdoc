@@ -27,5 +27,6 @@
 
 ##### Extending SocketStream
 
+* [Modules](http://socketstream.github.io/socketstream/docs/#/tutorials/modules) - extending indirectly with node modules from the app.
 * [Writing Template Engine Wrappers](http://socketstream.github.io/socketstream/docs/#/tutorials/template_engine_wrappers) - support any of the gazillion template formats out there
 * [Writing Request Responders](http://socketstream.github.io/socketstream/docs/#/tutorials/writing_request_responders) - experiment with models and low-level message protocols

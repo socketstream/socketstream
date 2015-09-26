@@ -9,7 +9,7 @@ var ss = require( '../../../lib/socketstream'),
 describe('start tasks plan', function () {
   var should = require('should');
 
-  ss.root = ss.api.root = fixtures.project;
+  fixtures.setProject('project');
 
   beforeEach(function () {
   });
