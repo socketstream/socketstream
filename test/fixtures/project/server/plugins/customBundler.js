@@ -1,4 +1,6 @@
-module.exports = function customBundler(ss, client, options) {
+'use strict';
+
+module.exports = function customBundler(ss, client) {
 	return ss.bundler.create({
 	  define: define,
 	  entries:entries
