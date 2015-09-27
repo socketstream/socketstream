@@ -101,9 +101,23 @@ describe('client asset manager', function () {
 
 
 
-        it('should allow the user to overwrite the existing options');
+        it('should allow the user to overwrite the existing options', function() {
+          ss.client.set({
+            a: 'a'
+          });
+          ss.client.options.a.should.be.equal('a');
+          ss.client.set({
+            a: 'aa'
+          });
+          ss.client.options.a.should.be.equal('aa');
+        });
 
-
+        it('should support objects being set', function() {
+          ss.client.set({
+            o: { more:'o'}
+          });
+          ss.client.options.o.should.be.eql({ more:'o'});
+        });
 
     });
 
