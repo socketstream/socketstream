@@ -12,14 +12,13 @@
 
 SocketStream is a framework for Realtime Web Apps
 
-_Latest release: 0.4.3 ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))_
+_Latest release: 0.4.4 ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))_
 
 [Live demo](http://demo.socketstream.com) | [Documentation](http://socketstream.github.io/socketstream/docs/)
 
 ### Installation
 
-Please note that the 0.4 release has many modifications. It is expected to be robust and changes are well covered by tests. There are some known issues with templates when hosting on Windows. If you are already in production use 0.3.12, or even better
-test this in a staging environment.
+Please note that the 0.4 release has many modifications. It is expected to be robust and changes are well covered by tests. It should be ready for production.
 
     npm install -g socketstream
 
