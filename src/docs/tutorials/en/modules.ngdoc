@@ -11,3 +11,6 @@ During development the bundlers, formatters and template engines are loaded as p
 ### Internal require
 
 The internal require is used to load modules that may be built in or supplied by the project. It is a function on the API passed to plugins and used internally.
+
+`ss.require(id,builtinPath,defaultId)` The builtin path is the relative path within socketstream
+where the builtin modules are found. The defaultId is the extension-less filename loaded when the main id isn't matched.
