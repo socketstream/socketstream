@@ -1,3 +1,44 @@
+<a name="0.4.4"></a>
+## [0.4.4](https://github.com/socketstream/socketstream/compare/0.4.3...v0.4.4) (2015-09-27)
+
+
+### Bug Fixes
+
+* **logging:** no warnings by Uglify ([2fd3fbd](https://github.com/socketstream/socketstream/commit/2fd3fbd))
+* **pack:** identify previous assets ([a11f584](https://github.com/socketstream/socketstream/commit/a11f584))
+* **paths:** relative paths outside client ([64aa4ce](https://github.com/socketstream/socketstream/commit/64aa4ce))
+* **start:** transport started when HTTP server started ([159e8d5](https://github.com/socketstream/socketstream/commit/159e8d5))
+* **tests:** pack tests disabled for now ([6070de8](https://github.com/socketstream/socketstream/commit/6070de8))
+* **tests:** quick-test doesn't rely on git ([47d1be4](https://github.com/socketstream/socketstream/commit/47d1be4))
+* **uglify:** stick with uglify-js which is the one that stays updated ([05c369e](https://github.com/socketstream/socketstream/commit/05c369e))
+* **windows:** handling * in asset definitions better ([23a9a0d](https://github.com/socketstream/socketstream/commit/23a9a0d))
+* **windows:** proper windows separator replacement ([08bea73](https://github.com/socketstream/socketstream/commit/08bea73))
+
+### Features
+
+* **orchestration:** internal draft for load-time assets building tasks ([1e62af3](https://github.com/socketstream/socketstream/commit/1e62af3))
+* **orchestrator:** tasks are used internally to start and run ([147b276](https://github.com/socketstream/socketstream/commit/147b276))
+* **tasks:** Alternate way to start socketstream without passing server ([62d0dc1](https://github.com/socketstream/socketstream/commit/62d0dc1))
+* **tasks:** Task orchestrator is the runtime engine ([c967cb3](https://github.com/socketstream/socketstream/commit/c967cb3))
+* **tasks:** default start-server task ([6ee5c34](https://github.com/socketstream/socketstream/commit/6ee5c34))
+
+
+
+<a name="0.4.3"></a>
+### 0.4.3 (2015-06-14)
+
+
+#### Bug Fixes
+
+* **bundler:** only include asset type in bundle ([5ef3ed02](https://github.com/socketstream/socketstream/commit/5ef3ed025cbafdad4f621ef6c3b4ab7f56a208db))
+* **cli:** Ensures that new apps point to SS 0.4 ([ecd7be27](https://github.com/socketstream/socketstream/commit/ecd7be27a5a615292ba7718b7a4c459cd852d888))
+* **templates:** Generate templates with the same IDs as before, and in sub-directories if configured.
+* **tests:**
+  * Misspelt a path to a file, not caught due to OS X handling mixed case filenames  ([01718001](https://github.com/socketstream/socketstream/commit/01718001527aba26501c9c3bf72e7618a325608c))
+  * More tests added, and some unexpected functionality found ([a9c7b54a](https://github.com/socketstream/socketstream/commit/a9c7b54a9b254a5421244d4e20d4c77a9de527e0))
+  * Added some tests for the cli, ported from ss-generator ([83b11e8f](https://github.com/socketstream/socketstream/commit/83b11e8f20968af44421028427c75fa5b448b4c2))
+
+
 <a name="0.4.2"></a>
 0.4.2 (2015-04-27)
 ===================
