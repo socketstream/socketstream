@@ -8,26 +8,15 @@ var path    = require('path'),
 describe('html formatter', function () {
 
   beforeEach(function() {
-
-    // back to initial client state
-    ss.client.assets.unload();
-    ss.client.assets.load();
-    ss.client.set({liveReload:false});
+    ss.client.reset();
+    ss.client.load();
   });
-
-  afterEach(function() {
-    ss.client.forget();
-  });
-
 
   describe('#init', function () {
 
     it('should return an object describing what file extensions the formatter handles', function() {
 
-      ss.client.formatters.add('html');
-
-      ss.api.bundler.load();
-      var formatters = ss.api.client.formatters = ss.client.formatters.load();
+      var formatters = ss.api.client.formatters;
 
       formatters.html.should.be.type('object');
       formatters.html.extensions.should.eql(['html']);
@@ -36,10 +25,7 @@ describe('html formatter', function () {
 
     it('should return an object describing what asset and content types that the formatter handles',function() {
 
-      ss.client.formatters.add('html');
-
-      ss.api.bundler.load();
-      var formatters = ss.api.client.formatters = ss.client.formatters.load();
+      var formatters = ss.api.client.formatters;
 
       formatters.html.should.be.type('object');
       formatters.html.assetType.should.equal('html');
@@ -50,11 +36,6 @@ describe('html formatter', function () {
     describe('#compile', function () {
 
       it('should return the HTML file content as is', function() {
-
-        ss.client.formatters.add('html');
-
-        ss.api.bundler.load();
-        ss.api.client.formatters = ss.client.formatters.load();
 
         var concrete = ss.api.client.formatters.html;
         var output;

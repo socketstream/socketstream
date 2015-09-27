@@ -1,4 +1,4 @@
-<h1><code ng:non-bindable=""></code>
+<a href="https://github.com/socketstream/socketstream/edit/master/src/docs/tutorials/en/client_side_templates.ngdoc" class="improve-docs"><i class="icon-edit"> </i>Improve this doc</a><h1><code ng:non-bindable=""></code>
 <div><span class="hint"></span>
 </div>
 </h1>
@@ -51,6 +51,15 @@ ss.client.templateEngine.use(require('ss-hogan'));
 <p>All client-side templates live in the <code>client/templates</code> folder; however you don&#39;t have to serve every template with the same engine.</p>
 <p>SocketStream allows you to mix and match different templates, perfect for trying out something like Ember.js without having to convert all your exiting templates over at once.</p>
 <p>You may limit the scope of a template engine by passing the name of a directory as the second argument.</p>
+<pre class="prettyprint linenums">
+// serve all templates with ss-hogan
+ss.client.templateEngine.use(require('ss-hogan'));
+// apart from any in the /client/ember directory
+ss.client.templateEngine.use('ember', './ember');
+</pre>
+<p>The new style of SocketStream is to use relative paths from the client directory. The default destinations for templates still work as shown below.
+However it is a good habit to specify the directory with the new notation style. If you want to have
+templates outside the client, you can access the project directory with the <code>../</code> prefix.</p>
 <pre class="prettyprint linenums">
 // serve all templates with ss-hogan
 ss.client.templateEngine.use(require('ss-hogan'));

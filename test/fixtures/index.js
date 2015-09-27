@@ -17,12 +17,17 @@ exports.reset = function(done) {
 };
 
 exports.cleanup = function(done) {
-  require('child_process').exec('cd '+__dirname + ' && git checkout project/client/static/assets', done);
+  fs.emptyDir(path.join(__dirname, 'project','client','static','assets'), done);
 };
 
 exports.setAbcPreviousAbcAssets = function() {
-  var id = '123456789';
+  var id = '1234567890';
   fs.closeSync(fs.openSync(path.join(__dirname,'project/client/static/assets/abc',id+'.css'),'w'));
   fs.closeSync(fs.openSync(path.join(__dirname,'project/client/static/assets/abc',id+'.js'),'w'));
   fs.closeSync(fs.openSync(path.join(__dirname,'project/client/static/assets/abc',id+'.html'),'w'));
 };
+
+exports.expected_css = '/* style.css */\nbody {color:red;}\n';
+exports.expected_css_packed = 'body{color:red;}\n';
+exports.expected_html_packed = fs.readFileSync(path.join(__dirname,'project/client/abc/expected.html'),'utf-8');
+exports.expected_js_packed = fs.readFileSync(path.join(__dirname,'project/client/abc/expected.min.js'),'utf-8');

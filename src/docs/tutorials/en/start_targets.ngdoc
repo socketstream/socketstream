@@ -1,0 +1,40 @@
+@ngdoc overview
+@name Start Targets
+
+@description
+# Start Targets
+
+When SocketStream is started in runs on an Orchestrator just like the build tool Gulp.
+
+Note that this interface is experimental and may change
+
+#### Starting the server
+
+The `default` target will build assets and start a web server as needed. If other named targets
+are specified they will be started instead.
+
+To start your socketstream project with different build targets specify them after the server
+object, or instead if you do not want to run the streaming server.
+
+    // Start web server
+    var server = http.Server(ss.http.middleware);
+    server.listen(3000);
+
+    // Start SocketStream
+    ss.start(server,'my-task','serve');
+ 
+#### Default tasks
+
+The default task depends on
+
+* `pack-all`/`pack-if-needed` if using packed assets
+* `live-assets` if not using packed assets
+* `live-reload` if live reload is enabled (true by default) 
+* and `serve-on-demand`
+
+#### Hooking in
+
+If you want to react when things happen around tasks you can register event handlers.
+The tasks are managed by Orchestrator which manages tasks in Gulp.
+
+Register events on [ss.api.orchestrator](https://www.npmjs.com/package/orchestrator#orchestrator-on-event-cb)

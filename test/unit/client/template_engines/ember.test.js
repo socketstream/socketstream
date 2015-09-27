@@ -12,20 +12,9 @@ describe('Ember.js template engine', function () {
   options.liveReload = false;
 
   beforeEach(function() {
-
-    // back to initial client state
-    ss.client.assets.unload();
-    ss.client.assets.load();
+    ss.client.reset();
     ss.client.set({liveReload:false});
-
-    ss.client.formatters.add('html');
   });
-
-  afterEach(function() {
-    ss.client.unload();
-    ss.client.forget();
-  });
-
 
   it('should output an inline template for use with Ember.js', function(done) {
 
@@ -37,14 +26,11 @@ describe('Ember.js template engine', function () {
 
     ss.client.templateEngine.use('ember');
 
-    ss.api.bundler.load();
-
-    ss.api.client.templateEngines = ss.client.templateEngine.load();
-    ss.api.client.formatters = ss.client.formatters.load();
+    ss.client.load();
 
     var bundler = ss.api.bundler.get('abc');
 
-    var files = [ bundler.entryFor('tmpl','./templates/1.html') ];
+    var files = [ bundler.entryFor('tmpl','client/templates/1.html') ];
 
     ss.client.templateEngine.generate(bundler, files, function(tag) {
       tag.should.be.equal('<script type="text/x-handlebars" data-template-name="1"><body><div>1</div></body>\n</script>');

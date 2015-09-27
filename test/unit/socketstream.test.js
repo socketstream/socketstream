@@ -11,7 +11,8 @@ var uncachedRequire = require('../helpers/uncache'),
 
 describe('lib/socketstream', function () {
 
-    var should = require('should');
+    var should = require('should'),
+        sinon = require('sinon');
 
     beforeEach(function (done) {
         uncachedRequire.uncache('../../lib/socketstream.js');
@@ -87,13 +88,19 @@ describe('lib/socketstream', function () {
             res.serveClient('abc');
           });
 
+          var tasksSpy = sinon.spy(ss.tasks,'start');
+          tasksSpy.withArgs(['default'], sinon.match.function);
+
           var http = require('http');
           var server = http.Server(ss.http.middleware);
-          server.listen(13000);
-          ss.start(server);
+          server.listen(13000, function() {
+            ss.start(server);
 
-          //TODO test that /abc is served
+            should(tasksSpy.calledOnce).equal(true);
+            //TODO test that /abc is served
 
+            server.close();
+          });
         });
     });
 });

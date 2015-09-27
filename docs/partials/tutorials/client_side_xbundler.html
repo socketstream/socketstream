@@ -1,8 +1,9 @@
-<h1><code ng:non-bindable=""></code>
+<a href="https://github.com/socketstream/socketstream/edit/master/src/docs/tutorials/en/client_side_xbundler.ngdoc" class="improve-docs"><i class="icon-edit"> </i>Improve this doc</a><h1><code ng:non-bindable=""></code>
 <div><span class="hint"></span>
 </div>
 </h1>
 <div><div class="client-side-bundler-page"><h2 id="client-side-bundler">Client-Side Bundler</h2>
+<h3 id="client-side-bundler">(Changes in next version)</h3>
 <p>Each view is served with a separate bundle of assets. A HTML, JS and CSS file makes up the view.
 The default bundler will create the bundle based on the client definition as described in Client-Side Code and Client-Side Templates.</p>
 <p>You can implement your own bundler and use it for a client definition. The bundlers are named and referenced by name.</p>
@@ -40,6 +41,8 @@ for bundlers in the future.</p>
   tmpl: &#39;./templates/discuss&#39;
 });
 </code></pre><p>The define method of the bundler will be called to complete <code>ss.client.define</code>.</p>
+<p>Note. The definition will switch to a production installtion light approach where the bundler
+is referenced by name rather than directly.</p>
 <h4 id="client-side-bundler_bundler-define">Bundler Define <code>define(client,config,..)</code></h4>
 <p>The define method will be called with a client object containing <code>id</code>, <code>name</code>,
 If you pass additional arguments to define they will be passed to <code>bundler.define</code>. This may be dropped in the future.</p>

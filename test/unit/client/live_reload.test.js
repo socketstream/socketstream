@@ -9,7 +9,7 @@ var path    = require('path'),
   fixtures = require('../../fixtures');
 
 
-describe('client asset manager index', function () {
+describe('live reload', function () {
 
   var sinon = require('sinon'),
       should = require('should'),
@@ -18,41 +18,51 @@ describe('client asset manager index', function () {
   ss.root = ss.api.root = fixtures.project;
 
   beforeEach(function () {
+    ss.client.reset();
     chokidarSpy = sinon.spy(chokidar,'watch');
+    logHook.on();
   });
 
   afterEach(function () {
     chokidar.watch.restore();
-    ss.client.unload();
-    ss.client.forget();
+    ss.api.unload();
   });
 
   it('should start live reload when in development', function() {
     ss.client.options.packedAssets = false;
+    ss.api.load();
+    ss.tasks.defaults();
+    ss.api.orchestrator.tasks.default.dep.should.containDeep(['live-reload']);
+  });
 
-    logHook.on();
-    ss.client.load();
+  it('should call chokidar for live-reload', function(done) {
 
-    should(chokidarSpy.calledWithMatch([
-      path.join(ss.api.root,'client','code'),
+    ss.client.options.packedAssets = false;
+    ss.api.load();
+    ss.tasks.defaults();
+
+    ss.tasks.start('live-reload', function() {
+      should(chokidarSpy.calledWithMatch([
+        path.join(ss.api.root,'client','code'),
         path.join(ss.api.root,'client','css'),
         path.join(ss.api.root,'client','static'),
         path.join(ss.api.root,'client','templates'),
         path.join(ss.api.root,'client','views')],{
-          ignored: /(\/\.|~$)/
-        })).equal(true);
-    var logs = logHook.off();
-    logs.should.have.length(0);
+        ignored: /(\/\.|~$)/
+      })).equal(true);
+      var logs = logHook.off();
+      logs.should.have.length(0);
+      done();
+    });
   });
 
   it('should not start live reload when liveReload option is set to false', function() {
     ss.client.options.packedAssets = false;
     ss.client.options.liveReload = false;
+    ss.api.load();
+    ss.tasks.defaults();
 
-    logHook.on();
-    ss.client.load();
-
-    should(chokidarSpy.called).equal(false);
+    ss.api.orchestrator.tasks.default.dep.should.not.containDeep(['live-reload']);
     var logs = logHook.off();
     logs.should.have.length(0);
   });
@@ -60,17 +70,18 @@ describe('client asset manager index', function () {
   it('should monitor directories according to option liveReload', function() {
     ss.client.options.packedAssets = false;
     ss.client.options.liveReload = ['code','css'];
+    ss.api.load();
+    ss.tasks.defaults();
 
-    logHook.on();
-    ss.client.load();
-
-    should(chokidarSpy.calledWithMatch([
-      path.join(ss.api.root,'client','code'),
-      path.join(ss.api.root,'client','css')],{
-      ignored: /(\/\.|~$)/
-    })).equal(true);
-    var logs = logHook.off();
-    logs.should.have.length(0);
+    ss.tasks.start('live-reload', function() {
+      should(chokidarSpy.calledWithMatch([
+        path.join(ss.api.root,'client','code'),
+        path.join(ss.api.root,'client','css')],{
+        ignored: /(\/\.|~$)/
+      })).equal(true);
+      var logs = logHook.off();
+      logs.should.have.length(0);
+    });
   });
 
   it('should monitor custom directories according to option liveReload');

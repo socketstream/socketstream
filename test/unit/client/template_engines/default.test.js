@@ -17,20 +17,9 @@ describe('default template engine', function () {
   engineMod(ss.api,options);
 
   beforeEach(function() {
-
-    // back to initial client state
-    ss.client.assets.unload();
-    ss.client.assets.load();
+    ss.client.reset();
     ss.client.set({liveReload:false});
-
-    ss.client.formatters.add('html');
   });
-
-  afterEach(function() {
-    ss.client.unload();
-    ss.client.forget();
-  });
-
 
   it('should output an inline template for use with jQuery or HoganJS', function(done) {
 
@@ -40,14 +29,11 @@ describe('default template engine', function () {
         view: './abc/abc.html'
       });
 
-    ss.api.bundler.load();
-
-    ss.api.client.templateEngines = ss.client.templateEngine.load();
-    ss.api.client.formatters = ss.client.formatters.load();
+    ss.client.load();
 
     var bundler = ss.api.bundler.get('abc');
 
-    var files = [ bundler.entryFor('tmpl','./templates/1.html') ];
+    var files = [ bundler.entryFor('tmpl','client/templates/1.html') ];
 
     ss.client.templateEngine.generate(bundler, files, function(tag) {
       tag.should.be.equal('<script id="tmpl-1" type="text/x-tmpl"><body><div>1</div></body>\n</script>');
@@ -64,14 +50,11 @@ describe('default template engine', function () {
       view: './abc/abc.html'
     });
 
-    ss.api.bundler.load();
-
-    ss.api.client.templateEngines = ss.client.templateEngine.load();
-    ss.api.client.formatters = ss.client.formatters.load();
+    ss.client.load();
 
     var bundler = ss.api.bundler.get('abc');
 
-    var files = [ bundler.entryFor('tmpl','./templates/abc/1.html') ];
+    var files = [ bundler.entryFor('tmpl','client/templates/abc/1.html') ];
 
     ss.client.templateEngine.generate(bundler, files, function(tag) {
       tag.should.be.equal('<script id="tmpl-abc-1" type="text/x-tmpl"><div>abc 1</div>\n</script>');

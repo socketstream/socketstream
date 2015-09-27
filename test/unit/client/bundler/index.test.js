@@ -28,9 +28,9 @@ describe('bundler', function () {
         tmpl: 'main.html'
       });
 
-      paths.css.should.eql(['./css/main.css']);
-      paths.code.should.eql(['./code/main.js']);
-      paths.tmpl.should.eql(['./templates/main.html']);
+      paths.css.should.eql(['client/css/main.css']);
+      paths.code.should.eql(['client/code/main.js']);
+      paths.tmpl.should.eql(['client/templates/main.html']);
     });
 
     it('should return bundler given id', function() {
@@ -43,6 +43,7 @@ describe('bundler', function () {
 
     it('should look up bundler by id', function() {
       var client = ss.client.define('abc', { view: 'abc.html' });
+      ss.api.bundler.load();
 
       var bundler = ss.api.bundler.get({ ts: client.id });
       bundler.should.be.type('object');
@@ -51,6 +52,8 @@ describe('bundler', function () {
 
     it('should throw odd bundler lookups', function() {
       ss.client.define('abc', { view: 'abc.html' });
+
+      ss.api.bundler.load();
 
       // jshint immed: false
       (function() {
@@ -110,13 +113,11 @@ describe('bundler', function () {
         css: 'main.css',
         code: 'main.js',
         tmpl: 'main.html'
-      }, function() {
-        ss.client.formatters.add('html');
       });
 
       var templates = ss.api.bundler.entries(client,'tmpl');
       templates.should.eql([{
-        file: './templates/main.html', importedBy: './templates/main.html', includeType: 'html', ext:'html', bundle:'tmpl', assetType:'html'
+        file: 'client/templates/main.html', importedBy: 'client/templates/main.html', includeType: 'html', ext:'html', bundle:'tmpl', assetType:'html'
       }]);
 
 
@@ -128,15 +129,13 @@ describe('bundler', function () {
         css: 'main.css',
         code: 'main.js',
         tmpl: ['main.html','abc/1.html','abc/2.html']
-      }, function() {
-        ss.client.formatters.add('html');
       });
 
       var templates = ss.api.bundler.entries(client,'tmpl');
       templates.should.eql([
-        { file: './templates/main.html', importedBy: './templates/main.html', includeType: 'html', ext:'html', bundle:'tmpl', assetType:'html' },
-        { file: './templates/abc/1.html', importedBy: './templates/abc/1.html', includeType: 'html', ext:'html', bundle:'tmpl', assetType:'html' },
-        { file: './templates/abc/2.html', importedBy: './templates/abc/2.html', includeType: 'html', ext:'html', bundle:'tmpl', assetType:'html' }
+        { file: 'client/templates/main.html', importedBy: 'client/templates/main.html', includeType: 'html', ext:'html', bundle:'tmpl', assetType:'html' },
+        { file: 'client/templates/abc/1.html', importedBy: 'client/templates/abc/1.html', includeType: 'html', ext:'html', bundle:'tmpl', assetType:'html' },
+        { file: 'client/templates/abc/2.html', importedBy: 'client/templates/abc/2.html', includeType: 'html', ext:'html', bundle:'tmpl', assetType:'html' }
       ]);
     });
 
@@ -147,14 +146,12 @@ describe('bundler', function () {
         css: 'main.css',
         code: 'main.js',
         tmpl: 'abc/*'
-      }, function() {
-        ss.client.formatters.add('html');
       });
 
       var templates = ss.api.bundler.entries(client,'tmpl');
       templates.should.eql([
-        { file: './templates/abc/1.html', importedBy: './templates/abc/1.html', includeType: 'html', ext:'html', bundle:'tmpl', assetType:'html' },
-        { file: './templates/abc/2.html', importedBy: './templates/abc/2.html', includeType: 'html', ext:'html', bundle:'tmpl', assetType:'html' }
+        { file: 'client/templates/abc/1.html', importedBy: 'client/templates/abc', includeType: 'html', ext:'html', bundle:'tmpl', assetType:'html' },
+        { file: 'client/templates/abc/2.html', importedBy: 'client/templates/abc', includeType: 'html', ext:'html', bundle:'tmpl', assetType:'html' }
       ]);
     });
 
@@ -166,8 +163,6 @@ describe('bundler', function () {
         css: './abc',
         code: './abc',
         tmpl: './abc'
-      }, function() {
-        ss.client.formatters.add('html');
       });
 
       var templates = ss.api.bundler.entries(client,'tmpl');

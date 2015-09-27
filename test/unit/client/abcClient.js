@@ -19,16 +19,25 @@ function defineAbcClient(conf) {
 }
 
 function defineAbcClientAndLoad(conf,run,load) {
+  ss.client.init();
+
   var client = defineAbcClient(conf);
   if (run) {
     run();
   }
   if (load !== false) {
-    ss.api.bundler.load();
-    ss.api.client.templateEngines = ss.client.templateEngine.load();
-    ss.api.client.formatters = ss.client.formatters.load();
+    ss.client.load();
+
+    ss.tasks.defaults();
   }
 
   return client;
 }
 
+module.exports.reset = function() {
+  ss.client.unload();
+  ss.client.forget();
+  ss.client.init();
+  ss.tasks.unload();
+  ss.tasks.forget();
+};

@@ -2,7 +2,7 @@
 
 var path    = require('path'),
   fs      = require('fs'),
-  ss      = require( '../../../../lib/socketstream'),
+  ss      = require( '../../../fixtures/socketstream'),
   Router = require('../../../../lib/http/router').Router,
   options = ss.client.options,
   defineAbcClient = require('../abcClient'),
@@ -23,17 +23,9 @@ describe('development mode asset server', function () {
 
 
   beforeEach(function() {
-
-    // back to initial client state
-    ss.client.assets.unload();
-    ss.client.assets.load();
-    ss.client.formatters.add('javascript');
-    ss.client.formatters.add('css');
+    ss.client.reset();
   });
 
-  afterEach(function() {
-    ss.client.forget();
-  });
 
   it('should serve system loader module',function() {
 
@@ -77,14 +69,14 @@ describe('development mode asset server', function () {
       });
 
       // dev time URL
-      var req = {url: '/assets/abc/'+client.id+'.js?_=/abc/index.js' };
+      var req = {url: '/assets/abc/'+client.id+'.js?_=/client/abc/index.js' };
       router.route(req.url,req,responseStub).should.equal(true);
-      responseStub.body.should.equal('require.define("/abc/index", function (require, module, exports, __dirname, __filename){\n// test\n\n});');
+      responseStub.body.should.equal('require.define("/client/abc/index", function (require, module, exports, __dirname, __filename){\n// test\n\n});');
 
       // dev time URL
-      req = {url: '/assets/abc/'+client.id+'.js?_=abc/index.js' };
+      req = {url: '/assets/abc/'+client.id+'.js?_=client/abc/index.js' };
       router.route(req.url,req,responseStub).should.equal(true);
-      responseStub.body.should.equal('require.define("/abc/index", function (require, module, exports, __dirname, __filename){\n// test\n\n});');
+      responseStub.body.should.equal('require.define("/client/abc/index", function (require, module, exports, __dirname, __filename){\n// test\n\n});');
     });
 
 
@@ -98,9 +90,9 @@ describe('development mode asset server', function () {
       });
 
       // dev time URL
-      var req = {url: '/assets/abc/'+client.id+'.css?_=abc/style.css' };
+      var req = {url: '/assets/abc/'+client.id+'.css?_=client/abc/style.css' };
       router.route(req.url,req,responseStub).should.equal(true);
-      responseStub.body.should.equal('/* style.css */\n');
+      responseStub.body.should.equal(fixtures.expected_css);
     });
 
 

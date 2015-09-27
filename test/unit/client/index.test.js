@@ -2,19 +2,21 @@
 
 var path    = require('path'),
     fs      = require('fs'),
-    ss      = require( '../../../lib/socketstream'),
+    ss      = require( '../../fixtures/socketstream'),
     logHook = require('../../helpers/logHook.js'),
     options = ss.client.options,
-  fixtures = require('../../fixtures');
+    //defineAbcClient = require('./abcClient'),
+    fixtures = require('../../fixtures');
 
 
-describe('client asset manager index', function () {
+describe('client asset manager', function () {
 
   ss.root = ss.api.root = fixtures.project;
 
     //var origDefaultEntryInit = options.defaultEntryInit;
 
   beforeEach(function() {
+    ss.client.reset();
     if (ss.client.assets.assets.constants.abc) {
       delete ss.client.assets.assets.constants.abc;
     }
@@ -99,63 +101,54 @@ describe('client asset manager index', function () {
 
 
 
-        it('should allow the user to overwrite the existing options');
+        it('should allow the user to overwrite the existing options', function() {
+          ss.client.set({
+            a: 'a'
+          });
+          ss.client.options.a.should.be.equal('a');
+          ss.client.set({
+            a: 'aa'
+          });
+          ss.client.options.a.should.be.equal('aa');
+        });
 
-
+        it('should support objects being set', function() {
+          ss.client.set({
+            o: { more:'o'}
+          });
+          ss.client.options.o.should.be.eql({ more:'o'});
+        });
 
     });
 
 
-
     describe('#packAssets', function () {
 
-        //options.packedAssets = true;
-
-      beforeEach(function() {
-
-        ss.client.unload();
-        ss.client.forget();
-        ss.client.formatters.add('html');
-        ss.client.formatters.add('javascript');
-        ss.client.formatters.add('css');
-
-      });
-
-      afterEach(function() {
-        ss.client.unload();
-        ss.client.forget();
+      beforeEach(function(done){
+        ss.client.reset();
+        fixtures.reset(done);
       });
 
       it('should tell the asset manager to pack and minimise all assets', function() {
 
-          ss.root = ss.api.root = fixtures.project;
+        ss.root = ss.api.root = fixtures.project;
 
         var client = ss.client.define('abc', {
             code: './abc/index.js',
-            view: './abc/abc.html'
+            view: './abc/abc.html',
+            css: './abc/style.css'
         });
 
         logHook.on();
         ss.client.packAssets();
         ss.client.load();
+        ss.tasks.defaults();
+
+        ss.api.orchestrator.tasks.default.dep.should.eql(['load-socketstream','pack-if-needed','live-reload','serve']);
+        ss.api.orchestrator.tasks['pack-if-needed'].dep.should.eql(['pack-prepare','load-api','abc:pack-needed','abc:pack']);
         logHook.off();
-
-        var html = fs.readFileSync(path.join(fixtures.project,'client/static/assets/abc/' + client.id + '.html'),'utf-8');
-        var js = fs.readFileSync(path.join(fixtures.project,'client/static/assets/abc/' + client.id + '.js'),'utf-8');
-        var css = fs.readFileSync(path.join(fixtures.project,'client/static/assets/abc/' + client.id + '.css'),'utf-8');
-        var expected_html = fs.readFileSync(path.join(fixtures.project,'client/abc/expected.html'),'utf-8');
-        var expected_js = fs.readFileSync(path.join(fixtures.project,'client/abc/expected.min.js'),'utf-8');
-
-        html.should.equal(expected_html);
-        js.should.equal(expected_js);
-        css.should.equal('');
       });
-
-
-
     });
-
-
 
     describe('#define', function () {
 
@@ -217,6 +210,7 @@ describe('client asset manager index', function () {
         ss.client.unload();
         ss.client.assets.unload();
         ss.client.forget();
+        ss.tasks.forget();
 
         ss.client.formatters.add('css');
         ss.client.formatters.add('javascript');
@@ -228,10 +222,12 @@ describe('client asset manager index', function () {
         // options and load client
         options.packedAssets = false;
         ss.client.load();
+        ss.tasks.defaults();
       });
 
       afterEach(function() {
         ss.client.unload();
+        ss.tasks.unload();
       });
 
       it('should render the SS view');
@@ -244,34 +240,25 @@ describe('client asset manager index', function () {
 
 
         beforeEach(function() {
-
-          // back to initial client state
-          ss.client.unload();
-          ss.client.assets.unload();
-          ss.client.forget();
-
-          ss.client.formatters.add('css');
-          ss.client.formatters.add('javascript');
-          ss.client.formatters.add('map');
-          ss.client.formatters.add('html');
-
-          ss.client.assets.load();
+          ss.client.reset();
 
           // options and load client
           logHook.on();
           options.packedAssets = true;
           ss.client.load();
+          ss.tasks.defaults();
           logHook.off();
         });
 
         afterEach(function() {
-          ss.client.unload();
+          ss.api.unload();
+          ss.tasks.unload();
         });
 
         it('should render the ABC view (with start)', function(done) {
           var expectedHtml = '<html>\n' +
             '<head><title>ABC</title></head>\n' +
-            '<body><p>ABC</p><script>require("/abc/index");</script></body>\n' +
+            '<body><p>ABC</p><script>require("/client/abc/index");</script></body>\n' +
             '</html>\n';
 
           var client = ss.client.define('abc', {
@@ -314,12 +301,13 @@ describe('client asset manager index', function () {
           code: './abc/index.js',
           view: './abc/ss.html'
         });
+        client.pack = true;
 
         var expectedHtml = ('<html>\n' +
         '<head><title>ABC</title>' +
         '<link href="/assets/abc/m1bf9lApd.css" media="screen" rel="stylesheet" type="text/css">' +
         '<script src="/assets/abc/m1bf9lApd.js" type="text/javascript"></script>' + '</head>\n' +
-        '<body><p>ABC</p><script>require("/abc/index");</script></body>\n' +
+        '<body><p>ABC</p><script>require("/client/abc/index");</script></body>\n' +
         '</html>\n').replace(/m1bf9lApd/g, client.id);
 
         view(ss.api, client, options, function (output) {
@@ -336,11 +324,12 @@ describe('client asset manager index', function () {
           code: './abc/index.js',
           view: './abc/ss.html'
         });
+        client.pack = true;
 
         var expectedHtml = ('<html>\n' +
           '<head><title>ABC</title>' +
           '<link href="/assets/abc/m1bf9lApd.css" media="screen" rel="stylesheet" type="text/css">' +
-          '<script src="/assets/abc/m1bf9lApd.js" type="text/javascript"></script><script>require("/abc/index");</script>'+ '</head>\n' +
+          '<script src="/assets/abc/m1bf9lApd.js" type="text/javascript"></script><script>require("/client/abc/index");</script>'+ '</head>\n' +
           '<body><p>ABC</p></body>\n' +
           '</html>\n').replace(/m1bf9lApd/g,client.id);
 
@@ -357,11 +346,12 @@ describe('client asset manager index', function () {
           code: './abc/index.js',
           view: './abc/ss.html'
         });
+        client.pack = true;
 
         var expectedHtml = ('<html>\n' +
           '<head><title>ABC</title>' +
           '<script src="/assets/abc/m1bf9lApd.js" type="text/javascript"></script>'+ '</head>\n' +
-          '<body><p>ABC</p><script>require("/abc/index");</script></body>\n' +
+          '<body><p>ABC</p><script>require("/client/abc/index");</script></body>\n' +
           '</html>\n').replace(/m1bf9lApd/g,client.id);
 
         view(ss.api, client, options, function(output) {
@@ -372,5 +362,3 @@ describe('client asset manager index', function () {
     });
 
 });
-
-

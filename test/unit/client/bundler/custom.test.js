@@ -1,7 +1,7 @@
 'use strict';
 
 var path    = require('path'),
-  ss      = require( '../../../../lib/socketstream'),
+  ss      = require( '../../../fixtures/socketstream'),
   options = ss.client.options,
   defineAbcClient = require('../abcClient');
 
@@ -11,9 +11,7 @@ describe('custom bundler', function () {
 
     beforeEach(function() {
 
-      // back to initial client state
-      ss.client.assets.unload();
-      ss.client.assets.load();
+      ss.client.reset();
       ss.client.set({liveReload:false});
     });
 
