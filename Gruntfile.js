@@ -95,12 +95,12 @@ module.exports = function(grunt) {
                 'grunt changelog'
             ],
             'release-complete': [
-                'git commit CHANGELOG.md package.json -m "chore(release): v%version%"',
+                'git commit CHANGELOG.md package.json -n -m "chore(release): v%version%"',
                 'git tag %version%'
             ],
             'release-start': [
                 'grunt version:patch:"SNAPSHOT"',
-                'git commit package.json -m "chore(release): Starting v%version%"'
+                'git commit package.json -n -m "chore(release): Starting v%version%"'
             ],
             'release-push': [
                 'git push origin master',

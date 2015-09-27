@@ -57,7 +57,7 @@ NG_DOCS={
       "type": "overview",
       "moduleName": "Client-Side Templates",
       "shortDescription": "Client-Side Templates",
-      "keywords": "accessible alice allowing allows angular apart app append argument astronomy bad bandwidth biology bob browser building built-in bundled called client client-side clients code coffeekup compiled construct convert correct create css data default define directories directory display div don dramatically easy ember engine engines enter example exiting extension external favorite file find flexibility folder format formatter functions generate github good happy html including inline iphone jade jquery js languages larger layoutless length lib library libs limit live ll logic main major manually match md mix mixing mobile model model-person module modules mustache npm number optional organizing out-of-the-box outputs overview pass passing people perfect person practice prefer prefix project raw ready recommended reduces refactoring refresh render required requires scale scope second send serve server serving simple simply single-page small socketstream solution source ss ss-hogan string student studies styl subdirectory suitable supported supports tag template templateengine templates templating time tmpl tmpl- tutorials types var view ways websocket wrappers wraps"
+      "keywords": "access accessible alice allowing allows angular apart app append argument astronomy bad bandwidth biology bob browser building built-in bundled called client client-side clients code coffeekup compiled construct convert correct create css data default define destinations directories directory display div don dramatically easy ember engine engines enter example exiting extension external favorite file find flexibility folder format formatter functions generate github good habit happy html including inline iphone jade jquery js languages larger layoutless length lib library libs limit live ll logic main major manually match md mix mixing mobile model model-person module modules mustache notation npm number optional organizing out-of-the-box outputs overview pass passing paths people perfect person practice prefer prefix project raw ready recommended reduces refactoring refresh relative render required requires scale scope second send serve server serving simple simply single-page small socketstream solution source ss ss-hogan string student studies styl style subdirectory suitable supported supports tag template templateengine templates templating time tmpl tmpl- tutorials types var view ways websocket work wrappers wraps"
     },
     {
       "section": "tutorials",
@@ -66,7 +66,7 @@ NG_DOCS={
       "type": "overview",
       "moduleName": "Client-Side Bundler",
       "shortDescription": "Client-Side Bundler",
-      "keywords": "action additional arguments array asset assets aware based behaviour browserify built-in bulk bundle bundler bundlers bundling callback called cb changes client client-side code complete completely config considered contents create css current custom default define definition described destsfor development directory dirs discuss dropped early entries existing experimental features file files forced function functionality future html implement implementation implemented implementing individual jade js jspm lacks load lot method methods minification move named newer next_arg object objective optimisations options opts overview pack pass passed path paths production referenced relative responsibilities return returns revised saved scss separate served server set shorthand shouldn sourcepaths ss starting starts step supported templates text tmpl tutorials types var view views webpack webpackbundler worker write"
+      "keywords": "action additional approach arguments array asset assets aware based behaviour browserify built-in bulk bundle bundler bundlers bundling callback called cb changes client client-side code complete completely config considered contents create css current custom default define definition described destsfor development directly directory dirs discuss dropped early entries existing experimental features file files forced function functionality future html implement implementation implemented implementing individual installtion jade js jspm lacks light load lot method methods minification move named newer next_arg note object objective optimisations options opts overview pack pass passed path paths production referenced relative responsibilities return returns revised saved scss separate served server set shorthand shouldn sourcepaths ss starting starts step supported switch templates text tmpl tutorials types var version view views webpack webpackbundler worker write"
     },
     {
       "section": "tutorials",
@@ -205,6 +205,15 @@ NG_DOCS={
     },
     {
       "section": "tutorials",
+      "id": "start_targets",
+      "shortName": "Start Targets",
+      "type": "overview",
+      "moduleName": "Start Targets",
+      "shortDescription": "Start Targets",
+      "keywords": "api assets build change default depends enabled event events experimental gulp handlers happen hooking http interface listen live live-assets live-reload managed manages middleware my-task named needed note npmjs object orchestrator orchestrator-on-event-cb overview pack-all pack-if-needed packed project react register reload runs serve serve-on-demand server socketstream ss start started starting streaming target targets task tasks things tool tutorials var web"
+    },
+    {
+      "section": "tutorials",
       "id": "template_engine_wrappers",
       "shortName": "Template Engine Wrappers",
       "type": "overview",
@@ -313,6 +322,14 @@ NG_DOCS={
     },
     {
       "section": "api",
+      "id": "client.task",
+      "shortName": "client.task",
+      "type": "service",
+      "moduleName": "client",
+      "keywords": "api array client dependents execute execution fn service task tasks"
+    },
+    {
+      "section": "api",
       "id": "client.templateEngine:templateEngine",
       "shortName": "templateEngine",
       "type": "service",
@@ -353,8 +370,8 @@ NG_DOCS={
       "shortName": "ss",
       "type": "overview",
       "moduleName": "ss",
-      "shortDescription": "Internal API object which is passed to sub-modules and can be used within your app",
-      "keywords": "access add api app env exports function internal log object overview passed require root session socketstream ss string sub-modules var"
+      "shortDescription": "Internal API object which is passed to sub-modules and can be used within your app.",
+      "keywords": "access add api app caution env exports function internal log object overview passed require root session socketstream ss string sub-modules var"
     },
     {
       "section": "api",
@@ -402,6 +419,15 @@ NG_DOCS={
     },
     {
       "section": "api",
+      "id": "ss.orchestrator",
+      "shortName": "ss.orchestrator",
+      "type": "service",
+      "moduleName": "ss",
+      "shortDescription": "Internal Orchestrator for starting the server or building resources.",
+      "keywords": "api building currently experimental internal note orchestrator resources server service ss starting"
+    },
+    {
+      "section": "api",
       "id": "ss.publish:publish",
       "shortName": "publish",
       "type": "service",
@@ -417,6 +443,15 @@ NG_DOCS={
       "moduleName": "ss",
       "shortDescription": "By default the project root is the current working directory",
       "keywords": "api current default directory project property root ss working"
+    },
+    {
+      "section": "api",
+      "id": "ss.server:server",
+      "shortName": "server",
+      "type": "service",
+      "moduleName": "ss",
+      "shortDescription": "Server parts used while running",
+      "keywords": "api parts running server service ss"
     },
     {
       "section": "api",
