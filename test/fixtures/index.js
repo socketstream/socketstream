@@ -7,6 +7,12 @@ exports.project = path.join(__dirname, 'project');
 exports.files = path.join(__dirname, 'files');
 exports.readDirSync = path.join(__dirname, 'readDirSync');
 
+exports.setProject = function(name) {
+
+  var ss = require('../../lib/socketstream');
+  ss.root = ss.api.root = path.join(__dirname, name);
+};
+
 exports.reset = function(done) {
   // generated abc client assets
   fs.emptyDir(path.join(__dirname,'project/client/static/assets/abc'),function() {

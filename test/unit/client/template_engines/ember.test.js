@@ -7,7 +7,7 @@ var path    = require('path'),
 
 describe('Ember.js template engine', function () {
 
-  ss.root = ss.api.root = fixtures.project;
+  fixtures.setProject('project');
 
   options.liveReload = false;
 

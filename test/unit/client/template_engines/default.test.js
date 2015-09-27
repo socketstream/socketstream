@@ -10,7 +10,7 @@ var path    = require('path'),
 
 describe('default template engine', function () {
 
-  ss.root = ss.api.root = fixtures.project;
+  fixtures.setProject('project');
 
   ss.api.bundler = bundlerMod(ss.api, options);
 

@@ -87,7 +87,7 @@ describe('pack-if-needed',function() {
       client = defineAbcClient({ tmpl:undefined }, null, false);
       ss.client.packAssets();
 
-      // ss.api.orchestrator.start('pack-if-needed',done);
+      // ss.tasks.orchestrator.start('pack-if-needed',done);
     });
 
     it('should reuse existing assets if possible', function() {

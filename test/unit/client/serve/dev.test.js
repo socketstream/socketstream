@@ -19,7 +19,7 @@ var responseStub = {
 describe('development mode asset server', function () {
 
   var router = new Router();
-  ss.root = ss.api.root = fixtures.project;
+  fixtures.setProject('project');
 
 
   beforeEach(function() {

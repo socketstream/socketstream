@@ -1,6 +1,6 @@
 'use strict';
 
-var   ss      = require( '../../../lib/socketstream');
+var ss = require( '../../../lib/socketstream');
 
 module.exports = defineAbcClientAndLoad;
 
