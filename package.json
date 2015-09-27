@@ -54,6 +54,7 @@
     "chokidar": "~1.1.0",
     "commander": "2.8.1",
     "connect-livereload": "~0.5.2",
+    "conventional-changelog": "^0.4.3",
     "coveralls": "~2.11.4",
     "fs-extra": "~0.24.0",
     "gently": "~0.10.0",
@@ -84,6 +85,7 @@
     "checkDependencies": "node_modules/.bin/npm-dview",
     "lint": "node_modules/.bin/jshint .",
     "notes": "node_modules/.bin/notes",
+    "changelog": "node_modules/.bin/conventional-changelog  -p angular -i CHANGELOG.md -w",
     "test": "node_modules/.bin/mocha test/unit/**/* --reporter spec",
     "quick-test": "node_modules/.bin/mocha test/unit/**/* --reporter progress",
     "test-debug": "node_modules/.bin/mocha --debug-brk test/unit/**/* --reporter spec"
