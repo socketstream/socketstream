@@ -9,6 +9,7 @@ node_modules
 test/fixtures/project/client/code
 test/fixtures/project/client/static/assets
 test/fixtures/project/app.js
+test/fixtures/project/node_modules
 Gruntfile.js
 **/*.min.js
 **/*.min.css

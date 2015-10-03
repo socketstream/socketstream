@@ -1,6 +1,6 @@
 .DS_Store
 coverage
-node_modules
+/node_modules
 dump.rdb
 npm-debug.log
 *.tgz
