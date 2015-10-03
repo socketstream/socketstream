@@ -4,6 +4,7 @@ docs/js/docs-setup.js
 lib/client/bundler/browserify.client.js
 lib/client/system/modules/eventemitter2.js
 lib/request/responders/events/client.js
+lib/websocket/transports/sockjs/lib.min.js
 node_modules
 test/fixtures/project/client/code
 test/fixtures/project/client/static/assets
@@ -20,4 +21,5 @@ lib/cli
 lib/websocket/transports/engineio/client.js
 lib/websocket/transports/engineio/index.js
 lib/websocket/transports/engineio/wrapper.js
+lib/websocket/transports/sockjs/wrapper.js
 test/unit

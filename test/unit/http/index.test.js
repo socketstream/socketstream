@@ -37,6 +37,10 @@ var request      = require('supertest'),
       secure: false           // allow setting of the 'secure' cookie attribute when using SSL - see https://github.com/socketstream/socketstream/issues/349
     },
     sessionOptions = {
+        cookie: { path: '/', httpOnly: false, secure: false, maxAge: null },
+        resave: true,
+        saveUninitialized: true,
+        secret:'not much',
         maxAge: 2592000000
     },
     fixtures    = require('../../fixtures'),
@@ -289,6 +293,9 @@ describe('lib/http/index', function () {
                         maxAge: sessionOptions.maxAge,
                         secure: settings.secure
                     },
+                    resave: true,
+                    saveUninitialized: true,
+                    secret: 'not much',
                     store: sessionStore
                 }).toString() );
 

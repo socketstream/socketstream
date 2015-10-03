@@ -102,7 +102,7 @@ var ss      = require( '../../fixtures/socketstream'),
         (function() {
           ss.client.formatters.add('not-there',{});
 
-        }).should.throw('The not-there formatter is not supported by SocketStream internally. Please pass a compatible module instead');
+        }).should.throw('The "not-there" formatter is not supported by SocketStream internally. Please pass a compatible module instead');
       });
 
     });
