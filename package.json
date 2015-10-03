@@ -35,7 +35,7 @@
     "cookies": "0.5.0",
     "csurf": "1.8.3",
     "escape-html": "1.0.2",
-    "eventemitter2": "= 0.4.14",
+    "eventemitter2": "0.4.14",
     "express-session": "1.11.3",
     "glob": "5.0.14",
     "orchestrator": "0.3.7",
