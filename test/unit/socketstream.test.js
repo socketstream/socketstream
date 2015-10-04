@@ -70,6 +70,8 @@ describe('lib/socketstream', function () {
             ss.api.add('abc',{abc:'def'});
           }).throw(Error);
         });
+
+        it('should be possible to disable loading addons');
     });
 
     describe('start', function() {

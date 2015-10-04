@@ -50,3 +50,7 @@ describe('ss.require', function() {
 		expect(p).to.equal(path.join(__dirname, '../fixtures','project/node_modules/object-assign/index.js'));
 	});
 });
+
+describe('ss.require.forEach', function() {
+	it('should identify modules matching given patterns');
+});
