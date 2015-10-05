@@ -12,7 +12,7 @@
 
 SocketStream is a framework for Realtime Web Apps
 
-_Latest release: 0.4.4 ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))_
+_Latest release: 0.5.0 ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))_
 
 [Live demo](http://demo.socketstream.com) | [Documentation](http://socketstream.github.io/socketstream/docs/)
 
@@ -32,6 +32,14 @@ Please note that the 0.4 release has many modifications. It is expected to be ro
 Then open a web browser at localhost:3000:
 
     open http://localhost:3000
+
+### Upgrade from 0.3 or 0.4 to 0.5
+
+To make SocketStream more stable some major dependencies have been moved out. Please add these modules to `package.json`.
+
+* socketstream-session: 0.5.0
+* engine.io: 1.5.2
+* redis: 0.12.1
 
 ### Why SocketStream?
 
@@ -71,19 +79,20 @@ Building a simple chat app that uses websockets is easy, but rich, non-trivial, 
 
 Checkout the [documentation here](http://socketstream.github.io/socketstream/docs/#/tutorials).
 
-### Next Major Release 0.5
+### Next Major Release 0.6
 
 [![Build Status](https://api.travis-ci.org/socketstream/socketstream.svg?branch=next)](https://travis-ci.org/socketstream/socketstream)
 [![Coverage Status](https://coveralls.io/repos/socketstream/socketstream/badge.svg?branch=next)](https://coveralls.io/r/socketstream/socketstream?branch=next)
 
 #### Notes
 
-This upcoming is expected in late 2015. The current state can be found on the `next` branch.
+This upcoming is expected in early 2016. The current state can be found on the `next` branch.
 
 
 ### Team
 
-*Creator:* Owen Barnes
+*Owner:* Henrik Vendelbo
+*Original Creator:* Owen Barnes
 
 
 *Core Contributors:* 
@@ -92,7 +101,6 @@ This upcoming is expected in late 2015. The current state can be found on the `n
 - Roman Minkin
 - Robert Hall
 - Joshua Cullick
-- Henrik Vendelbo
 
 ### Contact
 
