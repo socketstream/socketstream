@@ -18,7 +18,6 @@
 var compress = require('compression');
 var favicon = require('serve-favicon');
 var expressSession = require('express-session');
-var cookieParser = require('cookie-parser');
 
 var request      = require('supertest'),
     path         = require('path'),
@@ -27,7 +26,7 @@ var request      = require('supertest'),
     serveStatic  = require('../../../lib/utils/serve-static'),
     app          = null,
     utils        = require('../../helpers/utils.js'),
-    sessionStore = new expressSession.MemoryStore,
+    sessionStore = new expressSession.MemoryStore, //TODO testable without express-session
     settings     = {        // User-configurable settings with sensible defaults
       static: {
         maxAge: 2592000000    // (30 * 24 * 60 * 60 * 1000) cache static assets in the browser for 30 days
@@ -198,6 +197,8 @@ describe('lib/http/index', function () {
                 ss.http.middleware.prepend(testPrependMiddleware);
                 ss.http.middleware.append(testAppendMiddleware);
 
+                require(path.join(__dirname,'../..','fixtures/project/node_modules/socketstream-addon'))(ss.api);
+
                 /* loading http server assets */
                 app = ss.http.load(staticPath, assetsPath, sessionStore, sessionOptions);
             }
@@ -221,7 +222,7 @@ describe('lib/http/index', function () {
 
                 /* testing correct length of http.middleware.stack */
                 ss.http.middleware.stack.should.be.an.instanceOf(Array);
-                ss.http.middleware.stack.should.have.length(9);
+                ss.http.middleware.stack.should.have.length(8);
 
                 /**
                  * testing testPrependMiddleware
@@ -239,44 +240,26 @@ describe('lib/http/index', function () {
                 ss.http.middleware.stack[1].handle.toString().should.equal( compress().toString() );
 
                 /**
-                 * testing cookieParser('SocketStream')
-                 * lib/http/index.js:145
-                 */
-                ss.http.middleware.stack[2].handle.should.be.an.instanceOf(Function);
-                ss.http.middleware.stack[2].handle.toString().should.equal( cookieParser('SocketStream').toString() );
-
-                /**
                  * testing favicon()
                  * lib/http/index.js:145
                  */
-                ss.http.middleware.stack[3].handle.should.be.an.instanceOf(Function);
+                ss.http.middleware.stack[2].handle.should.be.an.instanceOf(Function);
 
-                ss.http.middleware.stack[3].handle.toString().should.equal( favicon( 'new_project/' + staticPath + '/favicon.ico').toString() );
+                ss.http.middleware.stack[2].handle.toString().should.equal( favicon( 'new_project/' + staticPath + '/favicon.ico').toString() );
 
                 /**
                  * testing expressSession()
                  * lib/http/index.js:145
                  */
-                ss.http.middleware.stack[4].handle.should.be.an.instanceOf(Function);
-                ss.http.middleware.stack[4].handle.toString().should.equal( expressSession({
-                    cookie: {
-                        path: '/',
-                        httpOnly: false,
-                        maxAge: sessionOptions.maxAge,
-                        secure: settings.secure
-                    },
-                    resave: true,
-                    saveUninitialized: true,
-                    secret: 'not much',
-                    store: sessionStore
-                }).toString() );
+                ss.http.middleware.stack[3].handle.should.be.an.instanceOf(Function);
+                utils.getfunctionName(ss.http.middleware.stack[3].handle).should.equal( 'sessionMiddleware' );
 
                 /**
                  * testing testAppendMiddleware
                  * lib/http/index.js:156
                  */
-                ss.http.middleware.stack[5].handle.should.be.an.instanceOf(Function);
-                ss.http.middleware.stack[5].handle.toString().should.equal( testAppendMiddleware.toString() );
+                ss.http.middleware.stack[4].handle.should.be.an.instanceOf(Function);
+                ss.http.middleware.stack[4].handle.toString().should.equal( testAppendMiddleware.toString() );
 
                 /**
                  * testing eventMiddleware
@@ -284,22 +267,22 @@ describe('lib/http/index', function () {
                  * just compare the functions names
                  * lib/http/index.js:161
                  */
-                ss.http.middleware.stack[6].handle.should.be.an.instanceOf(Function);
-                utils.getfunctionName( ss.http.middleware.stack[6].handle ).should.equal( 'eventMiddleware' );
+                ss.http.middleware.stack[5].handle.should.be.an.instanceOf(Function);
+                utils.getfunctionName( ss.http.middleware.stack[5].handle ).should.equal( 'eventMiddleware' );
 
                 /**
                  * testing assets resource middleware
                  * lib/http/index.js:161
                  */
-                ss.http.middleware.stack[7].handle.should.be.an.instanceOf(Function);
-                ss.http.middleware.stack[7].handle.toString().should.equal( serveStatic('/assets',assetsPath, settings.static).toString() );
+                ss.http.middleware.stack[6].handle.should.be.an.instanceOf(Function);
+                ss.http.middleware.stack[6].handle.toString().should.equal( serveStatic('/assets',assetsPath, settings.static).toString() );
 
                 /**
                  * testing static resource middleware
                  * lib/http/index.js:161
                  */
-                ss.http.middleware.stack[8].handle.should.be.an.instanceOf(Function);
-                ss.http.middleware.stack[8].handle.toString().should.equal( serveStatic('',staticPath, settings.static).toString() );
+                ss.http.middleware.stack[7].handle.should.be.an.instanceOf(Function);
+                ss.http.middleware.stack[7].handle.toString().should.equal( serveStatic('',staticPath, settings.static).toString() );
             });
 
             describe('returned app/http object', function () {
