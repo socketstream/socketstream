@@ -23,7 +23,6 @@
   "dependencies": {
     "apitree": "1.2.0",
     "async": "1.4.2",
-    "body-parser": "1.13.3",
     "clean-css": "3.3.9",
     "colors": "1.1.2",
     "connect": "3.4.0",
