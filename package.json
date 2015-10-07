@@ -26,7 +26,6 @@
     "body-parser": "1.13.3",
     "clean-css": "3.3.9",
     "colors": "1.1.2",
-    "compression": "1.5.2",
     "connect": "3.4.0",
     "connect-redis": "2.4.1",
     "connect-static": "1.5.0",
