@@ -15,7 +15,6 @@
  *     });
  *
  */
-var favicon = require('serve-favicon');
 var expressSession = require('express-session');
 
 var request      = require('supertest'),
@@ -218,7 +217,7 @@ describe('lib/http/index', function () {
 
                 /* testing correct length of http.middleware.stack */
                 ss.http.middleware.stack.should.be.an.instanceOf(Array);
-                ss.http.middleware.stack.should.have.length(7);
+                ss.http.middleware.stack.should.have.length(6);
 
                 /**
                  * testing testPrependMiddleware
@@ -228,26 +227,18 @@ describe('lib/http/index', function () {
                 ss.http.middleware.stack[0].handle.toString().should.equal( testPrependMiddleware.toString() );
 
                 /**
-                 * testing favicon()
-                 * lib/http/index.js:145
-                 */
-                ss.http.middleware.stack[1].handle.should.be.an.instanceOf(Function);
-
-                ss.http.middleware.stack[1].handle.toString().should.equal( favicon( 'new_project/' + staticPath + '/favicon.ico').toString() );
-
-                /**
                  * testing expressSession()
                  * lib/http/index.js:145
                  */
-                ss.http.middleware.stack[2].handle.should.be.an.instanceOf(Function);
-                utils.getfunctionName(ss.http.middleware.stack[2].handle).should.equal( 'sessionMiddleware' );
+                ss.http.middleware.stack[1].handle.should.be.an.instanceOf(Function);
+                utils.getfunctionName(ss.http.middleware.stack[1].handle).should.equal( 'sessionMiddleware' );
 
                 /**
                  * testing testAppendMiddleware
                  * lib/http/index.js:156
                  */
-                ss.http.middleware.stack[3].handle.should.be.an.instanceOf(Function);
-                ss.http.middleware.stack[3].handle.toString().should.equal( testAppendMiddleware.toString() );
+                ss.http.middleware.stack[2].handle.should.be.an.instanceOf(Function);
+                ss.http.middleware.stack[2].handle.toString().should.equal( testAppendMiddleware.toString() );
 
                 /**
                  * testing eventMiddleware
@@ -255,22 +246,22 @@ describe('lib/http/index', function () {
                  * just compare the functions names
                  * lib/http/index.js:161
                  */
-                ss.http.middleware.stack[4].handle.should.be.an.instanceOf(Function);
-                utils.getfunctionName( ss.http.middleware.stack[4].handle ).should.equal( 'eventMiddleware' );
+                ss.http.middleware.stack[3].handle.should.be.an.instanceOf(Function);
+                utils.getfunctionName( ss.http.middleware.stack[3].handle ).should.equal( 'eventMiddleware' );
 
                 /**
                  * testing assets resource middleware
                  * lib/http/index.js:161
                  */
-                ss.http.middleware.stack[5].handle.should.be.an.instanceOf(Function);
-                ss.http.middleware.stack[5].handle.toString().should.equal( serveStatic('/assets',assetsPath, settings.static).toString() );
+                ss.http.middleware.stack[4].handle.should.be.an.instanceOf(Function);
+                ss.http.middleware.stack[4].handle.toString().should.equal( serveStatic('/assets',assetsPath, settings.static).toString() );
 
                 /**
                  * testing static resource middleware
                  * lib/http/index.js:161
                  */
-                ss.http.middleware.stack[6].handle.should.be.an.instanceOf(Function);
-                ss.http.middleware.stack[6].handle.toString().should.equal( serveStatic('',staticPath, settings.static).toString() );
+                ss.http.middleware.stack[5].handle.should.be.an.instanceOf(Function);
+                ss.http.middleware.stack[5].handle.toString().should.equal( serveStatic('',staticPath, settings.static).toString() );
             });
 
             describe('returned app/http object', function () {
