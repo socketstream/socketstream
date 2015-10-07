@@ -26,7 +26,8 @@ describe('Template engine', function() {
         // jshint immed: false
         (function() {
           ss.client.templateEngine.use('not-there');
-        }).should.throw('Cannot find module \'./template_engines/not-there\'');
+        }).should.throw('The not-there template engine is not supported by SocketStream internally'+
+          ' or found in the project packages. Please pass a compatible module instead');
       });
     });
 
