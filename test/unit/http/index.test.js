@@ -249,19 +249,6 @@ describe('lib/http/index', function () {
                 ss.http.middleware.stack[3].handle.should.be.an.instanceOf(Function);
                 utils.getfunctionName( ss.http.middleware.stack[3].handle ).should.equal( 'eventMiddleware' );
 
-                /**
-                 * testing assets resource middleware
-                 * lib/http/index.js:161
-                 */
-                ss.http.middleware.stack[4].handle.should.be.an.instanceOf(Function);
-                ss.http.middleware.stack[4].handle.toString().should.equal( serveStatic('/assets',assetsPath, settings.static).toString() );
-
-                /**
-                 * testing static resource middleware
-                 * lib/http/index.js:161
-                 */
-                ss.http.middleware.stack[5].handle.should.be.an.instanceOf(Function);
-                ss.http.middleware.stack[5].handle.toString().should.equal( serveStatic('',staticPath, settings.static).toString() );
             });
 
             describe('returned app/http object', function () {
