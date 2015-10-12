@@ -1,8 +1,8 @@
 'use strict';
 
-var ss = require('../fixtures/socketstream'),
+var ss = require('../../fixtures/socketstream'),
 	path = require('path'),
-	fixtures = require('../fixtures'),
+	fixtures = require('../../fixtures'),
 	chai = require('chai'),
 	expect = chai.expect,
 	sinon = require('sinon'),
@@ -15,22 +15,22 @@ describe('ss.require', function() {
 
 	it('should load builtin default bundler', function() {
 		var mod = ss.api.require('default','client/bundler');
-		expect(mod).to.equal(require('../../lib/client/bundler/default'));
+		expect(mod).to.equal(require('../../../lib/client/bundler/default'));
 	});
 
 	it('should load builtin production bundler', function() {
 		var mod = ss.api.require('production','client/bundler');
-		expect(mod).to.equal(require('../../lib/client/bundler/production'));
+		expect(mod).to.equal(require('../../../lib/client/bundler/production'));
 	});
 
 	it('should load builtin jade formatter', function() {
 		var mod = ss.api.require('jade','client/formatters');
-		expect(mod).to.equal(require('../../lib/client/formatters/jade'));
+		expect(mod).to.equal(require('../../../lib/client/formatters/jade'));
 	});
 
 	it('should load builtin sass formatter', function() {
 		var mod = ss.api.require('sass','client/formatters');
-		expect(mod).to.equal(require('../../lib/client/formatters/sass'));
+		expect(mod).to.equal(require('../../../lib/client/formatters/sass'));
 	});
 
 	it('should call error callback if module not found', function() {
@@ -47,7 +47,7 @@ describe('ss.require', function() {
 
 	it('should identify path of package from project', function() {
 		var p = ss.api.require.resolve('object-assign');
-		expect(p).to.equal(path.join(__dirname, '../fixtures','project/node_modules/object-assign/index.js'));
+		expect(p).to.equal(path.join(__dirname, '../../fixtures','project/node_modules/object-assign/index.js'));
 	});
 });
 

@@ -14,7 +14,7 @@ ss.http.router.on('/', function(req, res) {
 });
 
 // Remove to use only plain .js, .html and .css files if you prefer
-ss.client.formatters.add(require('ss-coffee'));
+ss.client.formatters.add(require('ss-coffee')); //TODO switch to internal
 ss.client.formatters.add(require('ss-jade'));
 ss.client.formatters.add(require('ss-stylus'));
 
