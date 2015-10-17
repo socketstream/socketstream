@@ -1,0 +1,26 @@
+<a href="https://github.com/socketstream/socketstream/edit/master/src/docs/tutorials/en/hot_to_test.ngdoc" class="improve-docs"><i class="icon-edit"> </i>Improve this doc</a><h1><code ng:non-bindable=""></code>
+<div><span class="hint"></span>
+</div>
+</h1>
+<div><div class="how-to-test-page"><h2 id="how-do-i-test">How do I test?</h2>
+<p>You can make automated test for your server code with Mocha or a similar framework.</p>
+<p>A simple test found in the demo app looks like,</p>
+<pre><code>var ss,
+    chai = require(&quot;chai&quot;),
+    expect = chai.expect;
+
+describe(&#39;Demo&#39;, function() {
+  beforeEach(function(done) {
+    ss = require(&quot;socketstream&quot;).start(&#39;test-socketstream&#39;,done);
+  });
+
+  describe(&#39;sendMessage&#39;, function() {
+    it(&#39;should publish messages received&#39;, function(done) {
+      var text = &#39;Hello World!&#39;;
+      ss.rpc(&#39;demo.sendMessage&#39;, text, function(res) {
+        expect(res).to.equal([true]);
+      })
+    });
+  });
+});
+</code></pre></div></div>

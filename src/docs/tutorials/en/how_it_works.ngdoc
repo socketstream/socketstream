@@ -5,6 +5,7 @@
 # How does it work?
 
 SocketStream sends all the static HTML, CSS and client-side code your app needs the first time a user visits your site (all automatically compressed in `production` mode).
+This is done using regular http serving one HTML, CSS and JS resource.
 
 From then on all application data is sent and received via the websocket (or websocket fallbacks), instantly established when the client connects and automatically re-established if broken. Normally this will be in [JSON RPC](https://github.com/socketstream/socketstream/blob/master/doc/guide/en/rpc_responder.md) format, but SocketStream 0.3 allows you to use different Request Responders (message handlers) depending upon the task at hand.
 
@@ -12,7 +13,7 @@ All this means no more connection latency, HTTP header overhead, polling, or clu
 
 ### What can I create with it?
 
-SocketStream is a perfect fit for all manner of modern applications which require realtime data (chat, stock trading, location monitoring, analytics, etc). It's also a great platform for building realtime HTML5 games. 
+SocketStream is a perfect fit for all manner of modern applications which require realtime data (chat, stock trading, location monitoring, analytics, etc). It's also a great platform for building realtime HTML5 games.
 
 However, it would make a poor choice for a blog or other content-rich site which requires unique URLs for search engine optimization.
 
@@ -66,5 +67,5 @@ ss.rpc('app.square', number, function(response){
 Once you save the file, the browser will automatically reload and you'll see an alert box popup with the following:
 
     25 squared is 625
-    
+
 More examples coming soon!

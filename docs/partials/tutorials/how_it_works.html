@@ -3,11 +3,12 @@
 </div>
 </h1>
 <div><div class="how-it-works-page"><h2 id="how-does-it-work">How does it work?</h2>
-<p>SocketStream sends all the static HTML, CSS and client-side code your app needs the first time a user visits your site (all automatically compressed in <code>production</code> mode).</p>
+<p>SocketStream sends all the static HTML, CSS and client-side code your app needs the first time a user visits your site (all automatically compressed in <code>production</code> mode).
+This is done using regular http serving one HTML, CSS and JS resource.</p>
 <p>From then on all application data is sent and received via the websocket (or websocket fallbacks), instantly established when the client connects and automatically re-established if broken. Normally this will be in <a href="https://github.com/socketstream/socketstream/blob/master/doc/guide/en/rpc_responder.md">JSON RPC</a> format, but SocketStream 0.3 allows you to use different Request Responders (message handlers) depending upon the task at hand.</p>
 <p>All this means no more connection latency, HTTP header overhead, polling, or clunky AJAX. Just true bi-directional, asynchronous, &#39;streaming&#39; communication between client and server.</p>
 <h4 id="how-does-it-work_what-can-i-create-with-it">What can I create with it?</h4>
-<p>SocketStream is a perfect fit for all manner of modern applications which require realtime data (chat, stock trading, location monitoring, analytics, etc). It&#39;s also a great platform for building realtime HTML5 games. </p>
+<p>SocketStream is a perfect fit for all manner of modern applications which require realtime data (chat, stock trading, location monitoring, analytics, etc). It&#39;s also a great platform for building realtime HTML5 games.</p>
 <p>However, it would make a poor choice for a blog or other content-rich site which requires unique URLs for search engine optimization.</p>
 <p>More code examples to follow.</p>
 <h4 id="how-does-it-work_example-1-basic-rpc">Example 1: Basic RPC</h4>

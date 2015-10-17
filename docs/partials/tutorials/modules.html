@@ -1,0 +1,12 @@
+<a href="https://github.com/socketstream/socketstream/edit/master/src/docs/tutorials/en/modules.ngdoc" class="improve-docs"><i class="icon-edit"> </i>Improve this doc</a><h1><code ng:non-bindable=""></code>
+<div><span class="hint"></span>
+</div>
+</h1>
+<div><div class="modules-page"><h2 id="loading-modules-from-app">Loading Modules from app</h2>
+<h3 id="loading-modules-from-app_development-dependencies">Development Dependencies</h3>
+<p>During development the bundlers, formatters and template engines are loaded as plugins using <code>ss.require</code>. This allows you to not require development time code in your <code>app.js</code>. If you choose to build production assets beforehand, you can keep these dependencies as development dependencies and only install production dependencies.</p>
+<h4 id="loading-modules-from-app_development-dependencies_internal-require">Internal require</h4>
+<p>The internal require is used to load modules that may be built in or supplied by the project. It is a function on the API passed to plugins and used internally.</p>
+<p><code>ss.require(id,builtinPath,defaultId)</code> The builtin path is the relative path within socketstream
+where the builtin modules are found. The defaultId is the extension-less filename loaded when the main id isn&#39;t matched.</p>
+</div></div>

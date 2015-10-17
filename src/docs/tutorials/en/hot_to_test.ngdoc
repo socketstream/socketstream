@@ -1,0 +1,28 @@
+@ngdoc overview
+@name How to test
+
+@description
+# How do I test?
+
+You can make automated test for your server code with Mocha or a similar framework.
+
+A simple test found in the demo app looks like,
+
+    var ss,
+        chai = require("chai"),
+        expect = chai.expect;
+
+    describe('Demo', function() {
+      beforeEach(function(done) {
+        ss = require("socketstream").start('test-socketstream',done);
+      });
+
+      describe('sendMessage', function() {
+        it('should publish messages received', function(done) {
+          var text = 'Hello World!';
+          ss.rpc('demo.sendMessage', text, function(res) {
+            expect(res).to.equal([true]);
+          })
+        });
+      });
+    });
