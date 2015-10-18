@@ -1,0 +1,23 @@
+@ngdoc overview
+@name How to write view CSS
+
+@description
+# How to write view CSS ?
+
+Views can be styles using plain CSS, Less, SASS or any other supported by CSS formatters.
+
+The CSS formatter is added automatically. Formatters for Less and SASS are builtin, but must
+be added and the core dependency added to your `package.json`.
+
+    npm install sass --save-dev
+
+The SASS formatter is now builtin but optional. Add the following line to your app.
+
+    ss.client.formatters.add('sass');
+
+By default the `includePaths` option is the `node_modules` and the client directory.
+If you want to change it you can override it.
+
+    ss.client.formatters.add('sass', {
+      includePaths: [ path.join(__dirname,'client','sass')]
+    });

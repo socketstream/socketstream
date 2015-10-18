@@ -18,9 +18,12 @@ If on the other hand you have a page heavy on content and light on JavaScript, a
 the user will see the top of the page styled before the full page is loaded.
 
 The recommended place for bundles of CSS and JS to be loaded is just before the closing `</body>` tag. This is where
-you should put the SocketStream tag.
+you should put the SocketStream tag. This means that CSS will be fetched slightly late compared to the idea. In version `0.6`
+the default will be to put the CSS separately at the end of `</head>`.
 
 If you are doing XHTML rather than HTML use `<SocketStream/>`.
+
+### Using Jade
 
 If you are doing Jade use `!= SocketStream` such as
 
@@ -36,6 +39,17 @@ If you are doing Jade use `!= SocketStream` such as
 
 Note than the SocketStream include notation and up to the page formatter, so ultimately you are in control by configuring
 the formatters.
+
+The Jade formatter is now builtin but optional. Add the following line to your app.
+
+    ss.client.formatters.add('jade');
+
+By default the `basedir` option is the client directory. If you want to change it
+you can override it.
+
+    ss.client.formatters.add('jade', {
+      basedir: [ path.join(__dirname,'client','view')]
+    });
 
 
 ### Page Start code

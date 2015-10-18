@@ -124,12 +124,21 @@ NG_DOCS={
     },
     {
       "section": "tutorials",
+      "id": "how_to_write_css",
+      "shortName": "How to write view CSS",
+      "type": "overview",
+      "moduleName": "How to write view CSS",
+      "shortDescription": "How to write view CSS ?",
+      "keywords": "add app automatically builtin change client core css default dependency directory formatter formatters includepaths install join json node_modules npm option optional override overview package path plain sass ss styles supported tutorials view views write"
+    },
+    {
+      "section": "tutorials",
       "id": "how_to_write_view_html",
       "shortName": "How to write view HTML",
       "type": "overview",
       "moduleName": "How to write view HTML",
       "shortDescription": "How to write view HTML ?",
-      "keywords": "appending assigntransport behaviour block body browser bundle bundles client closing code configuring connection consider content contents control css default div echo-responder ensure events-responder executed files filled formatter formatters full hand head heavy html huge include insert inserted installation jade javascript js light link loaded loading lot main notation note option overview place plain previous recommended require requirement script scripts seconds send served set size slow socketstream socketstream-rpc ss start startcode startinbundle styled supported synced-model tag tags top true tutorials typical ultimately user view views white write written xhtml"
+      "keywords": "add app appending assigntransport basedir behaviour block body browser builtin bundle bundles change client closing code compared configuring connection consider content contents control css default directory div echo-responder ensure events-responder executed fetched files filled formatter formatters full hand head heavy html huge idea include insert inserted installation jade javascript join js late light link loaded loading lot main notation note option optional override overview path place plain previous recommended require requirement script scripts seconds send separately served set size slow socketstream socketstream-rpc ss start startcode startinbundle styled supported synced-model tag tags top true tutorials typical ultimately user version view views white write written xhtml"
     },
     {
       "section": "tutorials",
