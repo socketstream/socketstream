@@ -384,6 +384,15 @@ NG_DOCS={
     },
     {
       "section": "api",
+      "id": "set",
+      "shortName": "set",
+      "type": "function",
+      "moduleName": "set",
+      "shortDescription": "Overrides settings for root/client/server.",
+      "keywords": "api function object overrides path root set setting settings star"
+    },
+    {
+      "section": "api",
       "id": "ss",
       "shortName": "ss",
       "type": "overview",
