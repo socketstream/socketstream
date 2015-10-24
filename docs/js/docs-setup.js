@@ -12,7 +12,7 @@ NG_DOCS={
       "type": "overview",
       "moduleName": "index",
       "shortDescription": "Documentation",
-      "keywords": "app assets best cdns clients code demand developing documentation engine events exceptions experiment extending formats gazillion github handling io low-level message middleware models multiple overview packing practices production protocols reload request responder responders single-page socketstream support template templates tutorials workers wrappers"
+      "keywords": "app assets best cdns clients code demand developing documentation engine events exceptions experiment extending formats gazillion github handling indirectly io low-level message middleware models modules multiple node overview packing practices production protocols reload request responder responders single-page socketstream support template templates tutorials workers wrappers"
     },
     {
       "section": "tutorials",
@@ -97,12 +97,21 @@ NG_DOCS={
     },
     {
       "section": "tutorials",
+      "id": "hot_to_test",
+      "shortName": "How to test",
+      "type": "overview",
+      "moduleName": "How to test",
+      "shortDescription": "How do I test?",
+      "keywords": "app automated beforeeach chai code demo describe equal expect framework function hello messages mocha overview publish received require rpc sendmessage server simple socketstream ss start test test-socketstream text tutorials var world"
+    },
+    {
+      "section": "tutorials",
       "id": "how_it_works",
       "shortName": "How it works",
       "type": "overview",
       "moduleName": "How it works",
       "shortDescription": "How does it work?",
-      "keywords": "action actions ajax alert allows analytics answer app application applications asynchronous automatically basic bi-directional blog box broken browser building call called calling choice client client-side clunky code coming command common communication compressed connection connects console content-rich convention create css data default define depending eagle-eyed engine established example examples exports fallbacks file fine fit follow format function games great hand handlers header html html5 http image included instantly interested invoke invoked invoking javascript js json-over-rpc latency list ll local location logged manner md messages mode modern monitoring multiple naming notice number optimization organize overhead overview perfect platform polling poor popup processed processor production publicly re-established realtime received reload request require requires res resize responders response restart return returned rpc save search send sends server server-side simple site socketstream square squared squares ss static stock streaming sub-directories supports task time trading true tutorials undefined unique urls user var visits ways websocket wondering work works write written"
+      "keywords": "action actions ajax alert allows analytics answer app application applications asynchronous automatically basic bi-directional blog box broken browser building call called calling choice client client-side clunky code coming command common communication compressed connection connects console content-rich convention create css data default define depending eagle-eyed engine established example examples exports fallbacks file fine fit follow format function games great hand handlers header html html5 http image included instantly interested invoke invoked invoking javascript js json-over-rpc latency list ll local location logged manner md messages mode modern monitoring multiple naming notice number optimization organize overhead overview perfect platform polling poor popup processed processor production publicly re-established realtime received regular reload request require requires res resize resource responders response restart return returned rpc save search send sends server server-side serving simple site socketstream square squared squares ss static stock streaming sub-directories supports task time trading true tutorials undefined unique urls user var visits ways websocket wondering work works write written"
     },
     {
       "section": "tutorials",
@@ -115,12 +124,21 @@ NG_DOCS={
     },
     {
       "section": "tutorials",
+      "id": "how_to_write_css",
+      "shortName": "How to write view CSS",
+      "type": "overview",
+      "moduleName": "How to write view CSS",
+      "shortDescription": "How to write view CSS ?",
+      "keywords": "add app automatically builtin change client core css default dependency directory formatter formatters includepaths install join json node_modules npm option optional override overview package path plain sass ss styles supported tutorials view views write"
+    },
+    {
+      "section": "tutorials",
       "id": "how_to_write_view_html",
       "shortName": "How to write view HTML",
       "type": "overview",
       "moduleName": "How to write view HTML",
       "shortDescription": "How to write view HTML ?",
-      "keywords": "appending assigntransport behaviour block body browser bundle bundles client closing code configuring connection consider content contents control css default div echo-responder ensure events-responder executed files filled formatter formatters full hand head heavy html huge include insert inserted installation jade javascript js light link loaded loading lot main notation note option overview place plain previous recommended require requirement script scripts seconds send served set size slow socketstream socketstream-rpc ss start startcode startinbundle styled supported synced-model tag tags top true tutorials typical ultimately user view views white write written xhtml"
+      "keywords": "add app appending assigntransport basedir behaviour block body browser builtin bundle bundles change client closing code compared configuring connection consider content contents control css default directory div echo-responder ensure events-responder executed fetched files filled formatter formatters full hand head heavy html huge idea include insert inserted installation jade javascript join js late light link loaded loading lot main notation note option optional override overview path place plain previous recommended require requirement script scripts seconds send separately served set size slow socketstream socketstream-rpc ss start startcode startinbundle styled supported synced-model tag tags top true tutorials typical ultimately user version view views white write written xhtml"
     },
     {
       "section": "tutorials",
@@ -148,6 +166,15 @@ NG_DOCS={
       "moduleName": "Loading Assets On Demand",
       "shortDescription": "Loading Assets On Demand",
       "keywords": "additional allowing allows app application assets assume asynchronously automatic better blocking browser built-in caching call callback called client client-side code command contacting create default demand directly directory distinct example execute fancy file folder freeze function future good haven icloud ignore inside instantly js large ll load loaded loading module modules mount multiple namespace nature normal note overview pack requested requests require required retrieved returned root sadly safely sake search sections send server small socketstream ss sub-directories subsequent syntax tutorials var ve writing"
+    },
+    {
+      "section": "tutorials",
+      "id": "modules",
+      "shortName": "Modules",
+      "type": "overview",
+      "moduleName": "Modules",
+      "shortDescription": "Loading Modules from app",
+      "keywords": "allows api app assets build built builtin builtinpath bundlers choose code defaultid dependencies development engines extension-less filename formatters function install internal internally isn js load loaded loading main matched modules overview passed path plugins production project relative require socketstream ss supplied template time tutorials"
     },
     {
       "section": "tutorials",
@@ -277,15 +304,6 @@ NG_DOCS={
     },
     {
       "section": "api",
-      "id": "bundler.webpack:webpack",
-      "shortName": "webpack",
-      "type": "service",
-      "moduleName": "bundler",
-      "shortDescription": "The webpack bundler of HTML, CSS &amp; JS",
-      "keywords": "api asset assettype bundler client collection concept css custom demonstration directory entries functions html improved initcode js libs list method modules output pack purposes relative service systemassets type validate view webpack"
-    },
-    {
-      "section": "api",
       "id": "client",
       "shortName": "client",
       "type": "service",
@@ -308,8 +326,8 @@ NG_DOCS={
       "shortName": "formatters",
       "type": "service",
       "moduleName": "client",
-      "shortDescription": "Formatter registry",
-      "keywords": "api client formatter formatters registry service"
+      "shortDescription": "This is for the module returned by require(&#39;socketstream&#39;).client.formatters.",
+      "keywords": "add api asset client config configuring define formatter formatters method module nameormodule object parameters rendering require returned service socketstream"
     },
     {
       "section": "api",
@@ -317,8 +335,8 @@ NG_DOCS={
       "shortName": "formatters",
       "type": "service",
       "moduleName": "client",
-      "shortDescription": "This is for the module returned by require(&#39;socketstream&#39;).client.formatters.",
-      "keywords": "add api asset client config configuring define formatter formatters method module nameormodule object parameters rendering require returned service socketstream"
+      "shortDescription": "Formatter registry",
+      "keywords": "api client formatter formatters registry service"
     },
     {
       "section": "api",
@@ -363,6 +381,15 @@ NG_DOCS={
       "moduleName": "http",
       "shortDescription": "Right now the router is simply an EventEmitter. This may change in the future",
       "keywords": "allows api callback cb change clients ee eventemitter exists fall find fully function future html5 http instance mock multiple object original passed pushstate recursively req request res respond route router routing service simply single-page speed support url"
+    },
+    {
+      "section": "api",
+      "id": "set",
+      "shortName": "set",
+      "type": "function",
+      "moduleName": "set",
+      "shortDescription": "Overrides settings for root/client/server.",
+      "keywords": "api function object overrides path root set setting settings star"
     },
     {
       "section": "api",
@@ -416,15 +443,6 @@ NG_DOCS={
       "moduleName": "ss",
       "shortDescription": "Contains method stubs for logging to console (by default) or",
       "keywords": "api apply arguments assigning calls choose console debug default error fairly function happened info informed keeping level log logging method override parameters plugins provider require service socketstream ss stubs switch sysadmin takes time trace tracing trivial unexpected var wakeup warn winston"
-    },
-    {
-      "section": "api",
-      "id": "ss.orchestrator",
-      "shortName": "ss.orchestrator",
-      "type": "service",
-      "moduleName": "ss",
-      "shortDescription": "Internal Orchestrator for starting the server or building resources.",
-      "keywords": "api building currently experimental internal note orchestrator resources server service ss starting"
     },
     {
       "section": "api",

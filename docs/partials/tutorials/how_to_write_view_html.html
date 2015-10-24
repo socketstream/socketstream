@@ -13,8 +13,10 @@ white.</p>
 <p>If on the other hand you have a page heavy on content and light on JavaScript, and you put it within the head tag,
 the user will see the top of the page styled before the full page is loaded.</p>
 <p>The recommended place for bundles of CSS and JS to be loaded is just before the closing <code>&lt;/body&gt;</code> tag. This is where
-you should put the SocketStream tag.</p>
+you should put the SocketStream tag. This means that CSS will be fetched slightly late compared to the idea. In version <code>0.6</code>
+the default will be to put the CSS separately at the end of <code>&lt;/head&gt;</code>.</p>
 <p>If you are doing XHTML rather than HTML use <code>&lt;SocketStream/&gt;</code>.</p>
+<h4 id="how-to-write-view-html_using-jade">Using Jade</h4>
 <p>If you are doing Jade use <code>!= SocketStream</code> such as</p>
 <pre><code>  body
     +facebook-root()
@@ -25,7 +27,14 @@ you should put the SocketStream tag.</p>
       != SocketStream
 </code></pre><p>Note than the SocketStream include notation and up to the page formatter, so ultimately you are in control by configuring
 the formatters.</p>
-<h4 id="how-to-write-view-html_page-start-code">Page Start code</h4>
+<p>The Jade formatter is now builtin but optional. Add the following line to your app.</p>
+<pre><code>ss.client.formatters.add(&#39;jade&#39;);
+</code></pre><p>By default the <code>basedir</code> option is the client directory. If you want to change it
+you can override it.</p>
+<pre><code>ss.client.formatters.add(&#39;jade&#39;, {
+  basedir: [ path.join(__dirname,&#39;client&#39;,&#39;view&#39;)]
+});
+</code></pre><h4 id="how-to-write-view-html_page-start-code">Page Start code</h4>
 <p>By default the start code will be executed at the end of the view regardless of where you put the SocketStream tag.
 In a typical installation the end of your HTML for the view served to the browser will look like,</p>
 <pre><code>&lt;script&gt;require(&#39;synced-model&#39;)(1, {}, require(&#39;socketstream&#39;).send(1));
