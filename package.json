@@ -33,6 +33,7 @@
     "cookie-session": "1.2.0",
     "cookies": "0.5.0",
     "csurf": "1.8.3",
+    "debug": "~2.2.0",
     "escape-html": "1.0.2",
     "eventemitter2": "0.4.14",
     "findup-sync": "^0.3.0",
