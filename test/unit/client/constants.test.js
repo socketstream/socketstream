@@ -2,7 +2,6 @@
 
 var ss      = require( '../../../lib/socketstream'),
   options = ss.client.options,
-  Router = require('../../../lib/http/router').Router,
   defineAbcClient = require('./abcClient');
 
 var view = require('../../../lib/client/view');
@@ -13,9 +12,6 @@ var responseStub = {
 };
 
 describe('constants',function() {
-
-  var router = new Router();
-
 
   beforeEach(function() {
 
@@ -141,9 +137,6 @@ describe('constants',function() {
 });
 
 describe('locals', function() {
-
-  var router = new Router();
-
 
   beforeEach(function() {
 
