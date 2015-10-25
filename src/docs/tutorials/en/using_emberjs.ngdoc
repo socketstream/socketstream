@@ -25,7 +25,7 @@ Use `ss.client.define` to define the Ember MVC client end point in app.js
 Add route for the newly defined end-point.
 
 <pre>
-    ss.http.router.on('/todos', function(req, res) {
+    ss.http.route('/todos', function(req, res) {
         res.serveClient('todos');
     }
 </pre>

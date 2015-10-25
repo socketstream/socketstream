@@ -2,7 +2,6 @@
 
 var ss      = require( '../../../lib/socketstream'),
   options = ss.client.options,
-  Router = require('../../../lib/http/router').Router,
   defineAbcClient = require('./abcClient');
 
 var view = require('../../../lib/client/view');
@@ -13,9 +12,6 @@ var responseStub = {
 };
 
 describe('constants',function() {
-
-  var router = new Router();
-
 
   beforeEach(function() {
 
@@ -84,8 +80,6 @@ describe('constants',function() {
     var compileOptions = null,
         client = defineAbcClient({ code: './abc/index.a' }, function() {
 
-      require('../../../lib/client/serve/dev')(ss.api, router, options);
-
       ss.api.client.send('constant','abc','abc');
 
       var formatter = {
@@ -109,10 +103,10 @@ describe('constants',function() {
 
 
     // dev time URL
-    var req = {url: '/assets/abc/'+client.id+'.js?_=./client/abc/index.a' };
-    router.route(req.url,req,responseStub).should.equal(true);
-    compileOptions.constants.should.be.type('object');
-    compileOptions.constants.abc.should.equal('abc');
+    // var req = {url: '/assets/abc/'+client.id+'.js?_=./client/abc/index.a' };
+    // router.route(req.url,req,responseStub).should.equal(true);
+    // compileOptions.constants.should.be.type('object');
+    // compileOptions.constants.abc.should.equal('abc');
 
     //TODO packAssetSet
     var bundler = ss.api.bundler.get(client);
@@ -122,8 +116,6 @@ describe('constants',function() {
   it('should be loaded in the browser as globals', function(done) {
 
     var client = defineAbcClient({ constants:{'def':'def'} }, function() {
-
-        require('../../../lib/client/serve/dev')(ss.api, router, options);
 
         ss.api.client.send('constant','abc','abc');
 
@@ -145,9 +137,6 @@ describe('constants',function() {
 });
 
 describe('locals', function() {
-
-  var router = new Router();
-
 
   beforeEach(function() {
 
@@ -215,8 +204,6 @@ describe('locals', function() {
     var compileOptions = null,
         client = defineAbcClient({ code: './abc/index.a' }, function() {
 
-      require('../../../lib/client/serve/dev')(ss.api, router, options);
-
       ss.api.client.send('local','abc','abc');
 
       var formatter = {
@@ -240,10 +227,10 @@ describe('locals', function() {
     });
 
     // dev time URL
-    var req = {url: '/assets/abc/'+client.id+'.js?_=./client/abc/index.a' };
-    router.route(req.url,req,responseStub).should.equal(true);
-    compileOptions.locals.should.be.type('object');
-    compileOptions.locals.abc.should.equal('abc');
+    // var req = {url: '/assets/abc/'+client.id+'.js?_=./client/abc/index.a' };
+    // router.route(req.url,req,responseStub).should.equal(true);
+    // compileOptions.locals.should.be.type('object');
+    // compileOptions.locals.abc.should.equal('abc');
 
     //TODO packAssetSet
     var bundler = ss.api.bundler.get(client);

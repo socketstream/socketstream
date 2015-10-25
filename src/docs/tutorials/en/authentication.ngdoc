@@ -50,13 +50,15 @@ Let's look at a very simple example by adding the following 'route' to `app.js`:
 
 <pre>
 // app.js
-ss.http.router.on('/authenticateMe', function(req, res) {
+ss.http.middleware.get('/authenticateMe', function(req, res) {
   req.session.userId = 'john';
   req.session.save(function(err){
     res.serve('main');
   });
 });
 </pre>
+
+If you implement 'start-server' yourself use `app.get` instead.
 
 Next, add an RPC action which sends the contents of `req.session.userId` over the websocket:
 

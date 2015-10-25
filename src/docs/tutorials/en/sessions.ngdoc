@@ -58,7 +58,7 @@ The same session data is automatically loaded into `req.session` when accessed o
 
 <pre>
 // app.js
-ss.http.router.on('/updateSession', function(req, res) {
+ss.http.middleware.get('/updateSession', function(req, res) {
   req.session.myVar = 4321;
   res.end('req.session.myVar has been updated to', req.session.myVar);
 });
