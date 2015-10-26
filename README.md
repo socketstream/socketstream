@@ -12,13 +12,17 @@
 
 SocketStream is a framework for Realtime Web Apps
 
-_Latest release: 0.5.0 ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))_
+_Latest release: 0.5.1 unstable ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))_
 
 [Live demo](http://demo.socketstream.com) | [Documentation](http://socketstream.github.io/socketstream/docs/)
 
-### Installation
+For existing SocketStream installations you may want to remain on `0.4.5` for a while. It is the most backwards compatible
+and robust and  well covered by tests. It should be ready for production.
 
-Please note that the 0.4 release has many modifications. It is expected to be robust and changes are well covered by tests. It should be ready for production.
+The coming releases will see a lot of changes to accommodate new transport options modern browsers and mobile apps. The API
+will remain largely the same, but there are bound to be some changes.
+
+### Installation
 
     npm install -g socketstream
 
@@ -43,14 +47,32 @@ To make SocketStream more stable some major dependencies have been moved out. Pl
 
 ### Why SocketStream?
 
-Building a simple chat app that uses websockets is easy, but rich, non-trivial, responsive realtime UI without ending up with a mess of code is hard SocketStream eases the pain by:
+The Real-Time web has been touted for years, and it is very much in use. However there remains a number of challenges that have not been solved.
+Web Sockets will remain an important technology for delivering a _live_ experience on your website or mobile app. However with HTTP/2 and WebRTC
+other options come into play. SocketStream will help you to mix and match depending an what you aim to build.
 
-* Integrating best-of-breed modules to increase productivity
+It give you tools to manage your project:
+
 * Providing a sensible place to put everything
-* Accelerating development with Live Reload and (optional) support for Stylus, Jade, and other transpilers.
 * Accelerating deployment with integrated asset packing and CDN support
-* Organizing spaghetti client-side code into modules you can `require()` with Browserify
-* Working well with all major client-side frameworks (e.g. Backbone, Ember, Angular)
+* Production Deployment skeleton
+* Good debugging output
+
+Integration points:
+
+* Accelerating development with Live Reload and (optional) support for Stylus, Jade, and other transpilers.
+* Add-ons can be dropped in without configuration needed picking between Cookie and Token based auth.
+
+Batteries included:
+
+* Dependencies are peer, so you pick the versions you want to use.
+* Built-in CommonJS bundler (ES6 on-the-way)
+* Built in formatter integration for: Sass, LESS, Stylus, Jade, Hogan
+* Built in template engine integration for: HTML5, React, Angular, jQuery
+* Built in transport integration for: Socket.io and SockJS
+* Examples
+
+Building a simple chat app that uses websockets is easy, but rich, non-trivial, responsive realtime UI without ending up with a mess of code is hard SocketStream eases the pain by:
 
 ### Applications using SocketStream
 
@@ -79,23 +101,14 @@ Building a simple chat app that uses websockets is easy, but rich, non-trivial, 
 
 Checkout the [documentation here](http://socketstream.github.io/socketstream/docs/#/tutorials).
 
-### Next Major Release 0.6
-
-[![Build Status](https://api.travis-ci.org/socketstream/socketstream.svg?branch=next)](https://travis-ci.org/socketstream/socketstream)
-[![Coverage Status](https://coveralls.io/repos/socketstream/socketstream/badge.svg?branch=next)](https://coveralls.io/r/socketstream/socketstream?branch=next)
-
-#### Notes
-
-This upcoming is expected in early 2016. The current state can be found on the `next` branch.
-
 
 ### Team
 
 *Owner:* Henrik Vendelbo
+
 *Original Creator:* Owen Barnes
 
-
-*Core Contributors:* 
+*Core Contributors:*
 
 - Paul Jensen
 - Roman Minkin
@@ -106,7 +119,6 @@ This upcoming is expected in early 2016. The current state can be found on the `
 
 - Twitter: [@socketstream](http://twitter.com/#!/socketstream)  
 - Chat: [Gitter](https://gitter.im/socketstream/socketstream)
-- Forum: [Google Group](http://groups.google.com/group/socketstream)
 
 ### License
 
