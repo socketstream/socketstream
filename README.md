@@ -41,9 +41,10 @@ Then open a web browser at localhost:3000:
 
 To make SocketStream more stable some major dependencies have been moved out. Please add these modules to `package.json`.
 
-* socketstream-session: 0.5.0
+* socketstream-cookie-session: 0.5.x
 * engine.io: 1.5.2
 * redis: 0.12.1
+* connect: 3.4.0
 
 ### Why SocketStream?
 
