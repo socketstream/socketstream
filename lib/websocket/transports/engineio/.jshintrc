@@ -1,0 +1,26 @@
+{
+  "eqeqeq": true,
+  "indent": 2,
+  "node": true,
+  "predef": [
+    "document",
+    "eio",
+    "unescape",
+    "__dirname",
+    "after",
+    "afterEach",
+    "before",
+    "beforeEach",
+    "console",
+    "describe",
+    "it",
+    "module",
+    "process",
+    "require",
+    "setInterval"
+  ],
+  "strict": true,
+  "trailing": true,
+  "undef": true,
+  "unused": true
+}
