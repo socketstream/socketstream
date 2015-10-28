@@ -1,14 +1,14 @@
 'use strict';
 
-var ss = require( '../../fixtures/socketstream'),
-    fixtures = require( '../../fixtures');
+var fixtures = require( '../../fixtures'),
+    ss = fixtures.socketstreamProject(),
+    chai = require('chai'),
+    expect = chai.expect;
+
+//ss.start('test-socketstream');
 
 xdescribe('test-socketstream', function() {
   beforeEach(function(done) {
-    ss.root = ss.api.root = fixtures.project;
-    ss.client.reset();
-    //ss.api.rpc = undefined;
-    ss.api.load();
     ss.start('test-socketstream',done);
   });
 
@@ -17,9 +17,10 @@ xdescribe('test-socketstream', function() {
     it('should publish messages received', function(done) {
       var text = 'Hello World!';
       ss.api.rpc('demo.sendMessage', text, function(res) {
-        expect(res).to.equal([true]);
+        expect(res).to.eql([true]);
         //TODO published expectations
         // expect(..).to.equal({ status:'success', content:text});
+        done();
       })
     });
   });

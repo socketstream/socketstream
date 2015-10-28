@@ -8,9 +8,14 @@ exports.files = path.join(__dirname, 'files');
 exports.readDirSync = path.join(__dirname, 'readDirSync');
 
 exports.setProject = function(name) {
-
   var ss = require('../../lib/socketstream');
   ss.root = ss.api.root = path.join(__dirname, name);
+};
+
+exports.socketstreamProject = function(name) {
+  var ss = require('../../lib/socketstream');
+  ss.root = ss.api.root = path.join(__dirname, name || 'project');
+  return ss;
 };
 
 exports.reset = function(done) {

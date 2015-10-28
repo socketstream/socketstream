@@ -40,7 +40,21 @@ describe('ss.require', function() {
 		expect(spy).to.have.been.calledWith();
 	});
 
-	it('should load package from project', function() {
+  it('should call error callback if module undefined', function() {
+    var spy = sinon.spy();
+    var mod = ss.api.require(undefined,'client/formatters',spy);
+    expect(mod).to.equal(undefined);
+    expect(spy).to.have.been.calledWith();
+  });
+
+  it('should call error callback if module undefined', function() {
+    var spy = sinon.spy();
+    var mod = ss.api.require(null,'client/formatters',spy);
+    expect(mod).to.equal(undefined);
+    expect(spy).to.have.been.calledWith();
+  });
+
+  it('should load package from project', function() {
 		var mod = ss.api.require('object-assign');
 		expect(mod).to.be.a('function');
 	});
@@ -49,6 +63,9 @@ describe('ss.require', function() {
 		var p = ss.api.require.resolve('object-assign');
 		expect(p).to.equal(path.join(__dirname, '../../fixtures','project/node_modules/object-assign/index.js'));
 	});
+
+  it('should identify default when primary not defined');
+  it('should identify default when primary not found');
 });
 
 describe('ss.require.forEach', function() {
