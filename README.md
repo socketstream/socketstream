@@ -50,9 +50,9 @@ To make SocketStream more stable some major dependencies have been moved out. Pl
 
 The Real-Time web has been touted for years, and it is very much in use. However there remains a number of challenges that have not been solved.
 Web Sockets will remain an important technology for delivering a _live_ experience on your website or mobile app. However with HTTP/2 and WebRTC
-other options come into play. SocketStream will help you to mix and match depending an what you aim to build.
+other options come into play. SocketStream will help you to mix and match depending on what you aim to build.
 
-It give you tools to manage your project:
+It gives you tools to manage your project:
 
 * Providing a sensible place to put everything
 * Accelerating deployment with integrated asset packing and CDN support
