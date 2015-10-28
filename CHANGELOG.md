@@ -1,3 +1,4 @@
+
 <a name="0.5.1"></a>
 ## [0.5.1](https://github.com/socketstream/socketstream/compare/0.4.5...v0.5.1) (2015-10-28)
 
@@ -13,6 +14,7 @@
 ### Features
 
 * **middleware:** replaced with session middleware and cached middleware performing the two parts  ([9da5e2d](https://github.com/socketstream/socketstream/commit/9da5e2d))
+* **autoload** API auto load for ws.listen and http.middleware access (a7eb4bc2e)
 
 
 
@@ -262,5 +264,3 @@ the browser, and goes against a principle of simplicity. The require lookup is n
   * Add task `grunt changelog` ([fa3ebef8](https://github.com/socketstream/socketstream/commit/fa3ebef82cac66c8c41625f131b5c7d7572d1297))
 * **lib:** Users can now pass the NODE_ENV to set the environment ([09bb6c0d](https://github.com/socketstream/socketstream/commit/09bb6c0d69fbe4a290d6c6292e590a918ef985ac))
 * **utils:** Add `ss.api.log` unified logging API ([5fcd9527](https://github.com/socketstream/socketstream/commit/5fcd952765580e3e7f4cb206e1810028039b2f0a))
-
-
