@@ -1,3 +1,39 @@
+<a name="0.5.1"></a>
+## [0.5.1](https://github.com/socketstream/socketstream/compare/0.4.5...v0.5.1) (2015-10-28)
+
+
+### Bug Fixes
+
+* **log:** sockjs logging ([bfa9ce5](https://github.com/socketstream/socketstream/commit/bfa9ce5))
+* **rpc:** request wouldn't configure correctly due to bad fs.exists call ([f3e4363](https://github.com/socketstream/socketstream/commit/f3e4363))
+* **rpc:** server can start without rpc responders ([4c76116](https://github.com/socketstream/socketstream/commit/4c76116))
+* **servePacked:** serve the existing packed assets in either production configs ([c1fc962](https://github.com/socketstream/socketstream/commit/c1fc962))
+* **styling:** the default app would have background cropped with small browser window ([b5d478e](https://github.com/socketstream/socketstream/commit/b5d478e))
+
+### Features
+
+* **middleware:** replaced with session middleware and cached middleware performing the two parts  ([9da5e2d](https://github.com/socketstream/socketstream/commit/9da5e2d))
+
+
+
+<a name="0.5.0"></a>
+# [0.5.0](https://github.com/socketstream/socketstream/compare/0.4.5...v0.5.0) (2015-10-28)
+
+
+### Bug Fixes
+
+* **log:** sockjs logging ([bfa9ce5](https://github.com/socketstream/socketstream/commit/bfa9ce5))
+* **rpc:** request wouldn't configure correctly due to bad fs.exists call ([f3e4363](https://github.com/socketstream/socketstream/commit/f3e4363))
+* **rpc:** server can start without rpc responders ([4c76116](https://github.com/socketstream/socketstream/commit/4c76116))
+* **servePacked:** serve the existing packed assets in either production configs ([c1fc962](https://github.com/socketstream/socketstream/commit/c1fc962))
+* **styling:** the default app would have background cropped with small browser window ([b5d478e](https://github.com/socketstream/socketstream/commit/b5d478e))
+
+### Features
+
+* **middleware:** replaced with session middleware and cached middleware performing the two parts  ([9da5e2d](https://github.com/socketstream/socketstream/commit/9da5e2d))
+
+
+
 <a name="0.4.4"></a>
 ## [0.4.4](https://github.com/socketstream/socketstream/compare/0.4.3...v0.4.4) (2015-09-27)
 

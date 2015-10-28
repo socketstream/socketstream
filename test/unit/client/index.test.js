@@ -144,7 +144,7 @@ describe('client asset manager', function () {
         ss.client.load();
         ss.tasks.defaults();
 
-        ss.tasks.orchestrator.tasks.default.dep.should.eql(['load-socketstream','pack-if-needed','serve']);
+        ss.tasks.orchestrator.tasks.default.dep.should.eql(['pack-if-needed','serve']);
         ss.tasks.orchestrator.tasks['pack-if-needed'].dep.should.eql(['pack-prepare','load-api','abc:pack-needed','abc:pack']);
         logHook.off();
       });
