@@ -73,7 +73,7 @@ HTTP통해 접글할때는 같은 세션 데이터가 자동적으로 `req.sessi
 
 ``` javascript
 // app.js
-ss.http.router.on('/updateSession', function(req, res) {
+ss.http.route('/updateSession', function(req, res) {
   req.session.myVar = 4321;
   res.end('변경된 req.session.myVar = ', req.session.myVar);
 });
@@ -107,4 +107,3 @@ ss.http.router.on('/updateSession', function(req, res) {
 
     ss.session.options.maxAge = 8640000;  // 하루를 백분의1초단위로 환산
 <!--ss.session.options.maxAge = 8640000;  // one day in miliseconds-->
-

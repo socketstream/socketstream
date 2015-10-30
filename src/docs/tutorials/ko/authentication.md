@@ -58,7 +58,7 @@ exports.actions = function(req, res, ss){
 
 ```javascript
 // app.js
-ss.http.router.on('/authenticateMe', function(req, res) {
+ss.http.route('/authenticateMe', function(req, res) {
   req.session.userId = '나솔';
   req.session.save(function(err){
     res.serve('main');
@@ -127,7 +127,7 @@ ss.client.define('main', {
   code: ['libs', 'modules', 'main']
 });
 
-ss.http.router.on('/', function(req, res) {
+ss.http.route('/', function(req, res) {
   res.serve('main');
 });
 
