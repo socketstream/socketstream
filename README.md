@@ -63,6 +63,10 @@ Integration points:
 
 * Accelerating development with Live Reload and (optional) support for Stylus, Jade, and other transpilers.
 * Add-ons can be dropped in without configuration needed picking between Cookie and Token based auth.
+ 
+Easy progression from REST
+
+A good REST API will remain the right solution for many scenarios. Web pages will remain based on HTTP. Streaming is pixie dust sprinkled on top. SocketStream will be refactored to support a gradual addition on pixie dust keeping the REST structure as the central point.
 
 Batteries included:
 
