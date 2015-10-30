@@ -17,5 +17,15 @@ module.exports = function() {
   */
   app.stream = ss.http.stream;
 
+  if (ss.env === 'development') {
+    app.set('views', ss.client.dirs.views);
+    // Showing stack errors
+    app.set('showStackError', true);
+    // Disable views cache
+    app.set('view cache', false);
+    // Environment dependent middleware
+    require('express-debug')(app, {/* settings */});
+  }
+
   return app;
 };
