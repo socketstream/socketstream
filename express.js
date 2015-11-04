@@ -23,8 +23,10 @@ module.exports = function() {
     app.set('showStackError', true);
     // Disable views cache
     app.set('view cache', false);
+
     // Environment dependent middleware
-    require('express-debug')(app, {/* settings */});
+    // throws cannot find stack
+    // ss.api.require('express-debug')(app, {/* settings */});
   }
 
   return app;
