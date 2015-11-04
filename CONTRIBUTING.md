@@ -2,10 +2,9 @@
 If you have questions about how to use SocketStream, here are some useful sources:
 
 1. [SocketStream.org](socketstream.org)
-2. [Google Group](https://groups.google.com/d/forum/socketstream)
-3. [GitHub](https://github.com/socketstream/socketstream)
-4. IRC channel [#socketstream](http://webchat.freenode.net/?channels=socketstream)
-5. Twitter [@socketstream](http://twitter.com/#!/socketstream)
+2. [GitHub](https://github.com/socketstream/socketstream)
+3. Chat [Gitter](https://gitter.im/socketstream/socketstream)
+4. Twitter [@socketstream](http://twitter.com/#!/socketstream)
 
 ## Submitting issues
 To submit an issue please use [SocketStream issue tracker](https://github.com/socketstream/socketstream/issues).
