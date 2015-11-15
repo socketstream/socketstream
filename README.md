@@ -63,7 +63,7 @@ Integration points:
 
 * Accelerating development with Live Reload and (optional) support for Stylus, Jade, and other transpilers.
 * Add-ons can be dropped in without configuration needed picking between Cookie and Token based auth.
- 
+
 Easy progression from REST
 
 A good REST API will remain the right solution for many scenarios. Web pages will remain based on HTTP. Streaming is pixie dust sprinkled on top. SocketStream will be refactored to support a gradual addition on pixie dust keeping the REST structure as the central point.
@@ -79,6 +79,13 @@ Batteries included:
 
 Building a simple chat app that uses websockets is easy, but rich, non-trivial, responsive realtime UI without ending up with a mess of code is hard SocketStream eases the pain by:
 
+### How to
+
+* Base the application on [Connect and Engine io](https://github.com/socketstream/ss-examples/tree/master/connect-and-engineio)
+* Base the application on [Express and SockJS](https://github.com/socketstream/ss-examples/tree/master/express-4-and-js)
+* Make a minimal application like [SocketStream 0.3](https://github.com/socketstream/ss-examples/tree/master/legacy-app)
+* Serve [HTTP resources and pages](http://socketstream.github.io/socketstream/docs/#/tutorials/serving_http_resources)
+
 ### Applications using SocketStream
 
 - [Dashku](https://github.com/Anephenix/dashku): Realtime dashboards and widgets using HTML, CSS and JavaScript. Also hosted at [dashku.com](https://dashku.com).
@@ -90,6 +97,7 @@ Building a simple chat app that uses websockets is easy, but rich, non-trivial, 
 ### Presentations
 
 - SocketStream (November 2013): On [Slideshare](http://www.slideshare.net/paulbjensen/socketstream-28194445) and [SpeakerDeck](https://speakerdeck.com/paulbjensen/socketstream).
+- SocketStream (July 2015): On [SpeakerDeck](https://speakerdeck.com/paulbjensen/socketstream-nyccamp-2015).
 
 ### Videos
 
