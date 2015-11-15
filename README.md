@@ -12,7 +12,7 @@
 
 SocketStream is a framework for Realtime Web Apps
 
-_Latest release: 0.5.2 unstable ([view changelog](https://github.com/socketstream/socketstream/blob/master/CHANGELOG.md))_
+_Latest release: 0.5.2 unstable ([view changelog](CHANGELOG.md))_
 
 [Live demo](http://demo.socketstream.com) | [Documentation](http://socketstream.github.io/socketstream/docs/)
 
@@ -43,6 +43,7 @@ To make SocketStream more stable some major dependencies have been moved out. Pl
 
 * socketstream-cookie-session: 0.5.x
 * engine.io: 1.5.2
+* engine.io-client: 1.5.2
 * redis: 0.12.1
 * connect: 3.4.0
 
