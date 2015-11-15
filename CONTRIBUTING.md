@@ -210,7 +210,7 @@ To update local `gh-page` branch by merging from `master` run:
 
 There are helpful `grunt` tasks for overall version releasing process:
 
-1. Update package.json version
+1. Update package.json version and version in README.md
 
 2. Update the CHANGELOG.md and update docs
 ```

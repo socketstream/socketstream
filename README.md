@@ -12,7 +12,7 @@
 
 SocketStream is a framework for Realtime Web Apps
 
-_Latest release: 0.5.1 unstable ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))_
+_Latest release: 0.5.2 unstable ([view changelog](https://github.com/socketstream/socketstream/blob/master/CHANGELOG.md))_
 
 [Live demo](http://demo.socketstream.com) | [Documentation](http://socketstream.github.io/socketstream/docs/)
 
