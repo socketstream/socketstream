@@ -1,0 +1,24 @@
+@ngdoc overview
+@name Serving HTTP Resources
+
+@description
+# Serving HTTP Resources
+
+With Mobile phones being the new king of personal communication it is crucial for your website to work more like
+and application and less like a centralised portal. It is crucial to work in an online/offline world.
+
+SocketStream has until now had an event based Router. In 0.5 this is being replaced. Routing will come back in some other form in 1.0
+
+The aim is to push assets and content to edge caches and ideally directly onto the client devices. This means that the content of your
+application must be identified so it can be push out before it is needed, so the traditional Connect/Express model pulls you in the wrong direction.
+
+That being said the paradigm of defining REST resources is a very good one and fits into where the we is and will be going with HTTP version 2.
+So you should continue to define your content with URL semantics. Go ahead and base your implementation on Connect/Express middleware.
+We've prepared some examples for you for
+[Express](https://github.com/socketstream/ss-examples/tree/master/express-4-and-js) and
+[Connect](https://github.com/socketstream/ss-examples/tree/master/connect-and-engineio).
+
+In the future Express apps will be extended with semantics for real-time endpoints. Permissions will be span both HTTP, streaming and
+client side semantics.
+
+For this reason the use of middlewares are likely to change. `ss.http.middleware` still mostly works but is deprecated.
