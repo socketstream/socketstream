@@ -12,7 +12,7 @@
 
 SocketStream is a framework for Realtime Web Apps
 
-_Latest release: 0.4.4 ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))_
+_Latest release: 0.4.5 ([view changelog](https://github.com/socketstream/socketstream/blob/master/HISTORY.md))_
 
 [Live demo](http://demo.socketstream.com) | [Documentation](http://socketstream.github.io/socketstream/docs/)
 
@@ -86,7 +86,7 @@ This upcoming is expected in late 2015. The current state can be found on the `n
 *Creator:* Owen Barnes
 
 
-*Core Contributors:* 
+*Core Contributors:*
 
 - Paul Jensen
 - Roman Minkin

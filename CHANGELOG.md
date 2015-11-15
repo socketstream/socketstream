@@ -1,3 +1,15 @@
+<a name="0.4.5"></a>
+## [0.4.5](https://github.com/socketstream/socketstream/compare/0.4.4...v0.4.5) (2015-10-17)
+
+
+### Features
+
+* **bundler:** multi source require of custom bundlers ([4b344a4](https://github.com/socketstream/socketstream/commit/4b344a4))
+* **gulp:** ss.tasks.use(gulp) API for gulpfile integration ([319b6a1](https://github.com/socketstream/socketstream/commit/319b6a1))
+* **test:** added a task for testing transporters 'test-socketstream' ([9ee6721](https://github.com/socketstream/socketstream/commit/9ee6721))
+
+
+
 <a name="0.4.4"></a>
 ## [0.4.4](https://github.com/socketstream/socketstream/compare/0.4.3...v0.4.4) (2015-09-27)
 
@@ -226,5 +238,3 @@ the browser, and goes against a principle of simplicity. The require lookup is n
   * Add task `grunt changelog` ([fa3ebef8](https://github.com/socketstream/socketstream/commit/fa3ebef82cac66c8c41625f131b5c7d7572d1297))
 * **lib:** Users can now pass the NODE_ENV to set the environment ([09bb6c0d](https://github.com/socketstream/socketstream/commit/09bb6c0d69fbe4a290d6c6292e590a918ef985ac))
 * **utils:** Add `ss.api.log` unified logging API ([5fcd9527](https://github.com/socketstream/socketstream/commit/5fcd952765580e3e7f4cb206e1810028039b2f0a))
-
-

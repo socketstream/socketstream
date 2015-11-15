@@ -92,7 +92,7 @@ module.exports = function(grunt) {
                 'grunt build:docs',
                 'grunt is-clean:master',
                 'grunt version',    //remove "-SNAPSHOT" from the project's version in package.json
-                'grunt changelog'
+                'npm changelog'
             ],
             'release-complete': [
                 'git commit CHANGELOG.md package.json -n -m "chore(release): v%version%"',
@@ -112,14 +112,7 @@ module.exports = function(grunt) {
                 'git merge master',
                 'git checkout master'
             ]
-        },
-        changelog: {
-            options: {
-                dest: 'CHANGELOG.md',
-                templateFile: 'src/docs/changelog.tpl.md',
-                github: 'socketstream/socketstream'
-            }
-        },
+        }
     });
 
     // Rename our watch task to 'delta', then make actual 'watch'

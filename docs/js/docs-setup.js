@@ -12,7 +12,7 @@ NG_DOCS={
       "type": "overview",
       "moduleName": "index",
       "shortDescription": "Documentation",
-      "keywords": "app assets best cdns clients code demand developing documentation engine events exceptions experiment extending formats gazillion github handling io low-level message middleware models multiple overview packing practices production protocols reload request responder responders single-page socketstream support template templates tutorials workers wrappers"
+      "keywords": "app assets best cdns clients code demand developing documentation engine events exceptions experiment extending formats gazillion github handling indirectly io low-level message middleware models modules multiple node overview packing practices production protocols reload request responder responders single-page socketstream support template templates tutorials workers wrappers"
     },
     {
       "section": "tutorials",
@@ -151,6 +151,15 @@ NG_DOCS={
     },
     {
       "section": "tutorials",
+      "id": "modules",
+      "shortName": "Modules",
+      "type": "overview",
+      "moduleName": "Modules",
+      "shortDescription": "Loading Modules from app",
+      "keywords": "allows api app assets build built builtin builtinpath bundlers choose code defaultid dependencies development engines extension-less filename formatters function install internal internally isn js load loaded loading main matched modules overview passed path plugins production project relative require socketstream ss supplied template time tutorials"
+    },
+    {
+      "section": "tutorials",
       "id": "production_hosting",
       "shortName": "Production Hosting",
       "type": "overview",
@@ -277,15 +286,6 @@ NG_DOCS={
     },
     {
       "section": "api",
-      "id": "bundler.webpack:webpack",
-      "shortName": "webpack",
-      "type": "service",
-      "moduleName": "bundler",
-      "shortDescription": "The webpack bundler of HTML, CSS &amp; JS",
-      "keywords": "api asset assettype bundler client collection concept css custom demonstration directory entries functions html improved initcode js libs list method modules output pack purposes relative service systemassets type validate view webpack"
-    },
-    {
-      "section": "api",
       "id": "client",
       "shortName": "client",
       "type": "service",
@@ -308,8 +308,8 @@ NG_DOCS={
       "shortName": "formatters",
       "type": "service",
       "moduleName": "client",
-      "shortDescription": "Formatter registry",
-      "keywords": "api client formatter formatters registry service"
+      "shortDescription": "This is for the module returned by require(&#39;socketstream&#39;).client.formatters.",
+      "keywords": "add api asset client config configuring define formatter formatters method module nameormodule object parameters rendering require returned service socketstream"
     },
     {
       "section": "api",
@@ -317,8 +317,8 @@ NG_DOCS={
       "shortName": "formatters",
       "type": "service",
       "moduleName": "client",
-      "shortDescription": "This is for the module returned by require(&#39;socketstream&#39;).client.formatters.",
-      "keywords": "add api asset client config configuring define formatter formatters method module nameormodule object parameters rendering require returned service socketstream"
+      "shortDescription": "Formatter registry",
+      "keywords": "api client formatter formatters registry service"
     },
     {
       "section": "api",
@@ -416,15 +416,6 @@ NG_DOCS={
       "moduleName": "ss",
       "shortDescription": "Contains method stubs for logging to console (by default) or",
       "keywords": "api apply arguments assigning calls choose console debug default error fairly function happened info informed keeping level log logging method override parameters plugins provider require service socketstream ss stubs switch sysadmin takes time trace tracing trivial unexpected var wakeup warn winston"
-    },
-    {
-      "section": "api",
-      "id": "ss.orchestrator",
-      "shortName": "ss.orchestrator",
-      "type": "service",
-      "moduleName": "ss",
-      "shortDescription": "Internal Orchestrator for starting the server or building resources.",
-      "keywords": "api building currently experimental internal note orchestrator resources server service ss starting"
     },
     {
       "section": "api",
