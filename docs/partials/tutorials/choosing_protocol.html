@@ -1,0 +1,24 @@
+<a href="https://github.com/socketstream/socketstream/edit/master/src/docs/tutorials/en/choosing_protocol.ngdoc" class="improve-docs"><i class="icon-edit"> </i>Improve this doc</a><h1><code ng:non-bindable=""></code>
+<div><span class="hint"></span>
+</div>
+</h1>
+<div><div class="choosing-a-protocol-page"><h2 id="choosing-a-protocol">Choosing a Protocol</h2>
+<p>The state of web protocols is such that WebSockets are supported on perhaps 90% of the devices that reach your
+website. The first question you have to ask yourself is what to do about the last 10%. You can ignore them and
+configure SocketStream to only use WebSockets for streaming connections. This is an option that will be added
+in version <code>0.7</code> and be stable in <code>0.8</code>.</p>
+<p>Otherwise you can support 100% of devices with fallback protocols such as &quot;engine.io&quot; or &quot;SockJS&quot;. They are both
+mature but with different approaches. SockJS tries to open a WebSocket and fall backs to various polling techniques
+if it cannot. Engine.io starts with polling and tries to upgrade ultimately to a WebSocket connection. So for
+90% of devices SockJS will connect faster.</p>
+<p>However engine.io supports compression and binary data, so you may push more data to the client. This may not
+be relevant for your application, so both are good options.</p>
+<p>For streaming connections it is also important to consider Internet proxies and gateways. Many firewalls only let
+through HTTP and stops all other protocols. To support this you cannot use straight WebSockets as the fallback
+mechanisms must always be used.</p>
+<p>Over the next year HTTP version 2 will become supported in most web browsers and web servers. It allows some
+advanced data caching techniques that can be used to achieve Real-Time data streaming to clients over HTTP.</p>
+<p>Hopefully we will be able to extend SocketStream with the ability to stream over HTTP/2.</p>
+<p>Another interesting candidate is WebRTC which allows browsers to talk to each other. This might also be fitted
+into the Real-Time puzzle.</p>
+</div></div>

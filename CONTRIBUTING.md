@@ -173,8 +173,9 @@ a convention for the project. Use your best judgement when writing code and make
 Consistency with existing codebase is one of the best ways to make the code easier to understand, so you should
 take care not to diverge without a very good reason.
 
-1) Wherever possible functions should be declared in the classic way and not as variables.
-2) Variables should be declared where they are used and not at the top of the module except for module wide variables and imports.
+1. Wherever possible functions should be declared in the classic way and not as variables.
+
+2. Variables should be declared where they are used and not at the top of the module except for module wide variables and imports.
 
 These guidelines should not be seen as religion, but rather as a default, and should in effect be seen in 90+% of the codebase.
 If you are finding yourself sticking to them only occasionally, you are doing something wrong.
@@ -209,26 +210,23 @@ To update local `gh-page` branch by merging from `master` run:
 
 There are helpful `grunt` tasks for overall version releasing process:
 
-1. First of all we need put a mark into **GIT History Tree** by increasing patch version by **1**, adding suffix "**SNAPSHOT**" (ex. "**0.3.15-SNAPSHOT**") and commiting `package.json`:
+1. Update package.json version
+
+2. Update the CHANGELOG.md and update docs
 ```
-    grunt release:start
+npm run changelog
+grunt build:docs
+git add .
 ```
 
-2. Then we can perform regular commits with changes and pull requests
-
-3. Once we decide to release a new version we need to **prepeare release** and run all the tests, generate `CHANGELOG.md` since the release start point (**mark commit from step 1**) and clean up version to just "**0.3.15**":
+3. Commit changes (was grunt release:complete)
 ```
-grunt release:prepare
-```
-
-4. If previouse step passed we need to **complete release** by commiting `CHANGELOG.md`, `package.json` and adding version tag:
-```
-grunt release:complete
-```
-
-5. Finnaly if all good, just push `tags` and both `master` and `gh-pages` branches to `origin`:
-```
-grunt release:push
+git commit -m"0.5.1 release"
+git tag 0.5.1
+git co gh-pages
+git merge develop
+git co develop
+git push && git push --tags
 ```
 
 

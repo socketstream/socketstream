@@ -1,3 +1,14 @@
+<a name="0.5.2"></a>
+## [0.5.2](https://github.com/socketstream/socketstream/compare/0.5.1...v0.5.2) (2015-11-15)
+
+
+### Bug Fixes
+
+* **debug:** debugging info added to session logic ([a57528b](https://github.com/socketstream/socketstream/commit/a57528b))
+* **session:** never returned the identified sessionId ([f36181b](https://github.com/socketstream/socketstream/commit/f36181b))
+* **websocket** the new listen function correctly loads transport first
+
+
 
 <a name="0.5.1"></a>
 ## [0.5.1](https://github.com/socketstream/socketstream/compare/0.4.5...v0.5.1) (2015-10-28)

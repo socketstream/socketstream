@@ -25,6 +25,15 @@ NG_DOCS={
     },
     {
       "section": "tutorials",
+      "id": "choosing_protocol",
+      "shortName": "Choosing a Protocol",
+      "type": "overview",
+      "moduleName": "Choosing a Protocol",
+      "shortDescription": "Choosing a Protocol",
+      "keywords": "ability achieve advanced allows application approaches backs binary browsers caching candidate choosing client clients compression configure connect connection connections consider data devices engine extend fall fallback faster firewalls fitted gateways good hopefully http ignore interesting internet io mature mechanisms open option options overview polling protocol protocols proxies push puzzle question reach real-time relevant servers socketstream sockjs stable starts stops straight stream streaming support supported supports talk techniques tutorials ultimately upgrade version web webrtc website websocket websockets year"
+    },
+    {
+      "section": "tutorials",
       "id": "client_side_code",
       "shortName": "Client-Side Code",
       "type": "overview",
