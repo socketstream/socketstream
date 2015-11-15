@@ -85,6 +85,7 @@ Building a simple chat app that uses websockets is easy, but rich, non-trivial, 
 * Base the application on [Express and SockJS](https://github.com/socketstream/ss-examples/tree/master/express-4-and-js)
 * Make a minimal application like [SocketStream 0.3](https://github.com/socketstream/ss-examples/tree/master/legacy-app)
 * Serve [HTTP resources and pages](http://socketstream.github.io/socketstream/docs/#/tutorials/serving_http_resources)
+* Choosing the right [Streaming Protocol](http://socketstream.github.io/socketstream/docs/#/tutorials/choosing_protocol)
 
 ### Applications using SocketStream
 
