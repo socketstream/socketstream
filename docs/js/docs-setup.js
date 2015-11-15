@@ -21,7 +21,7 @@ NG_DOCS={
       "type": "overview",
       "moduleName": "Authentication",
       "shortDescription": "Authentication",
-      "keywords": "access accesstoken accesstokensecret action actions add adding app append apps authenticate authenticated authenticates authenticating authentication backend best bodyparser browser callback calling change choice client closely code coming command connect connection console consumer consumerkey consumersecret contents control css current data database db define denied details docs don easily enter events everyauth example examples exports express facebook findorcreateuser follow full function geared getcurrentuser github goal host http https integrates internal jade john js ldap libraries libs listen ll load log logout lookup main manually middleware modules multi-page note notifies oauth object option output overview password popular prepend processing production publish real redirectpath register req request require res resource return route router rpc save saves screen_name second secret sending sends serve server service session set setuserid simple socketstream specific ss start started styl supply tempted testing third-party true tutorials twitter twitterusermetadata unique update updating url user userid username users var view visit ways website websocket websockets whilst"
+      "keywords": "access accesstoken accesstokensecret action actions add adding app append apps authenticate authenticated authenticates authenticating authentication backend best bodyparser browser callback calling change choice client closely code coming command connect connection console consumer consumerkey consumersecret contents control css current data database db define denied details docs don easily enter events everyauth example examples exports express facebook findorcreateuser follow full function geared getcurrentuser github goal host http https implement integrates internal jade john js ldap libraries libs listen ll load log logout lookup main manually middleware modules multi-page note notifies oauth object option output overview password popular prepend processing production publish real redirectpath register req request require res resource return route rpc save saves screen_name second secret sending sends serve server service session set setuserid simple socketstream specific ss start start-server started styl supply tempted testing third-party true tutorials twitter twitterusermetadata unique update updating url user userid username users var view visit ways website websocket websockets whilst"
     },
     {
       "section": "tutorials",
@@ -147,7 +147,7 @@ NG_DOCS={
       "type": "overview",
       "moduleName": "HTTP Middleware",
       "shortDescription": "HTTP Middleware",
-      "keywords": "access accessible add adds allows apart app append appended appending approach asset assets avoid base bottom browser cache changing client clients compress configured connect connect-static connect-winston cookieparser custom customisable days default determining development directly eventmiddleware everyauth exactly example experimental favicon feature file files find flag fs functions future href http https images instance internally js leave limit load loaded loading making manage maxage maxlength maxobjects middleware minimal mode moment number objects options order overview pass passing pick prepend prepended prepending processed readfile repeated req requests require requires running serve serving session sessions set setting settings short single-page size socketstream source ss stack static staticcache store storing strategy support top tutorials variable wanting work"
+      "keywords": "add-ons additional asset client clients connect examples expressjs files follow handling http images internally longer middleware overview serve session single-page socketstream socketstream-cookie-session stack static tutorials"
     },
     {
       "section": "tutorials",
@@ -223,12 +223,21 @@ NG_DOCS={
     },
     {
       "section": "tutorials",
+      "id": "serving_http_resources",
+      "shortName": "Serving HTTP Resources",
+      "type": "overview",
+      "moduleName": "Serving HTTP Resources",
+      "shortDescription": "Serving HTTP Resources",
+      "keywords": "ahead aim application apps assets base based caches centralised change client communication connect content continue crucial define defining deprecated devices direction directly edge endpoints event examples express extended fits form future going good http ideally identified implementation king middleware middlewares mobile model needed online overview paradigm permissions personal phones portal prepared pulls push real-time reason replaced resources rest router routing semantics serving side socketstream span ss streaming traditional tutorials url ve version website work works world wrong"
+    },
+    {
+      "section": "tutorials",
       "id": "sessions",
       "shortName": "Sessions",
       "type": "overview",
       "moduleName": "Sessions",
       "shortDescription": "Sessions",
-      "keywords": "accessed actions activate add allow api app append argument authentication auto-expiring automatically avoid backend browser bundled call calling cart checkout choice closes configuration connect connect-redis console contents cookie crypto custom data day days default developing easily ensure example excellent expire expiry exports express false file flexibility framework function getsession http in-memory internal js leaks ll load loaded log maxage memory middleware milliseconds myvar note optimum options overview page-based parser passed performing persistent processed production randombytes redis req request requests res retrieved return route router save saved second secret server session sessions set setting shared socketstream speed ss standard start store stores terminated testaction time tostring tutorials updated updatesession user websocket websockets write"
+      "keywords": "accessed actions activate add allow api app append argument authentication auto-expiring automatically avoid backend browser bundled call calling cart checkout choice closes configuration connect connect-redis console contents cookie crypto custom data day days default developing easily ensure example excellent expire expiry exports express false file flexibility framework function getsession http in-memory internal js leaks ll load loaded log maxage memory middleware milliseconds myvar note optimum options overview page-based parser passed performing persistent processed production randombytes redis req request requests res retrieved return route save saved second secret server session sessions set setting shared socketstream speed ss standard start store stores terminated testaction time tostring tutorials updated updatesession user websocket websockets write"
     },
     {
       "section": "tutorials",
@@ -264,7 +273,7 @@ NG_DOCS={
       "type": "overview",
       "moduleName": "Use Ember JS",
       "shortDescription": "Use Ember JS",
-      "keywords": "add allaredone app application appreciated array arraycontroller backend bound browser capabilities checkbox clearcompletedtodos client code collection configuration content contentbinding contributed controller copy core create created creates createtodo createtodoview crossroads css data declared define defined defining described directly directory display doc dom downloaded early easy editing elements em ember enable end-point engine ensure event everyproperty example extend file filterproperty finally foreach framework function google group handlebar handler handlers head hold holds html http improve info insertnewline integrate isdone item itemclassbinding items jquery js kindly length lib libraries libs limit list load loaded loading min model mvc new-todo newly note order overview parsed path placeholder point properly property pull ready removeobject rendered requests require res retrieve return route router routing rpc scripts seamlessly second serveclient seteach simple socketstream ss steps support tagname tags template templateengine templates textfield title titlebinding tmpl todo todos todoscontroller true tutorials ul undefined usual valuebinding variables view views website window wiring works"
+      "keywords": "add allaredone app application appreciated array arraycontroller backend bound browser capabilities checkbox clearcompletedtodos client code collection configuration content contentbinding contributed controller copy core create created creates createtodo createtodoview crossroads css data declared define defined defining described directly directory display doc dom downloaded early easy editing elements em ember enable end-point engine ensure event everyproperty example extend file filterproperty finally foreach framework function google group handlebar handler handlers head hold holds html http improve info insertnewline integrate isdone item itemclassbinding items jquery js kindly length lib libraries libs limit list load loaded loading min model mvc new-todo newly note order overview parsed path placeholder point properly property pull ready removeobject rendered requests require res retrieve return route routing rpc scripts seamlessly second serveclient seteach simple socketstream ss steps support tagname tags template templateengine templates textfield title titlebinding tmpl todo todos todoscontroller true tutorials ul undefined usual valuebinding variables view views website window wiring works"
     },
     {
       "section": "tutorials",
@@ -326,8 +335,8 @@ NG_DOCS={
       "shortName": "formatters",
       "type": "service",
       "moduleName": "client",
-      "shortDescription": "This is for the module returned by require(&#39;socketstream&#39;).client.formatters.",
-      "keywords": "add api asset client config configuring define formatter formatters method module nameormodule object parameters rendering require returned service socketstream"
+      "shortDescription": "Formatter registry",
+      "keywords": "api client formatter formatters registry service"
     },
     {
       "section": "api",
@@ -335,8 +344,8 @@ NG_DOCS={
       "shortName": "formatters",
       "type": "service",
       "moduleName": "client",
-      "shortDescription": "Formatter registry",
-      "keywords": "api client formatter formatters registry service"
+      "shortDescription": "This is for the module returned by require(&#39;socketstream&#39;).client.formatters.",
+      "keywords": "add api asset client config configuring define formatter formatters method module nameormodule object parameters rendering require returned service socketstream"
     },
     {
       "section": "api",
@@ -371,16 +380,7 @@ NG_DOCS={
       "type": "service",
       "moduleName": "http",
       "shortDescription": "HTTP Server",
-      "keywords": "api app application assets attached callback concern connect css expose fn function http instance js load merge middleware newsettings object optional options path res route routing serveclient server servers service serving session sessionoptions sessionstore set settings settins short-form simply socketstream stack static staticcache staticpath store string updated url var web wishes"
-    },
-    {
-      "section": "api",
-      "id": "http.router:router",
-      "shortName": "router",
-      "type": "service",
-      "moduleName": "http",
-      "shortDescription": "Right now the router is simply an EventEmitter. This may change in the future",
-      "keywords": "allows api callback cb change clients ee eventemitter exists fall find fully function future html5 http instance mock multiple object original passed pushstate recursively req request res respond route router routing service simply single-page speed support url"
+      "keywords": "api app application attached callback concern connect expose fn function http listen listening load merge middleware newsettings object optional port res route routing serveclient server servers service session set settings settins short-form simply socketstream stack start staticcache store string url var web wishes"
     },
     {
       "section": "api",
@@ -397,8 +397,8 @@ NG_DOCS={
       "shortName": "ss",
       "type": "overview",
       "moduleName": "ss",
-      "shortDescription": "Internal API object which is passed to sub-modules and can be used within your app.",
-      "keywords": "access add api app caution env exports function internal log object overview passed require root session socketstream ss string sub-modules var"
+      "shortDescription": "It reflects a similar API to the client API.",
+      "keywords": "access add api app caution client env exports function internal log object overview passed reflects require root session socketstream ss string sub-modules var"
     },
     {
       "section": "api",

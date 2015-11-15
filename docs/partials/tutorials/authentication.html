@@ -38,13 +38,14 @@ exports.actions = function(req, res, ss){
 <p>Let&#39;s look at a very simple example by adding the following &#39;route&#39; to <code>app.js</code>:</p>
 <pre class="prettyprint linenums">
 // app.js
-ss.http.router.on('/authenticateMe', function(req, res) {
+ss.http.middleware.get('/authenticateMe', function(req, res) {
   req.session.userId = 'john';
   req.session.save(function(err){
     res.serve('main');
   });
 });
 </pre>
+<p>If you implement &#39;start-server&#39; yourself use <code>app.get</code> instead.</p>
 <p>Next, add an RPC action which sends the contents of <code>req.session.userId</code> over the websocket:</p>
 <pre class="prettyprint linenums">
 // server/rpc/app.js
@@ -85,7 +86,7 @@ ss.client.define('main', {
   code: ['libs', 'modules', 'main']
 });
 
-ss.http.router.on('/', function(req, res) {
+ss.http.route('/', function(req, res) {
   res.serve('main');
 });
 

@@ -18,7 +18,7 @@ Following are steps to create an end-point with Ember view in SocketStream.</p>
 </pre>
 <p>Add route for the newly defined end-point.</p>
 <pre class="prettyprint linenums">
-    ss.http.router.on('/todos', function(req, res) {
+    ss.http.route('/todos', function(req, res) {
         res.serveClient('todos');
     }
 </pre>

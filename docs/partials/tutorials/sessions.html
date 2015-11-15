@@ -47,7 +47,7 @@ exports.actions = function(req, res, ss) {
 <p>The same session data is automatically loaded into <code>req.session</code> when accessed over HTTP. For example, append this route to your <code>app.js</code> file:</p>
 <pre class="prettyprint linenums">
 // app.js
-ss.http.router.on('/updateSession', function(req, res) {
+ss.http.middleware.get('/updateSession', function(req, res) {
   req.session.myVar = 4321;
   res.end('req.session.myVar has been updated to', req.session.myVar);
 });
