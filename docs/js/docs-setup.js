@@ -205,6 +205,15 @@ NG_DOCS={
     },
     {
       "section": "tutorials",
+      "id": "serving_http_resources",
+      "shortName": "Serving HTTP Resources",
+      "type": "overview",
+      "moduleName": "Serving HTTP Resources",
+      "shortDescription": "Serving HTTP Resources",
+      "keywords": "ahead aim application apps assets base based caches centralised change client communication connect content continue crucial define defining deprecated devices direction directly edge endpoints event examples express extended fits form future going good http ideally identified implementation king middleware middlewares mobile model needed online overview paradigm permissions personal phones portal prepared pulls push real-time reason replaced resources rest router routing semantics serving side socketstream span ss streaming traditional tutorials url ve version website work works world wrong"
+    },
+    {
+      "section": "tutorials",
       "id": "sessions",
       "shortName": "Sessions",
       "type": "overview",
