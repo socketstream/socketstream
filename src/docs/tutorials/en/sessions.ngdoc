@@ -4,9 +4,12 @@
 @description
 # Sessions
 
-SocketStream uses the Connect Session Store to ensure sessions can be easily shared between HTTP and Websocket requests using a similar API.
+SocketStream uses session IDs to track the active running clients. The typical Cookie based approach is implemented as
+an add-on in `socketstream/socketstream-cookie-session`. By adding it to installed modules it will be used to manage
+sessions. Session information can be accessed for HTTP middleware and Streaming middleware alike.
 
-This means you're able to write data to a session from SocketStream and then use it in Express.js or any other page-based framework which uses Connect - especially useful when performing authentication.
+This means you're able to write data to a session from SocketStream and then use it in Express.js or any other page-based
+framework which uses Connect - especially useful when performing authentication.
 
 
 ### Using Sessions over Websockets
@@ -58,7 +61,7 @@ The same session data is automatically loaded into `req.session` when accessed o
 
 <pre>
 // app.js
-ss.http.middleware.get('/updateSession', function(req, res) {
+ss.http.route('/updateSession', function(req, res) {
   req.session.myVar = 4321;
   res.end('req.session.myVar has been updated to', req.session.myVar);
 });
@@ -66,6 +69,23 @@ ss.http.middleware.get('/updateSession', function(req, res) {
 
 Note: There is no need to call `req.session.save()` if you're calling `res.end()`.
 
+
+### Using Tokens and Local Storage
+
+Since the session strategy is managed by an add-on you can make your own strategy. It can use any combination of
+tokens and cookies.
+
+You can configure `socketstream-cookie-session` to use localStorage and httpOnly cookies which will be more
+compatible with Hybrid App frameworks like PhoneGap.
+
+```
+ss.set('*',{
+  session: { cookie: {httpOnly:true}},
+  ws: { client: {localStorage:true}}
+});
+```
+
+Note: this is draft, and isn't yet fully implemented.
 
 ### Session Stores
 
