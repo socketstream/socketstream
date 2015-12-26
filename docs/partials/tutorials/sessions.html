@@ -3,8 +3,11 @@
 </div>
 </h1>
 <div><div class="sessions-page"><h2 id="sessions">Sessions</h2>
-<p>SocketStream uses the Connect Session Store to ensure sessions can be easily shared between HTTP and Websocket requests using a similar API.</p>
-<p>This means you&#39;re able to write data to a session from SocketStream and then use it in Express.js or any other page-based framework which uses Connect - especially useful when performing authentication.</p>
+<p>SocketStream uses session IDs to track the active running clients. The typical Cookie based approach is implemented as
+an add-on in <code>socketstream/socketstream-cookie-session</code>. By adding it to installed modules it will be used to manage
+sessions. Session information can be accessed for HTTP middleware and Streaming middleware alike.</p>
+<p>This means you&#39;re able to write data to a session from SocketStream and then use it in Express.js or any other page-based
+framework which uses Connect - especially useful when performing authentication.</p>
 <h4 id="sessions_using-sessions-over-websockets">Using Sessions over Websockets</h4>
 <p>For optimum speed and flexibility, session data is not retrieved by default when a websocket request is processed by the server. Before you do anything with sessions, you&#39;ll need to activate the internal <code>session</code> <a href="#/tutorials/request_middleware">Request Middleware</a> as shown below:</p>
 <pre class="prettyprint linenums">
@@ -47,12 +50,22 @@ exports.actions = function(req, res, ss) {
 <p>The same session data is automatically loaded into <code>req.session</code> when accessed over HTTP. For example, append this route to your <code>app.js</code> file:</p>
 <pre class="prettyprint linenums">
 // app.js
-ss.http.middleware.get('/updateSession', function(req, res) {
+ss.http.route('/updateSession', function(req, res) {
   req.session.myVar = 4321;
   res.end('req.session.myVar has been updated to', req.session.myVar);
 });
 </pre>
 <p>Note: There is no need to call <code>req.session.save()</code> if you&#39;re calling <code>res.end()</code>.</p>
+<h4 id="sessions_using-tokens-and-local-storage">Using Tokens and Local Storage</h4>
+<p>Since the session strategy is managed by an add-on you can make your own strategy. It can use any combination of
+tokens and cookies.</p>
+<p>You can configure <code>socketstream-cookie-session</code> to use localStorage and httpOnly cookies which will be more
+compatible with Hybrid App frameworks like PhoneGap.</p>
+<pre><code>ss.set(&#39;*&#39;,{
+  session: { cookie: {httpOnly:true}},
+  ws: { client: {localStorage:true}}
+});
+</code></pre><p>Note: this is draft, and isn&#39;t yet fully implemented.</p>
 <h4 id="sessions_session-stores">Session Stores</h4>
 <p>The in-memory Connect Session Store is used by default to allow you to start developing easily. Before your app goes into production you <strong>must</strong> use a Connect Session Store with a persistent backend to avoid memory leaks.</p>
 <p>We have bundled the <code>connect-redis</code> store as standard as this makes an excellent choice. To use it, add the following line to your <code>app.js</code> file:
