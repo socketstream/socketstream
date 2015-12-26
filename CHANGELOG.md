@@ -1,6 +1,14 @@
+<a name="0.5.3"></a>
+## [0.5.3](https://github.com/socketstream/socketstream/compare/0.5.2...v0.5.3) (2015-12-26)
+
+### Bug Fixes
+
+* **cli:** Fixed #602 where newly-generated apps were missing dependencies
+
+
+
 <a name="0.5.2"></a>
 ## [0.5.2](https://github.com/socketstream/socketstream/compare/0.5.1...v0.5.2) (2015-11-15)
-
 
 ### Bug Fixes
 
