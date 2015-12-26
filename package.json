@@ -1,7 +1,7 @@
 {
   "name": "socketstream",
   "description": "A framework for Realtime Web Apps",
-  "version": "0.5.2",
+  "version": "0.5.3-SNAPSHOT",
   "license": "MIT",
   "homepage": "http://www.socketstream.org",
   "author": "Henrik Vendelbo <henrik@socketstream.org>",
