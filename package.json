@@ -41,12 +41,12 @@
     "shortid": "2.2.2",
     "uglify-js": "2.4.24",
     "utils-merge": "1.0.0",
-    "uuid": "2.0.1"
+    "uuid": "2.0.1",
+    "commander": "2.8.1"
   },
   "devDependencies": {
     "chai": "^3.3.0",
     "chokidar": "~1.1.0",
-    "commander": "2.8.1",
     "connect-livereload": "~0.5.2",
     "conventional-changelog": "^0.4.3",
     "cookie-parser": "^1.4.0",
