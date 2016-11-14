@@ -5,6 +5,7 @@ var ss      = require( '../../../lib/socketstream'),
   Router = require('../../../lib/http/router').Router,
   defineAbcClient = require('./abcClient');
 
+var os = require('os'), EOL = os.EOL;
 var view = require('../../../lib/client/view');
 
 var responseStub = {
@@ -130,12 +131,12 @@ describe('constants',function() {
         ss.client.formatters.add('html');
       });
 
-    var expectedHtml = '<html>\n'+
-      '<head><title>ABC</title></head>\n'+
+    var expectedHtml = '<html>'+ EOL +
+      '<head><title>ABC</title></head>'+ EOL +
       '<body><p>ABC</p>'+
       '<script>var abc="abc";\nvar def="def";\nrequire("/client/abc/index");</script>'+
-      '</body>\n'+
-      '</html>\n';
+      '</body>'+ EOL +
+      '</html>'+ EOL;
 
     view(ss.api, client, options, function(output) {
       output.should.equal(expectedHtml);

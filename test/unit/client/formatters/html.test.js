@@ -4,6 +4,7 @@ var path    = require('path'),
   ss      = require( '../../../../lib/socketstream'),
   fixtures = require('../../../fixtures');
 
+var os = require('os'), EOL = os.EOL;
 
 describe('html formatter', function () {
 
@@ -41,7 +42,7 @@ describe('html formatter', function () {
         var output;
         concrete.call(path.join(fixtures.project,'client/abc/ss.html'),{},function(out) {
           output = out;
-          out.should.be.equal('<html>\n<head><title>ABC</title><SocketStream/></head>\n<body><p>ABC</p></body>\n</html>\n');
+          out.should.be.equal(['<html>', '<head><title>ABC</title><SocketStream/></head>', '<body><p>ABC</p></body>', '</html>' + EOL].join(EOL));
         },function(err) {
           should(err).be.equal(undefined);
         });

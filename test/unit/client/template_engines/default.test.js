@@ -7,6 +7,7 @@ var path    = require('path'),
   options = ss.client.options,
   fixtures = require('../../../fixtures');
 
+var os = require('os'), EOL = os.EOL;
 
 describe('default template engine', function () {
 
@@ -36,7 +37,7 @@ describe('default template engine', function () {
     var files = [ bundler.entryFor('tmpl','client/templates/1.html') ];
 
     ss.client.templateEngine.generate(bundler, files, function(tag) {
-      tag.should.be.equal('<script id="tmpl-1" type="text/x-tmpl"><body><div>1</div></body>\n</script>');
+      tag.should.be.equal('<script id="tmpl-1" type="text/x-tmpl"><body><div>1</div></body>' + EOL + '</script>');
       done();
     });
 
@@ -57,7 +58,7 @@ describe('default template engine', function () {
     var files = [ bundler.entryFor('tmpl','client/templates/abc/1.html') ];
 
     ss.client.templateEngine.generate(bundler, files, function(tag) {
-      tag.should.be.equal('<script id="tmpl-abc-1" type="text/x-tmpl"><div>abc 1</div>\n</script>');
+      tag.should.be.equal('<script id="tmpl-abc-1" type="text/x-tmpl"><div>abc 1</div>' + EOL + '</script>');
       done();
     });
 

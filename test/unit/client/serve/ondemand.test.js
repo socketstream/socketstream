@@ -7,6 +7,7 @@ var path    = require('path'),
     defineAbcClient = require('../abcClient'),
     fixtures = require('../../../fixtures');
 
+var os = require('os'), EOL = os.EOL;
 var responseStub = {
   writeHead: function() {},
   end: function(body) {
@@ -36,7 +37,7 @@ describe('production mode asset server', function () {
     // dev time URL
     var req = {url: '/_serve/code?extras/e1.js' };
     router.route(req.url,req,responseStub).should.equal(true);
-    responseStub.body.should.equal('var e1 = 1;\n');
+    responseStub.body.should.equal('var e1 = 1;' + EOL);
   });
 
   it('should provide a bundle of javascript code for a directory entry');
@@ -51,7 +52,7 @@ describe('production mode asset server', function () {
     // dev time URL
     var req = {url: '/_serve/worker?/pi.js' };
     router.route(req.url,req,responseStub).should.equal(true);
-    responseStub.body.should.equal('// calc pi\n');
+    responseStub.body.should.equal('// calc pi' + EOL);
   });
 
 

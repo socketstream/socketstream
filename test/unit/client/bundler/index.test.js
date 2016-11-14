@@ -28,9 +28,9 @@ describe('bundler', function () {
         tmpl: 'main.html'
       });
 
-      paths.css.should.eql(['client/css/main.css']);
-      paths.code.should.eql(['client/code/main.js']);
-      paths.tmpl.should.eql(['client/templates/main.html']);
+      paths.css.should.eql([path.join('client', 'css', 'main.css')]);
+      paths.code.should.eql([path.join('client', 'code', 'main.js')]);
+      paths.tmpl.should.eql([path.join('client', 'templates', 'main.html')]);
     });
 
     it('should return bundler given id', function() {
@@ -117,7 +117,7 @@ describe('bundler', function () {
 
       var templates = ss.api.bundler.entries(client,'tmpl');
       templates.should.eql([{
-        file: 'client/templates/main.html', importedBy: 'client/templates/main.html', includeType: 'html', ext:'html', bundle:'tmpl', assetType:'html'
+        file: 'client/templates/main.html', importedBy: path.join('client','templates','main.html'), includeType: 'html', ext:'html', bundle:'tmpl', assetType:'html'
       }]);
 
 
@@ -133,9 +133,9 @@ describe('bundler', function () {
 
       var templates = ss.api.bundler.entries(client,'tmpl');
       templates.should.eql([
-        { file: 'client/templates/main.html', importedBy: 'client/templates/main.html', includeType: 'html', ext:'html', bundle:'tmpl', assetType:'html' },
-        { file: 'client/templates/abc/1.html', importedBy: 'client/templates/abc/1.html', includeType: 'html', ext:'html', bundle:'tmpl', assetType:'html' },
-        { file: 'client/templates/abc/2.html', importedBy: 'client/templates/abc/2.html', includeType: 'html', ext:'html', bundle:'tmpl', assetType:'html' }
+        { file: 'client/templates/main.html', importedBy: path.join('client','templates','main.html'), includeType: 'html', ext:'html', bundle:'tmpl', assetType:'html' },
+        { file: 'client/templates/abc/1.html', importedBy: path.join('client','templates','abc','1.html'), includeType: 'html', ext:'html', bundle:'tmpl', assetType:'html' },
+        { file: 'client/templates/abc/2.html', importedBy: path.join('client','templates','abc','2.html'), includeType: 'html', ext:'html', bundle:'tmpl', assetType:'html' }
       ]);
     });
 
@@ -150,8 +150,8 @@ describe('bundler', function () {
 
       var templates = ss.api.bundler.entries(client,'tmpl');
       templates.should.eql([
-        { file: 'client/templates/abc/1.html', importedBy: 'client/templates/abc', includeType: 'html', ext:'html', bundle:'tmpl', assetType:'html' },
-        { file: 'client/templates/abc/2.html', importedBy: 'client/templates/abc', includeType: 'html', ext:'html', bundle:'tmpl', assetType:'html' }
+        { file: 'client/templates/abc/1.html', importedBy: path.join('client', 'templates', 'abc'), includeType: 'html', ext:'html', bundle:'tmpl', assetType:'html' },
+        { file: 'client/templates/abc/2.html', importedBy: path.join('client', 'templates', 'abc'), includeType: 'html', ext:'html', bundle:'tmpl', assetType:'html' }
       ]);
     });
 

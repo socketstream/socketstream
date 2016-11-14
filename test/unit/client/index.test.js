@@ -8,6 +8,7 @@ var path    = require('path'),
     //defineAbcClient = require('./abcClient'),
     fixtures = require('../../fixtures');
 
+var os = require('os'), EOL = os.EOL;
 
 describe('client asset manager', function () {
 
@@ -145,7 +146,7 @@ describe('client asset manager', function () {
         ss.tasks.defaults();
 
         ss.tasks.orchestrator.tasks.default.dep.should.eql(['load-socketstream','pack-if-needed','serve']);
-        ss.tasks.orchestrator.tasks['pack-if-needed'].dep.should.eql(['pack-prepare','load-api','abc:pack-needed','abc:pack']);
+        ss.tasks.orchestrator.tasks['pack-if-needed'].dep.should.eql(['pack-prepare','load-api','attach-stream','abc:pack-needed','abc:pack']);
         logHook.off();
       });
     });
@@ -256,10 +257,10 @@ describe('client asset manager', function () {
         });
 
         it('should render the ABC view (with start)', function(done) {
-          var expectedHtml = '<html>\n' +
-            '<head><title>ABC</title></head>\n' +
-            '<body><p>ABC</p><script>require("/client/abc/index");</script></body>\n' +
-            '</html>\n';
+          var expectedHtml = '<html>' + EOL +
+            '<head><title>ABC</title></head>' + EOL +
+            '<body><p>ABC</p><script>require("/client/abc/index");</script></body>' + EOL +
+            '</html>' + EOL;
 
           var client = ss.client.define('abc', {
             css: './abc/style.css',
@@ -276,10 +277,10 @@ describe('client asset manager', function () {
 
         it('should render the ABC view (without start)', function(done) {
 
-          var expectedHtml = '<html>\n' +
-            '<head><title>ABC</title></head>\n' +
-            '<body><p>ABC</p></body>\n' +
-            '</html>\n';
+          var expectedHtml = '<html>' + EOL +
+            '<head><title>ABC</title></head>' + EOL +
+            '<body><p>ABC</p></body>' + EOL +
+            '</html>' + EOL;
 
           options.startInBundle = true;
 
@@ -303,12 +304,12 @@ describe('client asset manager', function () {
         });
         client.pack = true;
 
-        var expectedHtml = ('<html>\n' +
+        var expectedHtml = ('<html>' + EOL +
         '<head><title>ABC</title>' +
         '<link href="/assets/abc/m1bf9lApd.css" media="screen" rel="stylesheet" type="text/css">' +
-        '<script src="/assets/abc/m1bf9lApd.js" type="text/javascript"></script>' + '</head>\n' +
-        '<body><p>ABC</p><script>require("/client/abc/index");</script></body>\n' +
-        '</html>\n').replace(/m1bf9lApd/g, client.id);
+        '<script src="/assets/abc/m1bf9lApd.js" type="text/javascript"></script>' + '</head>' + EOL +
+        '<body><p>ABC</p><script>require("/client/abc/index");</script></body>' + EOL +
+        '</html>' + EOL).replace(/m1bf9lApd/g, client.id);
 
         view(ss.api, client, options, function (output) {
           output.should.equal(expectedHtml);
@@ -326,12 +327,12 @@ describe('client asset manager', function () {
         });
         client.pack = true;
 
-        var expectedHtml = ('<html>\n' +
+        var expectedHtml = ('<html>' + EOL +
           '<head><title>ABC</title>' +
           '<link href="/assets/abc/m1bf9lApd.css" media="screen" rel="stylesheet" type="text/css">' +
-          '<script src="/assets/abc/m1bf9lApd.js" type="text/javascript"></script><script>require("/client/abc/index");</script>'+ '</head>\n' +
-          '<body><p>ABC</p></body>\n' +
-          '</html>\n').replace(/m1bf9lApd/g,client.id);
+          '<script src="/assets/abc/m1bf9lApd.js" type="text/javascript"></script><script>require("/client/abc/index");</script>'+ '</head>' + EOL +
+          '<body><p>ABC</p></body>' + EOL +
+          '</html>' + EOL).replace(/m1bf9lApd/g,client.id);
 
         view(ss.api, client, options, function(output) {
           output.should.equal(expectedHtml);
@@ -348,11 +349,11 @@ describe('client asset manager', function () {
         });
         client.pack = true;
 
-        var expectedHtml = ('<html>\n' +
+        var expectedHtml = ('<html>' + EOL +
           '<head><title>ABC</title>' +
-          '<script src="/assets/abc/m1bf9lApd.js" type="text/javascript"></script>'+ '</head>\n' +
-          '<body><p>ABC</p><script>require("/client/abc/index");</script></body>\n' +
-          '</html>\n').replace(/m1bf9lApd/g,client.id);
+          '<script src="/assets/abc/m1bf9lApd.js" type="text/javascript"></script>'+ '</head>' + EOL +
+          '<body><p>ABC</p><script>require("/client/abc/index");</script></body>' + EOL +
+          '</html>' + EOL).replace(/m1bf9lApd/g,client.id);
 
         view(ss.api, client, options, function(output) {
           output.should.equal(expectedHtml);
