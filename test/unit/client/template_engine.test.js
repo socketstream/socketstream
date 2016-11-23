@@ -6,6 +6,7 @@ var path    = require('path'),
   defineAbcClient = require('./abcClient'),
   fixtures = require('../../fixtures');
 
+var os = require('os'), EOL = os.EOL;
 
 describe('Template engine', function() {
 
@@ -91,7 +92,7 @@ describe('Template engine', function() {
       var files = [ bundler.entryFor('tmpl','client/templates/1.html') ];
 
       ss.client.templateEngine.generate(bundler, files, function (tag) {
-        tag.should.be.equal('<script id="old-1" type="text/x-tmpl"><!-- 123 --><body><div>1</div></body>\n</script>');
+        tag.should.be.equal('<script id="old-1" type="text/x-tmpl"><!-- 123 --><body><div>1</div></body>' + EOL + '</script>');
         done();
       });
     });
@@ -109,7 +110,7 @@ describe('Template engine', function() {
       var files = [ bundler.entryFor('tmpl','client/templates/1.html') ];
 
       ss.client.templateEngine.generate(bundler, files, function (tag) {
-        tag.should.be.equal('<script id="new-1" type="text/x-tmpl"><!-- 1243 --><body><div>1</div></body>\n</script>');
+        tag.should.be.equal('<script id="new-1" type="text/x-tmpl"><!-- 1243 --><body><div>1</div></body>' + EOL + '</script>');
         done();
       });
     });

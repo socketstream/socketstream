@@ -8,6 +8,7 @@ var path    = require('path'),
   defineAbcClient = require('../abcClient'),
   fixtures = require('../../../fixtures');
 
+var os = require('os'), EOL = os.EOL;
 var responseStub = {
   writeHead: function() {},
   end: function(body) {
@@ -71,12 +72,12 @@ describe('development mode asset server', function () {
       // dev time URL
       var req = {url: '/assets/abc/'+client.id+'.js?_=/client/abc/index.js' };
       router.route(req.url,req,responseStub).should.equal(true);
-      responseStub.body.should.equal('require.define("/client/abc/index", function (require, module, exports, __dirname, __filename){\n// test\n\n});');
+      responseStub.body.should.equal('require.define("/client/abc/index", function (require, module, exports, __dirname, __filename){\n// test' + EOL + '\n});');
 
       // dev time URL
       req = {url: '/assets/abc/'+client.id+'.js?_=client/abc/index.js' };
       router.route(req.url,req,responseStub).should.equal(true);
-      responseStub.body.should.equal('require.define("/client/abc/index", function (require, module, exports, __dirname, __filename){\n// test\n\n});');
+      responseStub.body.should.equal('require.define("/client/abc/index", function (require, module, exports, __dirname, __filename){\n// test' + EOL + '\n});');
     });
 
 

@@ -8,6 +8,7 @@ var path    = require('path'),
   fixtures = require('../../../fixtures');
 
 
+var os = require('os'), EOL = os.EOL;
 describe('angular.js template engine', function () {
 
   fixtures.setProject('project');
@@ -30,7 +31,7 @@ describe('angular.js template engine', function () {
     templates.length.should.be.equal(1);
 
     ss.client.templateEngine.generate(bundler, templates, function (tag) {
-      tag.should.be.equal('<script type="text/ng-template" id="abc-1.html"><div>abc 1</div>\n</script>');
+      tag.should.be.equal('<script type="text/ng-template" id="abc-1.html"><div>abc 1</div>' + EOL + '</script>');
       done();
     });
   });
@@ -60,7 +61,7 @@ describe('angular.js template engine', function () {
     var files = [ bundler.entryFor('tmpl','client/templates/1.html') ];
 
     ss.client.templateEngine.generate(bundler, files, function (tag) {
-      tag.should.be.equal('<script type="text/ng-template" id="1.html"><body><div>1</div></body>\n</script>');
+      tag.should.be.equal('<script type="text/ng-template" id="1.html"><body><div>1</div></body>' + EOL + '</script>');
       done();
     });
   });
@@ -76,7 +77,7 @@ describe('angular.js template engine', function () {
     var files = [ bundler.entryFor('tmpl','client/templates/1.html') ];
 
     ss.client.templateEngine.generate(bundler, files, function (tag) {
-      tag.should.be.equal('<script type="text/ng-template" id="1.html"><body><div>1</div></body>\n</script>');
+      tag.should.be.equal('<script type="text/ng-template" id="1.html"><body><div>1</div></body>' + EOL + '</script>');
       done();
     });
   });
@@ -92,8 +93,8 @@ describe('angular.js template engine', function () {
     var files = [ bundler.entryFor('tmpl','client/abc/abc.html') ];
 
     ss.client.templateEngine.generate(bundler, files, function (tag) {
-      tag.should.be.equal('<script id="tmpl-client-abc-abc" type="text/x-tmpl"><html>\n'+
-        '<head><title>ABC</title></head>\n<body><p>ABC</p></body>\n</html>\n</script>');
+      tag.should.be.equal('<script id="tmpl-client-abc-abc" type="text/x-tmpl"><html>' + EOL+
+        '<head><title>ABC</title></head>' + EOL + '<body><p>ABC</p></body>' + EOL + '</html>' + EOL + '</script>');
       done();
     });
   });
@@ -110,10 +111,10 @@ describe('angular.js template engine', function () {
     var files1 = [ bundler.entryFor('tmpl','client/templates/1.html') ];
 
     ss.client.templateEngine.generate(bundler, files, function(tag) {
-      tag.should.be.equal('<script type="text/ng-template" id="abc-1.html"><div>abc 1</div>\n</script>');
+      tag.should.be.equal('<script type="text/ng-template" id="abc-1.html"><div>abc 1</div>' + EOL + '</script>');
 
       ss.client.templateEngine.generate(bundler, files1, function(tag) {
-        tag.should.be.equal('<script id="tmpl-1" type="text/x-tmpl"><body><div>1</div></body>\n</script>');
+        tag.should.be.equal('<script id="tmpl-1" type="text/x-tmpl"><body><div>1</div></body>' + EOL + '</script>');
         done();
       });
     });
@@ -133,10 +134,10 @@ describe('angular.js template engine', function () {
     // console.log('fake', files);
 
     ss.client.templateEngine.generate(bundler, files, function(tag) {
-      tag.should.be.equal('<script type="text/ng-template" id="abc-1.html"><div>abc 1</div>\n</script>');
+      tag.should.be.equal('<script type="text/ng-template" id="abc-1.html"><div>abc 1</div>' + EOL + '</script>');
 
       ss.client.templateEngine.generate(bundler, files1, function(tag) {
-        tag.should.be.equal('<script id="tmpl-1" type="text/x-tmpl"><body><div>1</div></body>\n</script>');
+        tag.should.be.equal('<script id="tmpl-1" type="text/x-tmpl"><body><div>1</div></body>' + EOL + '</script>');
         done();
       });
     });
@@ -156,8 +157,8 @@ describe('angular.js template engine', function () {
     templates.length.should.be.equal(2);
 
     ss.client.templateEngine.generate(bundler, templates, function(tag) {
-      tag.should.be.equal('<script type="text/ng-template" id="abc-1.html"><div>abc 1</div>\n'+
-'</script><script type="text/ng-template" id="abc-2.html"><div>abc 2</div>\n'+
+      tag.should.be.equal('<script type="text/ng-template" id="abc-1.html"><div>abc 1</div>' + EOL+
+'</script><script type="text/ng-template" id="abc-2.html"><div>abc 2</div>' + EOL+
 '</script>');
       done();
     });
@@ -179,8 +180,8 @@ describe('angular.js template engine', function () {
     // console.log('real',templates);
 
     ss.client.templateEngine.generate(bundler, templates, function(tag) {
-      tag.should.be.equal('<script type="text/ng-template" id="abc-1.html"><div>abc 1</div>\n'+
-'</script><script type="text/ng-template" id="abc-2.html"><div>abc 2</div>\n'+
+      tag.should.be.equal('<script type="text/ng-template" id="abc-1.html"><div>abc 1</div>' + EOL+
+'</script><script type="text/ng-template" id="abc-2.html"><div>abc 2</div>' + EOL+
 '</script>');
       done();
     });
@@ -201,7 +202,7 @@ describe('angular.js template engine', function () {
     var files = [ bundler.entryFor('tmpl','more/a/a.html') ];
 
     ss.client.templateEngine.generate(bundler, files, function (tag) {
-      tag.should.be.equal('<script type="text/ng-template" id="more-a-a.html"><body><div>a</div></body>\n</script>');
+      tag.should.be.equal('<script type="text/ng-template" id="more-a-a.html"><body><div>a</div></body>' + EOL + '</script>');
       done();
     });
   });

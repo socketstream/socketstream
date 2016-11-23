@@ -1,6 +1,6 @@
 'use strict';
 
-var ss = require( '../../fixtures/socketstream');
+var ss = require( '../fixtures/socketstream');
 
 
 describe('ss.require', function() {

@@ -7,6 +7,7 @@ var path    = require('path'),
     options = ss.client.options,
     defineAbcClient = require('../abcClient'),
     fixtures = require('../../../fixtures');
+var os = require('os'), EOL = os.EOL;
 
 describe('default bundler:', function () {
 
@@ -42,9 +43,9 @@ describe('default bundler:', function () {
       client.id.should.be.type('string');
 
       client.paths.should.be.type('object');
-      client.paths.css.should.be.eql(['client/css/main']);
-      client.paths.code.should.be.eql(['client/code/main/demo.coffee']);
-      client.paths.view.should.be.eql('client/views/main.jade');
+      client.paths.css.should.be.eql([path.join('client', 'css', 'main')]);
+      client.paths.code.should.be.eql([path.join('client', 'code', 'main', 'demo.coffee')]);
+      client.paths.view.should.be.eql(path.join('client', 'views', 'main.jade'));
       client.paths.tmpl.should.be.eql([]);
 
       client.entryInitPath.should.be.equal('/client/code/main/demo');
@@ -141,10 +142,10 @@ describe('default bundler:', function () {
       client.id.should.be.type('string');
 
       client.paths.should.be.type('object');
-      client.paths.css.should.be.eql(['client/css/main']);
-      client.paths.code.should.be.eql(['client/code/main/demo.coffee']);
-      client.paths.view.should.be.eql('client/views/main.jade');
-      client.paths.tmpl.should.be.eql(['client/templates/chat/message.jade']);
+      client.paths.css.should.be.eql([path.join('client', 'css', 'main')]);
+      client.paths.code.should.be.eql([path.join('client', 'code', 'main', 'demo.coffee')]);
+      client.paths.view.should.be.eql(path.join('client', 'views', 'main.jade'));
+      client.paths.tmpl.should.be.eql([path.join('client', 'templates', 'chat', 'message.jade')]);
     });
   });
 
@@ -172,10 +173,10 @@ describe('default bundler:', function () {
       client.id.should.be.type('string');
 
       client.paths.should.be.type('object');
-      client.paths.css.should.be.eql(['more/a']);
-      client.paths.code.should.be.eql(['more/a/a.js']);
-      client.paths.view.should.be.eql('more/a/a.html');
-      client.paths.tmpl.should.be.eql(['more/a/a.html']);
+      client.paths.css.should.be.eql([path.join('more', 'a')]);
+      client.paths.code.should.be.eql([path.join('more', 'a', 'a.js')]);
+      client.paths.view.should.be.eql(path.join('more', 'a', 'a.html'));
+      client.paths.tmpl.should.be.eql([path.join('more', 'a', 'a.html')]);
     });
   });
 
@@ -229,9 +230,9 @@ describe('default bundler:', function () {
         client.id.should.be.type('string');
 
         client.paths.should.be.type('object');
-        client.paths.css.should.be.eql(['client/abc/style.css']);
-        client.paths.code.should.be.eql(['client/abc/index.js']);
-        client.paths.view.should.be.eql('client/abc/abc.html');
+        client.paths.css.should.be.eql([path.join('client', 'abc', 'style.css')]);
+        client.paths.code.should.be.eql([path.join('client', 'abc', 'index.js')]);
+        client.paths.view.should.be.eql(path.join('client', 'abc', 'abc.html'));
         client.paths.tmpl.should.be.eql([]);
 
         client.entryInitPath.should.be.equal('/client/abc/index');
@@ -362,7 +363,7 @@ describe('default bundler:', function () {
 
         // css entries
         entriesCSS[0].file.should.be.equal('client/abc/style.css');
-        entriesCSS[0].importedBy.should.be.equal('client/abc/style.css');
+        entriesCSS[0].importedBy.should.be.equal(path.join('client', 'abc', 'style.css'));
       });
 
       it('should return no entries for css if not in includes', function() {
@@ -407,7 +408,7 @@ describe('default bundler:', function () {
 
         // mod TODO
         entriesJS[4].file.should.be.equal('client/abc/index.js');
-        entriesJS[4].importedBy.should.be.equal('client/abc/index.js');
+        entriesJS[4].importedBy.should.be.equal(path.join('client', 'abc', 'index.js'));
         //entriesJS[4].type.should.be.equal('mod');
 
         //entriesJS.should.be.equal([{ path:'./abc.js'}]);
@@ -441,7 +442,7 @@ describe('default bundler:', function () {
 
         // mod TODO
         entriesJS[4].file.should.be.equal('client/abc/index.js');
-        entriesJS[4].importedBy.should.be.equal('client/abc/index.js');
+        entriesJS[4].importedBy.should.be.equal(path.join('client', 'abc', 'index.js'));
         //entriesJS[4].type.should.be.equal('mod');
 
         // start TODO
@@ -464,7 +465,7 @@ describe('default bundler:', function () {
 
         // mod TODO
         entriesJS[0].file.should.be.equal('client/abc/index.js');
-        entriesJS[0].importedBy.should.be.equal('client/abc/index.js');
+        entriesJS[0].importedBy.should.be.equal(path.join('client', 'abc', 'index.js'));
       });
 
       it('should render css asset file as empty if includes is false');
@@ -494,7 +495,7 @@ describe('default bundler:', function () {
 
         // css
         entriesCSS[0].file.should.be.equal('client/abc/style.css');
-        entriesCSS[0].importedBy.should.be.equal('client/abc');
+        entriesCSS[0].importedBy.should.be.equal(path.join('client', 'abc'));
         entriesCSS[0].assetType.should.be.equal('css');
 
         // libs
@@ -511,7 +512,7 @@ describe('default bundler:', function () {
 
         // mod TODO
         entriesJS[4].file.should.be.equal('client/abc/index.js');
-        entriesJS[4].importedBy.should.be.equal('client/abc/index.js');
+        entriesJS[4].importedBy.should.be.equal(path.join('client', 'abc', 'index.js'));
         //entriesJS[4].type.should.be.equal('mod');
 
         // start TODO
@@ -576,8 +577,8 @@ describe('default bundler:', function () {
           '<html>',
           '<head><title>ABC</title></head>',
           '<body><p>ABC</p><script>var abcl={"b":"b"};\nrequire("/client/abc/index");</script></body>',
-          '</html>\n'
-        ].join('\n'))
+          '</html>' + EOL
+        ].join(EOL))
       });
     });
 
@@ -599,8 +600,8 @@ describe('default bundler:', function () {
           '<html>',
           '<head><title>ABC</title></head>',
           '<body><p>ABC</p><script>var abcg={"a":"a"};\nvar abcl={"b":"b"};\nrequire("/client/abc/index");</script></body>',
-          '</html>\n'
-        ].join('\n'));
+          '</html>' + EOL
+        ].join(EOL));
         done();
       });
     });
@@ -625,8 +626,8 @@ describe('default bundler:', function () {
           '<html>',
           '<head><title>ABC</title></head>',
           '<body><p>ABC</p><script>var abcg={"b":"b"};\nrequire("/client/abc/index");</script></body>',
-          '</html>\n'
-        ].join('\n'))
+          '</html>' + EOL
+        ].join(EOL))
       });
     });
 
@@ -831,8 +832,8 @@ describe('default bundler:', function () {
           '<html>',
           '<head><title>ABC</title></head>',
           '<body><p>ABC</p><script>require("/client/abc/index");</script></body>',
-          '</html>\n'
-        ].join('\n'))
+          '</html>' + EOL
+        ].join(EOL))
       });
 
     });
@@ -851,8 +852,8 @@ describe('default bundler:', function () {
           '<html>',
           '<head><title>ABC</title></head>',
           '<body><p>ABC</p></body>',
-          '</html>\n'
-        ].join('\n'))
+          '</html>' + EOL
+        ].join(EOL))
       });
 
     });

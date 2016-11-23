@@ -85,9 +85,9 @@
     "lint": "node_modules/.bin/jshint .",
     "notes": "node_modules/.bin/notes",
     "changelog": "node_modules/.bin/conventional-changelog  -p angular -i CHANGELOG.md -w",
-    "test": "node_modules/.bin/mocha test/unit/**/* --reporter spec",
-    "quick-test": "node_modules/.bin/mocha test/unit/**/* --reporter progress",
-    "test-debug": "node_modules/.bin/mocha --debug-brk test/unit/**/* --reporter spec"
+    "test": "node_modules/.bin/mocha test/unit/**/*.js --reporter spec",
+    "quick-test": "node_modules/.bin/mocha test/unit/**/*.js --reporter progress",
+    "test-debug": "node_modules/.bin/mocha --debug-brk test/unit/**/*.js --reporter spec"
   },
   "pre-commit": [
     "lint",

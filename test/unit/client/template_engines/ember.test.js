@@ -5,6 +5,7 @@ var path    = require('path'),
   options = ss.client.options,
   fixtures = require('../../../fixtures');
 
+var os = require('os'), EOL = os.EOL;
 describe('Ember.js template engine', function () {
 
   fixtures.setProject('project');
@@ -33,7 +34,7 @@ describe('Ember.js template engine', function () {
     var files = [ bundler.entryFor('tmpl','client/templates/1.html') ];
 
     ss.client.templateEngine.generate(bundler, files, function(tag) {
-      tag.should.be.equal('<script type="text/x-handlebars" data-template-name="1"><body><div>1</div></body>\n</script>');
+      tag.should.be.equal('<script type="text/x-handlebars" data-template-name="1"><body><div>1</div></body>' + EOL + '</script>');
       done();
     });
 
