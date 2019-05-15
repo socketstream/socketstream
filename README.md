@@ -1,3 +1,11 @@
+# NOTICE - NO LONGER WORKED ON
+
+Hi, SocketStream isn't maintained anymore, but the code is here for anyone who wants to take a look.
+
+There are lots of other Node.js web application frameworks out there, please consider those instead for building your applications.
+
+Paul Jensen, Wednesday 15th May, 2019.
+
 ![SocketStream!](https://github.com/socketstream/socketstream/raw/master/new_project/client/static/images/logo.png)
 
 # SocketStream
