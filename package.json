@@ -72,13 +72,13 @@
     "mocha": "~2.3.3",
     "notes": "0.0.4",
     "npm-dview": "~2.0.0",
-    "pre-commit": "~1.1.1",
-    "semver": "~5.0.3",
-    "shelljs": "~0.5.3",
+    "pre-commit": "~1.2.2",
+    "semver": "~6.1.0",
+    "shelljs": "~0.8.3",
     "should": "~7.1.0",
     "sinon": "~1.17.0",
     "supertest": "~1.1.0",
-    "vinyl-fs": "~2.0.0"
+    "vinyl-fs": "~2.4.4"
   },
   "scripts": {
     "cover-test": "node_modules/.bin/istanbul cover -x **/new_project/** node_modules/.bin/_mocha test/unit/**/* && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
