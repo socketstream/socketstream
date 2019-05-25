@@ -81,14 +81,14 @@
     "vinyl-fs": "~2.4.4"
   },
   "scripts": {
-    "cover-test": "node_modules/.bin/istanbul cover -x **/new_project/** node_modules/.bin/_mocha test/unit/**/* && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
-    "checkDependencies": "node_modules/.bin/npm-dview",
-    "lint": "node_modules/.bin/jshint .",
-    "notes": "node_modules/.bin/notes",
-    "changelog": "node_modules/.bin/conventional-changelog  -p angular -i CHANGELOG.md -w",
-    "test": "node_modules/.bin/mocha test/unit/**/*.js --reporter spec",
-    "quick-test": "node_modules/.bin/mocha test/unit/**/*.js --reporter progress",
-    "test-debug": "node_modules/.bin/mocha --debug-brk test/unit/**/*.js --reporter spec"
+    "cover-test": "istanbul cover -x **/new_project/** node_modules/.bin/_mocha test/unit/**/* && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage",
+    "checkDependencies": "npm-dview",
+    "lint": "jshint .",
+    "notes": "notes",
+    "changelog": "conventional-changelog  -p angular -i CHANGELOG.md -w",
+    "test": "mocha test/unit/**/*",
+    "quick-test": "mocha test/unit/**/* --reporter progress",
+    "test-debug": "mocha --debug-brk test/unit/**/* --reporter spec"
   },
   "pre-commit": [
     "lint",
