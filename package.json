@@ -90,10 +90,7 @@
     "quick-test": "mocha test/unit/**/* --reporter progress",
     "test-debug": "mocha --debug-brk test/unit/**/* --reporter spec"
   },
-  "pre-commit": [
-    "lint",
-    "quick-test"
-  ],
+  "pre-commit": [],
   "directories": {
     "lib": "./lib",
     "doc": "./doc"
